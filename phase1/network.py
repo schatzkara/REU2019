@@ -5,9 +5,9 @@
 # FORWARD PASS TAKES IN 4 INPUTS
 import torch
 import torch.nn as nn
-from .modifiedVGG import vgg16
-from .modifiedI3D import InceptionI3d
-from .generator import Generator
+from modifiedVGG import vgg16
+from modifiedI3D import InceptionI3d
+from generator import Generator
 
 """
 Pipeline:

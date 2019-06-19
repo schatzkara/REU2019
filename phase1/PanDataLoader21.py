@@ -38,7 +38,56 @@ class PanopticDataset(Dataset):
 
     def get_actual_paths(self):
         actual_paths = []
-        for item in self.data_file:
+        for item in self.data_list:
+            # print(item)
+            # ex. 170915_toddler4/samples 0_125
+            sample, frames = item.split(' ')
+            # print(sample)
+            # print(frames)
+            # sample_name = sample_path[:sample_path.index('/')]
+            # start_frame, end_frame = frame_nums.split('_')
+            sample_path = os.path.join(self.root_dir, sample)
+            if os.path.exists(sample_path):
+                cameras = os.listdir(sample_path)
+                # print(cameras)
+                full_paths = [os.path.join(self.root_dir, sample, cam, frames) for cam in cameras]
+                # print(full_paths)
+                exists = [os.path.exists(path) for path in full_paths]
+                # print(exists)
+                true_count = 0
+                for _bool in exists:
+                    if _bool:
+                        true_count += 1
+                # print(true_count)
+                if true_count >= 2:
+                    actual_paths.append(item)
+
+        return actual_paths
+
+    def get_cam_dict(self):
+        cam_dict = {}
+        for item in self.data_list:
+            good_cams = []
+            # ex. 170915_toddler4/samples 0_125
+            sample, frames = item.split(' ')
+            # sample_name = sample_path[:sample_path.index('/')]
+            # start_frame, end_frame = frame_nums.split('_')
+            sample_path = os.path.join(self.root_dir, sample)
+            if os.path.exists(sample_path):
+                cameras = os.listdir(sample_path)
+                full_paths = {cam: os.path.join(self.root_dir, sample, cam, frames) for cam in cameras}
+                for cam, path in full_paths.items():
+                    if os.path.exists(path):
+                        size = len(os.listdir(path=path))
+                        if size == 125:
+                            good_cams.append(cam)
+            cam_dict[item] = good_cams
+
+        return cam_dict
+
+    '''def get_actual_paths(self):
+        actual_paths = []
+        for item in self.data_list:
             # ex. 170915_toddler4/samples 0_125
             sample, frames = item.split(' ')
             # sample_name = sample_path[:sample_path.index('/')]
@@ -76,7 +125,7 @@ class PanopticDataset(Dataset):
                             good_cams.append(cam)
             cam_dict[item] = good_cams
 
-        return cam_dict
+        return cam_dict'''
 
     '''def get_cam_dict(self):
         cam_dict = {}

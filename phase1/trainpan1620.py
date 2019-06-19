@@ -4,14 +4,14 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from .network import FullNetwork
-from .PanDataLoader21 import PanopticDataset
+from network import FullNetwork
+from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
 # directory information
 data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
-train_splits = '/home/c2-2/yogesh/datasets/panoptic/train.list'
-test_splits = '/home/c2-2/yogesh/datasets/panoptic/test.list'
+train_splits = '/home/yogesh/kara/data/panoptic/mod_train.list'
+test_splits = '/home/yogesh/kara/data/panoptic/mod_test.list'
 
 # data parameters
 PRINT_PARAMS = True
