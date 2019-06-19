@@ -1,0 +1,15 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 3
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Traceback (most recent call last):
+  File "trainingLoop.py", line 202, in <module>
+    model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/network.py", line 46, in __init__
+    self.vgg.load_state_dict(torch.load(vgg_weights_path))
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/serialization.py", line 301, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: 'C:/Users/Owner/Documents/UCF/Project/REU2019/weights/vgg16-397923af.pth'

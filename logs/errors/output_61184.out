@@ -1,0 +1,59 @@
+Views: 2, 3
+Batch size: 32
+Tensor size: (3,8,112,112)
+Skip Length: 4
+Total Epochs: 20
+Learning Rate: 0.0001
+Model Built.
+Training...
+	Batch 1/420 Loss: 42289.7578125
+	Batch 2/420 Loss: 41620.5546875
+	Batch 3/420 Loss: 41288.66796875
+	Batch 4/420 Loss: 32908.25
+	Batch 5/420 Loss: 25148.43359375
+	Batch 6/420 Loss: 22165.76171875
+	Batch 7/420 Loss: 21523.515625
+	Batch 8/420 Loss: 16118.56640625
+	Batch 9/420 Loss: 29173.32421875
+	Batch 10/420 Loss: 14961.681640625
+Traceback (most recent call last):
+  File "trainingLoop.py", line 154, in <module>
+    train_model()
+  File "trainingLoop.py", line 99, in train_model
+    train(epoch)
+  File "trainingLoop.py", line 41, in train
+    for batch_idx, (view1vid, view2vid) in enumerate(trainloader):  # the tuple should match the output of __getitem__
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 286, in __next__
+    return self._process_next_batch(batch)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 307, in _process_next_batch
+    raise batch.exc_type(batch.exc_msg)
+AssertionError: Traceback (most recent call last):
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in _worker_loop
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in <listcomp>
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 54, in __getitem__
+    frame_index = PanopticDataset.rand_frame_index(frame_count, self.clip_len, self.skip_len)
+  File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 161, in rand_frame_index
+    assert max_frame >= 2, 'Not enough frames to sample from.'
+AssertionError: Not enough frames to sample from.
+
+Exception ignored in: <bound method _DataLoaderIter.__del__ of <torch.utils.data.dataloader._DataLoaderIter object at 0x7fc645c3fb70>>
+Traceback (most recent call last):
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 349, in __del__
+    self._shutdown_workers()
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 328, in _shutdown_workers
+    self.worker_result_queue.get()
+  File "/share/apps/anaconda3/lib/python3.6/multiprocessing/queues.py", line 337, in get
+    return _ForkingPickler.loads(res)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/multiprocessing/reductions.py", line 70, in rebuild_storage_fd
+    fd = df.detach()
+  File "/share/apps/anaconda3/lib/python3.6/multiprocessing/resource_sharer.py", line 57, in detach
+    with _resource_sharer.get_connection(self._id) as conn:
+  File "/share/apps/anaconda3/lib/python3.6/multiprocessing/resource_sharer.py", line 87, in get_connection
+    c = Client(address, authkey=process.current_process().authkey)
+  File "/share/apps/anaconda3/lib/python3.6/multiprocessing/connection.py", line 487, in Client
+    c = SocketClient(address)
+  File "/share/apps/anaconda3/lib/python3.6/multiprocessing/connection.py", line 614, in SocketClient
+    s.connect(address)
+ConnectionRefusedError: [Errno 111] Connection refused

@@ -1,0 +1,4 @@
+  File "testingLoop.py", line 138
+    assert os.path.exists(frame_path), 'The image does not exist.'
+                                                                 ^
+TabError: inconsistent use of tabs and spaces in indentation

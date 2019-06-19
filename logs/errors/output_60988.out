@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "REU2019/trainingLoop.py", line 5, in <module>
+    from network import FullNetwork
+  File "/home/yogesh/kara/REU2019/network.py", line 3, in <module>
+    from modifiedVGG import VGG, vgg16
+  File "/home/yogesh/kara/REU2019/modifiedVGG.py", line 6, in <module>
+    from torchsummary import summary
+ImportError: No module named torchsummary

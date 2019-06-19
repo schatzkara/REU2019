@@ -1,0 +1,27 @@
+Building Model.
+Full Network Model Successfully Built 
+
+Model Built.
+Training...
+Traceback (most recent call last):
+  File "REU2019/trainingLoop.py", line 152, in <module>
+    train_model()
+  File "REU2019/trainingLoop.py", line 121, in train_model
+    train(epoch)
+  File "REU2019/trainingLoop.py", line 61, in train
+    for batch_idx, (view1vid, view2vid) in enumerate(trainloader):  # the tuple should match the output of __getitem__
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 286, in __next__
+    return self._process_next_batch(batch)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 307, in _process_next_batch
+    raise batch.exc_type(batch.exc_msg)
+AssertionError: Traceback (most recent call last):
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in _worker_loop
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in <listcomp>
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 71, in __getitem__
+    channels=self.channels)
+  File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 204, in load_frames
+    assert os.path.exists(frame_path), 'Frame path {} DNE.'.format(frame_path)
+AssertionError: Frame path home/yogesh/kara/ntu-ard/frames-240x135/7/S007P028R002A007/1/032.jpg DNE.
+

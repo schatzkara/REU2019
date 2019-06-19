@@ -1,0 +1,150 @@
+Views: 1, 2
+Batch size: 
+Tensor size: (3,8,112,112)
+Skip Length: 2
+Total Epochs: 10
+Learning Rate: 0.0001
+Full Network Model Successfully Built 
+
+Model Built.
+Training...
+	Batch 1/7 Loss: 44622.2578125
+	Batch 2/7 Loss: 42948.05859375
+	Batch 3/7 Loss: 42800.4453125
+	Batch 4/7 Loss: 30842.2578125
+	Batch 5/7 Loss: 117414.7734375
+	Batch 6/7 Loss: 24761.64453125
+	Batch 7/7 Loss: 36256.66796875
+Epoch 1/10 Loss: 48520.87220982143
+Validation...
+	Batch 1/3 Loss: 41146.6875
+	Batch 2/3 Loss: 39244.984375
+	Batch 3/3 Loss: 41812.46875
+Epoch 1/10 Loss: 41812.46875
+Training...
+	Batch 1/7 Loss: 41052.671875
+	Batch 2/7 Loss: 41376.0703125
+	Batch 3/7 Loss: 42970.8046875
+	Batch 4/7 Loss: 41690.7890625
+	Batch 5/7 Loss: 43784.26171875
+	Batch 6/7 Loss: 42340.3046875
+	Batch 7/7 Loss: 43989.63671875
+Epoch 2/10 Loss: 42457.791294642855
+Validation...
+	Batch 1/3 Loss: 43513.9296875
+	Batch 2/3 Loss: 41617.0703125
+	Batch 3/3 Loss: 44191.2265625
+Epoch 2/10 Loss: 44191.2265625
+Training...
+	Batch 1/7 Loss: 44297.89453125
+	Batch 2/7 Loss: 42962.8359375
+	Batch 3/7 Loss: 43630.890625
+	Batch 4/7 Loss: 42990.5546875
+	Batch 5/7 Loss: 41139.3984375
+	Batch 6/7 Loss: 40621.28125
+	Batch 7/7 Loss: 39841.9609375
+Epoch 3/10 Loss: 42212.11662946428
+Validation...
+	Batch 1/3 Loss: 38356.5
+	Batch 2/3 Loss: 36592.71875
+	Batch 3/3 Loss: 38963.9296875
+Epoch 3/10 Loss: 38963.9296875
+Training...
+	Batch 1/7 Loss: 38814.6015625
+	Batch 2/7 Loss: 32867.76171875
+	Batch 3/7 Loss: 25044.328125
+	Batch 4/7 Loss: 23566.90234375
+	Batch 5/7 Loss: 18398.744140625
+	Batch 6/7 Loss: 15120.2255859375
+	Batch 7/7 Loss: 18773.19921875
+Epoch 4/10 Loss: 24655.108956473214
+Validation...
+	Batch 1/3 Loss: 19737.5625
+	Batch 2/3 Loss: 19294.048828125
+	Batch 3/3 Loss: 19832.37890625
+Epoch 4/10 Loss: 19832.37890625
+Training...
+	Batch 1/7 Loss: 19421.69921875
+	Batch 2/7 Loss: 18022.046875
+	Batch 3/7 Loss: 14906.259765625
+	Batch 4/7 Loss: 12113.09765625
+	Batch 5/7 Loss: 13145.80859375
+	Batch 6/7 Loss: 11209.3603515625
+	Batch 7/7 Loss: 12295.048828125
+Epoch 5/10 Loss: 14444.760184151786
+Validation...
+	Batch 1/3 Loss: 13362.6875
+	Batch 2/3 Loss: 13249.22265625
+	Batch 3/3 Loss: 13298.47265625
+Epoch 5/10 Loss: 13298.47265625
+Training...
+	Batch 1/7 Loss: 13191.4140625
+	Batch 2/7 Loss: 12974.80078125
+	Batch 3/7 Loss: 12103.73828125
+	Batch 4/7 Loss: 11957.890625
+	Batch 5/7 Loss: 11121.9677734375
+	Batch 6/7 Loss: 10861.5458984375
+	Batch 7/7 Loss: 10462.978515625
+Epoch 6/10 Loss: 11810.619419642857
+Validation...
+	Batch 1/3 Loss: 10005.80078125
+	Batch 2/3 Loss: 10248.85546875
+	Batch 3/3 Loss: 9829.63671875
+Epoch 6/10 Loss: 9829.63671875
+Training...
+	Batch 1/7 Loss: 10163.580078125
+	Batch 2/7 Loss: 10379.181640625
+	Batch 3/7 Loss: 10373.693359375
+	Batch 4/7 Loss: 9795.896484375
+	Batch 5/7 Loss: 10311.283203125
+	Batch 6/7 Loss: 9762.578125
+	Batch 7/7 Loss: 9579.568359375
+Epoch 7/10 Loss: 10052.254464285714
+Validation...
+	Batch 1/3 Loss: 9153.796875
+	Batch 2/3 Loss: 9573.564453125
+	Batch 3/3 Loss: 8872.576171875
+Epoch 7/10 Loss: 8872.576171875
+Training...
+	Batch 1/7 Loss: 9572.4375
+	Batch 2/7 Loss: 9077.70703125
+	Batch 3/7 Loss: 8831.4189453125
+	Batch 4/7 Loss: 8398.83203125
+	Batch 5/7 Loss: 8548.494140625
+	Batch 6/7 Loss: 8567.251953125
+	Batch 7/7 Loss: 8655.1875
+Epoch 8/10 Loss: 8807.332728794643
+Validation...
+	Batch 1/3 Loss: 8409.9140625
+	Batch 2/3 Loss: 8628.15625
+	Batch 3/3 Loss: 8281.58984375
+Epoch 8/10 Loss: 8281.58984375
+Training...
+	Batch 1/7 Loss: 8518.7890625
+	Batch 2/7 Loss: 8442.7646484375
+	Batch 3/7 Loss: 8523.6796875
+	Batch 4/7 Loss: 8581.0830078125
+	Batch 5/7 Loss: 8578.779296875
+	Batch 6/7 Loss: 7577.8984375
+	Batch 7/7 Loss: 7893.505859375
+Epoch 9/10 Loss: 8302.357142857143
+Validation...
+	Batch 1/3 Loss: 7677.5634765625
+	Batch 2/3 Loss: 7967.4482421875
+	Batch 3/3 Loss: 7494.8623046875
+Epoch 9/10 Loss: 7494.8623046875
+Training...
+	Batch 1/7 Loss: 7515.49609375
+	Batch 2/7 Loss: 7789.85498046875
+	Batch 3/7 Loss: 8191.890625
+	Batch 4/7 Loss: 7712.26904296875
+	Batch 5/7 Loss: 7742.392578125
+	Batch 6/7 Loss: 7839.0576171875
+	Batch 7/7 Loss: 7251.1337890625
+Epoch 10/10 Loss: 7720.299246651785
+Validation...
+	Batch 1/3 Loss: 7459.68310546875
+	Batch 2/3 Loss: 7665.23486328125
+	Batch 3/3 Loss: 7336.53515625
+Epoch 10/10 Loss: 7336.53515625
+Time: 184.19570684432983

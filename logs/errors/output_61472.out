@@ -1,0 +1,11 @@
+Parameters:
+Batch size: 32
+Tensor size: (3,8,112,112)
+Skip Length: 2
+Precrop: {}
+Traceback (most recent call last):
+  File "testingLoop.py", line 185, in <module>
+    print_params()
+  File "testingLoop.py", line 174, in print_params
+    print('Precrop: {}').format(PRECROP)
+AttributeError: 'NoneType' object has no attribute 'format'

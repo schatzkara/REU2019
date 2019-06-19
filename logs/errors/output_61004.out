@@ -1,0 +1,30 @@
+Building Model.
+Full Network Model Successfully Built 
+
+Model Built.
+Training...
+BATCH NUM 0
+Traceback (most recent call last):
+  File "REU2019/trainingLoop.py", line 152, in <module>
+    train_model()
+  File "REU2019/trainingLoop.py", line 121, in train_model
+    train(epoch)
+  File "REU2019/trainingLoop.py", line 70, in train
+    output_v1, output_v2, rep_v1, rep_v2 = model(view1vid, view2vid)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/yogesh/kara/REU2019/network.py", line 79, in forward
+    app_v1 = self.vgg(view1img)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/yogesh/kara/REU2019/modifiedVGG.py", line 116, in forward
+    x = self.features(x)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/container.py", line 91, in forward
+    input = module(input)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/conv.py", line 301, in forward
+    self.padding, self.dilation, self.groups)
+RuntimeError: Expected object of type torch.FloatTensor but found type torch.cuda.FloatTensor for argument #2 'weight'

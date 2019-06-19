@@ -1,0 +1,755 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+FullNetwork(
+  (vgg): VGG(
+    (features): Sequential(
+      (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace)
+      (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace)
+      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (6): ReLU(inplace)
+      (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (8): ReLU(inplace)
+      (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (11): ReLU(inplace)
+      (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (13): ReLU(inplace)
+      (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (15): ReLU(inplace)
+      (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (18): ReLU(inplace)
+      (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (20): ReLU(inplace)
+      (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (22): ReLU(inplace)
+      (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (25): ReLU(inplace)
+      (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (27): ReLU(inplace)
+      (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (29): ReLU(inplace)
+    )
+    (avgpool): AdaptiveAvgPool2d(output_size=(7, 7))
+    (classifier): Sequential(
+      (0): Linear(in_features=25088, out_features=4096, bias=True)
+      (1): ReLU(inplace)
+      (2): Dropout(p=0.5)
+      (3): Linear(in_features=4096, out_features=4096, bias=True)
+      (4): ReLU(inplace)
+      (5): Dropout(p=0.5)
+      (6): Linear(in_features=4096, out_features=1000, bias=True)
+    )
+  )
+  (i3d): InceptionI3d(
+    (logits): Unit3D(
+      (conv3d): Conv3d(1024, 157, kernel_size=[1, 1, 1], stride=(1, 1, 1))
+    )
+    (Conv3d_1a_7x7): Unit3D(
+      (conv3d): Conv3d(3, 64, kernel_size=[7, 7, 7], stride=(2, 2, 2), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_2a_3x3): MaxPool3dSamePadding(kernel_size=[1, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Conv3d_2b_1x1): Unit3D(
+      (conv3d): Conv3d(64, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (Conv3d_2c_3x3): Unit3D(
+      (conv3d): Conv3d(64, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_3a_3x3): MaxPool3dSamePadding(kernel_size=[1, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_3b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(192, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(192, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(192, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 32, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(192, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_3c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(256, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 96, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(256, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_4a_3x3): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(2, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_4b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(480, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(480, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 208, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(208, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(480, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 48, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(480, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(112, 224, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(224, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4d): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 256, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4e): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 144, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(144, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(144, 288, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(288, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4f): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(528, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(528, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(528, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(528, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_5a_1x1): MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(2, 1, 1), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_5b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_5c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 384, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(384, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(192, 384, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(384, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 48, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(48, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+  )
+  (gen): Generator(
+    (conv2d): Conv2d(1536, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (upsamp1): Upsample(scale_factor=2, mode=nearest)
+    (conv3d_1a): Conv3d(1024, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(256, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (upsamp2): Upsample(scale_factor=2, mode=nearest)
+    (conv3d_2a): Conv3d(256, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_2b): Conv3d(128, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (upsamp3): Upsample(scale_factor=2, mode=nearest)
+    (conv3d_3a): Conv3d(128, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_3b): Conv3d(64, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (upsamp4): Upsample(scale_factor=2, mode=nearest)
+    (conv3d_4): Conv3d(64, 3, kernel_size=(1, 1, 1), stride=(1, 1, 1))
+  )
+)
+Training...
+	Batch 1/420 Loss:40769.15234 con:0.30617, recon1:20173.22070, recon2:20595.62500
+	Batch 2/420 Loss:41715.53125 con:0.29877, recon1:20577.48047, recon2:21137.75195
+	Batch 3/420 Loss:38175.64844 con:0.29563, recon1:19008.61133, recon2:19166.74219
+	Batch 4/420 Loss:30328.25391 con:0.29914, recon1:15110.80762, recon2:15217.14648
+	Batch 5/420 Loss:22377.20703 con:0.30246, recon1:11159.90625, recon2:11216.99805
+	Batch 6/420 Loss:18650.79688 con:0.30741, recon1:9458.31934, recon2:9192.16895
+	Batch 7/420 Loss:17209.24219 con:0.29687, recon1:8594.88965, recon2:8614.05566
+	Batch 8/420 Loss:13662.96484 con:0.30244, recon1:6915.18750, recon2:6747.47559
+	Batch 9/420 Loss:18985.63477 con:0.30261, recon1:9719.80566, recon2:9265.52637
+	Batch 10/420 Loss:13266.56641 con:0.30263, recon1:6750.31396, recon2:6515.95020
+	Batch 11/420 Loss:17284.11719 con:0.29826, recon1:8701.39062, recon2:8582.42871
+	Batch 12/420 Loss:16757.78516 con:0.29153, recon1:8209.35645, recon2:8548.13574
+	Batch 13/420 Loss:12491.36914 con:0.29623, recon1:6294.87744, recon2:6196.19580
+	Batch 14/420 Loss:15276.86816 con:0.29987, recon1:7883.18896, recon2:7393.37939
+	Batch 15/420 Loss:12771.50586 con:0.29129, recon1:6304.39893, recon2:6466.81494
+	Batch 16/420 Loss:10814.06543 con:0.29488, recon1:5440.37012, recon2:5373.40039
+	Batch 17/420 Loss:11914.13672 con:0.29172, recon1:6063.25830, recon2:5850.58691
+	Batch 18/420 Loss:12108.53418 con:0.29229, recon1:6061.13037, recon2:6047.11133
+	Batch 19/420 Loss:10147.47852 con:0.28974, recon1:5015.04102, recon2:5132.14844
+	Batch 20/420 Loss:11540.99219 con:0.29167, recon1:5670.00244, recon2:5870.69824
+	Batch 21/420 Loss:11104.61328 con:0.27167, recon1:5441.14404, recon2:5663.19775
+	Batch 22/420 Loss:9726.17773 con:0.28264, recon1:4941.11572, recon2:4784.77881
+	Batch 23/420 Loss:10006.55859 con:0.27261, recon1:5096.78320, recon2:4909.50244
+	Batch 24/420 Loss:9921.71680 con:0.26827, recon1:4985.98193, recon2:4935.46680
+	Batch 25/420 Loss:8395.63184 con:0.27153, recon1:4169.18701, recon2:4226.17334
+	Batch 26/420 Loss:10423.20605 con:0.25975, recon1:5354.52051, recon2:5068.42578
+	Batch 27/420 Loss:8152.45020 con:0.27010, recon1:4056.58667, recon2:4095.59351
+	Batch 28/420 Loss:8336.58984 con:0.26960, recon1:4195.44141, recon2:4140.87842
+	Batch 29/420 Loss:8338.25488 con:0.27078, recon1:4131.27148, recon2:4206.71240
+	Batch 30/420 Loss:7886.70020 con:0.26265, recon1:3908.07568, recon2:3978.36182
+	Batch 31/420 Loss:8133.52051 con:0.25865, recon1:4118.50928, recon2:4014.75220
+	Batch 32/420 Loss:7465.32129 con:0.27157, recon1:3800.06763, recon2:3664.98218
+	Batch 33/420 Loss:7499.54004 con:0.25572, recon1:3745.63184, recon2:3753.65259
+	Batch 34/420 Loss:7595.60547 con:0.25799, recon1:3762.26611, recon2:3833.08130
+	Batch 35/420 Loss:7553.72314 con:0.25489, recon1:3774.69312, recon2:3778.77515
+	Batch 36/420 Loss:7090.94727 con:0.25188, recon1:3519.05273, recon2:3571.64282
+	Batch 37/420 Loss:7289.71094 con:0.25483, recon1:3595.89966, recon2:3693.55615
+	Batch 38/420 Loss:7594.27344 con:0.24831, recon1:3829.52344, recon2:3764.50171
+	Batch 39/420 Loss:6906.45215 con:0.24997, recon1:3450.55005, recon2:3455.65186
+	Batch 40/420 Loss:6792.87305 con:0.24961, recon1:3360.00635, recon2:3432.61743
+	Batch 41/420 Loss:6864.64502 con:0.25332, recon1:3355.25586, recon2:3509.13574
+	Batch 42/420 Loss:7235.59668 con:0.25647, recon1:3691.13745, recon2:3544.20264
+	Batch 43/420 Loss:6724.20605 con:0.25987, recon1:3395.46851, recon2:3328.47778
+	Batch 44/420 Loss:6541.36426 con:0.26087, recon1:3282.84473, recon2:3258.25854
+	Batch 45/420 Loss:6718.74414 con:0.26973, recon1:3366.41284, recon2:3352.06128
+	Batch 46/420 Loss:6216.59082 con:0.26403, recon1:3074.28198, recon2:3142.04468
+	Batch 47/420 Loss:6438.06348 con:0.26824, recon1:3199.45386, recon2:3238.34131
+	Batch 48/420 Loss:6014.85449 con:0.26118, recon1:3032.33545, recon2:2982.25806
+	Batch 49/420 Loss:6110.76709 con:0.25210, recon1:2985.55347, recon2:3124.96143
+	Batch 50/420 Loss:6189.71973 con:0.26175, recon1:3110.92505, recon2:3078.53271
+	Batch 51/420 Loss:5734.99902 con:0.27731, recon1:2812.50562, recon2:2922.21606
+	Batch 52/420 Loss:6321.08496 con:0.27068, recon1:3151.84033, recon2:3168.97363
+	Batch 53/420 Loss:5800.00244 con:0.26230, recon1:2893.02295, recon2:2906.71729
+	Batch 54/420 Loss:5662.80273 con:0.26946, recon1:2807.81494, recon2:2854.71802
+	Batch 55/420 Loss:5793.53613 con:0.27272, recon1:2905.15186, recon2:2888.11133
+	Batch 56/420 Loss:6115.19238 con:0.25304, recon1:3000.54224, recon2:3114.39746
+	Batch 57/420 Loss:5969.81982 con:0.26488, recon1:3015.58032, recon2:2953.97461
+	Batch 58/420 Loss:5609.74609 con:0.26496, recon1:2746.39307, recon2:2863.08838
+	Batch 59/420 Loss:5730.69043 con:0.28163, recon1:2894.59131, recon2:2835.81714
+	Batch 60/420 Loss:6066.52148 con:0.27157, recon1:3023.81763, recon2:3042.43237
+	Batch 61/420 Loss:5341.48633 con:0.27641, recon1:2578.85620, recon2:2762.35400
+	Batch 62/420 Loss:5599.41602 con:0.27044, recon1:2803.99609, recon2:2795.14917
+	Batch 63/420 Loss:5789.95068 con:0.25915, recon1:2916.49561, recon2:2873.19604
+	Batch 64/420 Loss:5563.44238 con:0.25592, recon1:2834.24072, recon2:2728.94604
+	Batch 65/420 Loss:5415.43164 con:0.26294, recon1:2675.19263, recon2:2739.97583
+	Batch 66/420 Loss:5447.04297 con:0.24970, recon1:2686.95312, recon2:2759.83984
+	Batch 67/420 Loss:4725.30420 con:0.25715, recon1:2287.23193, recon2:2437.81519
+	Batch 68/420 Loss:4907.97559 con:0.26908, recon1:2414.39136, recon2:2493.31543
+	Batch 69/420 Loss:4944.65625 con:0.27410, recon1:2535.51440, recon2:2408.86768
+	Batch 70/420 Loss:5138.91309 con:0.26230, recon1:2618.41309, recon2:2520.23779
+	Batch 71/420 Loss:5107.22559 con:0.26156, recon1:2552.96509, recon2:2553.99927
+	Batch 72/420 Loss:5580.93604 con:0.25704, recon1:2813.14038, recon2:2767.53857
+	Batch 73/420 Loss:4932.25684 con:0.26221, recon1:2390.07129, recon2:2541.92358
+	Batch 74/420 Loss:5243.50391 con:0.26947, recon1:2576.36865, recon2:2666.86597
+	Batch 75/420 Loss:5167.88525 con:0.26373, recon1:2578.01929, recon2:2589.60229
+	Batch 76/420 Loss:5276.80566 con:0.28454, recon1:2574.45239, recon2:2702.06860
+	Batch 77/420 Loss:5422.14648 con:0.25705, recon1:2732.88721, recon2:2689.00220
+	Batch 78/420 Loss:5116.51562 con:0.27907, recon1:2568.71436, recon2:2547.52222
+	Batch 79/420 Loss:4785.62354 con:0.25417, recon1:2419.75781, recon2:2365.61157
+	Batch 80/420 Loss:5116.70410 con:0.28621, recon1:2605.96021, recon2:2510.45801
+	Batch 81/420 Loss:4843.80078 con:0.27360, recon1:2454.29224, recon2:2389.23462
+	Batch 82/420 Loss:4984.21533 con:0.27084, recon1:2454.25244, recon2:2529.69214
+	Batch 83/420 Loss:4776.20947 con:0.24891, recon1:2431.14233, recon2:2344.81812
+	Batch 84/420 Loss:4457.45605 con:0.26025, recon1:2252.91211, recon2:2204.28345
+	Batch 85/420 Loss:4802.98438 con:0.26558, recon1:2434.05103, recon2:2368.66797
+	Batch 86/420 Loss:4877.02832 con:0.27172, recon1:2460.11035, recon2:2416.64600
+	Batch 87/420 Loss:5062.16602 con:0.27439, recon1:2529.16357, recon2:2532.72778
+	Batch 88/420 Loss:4981.22461 con:0.27583, recon1:2476.53052, recon2:2504.41797
+	Batch 89/420 Loss:4744.26709 con:0.24825, recon1:2408.60010, recon2:2335.41870
+	Batch 90/420 Loss:4719.86719 con:0.25419, recon1:2372.44507, recon2:2347.16797
+	Batch 91/420 Loss:4676.55225 con:0.25672, recon1:2321.21387, recon2:2355.08154
+	Batch 92/420 Loss:4660.30859 con:0.25761, recon1:2300.34570, recon2:2359.70532
+	Batch 93/420 Loss:4891.42725 con:0.26229, recon1:2462.73071, recon2:2428.43433
+	Batch 94/420 Loss:5087.05762 con:0.27419, recon1:2494.99854, recon2:2591.78516
+	Batch 95/420 Loss:4948.33350 con:0.25685, recon1:2453.91211, recon2:2494.16455
+	Batch 96/420 Loss:4470.15283 con:0.28044, recon1:2312.65820, recon2:2157.21411
+	Batch 97/420 Loss:4413.25488 con:0.25699, recon1:2263.33276, recon2:2149.66504
+	Batch 98/420 Loss:4847.66797 con:0.25780, recon1:2454.89502, recon2:2392.51538
+	Batch 99/420 Loss:4707.96777 con:0.25943, recon1:2316.17944, recon2:2391.52856
+	Batch 100/420 Loss:4289.08887 con:0.26436, recon1:2169.38599, recon2:2119.43823
+	Batch 101/420 Loss:4479.59082 con:0.27395, recon1:2292.55151, recon2:2186.76538
+	Batch 102/420 Loss:4273.04883 con:0.25942, recon1:2184.00073, recon2:2088.78857
+	Batch 103/420 Loss:4852.27930 con:0.25952, recon1:2440.16406, recon2:2411.85547
+	Batch 104/420 Loss:4681.82959 con:0.27736, recon1:2311.23535, recon2:2370.31689
+	Batch 105/420 Loss:4552.99023 con:0.25909, recon1:2301.68896, recon2:2251.04248
+	Batch 106/420 Loss:4393.51855 con:0.26987, recon1:2174.30566, recon2:2218.94287
+	Batch 107/420 Loss:4422.84814 con:0.25279, recon1:2267.08569, recon2:2155.50977
+	Batch 108/420 Loss:4272.94531 con:0.27715, recon1:2122.07300, recon2:2150.59521
+	Batch 109/420 Loss:4890.03613 con:0.27030, recon1:2420.95728, recon2:2468.80835
+	Batch 110/420 Loss:4735.50098 con:0.26634, recon1:2329.15405, recon2:2406.08057
+	Batch 111/420 Loss:4809.11230 con:0.25468, recon1:2456.75903, recon2:2352.09888
+	Batch 112/420 Loss:4524.34375 con:0.27157, recon1:2315.47827, recon2:2208.59399
+	Batch 113/420 Loss:4685.59717 con:0.26280, recon1:2299.91064, recon2:2385.42383
+	Batch 114/420 Loss:4661.83301 con:0.25871, recon1:2400.11475, recon2:2261.45923
+	Batch 115/420 Loss:5289.60449 con:0.25934, recon1:2624.92944, recon2:2664.41553
+	Batch 116/420 Loss:4254.94287 con:0.27164, recon1:2131.93604, recon2:2122.73511
+	Batch 117/420 Loss:4707.28125 con:0.26627, recon1:2401.87573, recon2:2305.13892
+	Batch 118/420 Loss:4944.48438 con:0.25895, recon1:2449.33765, recon2:2494.88745
+	Batch 119/420 Loss:4479.22754 con:0.27527, recon1:2246.19092, recon2:2232.76147
+	Batch 120/420 Loss:4904.79395 con:0.25197, recon1:2478.99023, recon2:2425.55176
+	Batch 121/420 Loss:4855.30615 con:0.25939, recon1:2418.87231, recon2:2436.17456
+	Batch 122/420 Loss:4757.27051 con:0.25269, recon1:2371.22437, recon2:2385.79370
+	Batch 123/420 Loss:4698.60449 con:0.25615, recon1:2275.94946, recon2:2422.39893
+	Batch 124/420 Loss:4512.05469 con:0.26642, recon1:2288.97510, recon2:2222.81323
+	Batch 125/420 Loss:4413.64062 con:0.27304, recon1:2252.61035, recon2:2160.75708
+	Batch 126/420 Loss:5020.71777 con:0.26420, recon1:2494.37036, recon2:2526.08301
+	Batch 127/420 Loss:4577.56738 con:0.26521, recon1:2257.22437, recon2:2320.07812
+	Batch 128/420 Loss:4251.46875 con:0.27388, recon1:2212.84253, recon2:2038.35229
+	Batch 129/420 Loss:4487.09766 con:0.27289, recon1:2216.56201, recon2:2270.26270
+	Batch 130/420 Loss:4710.69531 con:0.27187, recon1:2325.99316, recon2:2384.43042
+	Batch 131/420 Loss:4564.30762 con:0.26949, recon1:2249.25928, recon2:2314.77881
+	Batch 132/420 Loss:4209.21777 con:0.28230, recon1:2108.03491, recon2:2100.90039
+	Batch 133/420 Loss:4741.19141 con:0.28021, recon1:2380.73267, recon2:2360.17822
+	Batch 134/420 Loss:4804.91895 con:0.26511, recon1:2382.83594, recon2:2421.81763
+	Batch 135/420 Loss:4182.82666 con:0.26415, recon1:2098.29517, recon2:2084.26733
+	Batch 136/420 Loss:4454.57275 con:0.25054, recon1:2247.18286, recon2:2207.13940
+	Batch 137/420 Loss:4472.93164 con:0.27612, recon1:2183.29370, recon2:2289.36182
+	Batch 138/420 Loss:4149.90039 con:0.25888, recon1:2074.23120, recon2:2075.41064
+	Batch 139/420 Loss:4855.60059 con:0.28027, recon1:2425.18530, recon2:2430.13477
+	Batch 140/420 Loss:4675.17090 con:0.28868, recon1:2276.88428, recon2:2397.99780
+	Batch 141/420 Loss:4823.25977 con:0.29982, recon1:2426.86279, recon2:2396.09692
+	Batch 142/420 Loss:4755.63281 con:0.27972, recon1:2369.50635, recon2:2385.84644
+	Batch 143/420 Loss:4509.67285 con:0.26507, recon1:2246.61548, recon2:2262.79199
+	Batch 144/420 Loss:4292.91504 con:0.26161, recon1:2102.50879, recon2:2190.14478
+	Batch 145/420 Loss:4588.18164 con:0.28455, recon1:2310.50562, recon2:2277.39111
+	Batch 146/420 Loss:4438.75244 con:0.28213, recon1:2140.71387, recon2:2297.75635
+	Batch 147/420 Loss:4699.10938 con:0.26131, recon1:2302.12329, recon2:2396.72510
+	Batch 148/420 Loss:4497.93945 con:0.28022, recon1:2199.16675, recon2:2298.49268
+	Batch 149/420 Loss:4354.75586 con:0.27368, recon1:2144.25122, recon2:2210.23071
+	Batch 150/420 Loss:4310.39453 con:0.26013, recon1:2147.11304, recon2:2163.02148
+	Batch 151/420 Loss:4484.60254 con:0.28942, recon1:2290.08887, recon2:2194.22461
+	Batch 152/420 Loss:4582.73193 con:0.26603, recon1:2269.81201, recon2:2312.65381
+	Batch 153/420 Loss:4135.90430 con:0.28292, recon1:2051.46875, recon2:2084.15234
+	Batch 154/420 Loss:4652.49805 con:0.25979, recon1:2260.60815, recon2:2391.63013
+	Batch 155/420 Loss:4455.85156 con:0.27136, recon1:2286.64355, recon2:2168.93652
+	Batch 156/420 Loss:4342.32080 con:0.26982, recon1:2151.63525, recon2:2190.41577
+	Batch 157/420 Loss:4564.68945 con:0.26636, recon1:2261.11719, recon2:2303.30566
+	Batch 158/420 Loss:4535.41895 con:0.27645, recon1:2200.87891, recon2:2334.26367
+	Batch 159/420 Loss:4424.65430 con:0.27756, recon1:2214.64966, recon2:2209.72681
+	Batch 160/420 Loss:4344.28174 con:0.27716, recon1:2167.16211, recon2:2176.84253
+	Batch 161/420 Loss:4779.03125 con:0.26404, recon1:2359.63599, recon2:2419.13135
+	Batch 162/420 Loss:4353.78418 con:0.27367, recon1:2172.25928, recon2:2181.25122
+	Batch 163/420 Loss:4327.29395 con:0.27616, recon1:2129.15234, recon2:2197.86523
+	Batch 164/420 Loss:4530.98340 con:0.27352, recon1:2255.78296, recon2:2274.92725
+	Batch 165/420 Loss:4317.03223 con:0.28213, recon1:2107.40356, recon2:2209.34668
+	Batch 166/420 Loss:4219.94922 con:0.27324, recon1:2099.92480, recon2:2119.75122
+	Batch 167/420 Loss:4560.34668 con:0.28389, recon1:2317.04712, recon2:2243.01538
+	Batch 168/420 Loss:4462.47656 con:0.26310, recon1:2142.34302, recon2:2319.87061
+	Batch 169/420 Loss:4809.20215 con:0.27029, recon1:2399.08032, recon2:2409.85156
+	Batch 170/420 Loss:4325.50342 con:0.27008, recon1:2172.98779, recon2:2152.24561
+	Batch 171/420 Loss:4695.96680 con:0.28059, recon1:2330.40967, recon2:2365.27637
+	Batch 172/420 Loss:4519.77686 con:0.28744, recon1:2265.86475, recon2:2253.62476
+	Batch 173/420 Loss:4698.71484 con:0.28515, recon1:2349.88110, recon2:2348.54834
+	Batch 174/420 Loss:4493.02832 con:0.28216, recon1:2246.01514, recon2:2246.73120
+	Batch 175/420 Loss:4558.49609 con:0.29092, recon1:2342.07886, recon2:2216.12646
+	Batch 176/420 Loss:4133.78125 con:0.28544, recon1:2046.26953, recon2:2087.22632
+	Batch 177/420 Loss:4630.21924 con:0.28407, recon1:2299.57300, recon2:2330.36206
+	Batch 178/420 Loss:4618.60059 con:0.26946, recon1:2276.88599, recon2:2341.44482
+	Batch 179/420 Loss:4625.81250 con:0.27454, recon1:2305.15674, recon2:2320.38086
+	Batch 180/420 Loss:4867.07422 con:0.27463, recon1:2386.30103, recon2:2480.49854
+	Batch 181/420 Loss:4666.81445 con:0.27104, recon1:2310.67676, recon2:2355.86670
+	Batch 182/420 Loss:4580.71240 con:0.28279, recon1:2271.67505, recon2:2308.75464
+	Batch 183/420 Loss:4558.47900 con:0.26900, recon1:2258.20337, recon2:2300.00659
+	Batch 184/420 Loss:4363.68359 con:0.27592, recon1:2191.10938, recon2:2172.29858
+	Batch 185/420 Loss:4634.07080 con:0.28633, recon1:2347.06177, recon2:2286.72266
+	Batch 186/420 Loss:4915.34424 con:0.26759, recon1:2437.51465, recon2:2477.56201
+	Batch 187/420 Loss:4488.92041 con:0.26646, recon1:2282.43481, recon2:2206.21924
+	Batch 188/420 Loss:4274.03906 con:0.27561, recon1:2140.99756, recon2:2132.76562
+	Batch 189/420 Loss:4264.18701 con:0.28668, recon1:2151.89966, recon2:2112.00073
+	Batch 190/420 Loss:4535.91553 con:0.28286, recon1:2320.64722, recon2:2214.98535
+	Batch 191/420 Loss:4556.48096 con:0.27329, recon1:2287.77759, recon2:2268.43018
+	Batch 192/420 Loss:4190.34717 con:0.28356, recon1:2056.11865, recon2:2133.94507
+	Batch 193/420 Loss:4470.79102 con:0.27996, recon1:2251.28223, recon2:2219.22876
+	Batch 194/420 Loss:4505.54102 con:0.28650, recon1:2243.70264, recon2:2261.55200
+	Batch 195/420 Loss:4344.75195 con:0.28658, recon1:2180.31128, recon2:2164.15430
+	Batch 196/420 Loss:4753.47363 con:0.29448, recon1:2395.52393, recon2:2357.65527
+	Batch 197/420 Loss:4880.78516 con:0.28836, recon1:2383.14160, recon2:2497.35522
+	Batch 198/420 Loss:4491.66992 con:0.28706, recon1:2255.64673, recon2:2235.73608
+	Batch 199/420 Loss:4577.29297 con:0.28456, recon1:2233.94482, recon2:2343.06372
+	Batch 200/420 Loss:4308.26416 con:0.27990, recon1:2093.69165, recon2:2214.29272
+	Batch 201/420 Loss:4763.32324 con:0.28122, recon1:2365.82104, recon2:2397.22119
+	Batch 202/420 Loss:4499.09668 con:0.28583, recon1:2270.40869, recon2:2228.40210
+	Batch 203/420 Loss:4133.35840 con:0.27266, recon1:2096.24976, recon2:2036.83594
+	Batch 204/420 Loss:4485.42285 con:0.27622, recon1:2255.44116, recon2:2229.70532
+	Batch 205/420 Loss:4593.62695 con:0.28680, recon1:2265.47412, recon2:2327.86572
+	Batch 206/420 Loss:4852.83105 con:0.28942, recon1:2426.16821, recon2:2426.37329
+	Batch 207/420 Loss:4174.71191 con:0.27861, recon1:2086.00586, recon2:2088.42773
+	Batch 208/420 Loss:4386.77539 con:0.29296, recon1:2208.11987, recon2:2178.36255
+	Batch 209/420 Loss:4499.73633 con:0.29240, recon1:2232.90381, recon2:2266.54004
+	Batch 210/420 Loss:4377.40479 con:0.27874, recon1:2146.40845, recon2:2230.71753
+	Batch 211/420 Loss:4485.28125 con:0.29536, recon1:2227.40283, recon2:2257.58325
+	Batch 212/420 Loss:4064.47949 con:0.29612, recon1:2026.18213, recon2:2038.00122
+	Batch 213/420 Loss:4044.68115 con:0.27498, recon1:2046.54236, recon2:1997.86377
+	Batch 214/420 Loss:4589.48535 con:0.30063, recon1:2315.29590, recon2:2273.88892
+	Batch 215/420 Loss:4471.40430 con:0.30930, recon1:2218.33496, recon2:2252.76001
+	Batch 216/420 Loss:4118.26709 con:0.29645, recon1:2013.26196, recon2:2104.70874
+	Batch 217/420 Loss:4395.61426 con:0.29309, recon1:2194.51318, recon2:2200.80786
+	Batch 218/420 Loss:4186.98389 con:0.28885, recon1:2164.98828, recon2:2021.70667
+	Batch 219/420 Loss:4323.15137 con:0.29211, recon1:2175.13647, recon2:2147.72314
+	Batch 220/420 Loss:3973.40625 con:0.29281, recon1:2068.93506, recon2:1904.17859
+	Batch 221/420 Loss:4398.24316 con:0.27891, recon1:2183.76147, recon2:2214.20264
+	Batch 222/420 Loss:4286.49219 con:0.29031, recon1:2068.33496, recon2:2217.86670
+	Batch 223/420 Loss:4215.94189 con:0.28410, recon1:2092.18115, recon2:2123.47656
+	Batch 224/420 Loss:4688.25635 con:0.29161, recon1:2394.27539, recon2:2293.68945
+	Batch 225/420 Loss:4279.68311 con:0.27916, recon1:2122.73877, recon2:2156.66528
+	Batch 226/420 Loss:4277.61133 con:0.31368, recon1:2157.77783, recon2:2119.52002
+	Batch 227/420 Loss:4139.03125 con:0.27987, recon1:2081.34106, recon2:2057.41040
+	Batch 228/420 Loss:4029.27393 con:0.28730, recon1:2003.68628, recon2:2025.30042
+	Batch 229/420 Loss:4152.80859 con:0.30949, recon1:2046.90454, recon2:2105.59473
+	Batch 230/420 Loss:4270.66699 con:0.26919, recon1:2141.39062, recon2:2129.00684
+	Batch 231/420 Loss:4199.19824 con:0.27552, recon1:2094.65210, recon2:2104.27026
+	Batch 232/420 Loss:4540.04395 con:0.29038, recon1:2298.23364, recon2:2241.52002
+	Batch 233/420 Loss:4227.38135 con:0.27026, recon1:2067.91260, recon2:2159.19849
+	Batch 234/420 Loss:4272.90430 con:0.27156, recon1:2130.16357, recon2:2142.46899
+	Batch 235/420 Loss:4105.62646 con:0.27986, recon1:2007.85730, recon2:2097.48926
+	Batch 236/420 Loss:4091.67871 con:0.27380, recon1:2010.86670, recon2:2080.53809
+	Batch 237/420 Loss:4520.46582 con:0.28829, recon1:2182.28247, recon2:2337.89478
+	Batch 238/420 Loss:4406.90527 con:0.28145, recon1:2188.82080, recon2:2217.80322
+	Batch 239/420 Loss:4279.33301 con:0.27438, recon1:2158.11279, recon2:2120.94556
+	Batch 240/420 Loss:4398.90527 con:0.26142, recon1:2203.20142, recon2:2195.44214
+	Batch 241/420 Loss:4294.80664 con:0.28052, recon1:2101.50732, recon2:2193.01880
+	Batch 242/420 Loss:4077.06592 con:0.27324, recon1:2027.75720, recon2:2049.03564
+	Batch 243/420 Loss:4380.29980 con:0.28105, recon1:2243.53271, recon2:2136.48608
+	Batch 244/420 Loss:4622.15820 con:0.27299, recon1:2289.82031, recon2:2332.06470
+	Batch 245/420 Loss:4596.53223 con:0.27605, recon1:2347.18115, recon2:2249.07495
+	Batch 246/420 Loss:4372.86914 con:0.27922, recon1:2174.90674, recon2:2197.68286
+	Batch 247/420 Loss:4056.05737 con:0.27870, recon1:2041.70728, recon2:2014.07141
+	Batch 248/420 Loss:4284.01074 con:0.27273, recon1:2192.28979, recon2:2091.44824
+	Batch 249/420 Loss:4136.39453 con:0.27651, recon1:2030.18787, recon2:2105.92993
+	Batch 250/420 Loss:4076.19238 con:0.26795, recon1:2035.13123, recon2:2040.79321
+	Batch 251/420 Loss:4249.14648 con:0.26701, recon1:2116.30786, recon2:2132.57129
+	Batch 252/420 Loss:4213.03516 con:0.26318, recon1:2074.92603, recon2:2137.84619
+	Batch 253/420 Loss:4021.95752 con:0.26952, recon1:1977.19116, recon2:2044.49683
+	Batch 254/420 Loss:4258.12695 con:0.27192, recon1:2177.86255, recon2:2079.99268
+	Batch 255/420 Loss:4226.08398 con:0.26441, recon1:2125.80444, recon2:2100.01538
+	Batch 256/420 Loss:4762.57520 con:0.28555, recon1:2407.84961, recon2:2354.43970
+	Batch 257/420 Loss:4325.69238 con:0.27500, recon1:2168.87744, recon2:2156.54028
+	Batch 258/420 Loss:4546.30762 con:0.27055, recon1:2299.25684, recon2:2246.78027
+	Batch 259/420 Loss:4258.17139 con:0.28524, recon1:2172.98267, recon2:2084.90356
+	Batch 260/420 Loss:4313.86914 con:0.27848, recon1:2170.92114, recon2:2142.66943
+	Batch 261/420 Loss:4595.27197 con:0.27081, recon1:2320.15039, recon2:2274.85083
+	Batch 262/420 Loss:4537.17480 con:0.27013, recon1:2345.05103, recon2:2191.85352
+	Batch 263/420 Loss:4241.76123 con:0.27259, recon1:2087.44800, recon2:2154.04053
+	Batch 264/420 Loss:4324.28516 con:0.26871, recon1:2127.07642, recon2:2196.93970
+	Batch 265/420 Loss:4472.27930 con:0.27984, recon1:2262.61963, recon2:2209.37988
+	Batch 266/420 Loss:4592.33887 con:0.27114, recon1:2325.15942, recon2:2266.90796
+	Batch 267/420 Loss:4008.48779 con:0.28602, recon1:1964.05530, recon2:2044.14648
+	Batch 268/420 Loss:4158.70605 con:0.27365, recon1:2088.61719, recon2:2069.81494
+	Batch 269/420 Loss:4553.00195 con:0.26067, recon1:2220.70752, recon2:2332.03369
+	Batch 270/420 Loss:4309.85059 con:0.26246, recon1:2151.05786, recon2:2158.53052
+	Batch 271/420 Loss:4383.79199 con:0.28617, recon1:2180.33911, recon2:2203.16699
+	Batch 272/420 Loss:4196.20605 con:0.27218, recon1:2073.54321, recon2:2122.39038
+	Batch 273/420 Loss:4303.61621 con:0.27864, recon1:2123.49854, recon2:2179.83936
+	Batch 274/420 Loss:4123.41211 con:0.27594, recon1:2041.10229, recon2:2082.03394
+	Batch 275/420 Loss:4393.31543 con:0.28179, recon1:2216.73877, recon2:2176.29517
+	Batch 276/420 Loss:4356.76074 con:0.26343, recon1:2226.31128, recon2:2130.18628
+	Batch 277/420 Loss:4031.42871 con:0.28093, recon1:2029.89929, recon2:2001.24854
+	Batch 278/420 Loss:4320.43408 con:0.28224, recon1:2165.67749, recon2:2154.47437
+	Batch 279/420 Loss:4248.26074 con:0.26960, recon1:2180.77710, recon2:2067.21436
+	Batch 280/420 Loss:4353.47461 con:0.27054, recon1:2204.59375, recon2:2148.61060
+	Batch 281/420 Loss:4468.96240 con:0.26516, recon1:2274.15186, recon2:2194.54541
+	Batch 282/420 Loss:4442.85156 con:0.28137, recon1:2170.48535, recon2:2272.08472
+	Batch 283/420 Loss:4269.95557 con:0.27327, recon1:2146.43433, recon2:2123.24805
+	Batch 284/420 Loss:4439.23682 con:0.27241, recon1:2264.97949, recon2:2173.98486
+	Batch 285/420 Loss:4052.75708 con:0.27630, recon1:2029.47852, recon2:2023.00232
+	Batch 286/420 Loss:4707.64258 con:0.26725, recon1:2401.15039, recon2:2306.22461
+	Batch 287/420 Loss:4215.63574 con:0.26561, recon1:2086.72412, recon2:2128.64624
+	Batch 288/420 Loss:4073.30078 con:0.29057, recon1:2057.43555, recon2:2015.57483
+	Batch 289/420 Loss:4033.50635 con:0.26862, recon1:2024.59497, recon2:2008.64282
+	Batch 290/420 Loss:4354.75781 con:0.27755, recon1:2212.11426, recon2:2142.36597
+	Batch 291/420 Loss:3855.41602 con:0.27237, recon1:1929.10669, recon2:1926.03699
+	Batch 292/420 Loss:4039.30566 con:0.27398, recon1:1956.05017, recon2:2082.98169
+	Batch 293/420 Loss:4086.70020 con:0.27264, recon1:2033.63159, recon2:2052.79590
+	Batch 294/420 Loss:4322.15332 con:0.27181, recon1:2143.12256, recon2:2178.75903
+	Batch 295/420 Loss:4129.06982 con:0.27293, recon1:2036.31848, recon2:2092.47852
+	Batch 296/420 Loss:4232.68408 con:0.27901, recon1:2022.08142, recon2:2210.32349
+	Batch 297/420 Loss:4157.08691 con:0.27169, recon1:2083.71216, recon2:2073.10278
+	Batch 298/420 Loss:4027.60742 con:0.28001, recon1:1981.40247, recon2:2045.92493
+	Batch 299/420 Loss:4386.93701 con:0.26654, recon1:2170.75464, recon2:2215.91577
+	Batch 300/420 Loss:4252.44727 con:0.27705, recon1:2166.12109, recon2:2086.04932
+	Batch 301/420 Loss:4745.40039 con:0.28097, recon1:2382.83569, recon2:2362.28345
+	Batch 302/420 Loss:4810.45410 con:0.26931, recon1:2400.33716, recon2:2409.84790
+	Batch 303/420 Loss:3943.07007 con:0.27274, recon1:1919.00977, recon2:2023.78760
+	Batch 304/420 Loss:4590.80957 con:0.28419, recon1:2295.35620, recon2:2295.16919
+	Batch 305/420 Loss:4653.74854 con:0.27317, recon1:2290.14233, recon2:2363.33301
+	Batch 306/420 Loss:3949.05811 con:0.26330, recon1:1968.22742, recon2:1980.56738
+	Batch 307/420 Loss:4974.62695 con:0.27772, recon1:2530.11377, recon2:2444.23511
+	Batch 308/420 Loss:5332.04102 con:0.27627, recon1:2646.30933, recon2:2685.45557
+	Batch 309/420 Loss:4545.27246 con:0.27118, recon1:2277.75464, recon2:2267.24658
+	Batch 310/420 Loss:6917.02344 con:0.26500, recon1:3546.74463, recon2:3370.01416
+	Batch 311/420 Loss:6808.40283 con:0.27416, recon1:3387.33838, recon2:3420.79028
+	Batch 312/420 Loss:6661.14990 con:0.26831, recon1:3255.83911, recon2:3405.04248
+	Batch 313/420 Loss:6172.04395 con:0.26519, recon1:3075.70801, recon2:3096.07080
+	Batch 314/420 Loss:4365.19287 con:0.27216, recon1:2120.53174, recon2:2244.38892
+	Batch 315/420 Loss:5226.13477 con:0.25022, recon1:2622.93677, recon2:2602.94775
+	Batch 316/420 Loss:4876.63086 con:0.27350, recon1:2488.27979, recon2:2388.07788
+	Batch 317/420 Loss:4742.33105 con:0.26548, recon1:2379.20801, recon2:2362.85791
+	Batch 318/420 Loss:4751.86182 con:0.27546, recon1:2418.15137, recon2:2333.43506
+	Batch 319/420 Loss:4408.93750 con:0.25843, recon1:2220.61694, recon2:2188.06201
+	Batch 320/420 Loss:4811.38379 con:0.28069, recon1:2430.13892, recon2:2380.96436
+	Batch 321/420 Loss:4354.33594 con:0.26013, recon1:2228.73340, recon2:2125.34277
+	Batch 322/420 Loss:4509.15723 con:0.26789, recon1:2245.92969, recon2:2262.95996
+	Batch 323/420 Loss:4482.14746 con:0.26473, recon1:2197.94214, recon2:2283.94067
+	Batch 324/420 Loss:4850.76953 con:0.25994, recon1:2446.34155, recon2:2404.16821
+	Batch 325/420 Loss:4661.96191 con:0.26519, recon1:2406.70605, recon2:2254.99097
+	Batch 326/420 Loss:4418.63770 con:0.27385, recon1:2212.26367, recon2:2206.09985
+	Batch 327/420 Loss:4744.03174 con:0.27459, recon1:2430.22974, recon2:2313.52734
+	Batch 328/420 Loss:4282.90479 con:0.26489, recon1:2152.88232, recon2:2129.75757
+	Batch 329/420 Loss:4506.99414 con:0.26189, recon1:2191.64429, recon2:2315.08765
+	Batch 330/420 Loss:4040.97559 con:0.24650, recon1:2006.84497, recon2:2033.88416
+	Batch 331/420 Loss:4629.79883 con:0.25857, recon1:2394.29126, recon2:2235.24878
+	Batch 332/420 Loss:4017.49561 con:0.26733, recon1:2059.47119, recon2:1957.75720
+	Batch 333/420 Loss:4647.72656 con:0.27871, recon1:2335.18164, recon2:2312.26587
+	Batch 334/420 Loss:4146.88086 con:0.25405, recon1:2019.54956, recon2:2127.07739
+	Batch 335/420 Loss:4535.99219 con:0.24974, recon1:2256.98120, recon2:2278.76123
+	Batch 336/420 Loss:4377.14551 con:0.24557, recon1:2203.21680, recon2:2173.68335
+	Batch 337/420 Loss:4534.97461 con:0.26095, recon1:2294.42896, recon2:2240.28491
+	Batch 338/420 Loss:4127.83887 con:0.25979, recon1:2070.46143, recon2:2057.11768
+	Batch 339/420 Loss:4043.04761 con:0.25606, recon1:2051.60767, recon2:1991.18384
+	Batch 340/420 Loss:4412.22705 con:0.27123, recon1:2199.34058, recon2:2212.61523
+	Batch 341/420 Loss:4535.68066 con:0.26399, recon1:2258.37061, recon2:2277.04590
+	Batch 342/420 Loss:4009.67285 con:0.25412, recon1:2024.39502, recon2:1985.02380
+	Batch 343/420 Loss:3980.22974 con:0.25436, recon1:1994.70325, recon2:1985.27209
+	Batch 344/420 Loss:4157.40381 con:0.25763, recon1:2144.29468, recon2:2012.85156
+	Batch 345/420 Loss:4292.05615 con:0.27121, recon1:2112.45044, recon2:2179.33447
+	Batch 346/420 Loss:4264.14258 con:0.26963, recon1:2078.34106, recon2:2185.53198
+	Batch 347/420 Loss:4209.85840 con:0.26474, recon1:2152.49585, recon2:2057.09790
+	Batch 348/420 Loss:4257.65332 con:0.24569, recon1:2101.81177, recon2:2155.59570
+	Batch 349/420 Loss:3878.54688 con:0.25490, recon1:1951.40198, recon2:1926.88989
+	Batch 350/420 Loss:4589.63379 con:0.25730, recon1:2257.46704, recon2:2331.90942
+	Batch 351/420 Loss:4395.77734 con:0.25963, recon1:2198.50244, recon2:2197.01538
+	Batch 352/420 Loss:4002.45947 con:0.25767, recon1:2009.31995, recon2:1992.88196
+	Batch 353/420 Loss:4306.46924 con:0.25875, recon1:2138.46216, recon2:2167.74829
+	Batch 354/420 Loss:4290.89600 con:0.25453, recon1:2117.41821, recon2:2173.22314
+	Batch 355/420 Loss:4391.44922 con:0.26777, recon1:2200.71436, recon2:2190.46680
+	Batch 356/420 Loss:4286.20117 con:0.26480, recon1:2115.70410, recon2:2170.23218
+	Batch 357/420 Loss:4413.36816 con:0.27228, recon1:2253.22119, recon2:2159.87476
+	Batch 358/420 Loss:4174.51855 con:0.27958, recon1:2098.68140, recon2:2075.55786
+	Batch 359/420 Loss:4369.38135 con:0.24682, recon1:2186.37817, recon2:2182.75635
+	Batch 360/420 Loss:4235.96143 con:0.25471, recon1:2204.93286, recon2:2030.77405
+	Batch 361/420 Loss:4127.41504 con:0.26998, recon1:2007.48425, recon2:2119.66089
+	Batch 362/420 Loss:4296.84277 con:0.25906, recon1:2119.69263, recon2:2176.89136
+	Batch 363/420 Loss:4307.23535 con:0.26446, recon1:2104.44824, recon2:2202.52271
+	Batch 364/420 Loss:4474.80078 con:0.24814, recon1:2243.64258, recon2:2230.90991
+	Batch 365/420 Loss:4364.03516 con:0.24323, recon1:2205.98804, recon2:2157.80420
+	Batch 366/420 Loss:4262.63184 con:0.26142, recon1:2169.91699, recon2:2092.45312
+	Batch 367/420 Loss:4245.90430 con:0.26341, recon1:2099.46631, recon2:2146.17432
+	Batch 368/420 Loss:4147.01025 con:0.26088, recon1:1984.38770, recon2:2162.36182
+	Batch 369/420 Loss:4066.95337 con:0.25703, recon1:2028.08252, recon2:2038.61377
+	Batch 370/420 Loss:4588.98242 con:0.25109, recon1:2308.38599, recon2:2280.34521
+	Batch 371/420 Loss:4336.61523 con:0.26889, recon1:2226.22656, recon2:2110.11987
+	Batch 372/420 Loss:4381.02979 con:0.26160, recon1:2192.64307, recon2:2188.12500
+	Batch 373/420 Loss:4104.02393 con:0.24920, recon1:2081.08936, recon2:2022.68518
+	Batch 374/420 Loss:4083.22241 con:0.24939, recon1:2080.23071, recon2:2002.74219
+	Batch 375/420 Loss:4151.92676 con:0.26377, recon1:2029.06360, recon2:2122.59961
+	Batch 376/420 Loss:4154.05518 con:0.25022, recon1:2108.81836, recon2:2044.98645
+	Batch 377/420 Loss:4106.26611 con:0.24532, recon1:2044.79651, recon2:2061.22412
+	Batch 378/420 Loss:3972.04932 con:0.25547, recon1:1984.95618, recon2:1986.83752
+	Batch 379/420 Loss:4400.55664 con:0.25068, recon1:2233.10303, recon2:2167.20288
+	Batch 380/420 Loss:4432.07129 con:0.25651, recon1:2239.10986, recon2:2192.70459
+	Batch 381/420 Loss:4358.45459 con:0.25802, recon1:2177.84131, recon2:2180.35522
+	Batch 382/420 Loss:4142.86035 con:0.25586, recon1:2131.65527, recon2:2010.94922
+	Batch 383/420 Loss:4423.49316 con:0.24810, recon1:2169.85474, recon2:2253.39062
+	Batch 384/420 Loss:4213.12793 con:0.24980, recon1:2138.24756, recon2:2074.63062
+	Batch 385/420 Loss:4273.83008 con:0.25366, recon1:2178.93091, recon2:2094.64551
+	Batch 386/420 Loss:4218.23584 con:0.25008, recon1:2105.29590, recon2:2112.68994
+	Batch 387/420 Loss:4188.16797 con:0.25000, recon1:2097.68872, recon2:2090.22949
+	Batch 388/420 Loss:4621.89453 con:0.25374, recon1:2324.66431, recon2:2296.97656
+	Batch 389/420 Loss:4425.31885 con:0.24781, recon1:2226.48853, recon2:2198.58252
+	Batch 390/420 Loss:4035.84766 con:0.24518, recon1:2018.51770, recon2:2017.08484
+	Batch 391/420 Loss:4017.44434 con:0.25910, recon1:2017.16797, recon2:2000.01721
+	Batch 392/420 Loss:3968.54150 con:0.26050, recon1:1939.78320, recon2:2028.49768
+	Batch 393/420 Loss:4138.20312 con:0.25889, recon1:2114.13672, recon2:2023.80762
+	Batch 394/420 Loss:4198.97461 con:0.24297, recon1:2187.45654, recon2:2011.27502
+	Batch 395/420 Loss:4125.80615 con:0.25981, recon1:2037.67493, recon2:2087.87134
+	Batch 396/420 Loss:4320.43848 con:0.24939, recon1:2173.59229, recon2:2146.59692
+	Batch 397/420 Loss:4066.44434 con:0.24697, recon1:1973.84082, recon2:2092.35645
+	Batch 398/420 Loss:3916.42725 con:0.25026, recon1:1938.34143, recon2:1977.83545
+	Batch 399/420 Loss:4262.44971 con:0.23441, recon1:2167.74683, recon2:2094.46851
+	Batch 400/420 Loss:4002.80444 con:0.25671, recon1:2035.69861, recon2:1966.84912
+	Batch 401/420 Loss:4399.61426 con:0.24538, recon1:2166.03540, recon2:2233.33350
+	Batch 402/420 Loss:4061.33472 con:0.25067, recon1:1972.71387, recon2:2088.37012
+	Batch 403/420 Loss:4252.64160 con:0.26119, recon1:2158.11011, recon2:2094.27026
+	Batch 404/420 Loss:4213.91406 con:0.24682, recon1:2099.41479, recon2:2114.25244
+	Batch 405/420 Loss:4429.93066 con:0.24162, recon1:2205.84595, recon2:2223.84326
+	Batch 406/420 Loss:4220.69824 con:0.24962, recon1:2171.94653, recon2:2048.50244
+	Batch 407/420 Loss:4090.91919 con:0.23787, recon1:2055.98608, recon2:2034.69531
+	Batch 408/420 Loss:3976.49512 con:0.25915, recon1:1971.96509, recon2:2004.27087
+	Batch 409/420 Loss:4092.43457 con:0.24942, recon1:2065.29077, recon2:2026.89429
+	Batch 410/420 Loss:3980.54932 con:0.25027, recon1:1988.93091, recon2:1991.36816
+	Batch 411/420 Loss:4006.18701 con:0.24898, recon1:2053.57153, recon2:1952.36633
+	Batch 412/420 Loss:4460.71289 con:0.25126, recon1:2333.26562, recon2:2127.19629
+	Batch 413/420 Loss:4197.03125 con:0.25308, recon1:2091.44092, recon2:2105.33740
+	Batch 414/420 Loss:4173.19678 con:0.25597, recon1:2082.09790, recon2:2090.84302
+	Batch 415/420 Loss:4447.21777 con:0.24270, recon1:2162.41040, recon2:2284.56470
+	Batch 416/420 Loss:4265.02051 con:0.25431, recon1:2136.37842, recon2:2128.38745
+	Batch 417/420 Loss:3793.38696 con:0.23778, recon1:1899.20020, recon2:1893.94897
+	Batch 418/420 Loss:3985.59619 con:0.25139, recon1:2004.53406, recon2:1980.81079
+	Batch 419/420 Loss:4157.50195 con:0.25551, recon1:2101.32153, recon2:2055.92456
+	Batch 420/420 Loss:4189.69482 con:0.25910, recon1:2038.71729, recon2:2150.71851
+Training Epoch 1/1000 Loss:5448.49800 con:0.26974, recon1:2724.07644, recon2:2724.15181
+Validation...
+slurmstepd: error: *** JOB 61315 ON c2-3 CANCELLED AT 2019-06-13T12:03:41 ***

@@ -1,0 +1,9 @@
+Views: 2, 3
+Batch size: 
+Tensor size: (3,8,112,112)
+Skip Length: 2
+Total Epochs: 10
+Learning Rate: 0.0001
+Model Built.
+Training...
+slurmstepd: error: *** JOB 61059 ON c1-7 CANCELLED AT 2019-06-11T15:42:04 ***

@@ -1,0 +1,13 @@
+Parameters:
+Batch size: 32
+Tensor size: (3,8,112,112)
+Skip Length: 2
+Total Epochs: 1
+Traceback (most recent call last):
+  File "testingLoop.py", line 182, in <module>
+    model.load_state_dict(torch.load(weights_path))
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/serialization.py", line 303, in load
+    return _load(f, map_location, pickle_module)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/serialization.py", line 476, in _load
+    deserialized_objects[key]._set_from_file(f, offset, f_is_real_file)
+RuntimeError: storage has wrong size: expected -4837886231729475348 got 16

@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "trainingLoop.py", line 5, in <module>
+    from RUNNABLE.network_phase1 import FullNetwork
+ModuleNotFoundError: No module named 'RUNNABLE'

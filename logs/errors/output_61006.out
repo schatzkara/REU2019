@@ -1,0 +1,20 @@
+Building Model.
+Full Network Model Successfully Built 
+
+Model Built.
+Training...
+BATCH NUM 0
+Traceback (most recent call last):
+  File "REU2019/trainingLoop.py", line 152, in <module>
+    train_model()
+  File "REU2019/trainingLoop.py", line 121, in train_model
+    train(epoch)
+  File "REU2019/trainingLoop.py", line 71, in train
+    con_loss = criterion(rep_v1, rep_v2)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/loss.py", line 371, in forward
+    _assert_no_grad(target)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/loss.py", line 12, in _assert_no_grad
+    "nn criterions don't compute the gradient w.r.t. targets - please " \
+AssertionError: nn criterions don't compute the gradient w.r.t. targets - please mark these tensors as not requiring gradients

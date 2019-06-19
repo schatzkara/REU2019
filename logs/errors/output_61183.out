@@ -1,0 +1,39 @@
+Views: 2, 3
+Batch size: 32
+Tensor size: (3,8,112,112)
+Skip Length: 4
+Total Epochs: 20
+Learning Rate: 0.0001
+Model Built.
+Training...
+	Batch 1/420 Loss: 43326.1953125
+	Batch 2/420 Loss: 41214.34375
+	Batch 3/420 Loss: 35746.87890625
+	Batch 4/420 Loss: 17103.6484375
+	Batch 5/420 Loss: 319834.75
+	Batch 6/420 Loss: 15509.6337890625
+	Batch 7/420 Loss: 26391.185546875
+	Batch 8/420 Loss: 36509.97265625
+	Batch 9/420 Loss: 40475.4375
+Traceback (most recent call last):
+  File "trainingLoop.py", line 154, in <module>
+    train_model()
+  File "trainingLoop.py", line 99, in train_model
+    train(epoch)
+  File "trainingLoop.py", line 41, in train
+    for batch_idx, (view1vid, view2vid) in enumerate(trainloader):  # the tuple should match the output of __getitem__
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 286, in __next__
+    return self._process_next_batch(batch)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 307, in _process_next_batch
+    raise batch.exc_type(batch.exc_msg)
+AssertionError: Traceback (most recent call last):
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in _worker_loop
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in <listcomp>
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 54, in __getitem__
+    frame_index = PanopticDataset.rand_frame_index(frame_count, self.clip_len, self.skip_len)
+  File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 161, in rand_frame_index
+    assert max_frame >= 2, 'Not enough frames to sample from.'
+AssertionError: Not enough frames to sample from.
+
