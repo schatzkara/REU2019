@@ -3,8 +3,8 @@
 import time
 import torch
 import torch.nn as nn
-from phase1.network import FullNetwork
-from phase1.NTUDataLoader import NTUDataset
+from .network import FullNetwork
+from .NTUDataLoader import NTUDataset
 import torch.backends.cudnn as cudnn
 import os
 import cv2

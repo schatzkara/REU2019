@@ -93,8 +93,6 @@
 161202_haggling1/samples 11500_11625
 161202_haggling1/samples 11625_11750
 161202_haggling1/samples 11750_11875
-161202_haggling1/samples 11875_12000
-170307_dance2/samples 0_125
 170307_dance2/samples 125_250
 170307_dance2/samples 250_375
 170307_dance2/samples 375_500
@@ -201,8 +199,6 @@
 170307_dance2/samples 13000_13125
 170307_dance2/samples 13125_13250
 170307_dance2/samples 13250_13375
-170307_dance2/samples 13375_13500
-171026_pose3/samples 0_125
 171026_pose3/samples 125_250
 171026_pose3/samples 250_375
 171026_pose3/samples 375_500
@@ -227,6 +223,7 @@
 171026_pose3/samples 2750_2875
 171026_pose3/samples 2875_3000
 171026_pose3/samples 3000_3125
+171026_pose3/samples 3125_3250
 171026_pose3/samples 3250_3375
 171026_pose3/samples 3375_3500
 171026_pose3/samples 3500_3625
@@ -252,8 +249,6 @@
 171026_pose3/samples 6000_6125
 171026_pose3/samples 6125_6250
 171026_pose3/samples 6250_6375
-171026_pose3/samples 6375_6500
-160226_mafia2/samples 0_125
 160226_mafia2/samples 125_250
 160226_mafia2/samples 250_375
 160226_mafia2/samples 375_500
@@ -372,11 +367,10 @@
 160226_mafia2/samples 14500_14625
 160226_mafia2/samples 14625_14750
 160226_mafia2/samples 14750_14875
-160226_mafia2/samples 14875_15000
-150821_dance5/samples 0_125
 150821_dance5/samples 125_250
 150821_dance5/samples 250_375
 150821_dance5/samples 375_500
+150821_dance5/samples 500_625
 150821_dance5/samples 625_750
 150821_dance5/samples 750_875
 150821_dance5/samples 875_1000
@@ -395,8 +389,6 @@
 150821_dance5/samples 2500_2625
 150821_dance5/samples 2625_2750
 150821_dance5/samples 2750_2875
-150821_dance5/samples 2875_3000
-160906_band1/samples 0_125
 160906_band1/samples 125_250
 160906_band1/samples 250_375
 160906_band1/samples 375_500
@@ -407,8 +399,6 @@
 160906_band1/samples 1000_1125
 160906_band1/samples 1125_1250
 160906_band1/samples 1250_1375
-160906_band1/samples 1375_1500
-150406_drum7/samples 0_125
 150406_drum7/samples 125_250
 150406_drum7/samples 250_375
 150406_drum7/samples 375_500
@@ -437,8 +427,6 @@
 150406_drum7/samples 3250_3375
 150406_drum7/samples 3375_3500
 150406_drum7/samples 3500_3625
-150406_drum7/samples 3625_3750
-171026_cello1/samples 0_125
 171026_cello1/samples 125_250
 171026_cello1/samples 250_375
 171026_cello1/samples 375_500
@@ -467,6 +455,7 @@
 171026_cello1/samples 3250_3375
 171026_cello1/samples 3375_3500
 171026_cello1/samples 3500_3625
+171026_cello1/samples 3625_3750
 171026_cello1/samples 3750_3875
 171026_cello1/samples 3875_4000
 171026_cello1/samples 4000_4125
@@ -480,6 +469,7 @@
 171026_cello1/samples 5000_5125
 171026_cello1/samples 5125_5250
 171026_cello1/samples 5250_5375
+171026_cello1/samples 5375_5500
 171026_cello1/samples 5500_5625
 171026_cello1/samples 5625_5750
 171026_cello1/samples 5750_5875
@@ -503,11 +493,10 @@
 171026_cello1/samples 8000_8125
 171026_cello1/samples 8125_8250
 171026_cello1/samples 8250_8375
+171026_cello1/samples 8375_8500
 171026_cello1/samples 8500_8625
 171026_cello1/samples 8625_8750
 171026_cello1/samples 8750_8875
-171026_cello1/samples 8875_9000
-160906_ian1/samples 0_125
 160906_ian1/samples 125_250
 160906_ian1/samples 250_375
 160906_ian1/samples 375_500
@@ -530,10 +519,3 @@
 160906_ian1/samples 2500_2625
 160906_ian1/samples 2625_2750
 160906_ian1/samples 2750_2875
-160906_ian1/samples 2875_3000
-170915_toddler2/samples 0_125
-170915_toddler2/samples 125_250
-170915_toddler2/samples 250_375
-170915_toddler2/samples 375_500
-170915_toddler2/samples 500_625
-170915_toddler2/samples 625_750

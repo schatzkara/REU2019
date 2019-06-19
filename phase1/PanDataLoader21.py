@@ -1,74 +1,115 @@
-# phase 2
-
-# THIS VERSION INCLUDES VIEWPOINT INFORMATION
+# phase 1
 
 from torch.utils.data.dataset import Dataset
 import os
 import numpy as np
 import cv2
-import torch
+import _pickle as pickle
 
 
-class NTUDataset(Dataset):
-    """NTU Dataset"""
+class PanopticDataset(Dataset):
+    """Panoptic Dataset"""
 
-    def __init__(self, root_dir, data_file, param_file,
-                 resize_height, resize_width, clip_len,
-                 height=135, width=240,
-                 skip_len=1, view1=1, view2=2, random_views=False, random_all=False,
+    def __init__(self, root_dir, data_file, resize_height, resize_width, clip_len,
+                 height=128, width=128, frame_count=125,
+                 skip_len=1, random_views=False, random_all=False,
                  precrop=False):
-        """
-        Initializes the NTU Dataset object used for extracting samples to run through the network.
-        :param root_dir: (str) Directory with all the frames extracted from the videos.
-        :param data_file: (str) Path to .txt file containing the sample IDs.
-        :param resize_height: (int) The desired frame height.
-        :param resize_width: (int) The desired frame width.
-        :param clip_len: (int) The number of frames desired in the sample clip.
-        :param height: (int, optional) The height of the frames in the dataset (default 135 for NTU Dataset).
-        :param width: (int, optional) The width of the frames in the dataset (default 240 for NTU Dataset).
-        :param skip_len: (int, optional) The number of frames to skip between each when creating the clip (default 1).
-        :param view1: (int, optional) The desired viewpoint to use as the first view; can be 1, 2, or 3 (default 1).
-        :param view2: (int, optional) The desired viewpoint to use as the seconds view; can be 1, 2, or 3 (default 2).
-        :param random_views: (boolean, optional) True to use 2 constant randomly generated views (default False).
-        :param random_all: (boolean, optional) True to use 2 randomly generated views for each sample (default False).
-        :param precrop: (boolean, optional) True to crop 50 pixels off left and right of frame before randomly cropping
-                        (default False).
-        """
+        self.root_dir = root_dir
         with open(data_file) as f:
             self.data_file = f.readlines()
-        self.data_file = [line.strip() for line in self.data_file]
-        self.root_dir = root_dir
-        self.param_file = param_file
+        self.data_list = [line.strip() for line in self.data_file]
+        self.data_list = self.get_actual_paths()
+        self.cam_dict = self.get_cam_dict()
+
         self.clip_len = clip_len
         self.skip_len = skip_len
         self.height = height
         self.width = width
+        self.frame_count = frame_count
         self.resize_height = resize_height
         self.resize_width = resize_width
         self.channels = 3
-        self.view1 = view1
-        self.view2 = view2
+        self.view1 = 1
+        self.view2 = 2
         if random_views:
             self.get_random_views()
         self.random_all = random_all
         self.precrop = precrop
 
-        self.view_params = self.load_view_params()
+    def get_actual_paths(self):
+        actual_paths = []
+        for item in self.data_file:
+            # ex. 170915_toddler4/samples 0_125
+            sample, frames = item.split(' ')
+            # sample_name = sample_path[:sample_path.index('/')]
+            # start_frame, end_frame = frame_nums.split('_')
+            sample_path = os.path.join(self.root_dir, sample)
+            if os.path.exists(sample_path):
+                cameras = os.listdir(sample_path)
+                full_paths = [os.path.join(self.root_dir, sample, cam, frames) for cam in cameras]
+                exists = [os.path.exists(path) for path in full_paths]
+                true_count = 0
+                for _bool in exists:
+                    if _bool:
+                        true_count += 1
+                if true_count >= 2:
+                    actual_paths.append(item)
 
-    def load_view_params(self):
-        view_params = np.loadtxt(self.param_file)
+        return actual_paths
 
-        # normalize the distances
-        view_params /= view_params.max(axis=0)
+    def get_cam_dict(self):
+        cam_dict = {}
+        for item in self.data_list:
+            good_cams = []
+            # ex. 170915_toddler4/samples 0_125
+            sample, frames = item.split(' ')
+            # sample_name = sample_path[:sample_path.index('/')]
+            # start_frame, end_frame = frame_nums.split('_')
+            sample_path = os.path.join(self.root_dir, sample)
+            if os.path.exists(sample_path):
+                cameras = os.listdir(sample_path)
+                full_paths = {cam: os.path.join(self.root_dir, sample, cam, frames) for cam in cameras}
+                for cam, path in full_paths.items():
+                    if os.path.exists(path):
+                        size = len(os.listdir(path=path))
+                        if size == 125:
+                            good_cams.append(cam)
+            cam_dict[item] = good_cams
 
-        return view_params
+        return cam_dict
+
+    '''def get_cam_dict(self):
+        cam_dict = {}
+        for sample in self.data_file:
+            # ex. 170915_toddler4/samples 0_125
+            sample_path, frame_nums = sample.split(' ')
+            # sample_name = sample_path[:sample_path.index('/')]
+            # start_frame, end_frame = frame_nums.split('_')
+            if os.path.exists(os.path.join(self.root_dir, sample_path)):
+                cameras = os.listdir(sample_path)
+                full_paths = [os.path.join(self.root_dir, sample_path, cam, frame_nums) for cam in cameras]
+                cameras = self.filter_bad_paths(cameras, full_paths)
+                cam_dict[sample] = cameras
+
+        return cam_dict
+
+    def filter_bad_paths(self, cameras, full_paths):
+        for path in full_paths:
+            if not os.path.exists:
+                full_paths.remove(path)
+        dir_sizes = [len(os.listdir(path)) for path in full_paths]
+        for i in range(dir_sizes):
+            if dir_sizes[i] < self.frame_count:
+
+
+        return cameras'''
 
     def __len__(self):
         """
         Function to return the number of samples in the dataset.
         :return: int representing the number of samples in the dataset.
         """
-        return len(self.data_file)
+        return len(self.data_list)
 
     def __getitem__(self, idx):
         """
@@ -76,41 +117,29 @@ class NTUDataset(Dataset):
         :param idx: (int) The index of the sample to get.
         :return: 2 tensors representing the sample video from 2 different viewpoints
         """
+        sample_name, sample_path_head, sample_path_tail, cameras = self.process_index(index=idx)
+        num_cameras = len(cameras)
+
         if self.random_all:
-            self.get_random_views()
+            self.get_random_views(num_views=num_cameras)
 
-        action, sample_id, vp1, vp2, nf_v1, nf_v2 = self.process_index(index=idx)
-        view1path, view2path = self.get_vid_paths(action=action, sample_id=sample_id)
+        self.view1 = cameras[self.view1]
+        self.view2 = cameras[self.view2]
 
-        frame_count = min(nf_v1, nf_v2)
-        frame_index = self.rand_frame_index(frame_count=frame_count)
+        frame_index = self.rand_frame_index()
         pixel_index = self.rand_pixel_index()
+
+        view1path, view2path = self.get_vid_paths(path_head=sample_path_head, path_tail=sample_path_tail)
 
         vid1 = self.load_frames(vid_path=view1path,
                                 frame_index=frame_index, pixel_index=pixel_index)
         vid2 = self.load_frames(vid_path=view2path,
                                 frame_index=frame_index, pixel_index=pixel_index)
-        vid1, vid2 = NTUDataset.to_tensor(sample=vid1), NTUDataset.to_tensor(sample=vid2)
+        vid1, vid2 = PanopticDataset.to_tensor(sample=vid1), PanopticDataset.to_tensor(sample=vid2)
 
-        # vp1, vp2 = torch.tensor([vp1]), torch.tensor([vp2])
-        # print(vp1 - vp2)
-        # print(vp2)
-        # print(vp1.size())
-        # print(vp2.size())
-        # print(vid1.size())
-        # print(vid2.size())
-        return vp1, vp2, vid1, vid2
+        return vid1, vid2
 
     # MAKE SURE TO NOW GO CHANGE TRAINING AND TESTING LOOPS #
-
-    def get_random_views(self):
-        """
-        Function to generate 2 random viewpoints for the sample.
-        :return: 2 ints representing the viewpoints for the sample.
-        """
-        self.view1, self.view2 = np.random.randint(1, 4), np.random.randint(1, 4)
-        while self.view2 == self.view1:
-            self.view2 = np.random.randint(1, 4)
 
     # CHANGED
     def process_index(self, index):
@@ -120,95 +149,37 @@ class NTUDataset(Dataset):
         :param index: (int) The index of the sample.
         :return: the action class, sample_id, and two ints representing the number of frames in view1 and view2
         """
-        sample_info = self.data_file[index].split(' ')
-        sample_id = sample_info[0][sample_info[0].index('/') + 1:]
-        scene, pid, rid, action = NTUDataset.decrypt_vid_name(vid_name=sample_id)
+        # ex. 170915_toddler4/samples 0_125
+        item = self.data_list[index]
+        sample_path, frame_nums = item.split(' ')
+        sample_name = sample_path[:sample_path.index('/')]
+        # start_frame, end_frame = frame_nums.split('_')
+        cameras = self.cam_dict[item]
 
-        angle_v1 = NTUDataset.get_viewing_angle(rid=rid, cam=self.view1)
-        angle_v2 = NTUDataset.get_viewing_angle(rid=rid, cam=self.view2)
+        return sample_name, sample_path, frame_nums, cameras
 
-        nf_v1, nf_v2, nf_v3 = sample_info[1:]
-        nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
+    def get_random_views(self, num_views):
+        """
+        Function to generate 2 random viewpoints for the sample.
+        :return: 2 ints representing the viewpoints for the sample.
+        """
+        self.view1, self.view2 = np.random.randint(1, num_views), np.random.randint(1, num_views)
+        while self.view2 == self.view1:
+            self.view2 = np.random.randint(1, num_views)
 
-        info = (action, sample_id, angle_v1, angle_v2)
-        if self.view1 == 1:
-            info = info + (nf_v1,)
-        elif self.view1 == 2:
-            info = info + (nf_v2,)
-        elif self.view1 == 3:
-            info = info + (nf_v3,)
-
-        if self.view2 == 1:
-            info = info + (nf_v1,)
-        elif self.view2 == 2:
-            info = info + (nf_v2,)
-        elif self.view2 == 3:
-            info = info + (nf_v3,)
-
-        return info
-
-    # ADDED
-    @staticmethod
-    def get_viewing_angle(rid, cam):
-        vpt = 0.
-        pi = 22 / 7.
-        # rid-1 implies face towards cam3; rid-2 implies face towards cam2; cam1 is the center camera
-        if rid == 1:
-            if cam == 1:
-                vpt = pi / 4
-            elif cam == 2:
-                vpt = pi / 2
-            elif cam == 3:
-                vpt = 0.00
-        elif rid == 2:
-            if cam == 1:
-                vpt = -pi / 4
-            elif cam == 2:
-                vpt = 0.00
-            elif cam == 3:
-                vpt = -pi / 2
-
-        return vpt
-
-    def get_vid_paths(self, action, sample_id):
+    def get_vid_paths(self, path_head, path_tail):
         """
         Function to get the paths at which the two sample views are located.
         :param action: (int) The action class that the sample captures.
         :param sample_id: (str) The id for the sample from the data file.
         :return: 2 strings representing the paths for the sample views.
         """
-        vid_path = self.make_sample_path(action=action, sample_id=sample_id)
-
-        view1_path, view2_path = os.path.join(vid_path, str(self.view1)), os.path.join(vid_path, str(self.view2))
+        view1_path = os.path.join(self.root_dir, path_head, str(self.view1), path_tail)
+        view2_path = os.path.join(self.root_dir, path_head, str(self.view2), path_tail)
 
         return view1_path, view2_path
 
-    def make_sample_path(self, action, sample_id):
-        """
-        Function to make the path at which the sample is located.
-        :param action: (int) The action class that the sample captures.
-        :param sample_id: (str) The id for the sample from the data file.
-        :return: The path at which the sample is located.
-        """
-        vid_path = os.path.join(self.root_dir, str(action), sample_id)
-
-        return vid_path
-
-    @staticmethod
-    def decrypt_vid_name(vid_name):
-        """
-        Function to break up the meaning of the video name.
-        :param vid_name: (string) The name of the video.
-        :return: 4 ints representing the scene, person, repetition, and action that the video captures.
-        """
-        scene = int(vid_name[1:4])
-        pid = int(vid_name[5:8])
-        rid = int(vid_name[9:12])
-        action = int(vid_name[13:16])
-
-        return scene, pid, rid, action
-
-    def rand_frame_index(self, frame_count):
+    def rand_frame_index(self):
         """
         Function to generate a random starting frame index for cropping the temporal dimension of the video.
         :param frame_count: (int) The number of available frames in the sample video.
@@ -216,7 +187,7 @@ class NTUDataset(Dataset):
         :param skip_len: (int) The number of frames to skip between each when creating the clip.
         :return: The starting frame index for the sample.
         """
-        max_frame = frame_count - (self.skip_len * self.clip_len)
+        max_frame = self.frame_count - (self.skip_len * self.clip_len)
         assert max_frame >= 1, 'Not enough frames to sample from.'
         frame_index = np.random.randint(0, max_frame)
 
@@ -259,7 +230,7 @@ class NTUDataset(Dataset):
         for i in range(self.clip_len):
             # retrieve the frame (next 9 lines)
             frame_num = frame_index + (i * self.skip_len)
-            frame_name = NTUDataset.make_frame_name(frame_num=frame_num)
+            frame_name = PanopticDataset.make_frame_name(frame_num=frame_num)
             frame_path = os.path.join(vid_path, frame_name)
             assert os.path.exists(frame_path), 'Frame path {} DNE.'.format(frame_path)
             try:
@@ -273,7 +244,7 @@ class NTUDataset(Dataset):
             frame = self.crop_frame(frame=frame,
                                     height_index=height_index, width_index=width_index)
             # normalize
-            frame = NTUDataset.normalize_frame(frame)
+            frame = PanopticDataset.normalize_frame(frame)
 
             # add the frame to the buffer (clip)
             buffer[i] = frame
@@ -287,7 +258,7 @@ class NTUDataset(Dataset):
         :param frame_num: The frame number captured in the file.
         :return: str representing the file name.
         """
-        return str(frame_num).zfill(3) + '.jpg'
+        return str(frame_num).zfill(3) + '.png'
 
     def crop_frame(self, frame, height_index, width_index):
         """

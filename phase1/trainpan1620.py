@@ -4,8 +4,8 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from phase1.network import FullNetwork
-from phase1.PanopticDataLoader import PanopticDataset
+from .network import FullNetwork
+from .PanDataLoader21 import PanopticDataset
 import torch.backends.cudnn as cudnn
 
 # directory information
