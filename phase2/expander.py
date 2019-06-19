@@ -51,7 +51,7 @@ class Expander(nn.Module):
             for c in range(self.out_frames):
                 for d in range(self.out_size):
                     for e in range(self.out_size):
-                        buffer[:, :, c, d, e] = vp
+                        buffer[:, b, c, d, e] = vp
         buffer = buffer.to(device)
 
         return buffer

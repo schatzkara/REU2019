@@ -2,12 +2,13 @@
 
 import torch
 import torch.nn as nn
-from phase2.modifiedVGG import vgg16
-from phase2.modifiedI3D import InceptionI3d
-from phase2.deconvolutional import Deconv
-from phase2.expander import Expander
-from phase2.transformer import Transformer
-from phase2.generator import Generator
+from modifiedVGG import vgg16
+from modifiedI3D import I3D
+from deconvolutional import Deconv
+from expander import Expander
+from transformer import Transformer
+from generator import Generator
+
 # from torchsummary import summary
 
 """
@@ -16,12 +17,12 @@ Pipeline:
     i2 = 8 frames view1
     i3 = viewpoint change, scalar
     app = VGG(i1)
-    
+
     rep = I3D(i2)
     kp = deconv(rep)
     vp = expander(i3)
     kp' = trans(kp + vp)
-    
+
     o3 = GEN(app + kp)
 """
 
@@ -59,16 +60,17 @@ class FullNetwork(nn.Module):
         self.output_shape = output_shape
         self.out_frames = output_shape[2]
 
-        self.vgg = vgg16()
-        self.vgg.load_state_dict(torch.load(vgg_weights_path))
-        self.i3d = InceptionI3d(final_endpoint='Mixed_5c', in_frames=self.out_frames)
-        self.i3d.load_state_dict(torch.load(i3d_weights_path))
+        self.vgg = vgg16(pretrained=True, weights_path=vgg_weights_path)
+        # self.vgg.load_state_dict(torch.load(vgg_weights_path))
+        self.i3d = I3D(final_endpoint='Mixed_5c_small', in_frames=self.out_frames,
+                       pretrained=True, weights_path=i3d_weights_path)
+        # self.i3d.load_state_dict(torch.load(i3d_weights_path))
 
         self.deconv = Deconv(in_channels=256, out_frames=self.out_frames)
         self.exp = Expander(vp_value_count=self.vp_value_count, out_frames=self.out_frames, out_size=28)
-        self.trans = Transformer(in_channels=32+self.vp_value_count)
+        self.trans = Transformer(in_channels=32 + self.vp_value_count)
 
-        self.gen = Generator(in_channels=256+32, out_frames=self.out_frames)
+        self.gen = Generator(in_channels=32 + 32, out_frames=self.out_frames)
         # print('%s Model Successfully Built \n' % self.net_name)
 
     def forward(self, vp_diff, vid1, vid2, img1, img2):
@@ -89,7 +91,7 @@ class FullNetwork(nn.Module):
                  Shape of two representation feature maps is: (bsz, 1024, 7, 7) for this application.
         """
         # print(vp_diff.size())
-        app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # 256,28,28
+        app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # 32,28,28
 
         app_v1, app_v2 = self.expand_app_encoding(app=app_v1), self.expand_app_encoding(app=app_v2)  # 256,8/16,28,28
 
@@ -108,7 +110,8 @@ class FullNetwork(nn.Module):
         gen_input1, gen_input2 = torch.cat([app_v1, kp_v2], dim=1), torch.cat([app_v2, kp_v1], dim=1)  # dim=channels
 
         # these are the videos that get returned
-        output_v1, output_v2 = self.gen(gen_input1), self.gen(gen_input2)  # 3,8/16,112,112
+        output_v1 = self.gen(gen_input1)
+        output_v2 = self.gen(gen_input2)  # 3,8/16,112,112
 
         return output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est
 
@@ -120,7 +123,6 @@ class FullNetwork(nn.Module):
         buffer = buffer.to(device)
 
         return buffer
-
 
 # if __name__ == "__main__":
 #     print_summary = True

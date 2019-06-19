@@ -4,8 +4,8 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from phase2.network import FullNetwork
-from phase2.NTUDataLoader import NTUDataset
+from network import FullNetwork
+from NTUDataLoader import NTUDataset
 import torch.backends.cudnn as cudnn
 
 # directory information
@@ -231,7 +231,7 @@ if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
     # model
-    model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+    model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
     model = model.to(device)
 
     print(model)

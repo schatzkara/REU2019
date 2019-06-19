@@ -27,7 +27,8 @@ class VGG(nn.Module):
     """
     Class representing the modified VGG network to be used.
     """
-    def __init__(self, features, num_layers, num_classes=1000, init_weights=True):
+    def __init__(self, features, num_layers, num_classes=1000, init_weights=True,
+                 pretrained=False, weights_path=''):
         """
         Initializes the modified VGG network.
         :param features: All the network layers.
@@ -50,6 +51,13 @@ class VGG(nn.Module):
         if init_weights:
             self._initialize_weights()
 
+        if pretrained:
+            print(weights_path)
+            self.load_state_dict(torch.load(weights_path))
+
+        self.final_layer = nn.Conv2d(256, 32, kernel_size=3, padding=1)
+        self.final_relu = nn.ReLU(inplace=True)
+
     def forward(self, x):
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#
         self.features = self.features[:self.num_layers]
@@ -57,6 +65,10 @@ class VGG(nn.Module):
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
         # x = self.classifier(x)
+
+        x = self.final_layer(x)
+        x = self.final_relu(x)
+
         return x
 
     def _initialize_weights(self):
@@ -99,10 +111,11 @@ cfgs = {
 }
 
 
-def _vgg(arch, cfg, num_layers, batch_norm, pretrained, progress, **kwargs):
+def _vgg(arch, cfg, num_layers, batch_norm, pretrained, progress, weights_path='', **kwargs):
     if pretrained:
         kwargs['init_weights'] = False
-    model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), num_layers=num_layers, **kwargs)
+    model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), num_layers=num_layers,
+                pretrained=pretrained, weights_path=weights_path, **kwargs)
     # if pretrained:
     #     state_dict = load_state_dict_from_url(model_urls[arch],
     #                                           progress=progress)
@@ -146,13 +159,13 @@ def vgg13_bn(pretrained=False, progress=True, **kwargs):
     return _vgg('vgg13_bn', 'B', 14, True, pretrained, progress, **kwargs)
 
 
-def vgg16(pretrained=False, progress=True, **kwargs):
+def vgg16(pretrained=False, progress=True, weights_path='', **kwargs):
     """VGG 16-layer model (configuration "D")
     Args:
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg16', 'D', 16, False, pretrained, progress, **kwargs)
+    return _vgg('vgg16', 'D', 15, False, pretrained=pretrained, progress=progress, weights_path=weights_path, **kwargs)
 
 
 def vgg16_bn(pretrained=False, progress=True, **kwargs):

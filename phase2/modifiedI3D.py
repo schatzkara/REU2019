@@ -6,6 +6,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
+
+
 # from torchsummary import summary
 
 
@@ -191,7 +193,8 @@ class InceptionI3d(nn.Module):
         # 'MaxPool3d_5a_2x2',
         'MaxPool3d_5a_1x1',
         'Mixed_5b',
-        'Mixed_5c',
+        # 'Mixed_5c',
+        'Mixed_5c_small',
         # 'Logits',
         # 'Predictions',
     )
@@ -216,7 +219,8 @@ class InceptionI3d(nn.Module):
     #           ValueError: if `final_endpoint` is not recognized.
     #     """
 
-    def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c', in_frames=8, in_channels=3):
+    def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c_small', in_frames=8, in_channels=3,
+                 pretrained=False, weights_path=''):
         """
         Initializes I3D model instance.
         :param name: (str, optional) The name of the network (default 'modified_inception_i3d').
@@ -240,6 +244,8 @@ class InceptionI3d(nn.Module):
         self._final_endpoint = final_endpoint
         self.in_frames = in_frames
         # self.logits = None
+        self.pretrained = pretrained
+        self.weights_path = weights_path
 
         if self._final_endpoint not in self.VALID_ENDPOINTS:
             raise ValueError('Unknown final endpoint %s' % self._final_endpoint)
@@ -330,11 +336,18 @@ class InceptionI3d(nn.Module):
         if self._final_endpoint == end_point: return
 
         # Modification: changed the number of channels here to get only 256 as the output
-        end_point = 'Mixed_5c'
-        self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128,
-                                                     [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
-                                                      int(128 / 4), int(128 / 4)],
-                                                     name + end_point)
+        # end_point = 'Mixed_5c_small'
+        # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128,
+        #                                              [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
+        #                                               int(128 / 4), int(128 / 4)],
+        #                                              name + end_point)
+
+        end_point = 'Mixed_5c_small'
+        self.final_layer = InceptionModule(256 + 320 + 128 + 128,
+                                           [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
+                                            int(128 / 4), int(128 / 4)],
+                                           name + end_point)
+        # end_point = 'Mixed_5c'
         # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
         #                                              name + end_point)
 
@@ -349,14 +362,14 @@ class InceptionI3d(nn.Module):
         # selfdropout = nn.Dropout(dropout_keep_prob)
         # Note: this layer is not actually used in the network, but it is built here anyways so that pretrained weights
         # can be used for the network.
-        self.logits = Unit3D(in_channels=int(384 / 4) + int(384 / 4) + int(128 / 4) + int(128 / 4), output_channels=157,
-                             # self._num_classes,
-                             kernel_shape=[1, 1, 1],
-                             padding=0,
-                             activation_fn=None,
-                             use_batch_norm=False,
-                             use_bias=True,
-                             name='logits')
+        # self.logits = Unit3D(in_channels=int(384 / 4) + int(384 / 4) + int(128 / 4) + int(128 / 4), output_channels=157,
+        #                      self._num_classes,
+        # kernel_shape=[1, 1, 1],
+        # padding=0,
+        # activation_fn=None,
+        # use_batch_norm=False,
+        # use_bias=True,
+        # name='logits')
 
         self.build()
 
@@ -373,6 +386,9 @@ class InceptionI3d(nn.Module):
     def build(self):
         for k in self.end_points.keys():
             self.add_module(k, self.end_points[k])
+        if self.pretrained:
+            state_dict = load_layer_weights(self.weights_path, final_endpoint='Mixed_5c_small')
+            self.load_state_dict(state_dict)
         # print('%s Model Successfully Built \n' % self.i3d_name)
 
     def forward(self, x):
@@ -386,6 +402,8 @@ class InceptionI3d(nn.Module):
         for end_point in self.VALID_ENDPOINTS:
             if end_point in self.end_points:
                 x = self._modules[end_point](x)  # use _modules to work with dataparallel
+
+        x = self.final_layer(x)
 
         # Modification: Again, the final 'Logits' layers were eliminated.
         # x = self.logits(self.dropout(self.avg_pool(x)))
@@ -403,6 +421,61 @@ class InceptionI3d(nn.Module):
     #             x = self._modules[end_point](x)
     #     return self.avg_pool(x)
 
+
+def I3D(name='modified_inception_i3d', final_endpoint='Mixed_5c_small', in_frames=8, in_channels=3,
+        pretrained=False, weights_path=''):
+    model = InceptionI3d(name=name, final_endpoint=final_endpoint, in_frames=in_frames, in_channels=in_channels)
+    # if pretrained:
+    #     state_dict = load_layer_weights(weights_path, final_endpoint='Mixed_5c_small')
+    #     model.load_state_dict(state_dict)
+    return model
+
+
+def load_layer_weights(weights_path, final_endpoint):
+    VALID_ENDPOINTS = (
+        'Conv3d_1a_7x7',
+        'MaxPool3d_2a_3x3',
+        'Conv3d_2b_1x1',
+        'Conv3d_2c_3x3',
+        'MaxPool3d_3a_3x3',
+        'Mixed_3b',
+        'Mixed_3c',
+        'MaxPool3d_4a_3x3',
+        'Mixed_4b',
+        'Mixed_4c',
+        'Mixed_4d',
+        'Mixed_4e',
+        'Mixed_4f',
+        'MaxPool3d_5a_2x2',
+        'MaxPool3d_5a_1x1',
+        'Mixed_5b',
+        # 'Mixed_5c',
+        'Mixed_5c_small',
+        'Logits',
+        'Predictions',
+    )
+    state_dict = torch.load(weights_path)
+    remove_layers = ['Mixed_5c', 'Logits', 'Predictions']
+    remove_layers.extend([l.lower() for l in remove_layers])
+    new_state_dict = {}  # state_dict.copy()
+    # print(new_state_dict)
+    # print(new_state_dict.keys())
+    for item, state in state_dict.items():
+        layer = item[:item.index('.')]
+        if layer not in remove_layers:
+            new_state_dict[item] = state
+        # bad_state = False
+        # for layer in remove_layers:
+        #     print(item)
+        #     print(state)
+        # if layer in item:
+        #     bad_state = True
+        #     new_state_dict = new_state_dict.pop(item)
+        # if not bad_state:
+        #     print(item)
+        #     new_state_dict[item] = state
+
+    return new_state_dict
 
 # if __name__ == "__main__":
 #     print_summary = True

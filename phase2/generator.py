@@ -38,14 +38,14 @@ class Generator(nn.Module):
         self.conv3d_1b = nn.Conv3d(in_channels=256, out_channels=128, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
-        self.upsamp2 = nn.Upsample(size=(self.out_frames, 56, 56), mode='nearest')
+        # self.upsamp2 = nn.functional.upsample(size=(56, 56), mode='nearest')
 
         self.conv3d_2a = nn.Conv3d(in_channels=128, out_channels=64, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
         self.conv3d_2b = nn.Conv3d(in_channels=64, out_channels=32, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
-        self.upsamp3 = nn.Upsample(size=(self.out_frames, 112, 112), mode='nearest')
+        # self.upsamp3 = nn.functional.upsample(size=(112, 112), mode='nearest')
 
         self.conv3d_3a = nn.Conv3d(in_channels=32, out_channels=16, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
@@ -81,11 +81,13 @@ class Generator(nn.Module):
         x = self.conv3d_1a(x)
         x = self.conv3d_1b(x)
 
-        x = self.upsamp2(x)
+        # x = self.upsamp2(x)
+        x = nn.functional.interpolate(x, size=(self.out_frames, 56, 56), mode='nearest')
         x = self.conv3d_2a(x)
         x = self.conv3d_2b(x)
 
-        x = self.upsamp3(x)
+        # x = self.upsamp3(x)
+        x = nn.functional.interpolate(x, size=(self.out_frames, 112, 112), mode='nearest')
         x = self.conv3d_3a(x)
         x = self.conv3d_3b(x)
 

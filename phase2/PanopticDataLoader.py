@@ -18,6 +18,7 @@ class PanopticDataset(Dataset):
         with open(data_file) as f:
             self.data_file = f.readlines()
         self.data_file = [line.strip() for line in self.data_file]
+
         self.root_dir = root_dir
         self.clip_len = clip_len
         self.skip_len = skip_len
