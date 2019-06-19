@@ -17,5 +17,5 @@ if __name__ == '__main__':
                     if len(frames) != 125:
                         print(frame_dir)
                         print(len(frames))
-                        file.write(frame_dir)
-                        file.write(str(len(frames)))
+                        file.write(frame_dir + '\n')
+                        file.write(str(len(frames)) + '\n')
