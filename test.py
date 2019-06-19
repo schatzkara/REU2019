@@ -1,18 +1,12 @@
 import torch
+import torch.nn as nn
 
-# print(5 * torch.ones(2, 2))
-#
-# app = torch.ones(1, 2, 7, 7)
+split = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/160906_ian2/samples/vga_11_21/7500_7625'.split('/')
 
-# bsz, channels, height, width = app.size()
-# buffer = torch.zeros(bsz, channels, 8, height, width)
-# print(app.size())
-# print(buffer.size())
-# for frame in range(8):
-#     buffer[:, :, frame, :, :] = app
-#
-# print(buffer)
-# print(buffer.size())
+print(split)
 
-print(torch.tensor([5]) - torch.tensor([2]))
+x = torch.zeros(32, 4, 16, 28, 28)
 
+x = nn.functional.interpolate(x, size=(16, 56, 56), mode='nearest')
+
+print(x.size())
