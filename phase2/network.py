@@ -2,12 +2,12 @@
 
 import torch
 import torch.nn as nn
-from modifiedVGG import vgg16
-from modifiedI3D import InceptionI3d
-from deconvolutional import Deconv
-from expander import Expander
-from transformer import Transformer
-from generator import Generator
+from phase2.modifiedVGG import vgg16
+from phase2.modifiedI3D import InceptionI3d
+from phase2.deconvolutional import Deconv
+from phase2.expander import Expander
+from phase2.transformer import Transformer
+from phase2.generator import Generator
 # from torchsummary import summary
 
 """
@@ -28,9 +28,9 @@ Pipeline:
 vgg_weights_path = '/home/yogesh/kara/REU2019/weights/vgg16-397923af.pth'
 # 'C:/Users/Owner/Documents/UCF/Project/REU2019/weights/vgg16-397923af.pth'
 i3d_weights_path = '/home/yogesh/kara/REU2019/weights/rgb_charades.pt'
-
-
 # 'C:/Users/Owner/Documents/UCF/Project/REU2019/weights/rgb_charades.pt'
+
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class FullNetwork(nn.Module):
@@ -40,7 +40,7 @@ class FullNetwork(nn.Module):
 
     VALID_FRAME_COUNTS = (8, 16)
 
-    def __init__(self, output_shape, name='Full Network'):
+    def __init__(self, vp_value_count, output_shape, name='Full Network'):
         """
         Initializes the Full Network.
         :param output_shape: (5-tuple) The desired output shape for generated videos. Must match video input shape.
@@ -55,20 +55,20 @@ class FullNetwork(nn.Module):
         super(FullNetwork, self).__init__()
 
         self.net_name = name
+        self.vp_value_count = vp_value_count
         self.output_shape = output_shape
         self.out_frames = output_shape[2]
 
-        # self.vgg = VGG('VGG16')
         self.vgg = vgg16()
         self.vgg.load_state_dict(torch.load(vgg_weights_path))
         self.i3d = InceptionI3d(final_endpoint='Mixed_5c', in_frames=self.out_frames)
         self.i3d.load_state_dict(torch.load(i3d_weights_path))
 
-        self.deconv = Deconv(in_channels=1024, out_frames=self.out_frames)
-        self.exp = Expander()
-        self.trans = Transformer(in_channels=40)
+        self.deconv = Deconv(in_channels=256, out_frames=self.out_frames)
+        self.exp = Expander(vp_value_count=self.vp_value_count, out_frames=self.out_frames, out_size=28)
+        self.trans = Transformer(in_channels=32+self.vp_value_count)
 
-        self.gen = Generator(in_channels=1536, out_frames=self.out_frames)
+        self.gen = Generator(in_channels=256+32, out_frames=self.out_frames)
         # print('%s Model Successfully Built \n' % self.net_name)
 
     def forward(self, vp_diff, vid1, vid2, img1, img2):
@@ -89,26 +89,26 @@ class FullNetwork(nn.Module):
                  Shape of two representation feature maps is: (bsz, 1024, 7, 7) for this application.
         """
         # print(vp_diff.size())
-        app_v1, app_v2 = self.vgg(img1), self.vgg(img2)
+        app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # 256,28,28
 
-        app_v1, app_v2 = self.expand_app_encoding(app=app_v1), self.expand_app_encoding(app=app_v2)
+        app_v1, app_v2 = self.expand_app_encoding(app=app_v1), self.expand_app_encoding(app=app_v2)  # 256,8/16,28,28
 
-        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)
+        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # 256,4,7,7
 
-        kp_v1, kp_v2 = self.deconv(rep_v1), self.deconv(rep_v2)
+        kp_v1, kp_v2 = self.deconv(rep_v1), self.deconv(rep_v2)  # 32,8/16,28,28
 
-        vp1, vp2 = self.exp(vp_diff), self.exp(-vp_diff)
+        vp1, vp2 = self.exp(vp_diff), self.exp(-vp_diff)  # 1/3,8/16,28,28
 
         # key points + view point
         trans_input1, trans_input2 = torch.cat([vp1, kp_v2], dim=1), torch.cat([vp2, kp_v1], dim=1)  # dim=channels
 
-        kp_v1_est, kp_v2_est = self.trans(trans_input1), self.trans(trans_input2)
+        kp_v1_est, kp_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # 32,8/16,28,28
 
         # appearance encoding + key points
         gen_input1, gen_input2 = torch.cat([app_v1, kp_v2], dim=1), torch.cat([app_v2, kp_v1], dim=1)  # dim=channels
 
         # these are the videos that get returned
-        output_v1, output_v2 = self.gen(gen_input1), self.gen(gen_input2)
+        output_v1, output_v2 = self.gen(gen_input1), self.gen(gen_input2)  # 3,8/16,112,112
 
         return output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est
 
@@ -117,8 +117,9 @@ class FullNetwork(nn.Module):
         buffer = torch.zeros(bsz, channels, self.out_frames, height, width)
         for frame in range(self.out_frames):
             buffer[:, :, frame, :, :] = app
+        buffer = buffer.to(device)
 
-        return buffer.to('cuda')
+        return buffer
 
 
 # if __name__ == "__main__":

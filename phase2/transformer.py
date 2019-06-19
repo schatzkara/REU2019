@@ -44,7 +44,7 @@ class Transformer(nn.Module):
 # if __name__ == "__main__":
 #     print_summary = True
 #
-#     ex = Transformer(in_channels=264)
+#     ex = Transformer(in_channels=33)
 #
 #     if print_summary:
-#         summary(ex, input_size=(264, 16, 28, 28))
+#         summary(ex, input_size=(33, 16, 28, 28))

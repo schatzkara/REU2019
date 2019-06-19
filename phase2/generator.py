@@ -35,21 +35,21 @@ class Generator(nn.Module):
 
         self.conv3d_1a = nn.Conv3d(in_channels=in_channels, out_channels=256, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
-        self.conv3d_1b = nn.Conv3d(in_channels=256, out_channels=256, kernel_size=(3, 3, 3),
+        self.conv3d_1b = nn.Conv3d(in_channels=256, out_channels=128, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
-        self.upsamp2 = nn.Upsample(size=(16, 56, 56), mode='nearest')
+        self.upsamp2 = nn.Upsample(size=(self.out_frames, 56, 56), mode='nearest')
 
-        self.conv3d_2a = nn.Conv3d(in_channels=256, out_channels=128, kernel_size=(3, 3, 3),
+        self.conv3d_2a = nn.Conv3d(in_channels=128, out_channels=64, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
-        self.conv3d_2b = nn.Conv3d(in_channels=128, out_channels=128, kernel_size=(3, 3, 3),
+        self.conv3d_2b = nn.Conv3d(in_channels=64, out_channels=32, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
-        self.upsamp3 = nn.Upsample(size=(16, 112, 112), mode='nearest')
+        self.upsamp3 = nn.Upsample(size=(self.out_frames, 112, 112), mode='nearest')
 
-        self.conv3d_3a = nn.Conv3d(in_channels=128, out_channels=64, kernel_size=(3, 3, 3),
+        self.conv3d_3a = nn.Conv3d(in_channels=32, out_channels=16, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
-        self.conv3d_3b = nn.Conv3d(in_channels=64, out_channels=3, kernel_size=(3, 3, 3),
+        self.conv3d_3b = nn.Conv3d(in_channels=16, out_channels=3, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
         # self.upsamp4 = nn.Upsample(scale_factor=2, mode='nearest')

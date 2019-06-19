@@ -92,16 +92,7 @@ class NTUDataset(Dataset):
                                 frame_index=frame_index, pixel_index=pixel_index)
         vid1, vid2 = NTUDataset.to_tensor(sample=vid1), NTUDataset.to_tensor(sample=vid2)
 
-        # vp1, vp2 = torch.tensor([vp1]), torch.tensor([vp2])
-        # print(vp1 - vp2)
-        # print(vp2)
-        # print(vp1.size())
-        # print(vp2.size())
-        # print(vid1.size())
-        # print(vid2.size())
         return vp1, vp2, vid1, vid2
-
-    # MAKE SURE TO NOW GO CHANGE TRAINING AND TESTING LOOPS #
 
     def get_random_views(self):
         """

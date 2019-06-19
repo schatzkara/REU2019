@@ -27,7 +27,7 @@ class VGG(nn.Module):
     """
     Class representing the modified VGG network to be used.
     """
-    def __init__(self, features, num_classes=1000, init_weights=True):
+    def __init__(self, features, num_layers, num_classes=1000, init_weights=True):
         """
         Initializes the modified VGG network.
         :param features: All the network layers.
@@ -36,6 +36,7 @@ class VGG(nn.Module):
         """
         super(VGG, self).__init__()
         self.features = features
+        self.num_layers = num_layers
         self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
         self.classifier = nn.Sequential(
             nn.Linear(512 * 7 * 7, 4096),
@@ -51,7 +52,7 @@ class VGG(nn.Module):
 
     def forward(self, x):
         #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!#
-        self.features = self.features[:9]
+        self.features = self.features[:self.num_layers]
         x = self.features(x)
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
@@ -98,14 +99,14 @@ cfgs = {
 }
 
 
-def _vgg(arch, cfg, batch_norm, pretrained, progress, **kwargs):
+def _vgg(arch, cfg, num_layers, batch_norm, pretrained, progress, **kwargs):
     if pretrained:
         kwargs['init_weights'] = False
-    model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), **kwargs)
+    model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), num_layers=num_layers, **kwargs)
     # if pretrained:
-        # state_dict = load_state_dict_from_url(model_urls[arch],
-        #                                       progress=progress)
-        # model.load_state_dict(state_dict)
+    #     state_dict = load_state_dict_from_url(model_urls[arch],
+    #                                           progress=progress)
+    #     model.load_state_dict(state_dict)
     return model
 
 
@@ -115,7 +116,7 @@ def vgg11(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg11', 'A', False, pretrained, progress, **kwargs)
+    return _vgg('vgg11', 'A', 10, False, pretrained, progress, **kwargs)
 
 
 def vgg11_bn(pretrained=False, progress=True, **kwargs):
@@ -124,7 +125,7 @@ def vgg11_bn(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg11_bn', 'A', True, pretrained, progress, **kwargs)
+    return _vgg('vgg11_bn', 'A', 10, True, pretrained, progress, **kwargs)
 
 
 def vgg13(pretrained=False, progress=True, **kwargs):
@@ -133,7 +134,7 @@ def vgg13(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg13', 'B', False, pretrained, progress, **kwargs)
+    return _vgg('vgg13', 'B', 14, False, pretrained, progress, **kwargs)
 
 
 def vgg13_bn(pretrained=False, progress=True, **kwargs):
@@ -142,7 +143,7 @@ def vgg13_bn(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg13_bn', 'B', True, pretrained, progress, **kwargs)
+    return _vgg('vgg13_bn', 'B', 14, True, pretrained, progress, **kwargs)
 
 
 def vgg16(pretrained=False, progress=True, **kwargs):
@@ -151,7 +152,7 @@ def vgg16(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg16', 'D', False, pretrained, progress, **kwargs)
+    return _vgg('vgg16', 'D', 16, False, pretrained, progress, **kwargs)
 
 
 def vgg16_bn(pretrained=False, progress=True, **kwargs):
@@ -160,7 +161,7 @@ def vgg16_bn(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg16_bn', 'D', True, pretrained, progress, **kwargs)
+    return _vgg('vgg16_bn', 'D', 16, True, pretrained, progress, **kwargs)
 
 
 def vgg19(pretrained=False, progress=True, **kwargs):
@@ -169,7 +170,7 @@ def vgg19(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg19', 'E', False, pretrained, progress, **kwargs)
+    return _vgg('vgg19', 'E', 18, False, pretrained, progress, **kwargs)
 
 
 def vgg19_bn(pretrained=False, progress=True, **kwargs):
@@ -178,7 +179,7 @@ def vgg19_bn(pretrained=False, progress=True, **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _vgg('vgg19_bn', 'E', True, pretrained, progress, **kwargs)
+    return _vgg('vgg19_bn', 'E', 18, True, pretrained, progress, **kwargs)
 
 
 # if __name__ == "__main__":

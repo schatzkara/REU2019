@@ -13,6 +13,7 @@ class MaxPool3dSamePadding(nn.MaxPool3d):
     """
     Class respresenting a 3D Max Pooling layer that computes padding necessary for legal computation with kernel.
     """
+
     def compute_pad(self, dim, s):
         if s % self.stride[dim] == 0:
             return max(self.kernel_size[dim] - self.stride[dim], 0)
@@ -50,6 +51,7 @@ class Unit3D(nn.Module):
     """
     Class Representing a 3D Convolutional Unit that computes padding necessary for legal convolution with kernel.
     """
+
     def __init__(self, in_channels,
                  output_channels,
                  kernel_shape=(1, 1, 1),
@@ -128,6 +130,7 @@ class InceptionModule(nn.Module):
     """
     Class representing a single Inception Module that is part of the I3D Network design.
     """
+
     def __init__(self, in_channels, out_channels, name):
         super(InceptionModule, self).__init__()
 
@@ -326,10 +329,14 @@ class InceptionI3d(nn.Module):
                                                      name + end_point)
         if self._final_endpoint == end_point: return
 
-        # Modification: changed the number of channels here to get only 256 as the output????????????? not yet
+        # Modification: changed the number of channels here to get only 256 as the output
         end_point = 'Mixed_5c'
-        self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
+        self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128,
+                                                     [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
+                                                      int(128 / 4), int(128 / 4)],
                                                      name + end_point)
+        # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
+        #                                              name + end_point)
 
         # Modification: removed final 'Logits' layers since we are not dealing with classification in this application.
         # We are using this network to produce a feature map to represent the 'action' of the video, so we want a larger
@@ -342,7 +349,8 @@ class InceptionI3d(nn.Module):
         # selfdropout = nn.Dropout(dropout_keep_prob)
         # Note: this layer is not actually used in the network, but it is built here anyways so that pretrained weights
         # can be used for the network.
-        self.logits = Unit3D(in_channels=384 + 384 + 128 + 128, output_channels=157, # self._num_classes,
+        self.logits = Unit3D(in_channels=int(384 / 4) + int(384 / 4) + int(128 / 4) + int(128 / 4), output_channels=157,
+                             # self._num_classes,
                              kernel_shape=[1, 1, 1],
                              padding=0,
                              activation_fn=None,
@@ -399,8 +407,7 @@ class InceptionI3d(nn.Module):
 # if __name__ == "__main__":
 #     print_summary = True
 #
-#     i3d = InceptionI3d(final_endpoint='Mixed_5c', in_frames=16)
+#     i3d = InceptionI3d(final_endpoint='Mixed_5c', in_frames=8)
 #
 #     if print_summary:
-#         summary(i3d, input_size=(3, 16, 112, 112))
-#
+#         summary(i3d, input_size=(3, 8, 112, 112))

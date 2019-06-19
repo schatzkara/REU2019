@@ -2,7 +2,7 @@
 
 import torch
 import torch.nn as nn
-# from torchsummary import summary
+from torchsummary import summary
 
 
 class Deconv(nn.Module):
@@ -12,7 +12,7 @@ class Deconv(nn.Module):
 
     VALID_OUT_FRAMES = (8, 16)
 
-    def __init__(self, in_channels, out_frames=8, deconv_name='Deconvolutional Network'):
+    def __init__(self, in_channels, out_frames, deconv_name='Deconvolutional Network'):
         """
         Initializes the Deconvolutional network.
         :param in_channels: (int) The number of channels in the input tensor.
@@ -27,6 +27,7 @@ class Deconv(nn.Module):
 
         super(Deconv, self).__init__()
         self.deconv_name = deconv_name
+
         self.out_frames = out_frames
 
         # definition of all network layers
@@ -35,29 +36,19 @@ class Deconv(nn.Module):
         #
         # self.upsamp1 = nn.Upsample(scale_factor=2, mode='nearest')
         #
-        self.conv3d_1a = nn.Conv3d(in_channels=1024, out_channels=512, kernel_size=(3, 3, 3),
+        self.conv3d_1a = nn.Conv3d(in_channels=in_channels, out_channels=256, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
-        self.conv3d_1b = nn.Conv3d(in_channels=512, out_channels=256, kernel_size=(3, 3, 3),
+        self.conv3d_1b = nn.Conv3d(in_channels=256, out_channels=128, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
         self.upsamp2 = nn.Upsample(scale_factor=2, mode='nearest')
 
-        self.conv3d_2a = nn.Conv3d(in_channels=256, out_channels=128, kernel_size=(3, 3, 3),
+        self.conv3d_2a = nn.Conv3d(in_channels=128, out_channels=64, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
-        self.conv3d_2b = nn.Conv3d(in_channels=128, out_channels=32, kernel_size=(3, 3, 3),
+        self.conv3d_2b = nn.Conv3d(in_channels=64, out_channels=32, kernel_size=(3, 3, 3),
                                    stride=(1, 1, 1), padding=(1, 1, 1))
 
-        self.upsamp3 = nn.Upsample(scale_factor=2, mode='nearest')
-
-        # self.conv3d_3a = nn.Conv3d(in_channels=256, out_channels=256, kernel_size=(3, 3, 3),
-        #                            stride=(1, 1, 1), padding=(1, 1, 1))
-        # self.conv3d_3b = nn.Conv3d(in_channels=64, out_channels=64, kernel_size=(3, 3, 3),
-        #                            stride=(1, 1, 1), padding=(1, 1, 1))
-        #
-        # self.upsamp4 = nn.Upsample(scale_factor=2, mode='nearest')
-        #
-        # self.conv3d_4 = nn.Conv3d(in_channels=64, out_channels=3, kernel_size=(1, 1, 1),
-        #                           stride=(1, 1, 1), padding=0)
+        self.upsamp3 = nn.Upsample(size=(self.out_frames, 28, 28), mode='nearest')
 
         # print('%s Model Successfully Built \n' % self.deconv_name)
 
@@ -97,10 +88,10 @@ class Deconv(nn.Module):
         return x
 
 
-# if __name__ == "__main__":
-#     print_summary = True
-#
-#     deconv = Deconv(in_channels=1024, out_frames=16)
-#
-#     if print_summary:
-#         summary(deconv, input_size=(1024, 4, 7, 7))
+if __name__ == "__main__":
+    print_summary = True
+
+    deconv = Deconv(in_channels=256, out_frames=16)
+
+    if print_summary:
+        summary(deconv, input_size=(256, 4, 7, 7))
