@@ -76,13 +76,18 @@ class NTUDataset(Dataset):
         """
         Function to get a single sample from the dataset. All modifications to the sample are done here.
         :param idx: (int) The index of the sample to get.
-        :return: 2 float representing the viewing angles, and 2 tensors representing the sample video from 2 viewpoints
+        :return: a float representing the viewpoint difference from the perspective of the first view, i.e. a negative
+                 value indicates that the second view is clockwise from the first and a positive values indicates that
+                 the second value is counterclockwise from the first,
+                 and 2 tensors representing the sample video from 2 viewpoints
         """
         if self.random_all:
             self.get_random_views()
 
         action, sample_id, vp1, vp2, nf_v1, nf_v2 = self.process_index(index=idx)
         view1path, view2path = self.get_vid_paths(action=action, sample_id=sample_id)
+
+        vp_diff = vp2 - vp1
 
         frame_count = min(nf_v1, nf_v2)
         frame_index = self.rand_frame_index(frame_count=frame_count)
@@ -94,7 +99,7 @@ class NTUDataset(Dataset):
                                 frame_index=frame_index, pixel_index=pixel_index)
         vid1, vid2 = NTUDataset.to_tensor(sample=vid1), NTUDataset.to_tensor(sample=vid2)
 
-        return vp1, vp2, vid1, vid2
+        return vp_diff, vid1, vid2
 
     def get_random_views(self):
         """
