@@ -342,11 +342,7 @@ class InceptionI3d(nn.Module):
         #                                               int(128 / 4), int(128 / 4)],
         #                                              name + end_point)
 
-        end_point = 'Mixed_5c_small'
-        self.final_layer = InceptionModule(256 + 320 + 128 + 128,
-                                           [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
-                                            int(128 / 4), int(128 / 4)],
-                                           name + end_point)
+
         # end_point = 'Mixed_5c'
         # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
         #                                              name + end_point)
@@ -373,6 +369,12 @@ class InceptionI3d(nn.Module):
 
         self.build()
 
+        end_point = 'Mixed_5c_small'
+        self.final_layer = InceptionModule(256 + 320 + 128 + 128,
+                                           [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
+                                            int(128 / 4), int(128 / 4)],
+                                           name + end_point)
+
     # def replace_logits(self, num_classes):
     #     self._num_classes = num_classes
     #     self.logits = Unit3D(in_channels=384 + 384 + 128 + 128, output_channels=self._num_classes,
@@ -387,7 +389,7 @@ class InceptionI3d(nn.Module):
         for k in self.end_points.keys():
             self.add_module(k, self.end_points[k])
         if self.pretrained:
-            state_dict = load_layer_weights(self.weights_path, final_endpoint='Mixed_5c_small')
+            state_dict = load_layer_weights(self.weights_path)
             self.load_state_dict(state_dict)
         # print('%s Model Successfully Built \n' % self.i3d_name)
 

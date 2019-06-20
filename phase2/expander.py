@@ -2,6 +2,7 @@
 
 import torch
 import torch.nn as nn
+
 # from torchsummary import summary
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -58,6 +59,9 @@ class Expander(nn.Module):
         """
         bsz = vp.size()[0]
 
+        if self.vp_value_count == 1:
+            vp = torch.unsqueeze(vp, dim=1)
+
         buffer = torch.zeros(bsz, self.vp_value_count, self.out_frames, self.out_size, self.out_size)
         for f in range(self.out_frames):
             for h in range(self.out_size):
@@ -74,4 +78,4 @@ class Expander(nn.Module):
 #     ex = Expander(vp_value_count=1, out_frames=16, out_size=28)
 #
 #     if print_summary:
-#         summary(ex, input_size=(1))
+#         summary(ex, input_size=(3))
