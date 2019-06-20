@@ -203,7 +203,8 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
-    print('Parameters:')
+    print('Panoptic')
+    print('Parameters for training:')
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
@@ -226,7 +227,7 @@ if __name__ == '__main__':
     model = FullNetwork(vp_value_count=3, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
     model = model.to(device)
 
-    # print(model)
+    print(model)
 
     if device == 'cuda':
         net = torch.nn.DataParallel(model)

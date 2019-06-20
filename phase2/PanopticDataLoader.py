@@ -316,8 +316,8 @@ class PanopticDataset(Dataset):
             cal = pickle.load(fp)
 
         # get the camera calibration values
-        print(seq_id)
-        print(view_id)
+        # print(seq_id)
+        # print(view_id)
         # print(cal)
         try:
             c_data = cal[view_id[4:]]
