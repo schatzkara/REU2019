@@ -31,7 +31,8 @@ PRECROP = True
 NUM_EPOCHS = 1000
 LR = 1e-4
 
-weight_file_name = './weights/net_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN, PRECROP, NUM_EPOCHS, LR)
+weight_file_name = './weights/phase2_net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                          PRECROP, NUM_EPOCHS, LR)
 
 
 def train(epoch):
@@ -48,16 +49,8 @@ def train(epoch):
 
     model.train()
 
-    for batch_idx, (vp1, vp2, vid1, vid2) in enumerate(trainloader):
-        # print(batch_idx)
-        # vp_diff = vp1 - vp2
-        # print(vp1)
-        # print(vp2)
-        # print(vp_diff)
-        # print('\n\n\n\n')
-        vp_diff = vp1 - vp2
+    for batch_idx, (vp_diff, vid1, vid2) in enumerate(trainloader):
         vp_diff = vp_diff.to(device)
-        # vp_diff = (torch.tensor([vp_diff])).to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
@@ -67,7 +60,7 @@ def train(epoch):
         output_vid1, output_vid2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
                                                                              vid1=vid1, vid2=vid2,
                                                                              img1=img1, img2=img2)
-        # loss (normalized)
+        # loss
         con1_loss = criterion(kp_v1, kp_v1_est)
         con2_loss = criterion(kp_v2, kp_v2_est)
         recon1_loss = criterion(output_vid1, vid1)
@@ -121,8 +114,8 @@ def test(epoch):
 
     model.eval()
 
-    for batch_idx, (vp1, vp2, vid1, vid2) in enumerate(testloader):
-        vp_diff = (vp1 - vp2).to(device)
+    for batch_idx, (vp_diff, vid1, vid2) in enumerate(testloader):
+        vp_diff = vp_diff.to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
@@ -131,6 +124,7 @@ def test(epoch):
             output_vid1, output_vid2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
                                                                                  vid1=vid1, vid2=vid2,
                                                                                  img1=img1, img2=img2)
+            # loss
             con1_loss = criterion(kp_v1, kp_v1_est)
             con2_loss = criterion(kp_v2, kp_v2_est)
             recon1_loss = criterion(output_vid1, vid1)
@@ -192,6 +186,10 @@ def get_first_frame(vid_batch):
 
 
 def train_model():
+    """
+    Function to train and validate the model for all epochs.
+    :return: None
+    """
     min_loss = 0.0
     start_time = time.time()
     for epoch in range(NUM_EPOCHS):
@@ -211,7 +209,7 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
-    print('Parameters:')
+    print('Parameters for training:')
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))

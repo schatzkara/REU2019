@@ -49,8 +49,7 @@ def train(epoch):
 
     model.train()
 
-    for batch_idx, (vp1, vp2, vid1, vid2) in enumerate(trainloader):
-        vp_diff = vp1 - vp2
+    for batch_idx, (vp_diff, vid1, vid2) in enumerate(trainloader):
         vp_diff = vp_diff.to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
@@ -115,8 +114,8 @@ def test(epoch):
 
     model.eval()
 
-    for batch_idx, (vp1, vp2, vid1, vid2) in enumerate(testloader):
-        vp_diff = (vp1 - vp2).to(device)
+    for batch_idx, (vp_diff, vid1, vid2) in enumerate(testloader):
+        vp_diff = vp_diff.to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
