@@ -1,0 +1,26 @@
+0.4.0
+Parameters:
+Batch Size: 32
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Training...
+0.4.0
+Traceback (most recent call last):
+  File "trainingLoop.py", line 260, in <module>
+    train_model()
+  File "trainingLoop.py", line 199, in train_model
+    train(epoch)
+  File "trainingLoop.py", line 69, in train
+    img1=img1, img2=img2)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 113, in forward
+    output_v1 = self.gen(gen_input1)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 491, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/generator.py", line 86, in forward
+    x = nn.functional.interpolate(x, size=(self.out_frames, 56, 56), mode='nearest')
+AttributeError: module 'torch.nn.functional' has no attribute 'interpolate'

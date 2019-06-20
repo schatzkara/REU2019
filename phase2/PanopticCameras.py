@@ -30,6 +30,14 @@ def get_cameras(sample):
 
 
 def get_view(seq_id, view_id, x_pos, y_pos):
+    """
+    Function to get the view of the camera.
+    :param seq_id: (str) The sample name.
+    :param view_id: (int) The camera ID.
+    :param x_pos: (int) The x coordinate of the pixel to crop at.
+    :param y_pos: (int) The y coordinate of the pixel to crop at.
+    :return: The x, y, and z coordinates of the camera and the pan and van values
+    """
     # seq = os.path.split(seq_id)[0]
     cal_file = os.path.join(data_root_dir, seq_id, 'calibration_' + seq_id + '.pkl')
     # print cal_file

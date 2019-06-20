@@ -1,0 +1,18 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Traceback (most recent call last):
+  File "trainingLoop.py", line 234, in <module>
+    model = FullNetwork(vp_value_count= 1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 64, in __init__
+    self.vgg.load_state_dict(torch.load(vgg_weights_path))
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 721, in load_state_dict
+    self.__class__.__name__, "\n\t".join(error_msgs)))
+RuntimeError: Error(s) in loading state_dict for VGG:
+	While copying the parameter named "features.14.weight", whose dimensions in the model are torch.Size([32, 256, 3, 3]) and whose dimensions in the checkpoint are torch.Size([256, 256, 3, 3]).
+	While copying the parameter named "features.14.bias", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([256]).
+	While copying the parameter named "features.17.weight", whose dimensions in the model are torch.Size([512, 32, 3, 3]) and whose dimensions in the checkpoint are torch.Size([512, 256, 3, 3]).

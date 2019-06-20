@@ -1,0 +1,129 @@
+1.1.0
+Parameters:
+Batch Size: 20
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Training...
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+	Batch 10/672 Loss:0.16593 con1:0.00069 con2:0.00069 recon1:0.08231 recon2:0.08225
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+	Batch 20/672 Loss:0.10182 con1:0.00046 con2:0.00047 recon1:0.05095 recon2:0.04994
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+	Batch 30/672 Loss:0.06923 con1:0.00056 con2:0.00057 recon1:0.03370 recon2:0.03441
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+	Batch 40/672 Loss:0.05028 con1:0.00035 con2:0.00037 recon1:0.02485 recon2:0.02470
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+1.1.0
+Traceback (most recent call last):
+  File "trainingLoop.py", line 260, in <module>
+    train_model()
+  File "trainingLoop.py", line 199, in train_model
+    train(epoch)
+  File "trainingLoop.py", line 51, in train
+    for batch_idx, (vp1, vp2, vid1, vid2) in enumerate(trainloader):
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 582, in __next__
+    return self._process_next_batch(batch)
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 608, in _process_next_batch
+    raise batch.exc_type(batch.exc_msg)
+AssertionError: Traceback (most recent call last):
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py", line 99, in _worker_loop
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py", line 99, in <listcomp>
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/yogesh/kara/REU2019/phase2/NTUDataLoader.py", line 86, in __getitem__
+    frame_index = self.rand_frame_index(frame_count=frame_count)
+  File "/home/yogesh/kara/REU2019/phase2/NTUDataLoader.py", line 211, in rand_frame_index
+    assert max_frame >= 1, 'Not enough frames to sample from.'
+AssertionError: Not enough frames to sample from.
+

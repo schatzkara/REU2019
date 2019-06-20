@@ -9,6 +9,13 @@ metrics = ['loss', 'con', 'recon1', 'recon2']
 
 
 def plot_multiple_files(file1, file2, *args):
+    """
+    Function to plot multiple flies side by side.
+    :param file1: (str) The path of the first file to plot.
+    :param file2: (str) The path of the second file to plot.
+    :param args: The paths of any subsequent files to plot.
+    :return: None
+    """
     file_list = [file1, file2]
     for file in args:
         file_list.append(file)
@@ -19,6 +26,13 @@ def plot_multiple_files(file1, file2, *args):
 
 
 def plot_multiple_files_together(file1, file2, *args):
+    """
+    Function to plot multiple files on the same plot.
+    :param file1: (str) The path of the first file to plot.
+    :param file2: (str) The path of the second file to plot.
+    :param args: The paths of any subsequent files to plot.
+    :return: None
+    """
     file_list = [file1, file2]
     for file in args:
         file_list.append(file)
@@ -57,6 +71,11 @@ def plot_multiple_files_together(file1, file2, *args):
 
 
 def plot_one_file(file_path):
+    """
+    Funtion to plot a single file.
+    :param file_path: (str) The path of the file to plot.
+    :return: None
+    """
     param_dict = get_parameters(file_path)
     print(param_dict)
     total_epochs = param_dict['total epochs']

@@ -1,0 +1,46 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Traceback (most recent call last):
+  File "trainingLoop.py", line 234, in <module>
+    model = FullNetwork(vp_value_count= 1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 65, in __init__
+    self.i3d.load_state_dict(torch.load(i3d_weights_path))
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 721, in load_state_dict
+    self.__class__.__name__, "\n\t".join(error_msgs)))
+RuntimeError: Error(s) in loading state_dict for InceptionI3d:
+	While copying the parameter named "logits.conv3d.weight", whose dimensions in the model are torch.Size([157, 256, 1, 1, 1]) and whose dimensions in the checkpoint are torch.Size([157, 1024, 1, 1, 1]).
+	While copying the parameter named "Mixed_5c.b0.conv3d.weight", whose dimensions in the model are torch.Size([96, 832, 1, 1, 1]) and whose dimensions in the checkpoint are torch.Size([384, 832, 1, 1, 1]).
+	While copying the parameter named "Mixed_5c.b0.bn.weight", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b0.bn.bias", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b0.bn.running_mean", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b0.bn.running_var", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b1a.conv3d.weight", whose dimensions in the model are torch.Size([48, 832, 1, 1, 1]) and whose dimensions in the checkpoint are torch.Size([192, 832, 1, 1, 1]).
+	While copying the parameter named "Mixed_5c.b1a.bn.weight", whose dimensions in the model are torch.Size([48]) and whose dimensions in the checkpoint are torch.Size([192]).
+	While copying the parameter named "Mixed_5c.b1a.bn.bias", whose dimensions in the model are torch.Size([48]) and whose dimensions in the checkpoint are torch.Size([192]).
+	While copying the parameter named "Mixed_5c.b1a.bn.running_mean", whose dimensions in the model are torch.Size([48]) and whose dimensions in the checkpoint are torch.Size([192]).
+	While copying the parameter named "Mixed_5c.b1a.bn.running_var", whose dimensions in the model are torch.Size([48]) and whose dimensions in the checkpoint are torch.Size([192]).
+	While copying the parameter named "Mixed_5c.b1b.conv3d.weight", whose dimensions in the model are torch.Size([96, 48, 3, 3, 3]) and whose dimensions in the checkpoint are torch.Size([384, 192, 3, 3, 3]).
+	While copying the parameter named "Mixed_5c.b1b.bn.weight", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b1b.bn.bias", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b1b.bn.running_mean", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b1b.bn.running_var", whose dimensions in the model are torch.Size([96]) and whose dimensions in the checkpoint are torch.Size([384]).
+	While copying the parameter named "Mixed_5c.b2a.conv3d.weight", whose dimensions in the model are torch.Size([12, 832, 1, 1, 1]) and whose dimensions in the checkpoint are torch.Size([48, 832, 1, 1, 1]).
+	While copying the parameter named "Mixed_5c.b2a.bn.weight", whose dimensions in the model are torch.Size([12]) and whose dimensions in the checkpoint are torch.Size([48]).
+	While copying the parameter named "Mixed_5c.b2a.bn.bias", whose dimensions in the model are torch.Size([12]) and whose dimensions in the checkpoint are torch.Size([48]).
+	While copying the parameter named "Mixed_5c.b2a.bn.running_mean", whose dimensions in the model are torch.Size([12]) and whose dimensions in the checkpoint are torch.Size([48]).
+	While copying the parameter named "Mixed_5c.b2a.bn.running_var", whose dimensions in the model are torch.Size([12]) and whose dimensions in the checkpoint are torch.Size([48]).
+	While copying the parameter named "Mixed_5c.b2b.conv3d.weight", whose dimensions in the model are torch.Size([32, 12, 3, 3, 3]) and whose dimensions in the checkpoint are torch.Size([128, 48, 3, 3, 3]).
+	While copying the parameter named "Mixed_5c.b2b.bn.weight", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b2b.bn.bias", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b2b.bn.running_mean", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b2b.bn.running_var", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b3b.conv3d.weight", whose dimensions in the model are torch.Size([32, 832, 1, 1, 1]) and whose dimensions in the checkpoint are torch.Size([128, 832, 1, 1, 1]).
+	While copying the parameter named "Mixed_5c.b3b.bn.weight", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b3b.bn.bias", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b3b.bn.running_mean", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).
+	While copying the parameter named "Mixed_5c.b3b.bn.running_var", whose dimensions in the model are torch.Size([32]) and whose dimensions in the checkpoint are torch.Size([128]).

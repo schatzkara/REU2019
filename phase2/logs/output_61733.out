@@ -1,0 +1,29 @@
+/var/spool/slurm/slurmd/job61733/slurm_script: line 12: activate: No such file or directory
+1.1.0
+Parameters:
+Batch Size: 32
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Training...
+1.1.0
+Traceback (most recent call last):
+  File "trainingLoop.py", line 260, in <module>
+    train_model()
+  File "trainingLoop.py", line 199, in train_model
+    train(epoch)
+  File "trainingLoop.py", line 69, in train
+    img1=img1, img2=img2)
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/modules/module.py", line 493, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 113, in forward
+    output_v1 = self.gen(gen_input1)
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/modules/module.py", line 493, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/generator.py", line 91, in forward
+    x = nn.functional.interpolate(x, size=(self.out_frames, 112, 112), mode='nearest')
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/functional.py", line 2547, in interpolate
+    return torch._C._nn.upsample_nearest3d(input, _output_size(3))
+RuntimeError: CUDA out of memory. Tried to allocate 784.00 MiB (GPU 0; 11.91 GiB total capacity; 10.44 GiB already allocated; 699.12 MiB free; 251.78 MiB cached)

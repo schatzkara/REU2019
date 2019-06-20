@@ -12,12 +12,28 @@ class PanopticDataset(Dataset):
 
     def __init__(self, root_dir, data_file, resize_height, resize_width, clip_len,
                  height=128, width=128, frame_count=125,
-                 skip_len=1, random_views=False, random_all=False,
+                 skip_len=1, num_views=None, random_views=False, random_all=False,
                  precrop=False):
-
+        """
+        Initializes the Panoptic Dataset object used for extracting samples to run through the network.
+        :param root_dir: (str) Directory with all the frames extracted from the videos.
+        :param data_file: (str) Path to file containing the sample IDs.
+        :param resize_height: (int) The desired frame height.
+        :param resize_width: (int) The desired frame width.
+        :param clip_len: (int) The number of frames desired in the sample clip.
+        :param height: (int, optional) The height of the frames in the dataset (default 128 for Panoptic Dataset).
+        :param width: (int, optional) The width of the frames in the dataset (default 128 for Panoptic Dataset).
+        :param frame_count: (int) The number of total frames in each sample (default 125 for Panoptic Dataset).
+        :param skip_len: (int, optional) The number of frames to skip between each when creating the clip (default 1).
+        :param num_views: (int, optional) The number of views available to choose from for all samples (default None).
+        :param random_views: (boolean, optional) True to use 2 constant randomly generated views (default False).
+        :param random_all: (boolean, optional) True to use 2 randomly generated views for each sample (default False).
+        :param precrop: (boolean, optional) True to crop 50 pixels off left and right of frame before randomly cropping
+                        (default False).
+        """
         with open(data_file) as f:
             self.data_file = f.readlines()
-        self.data_file = [line.strip() for line in self.data_file]
+        self.data_list = [line.strip() for line in self.data_file]  # list of all sample IDs
         self.root_dir = root_dir
         self.clip_len = clip_len
         self.skip_len = skip_len
@@ -27,10 +43,11 @@ class PanopticDataset(Dataset):
         self.resize_height = resize_height
         self.resize_width = resize_width
         self.channels = 3
-        self.view1 = 1
-        self.view2 = 2
+        self.num_views = num_views
+        self.view1 = None
+        self.view2 = None
         if random_views:
-            self.get_random_views()
+            self.get_random_views(self.num_views)
         self.random_all = random_all
         self.precrop = precrop
 
@@ -39,7 +56,7 @@ class PanopticDataset(Dataset):
         Function to return the number of samples in the dataset.
         :return: int representing the number of samples in the dataset.
         """
-        return len(self.data_file)
+        return len(self.data_list)
 
     def __getitem__(self, idx):
         """
@@ -82,28 +99,24 @@ class PanopticDataset(Dataset):
 
         return vid1, vid2
 
-    # MAKE SURE TO NOW GO CHANGE TRAINING AND TESTING LOOPS #
-
-    # CHANGED
     def process_index(self, index):
         """
         Function to process the information that the data file contains about the sample.
-        The line of information contains the sample name as well as the number of available frames from each view
+        The line of information contains the sample name as well as the frames to sample from.
         :param index: (int) The index of the sample.
-        :return: the action class, sample_id, and two ints representing the number of frames in view1 and view2
+        :return: the sample name, sample path, and frame indices
         """
         # ex. 170915_toddler4/samples 0_125
-        sample_path, frame_nums = self.data_file[index].split(' ')
+        sample_path, frame_nums = self.data_list[index].split(' ')
         sample_name = sample_path[:sample_path.index('/')]
         # start_frame, end_frame = frame_nums.split('_')
 
-        info = (sample_name, sample_path, frame_nums)
-
-        return info
+        return sample_name, sample_path, frame_nums
 
     def get_random_views(self, num_views):
         """
         Function to generate 2 random viewpoints for the sample.
+        :param num_views: (int) The number of available view to choose from.
         :return: 2 ints representing the viewpoints for the sample.
         """
         self.view1, self.view2 = np.random.randint(1, num_views), np.random.randint(1, num_views)
@@ -113,21 +126,18 @@ class PanopticDataset(Dataset):
     def get_vid_paths(self, path_head, path_tail):
         """
         Function to get the paths at which the two sample views are located.
-        :param action: (int) The action class that the sample captures.
-        :param sample_id: (str) The id for the sample from the data file.
+        :param path_head: (str) The first part of the vid path that contains the sample name and dir
+        :param path_tail: (str) The last part of the vid path that contains the frame indices
         :return: 2 strings representing the paths for the sample views.
         """
         view1_path = os.path.join(self.root_dir, path_head, str(self.view1), path_tail)
-        view2_path = os.path.join(self. root_dir, path_head, str(self.view2), path_tail)
+        view2_path = os.path.join(self.root_dir, path_head, str(self.view2), path_tail)
 
         return view1_path, view2_path
 
     def rand_frame_index(self):
         """
         Function to generate a random starting frame index for cropping the temporal dimension of the video.
-        :param frame_count: (int) The number of available frames in the sample video.
-        :param clip_len: (int) The number of frames desired in the sample clip.
-        :param skip_len: (int) The number of frames to skip between each when creating the clip.
         :return: The starting frame index for the sample.
         """
         max_frame = self.frame_count - (self.skip_len * self.clip_len)
@@ -139,12 +149,9 @@ class PanopticDataset(Dataset):
     def rand_pixel_index(self):
         """
         Function to generate a random starting pixel for cropping the height and width of the frames.
-        :param height: (int) The height of the video.
-        :param width: (int) The width of the video.
-        :param desired_height: (int) The desired height of the video.
-        :param desired_width: (int) The desired width of the video.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
+        # if the sample is being precropped, then there are 50 pixels removed from the left and right
         if self.precrop:
             width = self.width - 100
         else:
@@ -158,13 +165,8 @@ class PanopticDataset(Dataset):
         """
         Function to load the video frames for the sample.
         :param vid_path: (str) The path at which the sample video is located.
-        :param clip_len: (int) The number of frames desired in the sample clip.
-        :param skip_len: (int) The number of frames to skip between each when creating the clip.
         :param frame_index: (int) The starting frame index for the sample.
         :param pixel_index: (tuple: int, int) The height and width indices of the pixel at which to crop.
-        :param resize_height: (int) The desired frame height.
-        :param resize_width: (int) The desired frame width.
-        :param channels: (int) The number of channels in each frame.
         :return: np array representing the sample video clip.
         """
         buffer = np.empty((self.clip_len, self.resize_height, self.resize_width, self.channels), np.dtype('float32'))
@@ -185,7 +187,7 @@ class PanopticDataset(Dataset):
             # crop the frame (next 3 lines)
             height_index, width_index = pixel_index
             frame = self.crop_frame(frame=frame,
-                                    height_index=height_index, width_index=width_index)
+                                    h_index=height_index, w_index=width_index)
             # normalize
             frame = PanopticDataset.normalize_frame(frame)
 
@@ -197,32 +199,34 @@ class PanopticDataset(Dataset):
     @staticmethod
     def make_frame_name(frame_num):
         """
-        Function to correctly generate the correctly formatted .jpg file name for the frame.
+        Function to correctly generate the correctly formatted .png file name for the frame.
         :param frame_num: The frame number captured in the file.
         :return: str representing the file name.
         """
         return str(frame_num).zfill(3) + '.png'
 
-    def crop_frame(self, frame, height_index, width_index):
+    def crop_frame(self, frame, h_index, w_index):
         """
         Function that crops a frame.
         :param frame: (array-like) The frame to crop.
-        :param height_index: (int) The height index to start the crop.
-        :param width_index: (int) The width index to start the crop.
-        :param desired_height: (int) The desired height of the cropped frame.
-        :param desired_width: (int) The desired width of the cropped frame.
+        :param h_index: (int) The height index to start the crop.
+        :param w_index: (int) The width index to start the crop.
         :return: np array representing the cropped frame
         """
         frame = np.array(frame).astype(np.float32)
         if self.precrop:
             frame = frame[:, 50:-50]
-        cropped_frame = frame[height_index:height_index + self.resize_height,
-                        width_index:width_index + self.resize_width]
+        cropped_frame = frame[h_index:h_index + self.resize_height, w_index:w_index + self.resize_width]
 
         return cropped_frame
 
     @staticmethod
     def normalize_frame(frame):
+        """
+        Function to normalize the pixel values in the frame to be between 0 and 1.
+        :param frame: (array-like) The frame to be normalized.
+        :return: (np array) The normalized frame.
+        """
         frame = np.array(frame).astype(np.float32)
         return np.divide(frame, 255.0)
 

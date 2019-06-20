@@ -1,0 +1,7 @@
+/var/spool/slurm/slurmd/job61721/slurm_script: line 9: activate: No such file or directory
+Traceback (most recent call last):
+  File "trainingLoop.py", line 8, in <module>
+    from NTUDataLoader import NTUDataset
+  File "/home/yogesh/kara/REU2019/phase2/NTUDataLoader.py", line 8, in <module>
+    import cv2
+ModuleNotFoundError: No module named 'cv2'

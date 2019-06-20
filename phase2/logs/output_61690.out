@@ -1,0 +1,17 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Traceback (most recent call last):
+  File "trainingLoop.py", line 234, in <module>
+    model = FullNetwork(vp_value_count= 1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 65, in __init__
+    pretrained=True, weights_path=i3d_weights_path)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedI3D.py", line 414, in I3D
+    model = InceptionI3d(name=name, final_endpoint=final_endpoint, in_frames=in_frames, in_channels=in_channels)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedI3D.py", line 234, in __init__
+    raise ValueError('Unknown final endpoint %s' % final_endpoint)
+ValueError: Unknown final endpoint Mixed_5c

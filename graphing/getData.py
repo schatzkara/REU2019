@@ -22,6 +22,11 @@ metrics = ['loss', 'con', 'recon1', 'recon2']
 
 
 def get_parameters(output_file):
+    """
+    Function to get the model and data parameters for the experiment.
+    :param output_file: (str) The path for the file that contains the experiment terminal output.
+    :return: (dict) A dictionary with keys as parameter names and values as parameter values.
+    """
     parameters = {}
     with open(output_file, 'r') as f:
         for line in f:
@@ -42,6 +47,12 @@ def get_parameters(output_file):
 
 
 def get_epoch_metrics(output_file):
+    """
+    Function to get the metric values for each epoch.
+    :param output_file: (str) The path for the file that contains the experiment terminal output.
+    :return: (dict, dict) A dictionary representing the training metrics and another representing the val metrics.
+              Keys are metric names and values are a list of the metric values for each epoch.
+    """
     # these dictionaries will hold lists for each metric
     training_metrics = {}
     val_metrics = {}

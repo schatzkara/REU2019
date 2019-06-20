@@ -18,7 +18,7 @@ class NTUDataset(Dataset):
         """
         Initializes the NTU Dataset object used for extracting samples to run through the network.
         :param root_dir: (str) Directory with all the frames extracted from the videos.
-        :param data_file: (str) Path to .txt file containing the sample IDs.
+        :param data_file: (str) Path to file containing the sample IDs.
         :param resize_height: (int) The desired frame height.
         :param resize_width: (int) The desired frame width.
         :param clip_len: (int) The number of frames desired in the sample clip.
@@ -268,6 +268,11 @@ class NTUDataset(Dataset):
 
     @staticmethod
     def normalize_frame(frame):
+        """
+        Function to normalize the pixel values in the frame to be between 0 and 1.
+        :param frame: (array-like) The frame to be normalized.
+        :return: (np array) The normalized frame.
+        """
         frame = np.array(frame).astype(np.float32)
         return np.divide(frame, 255.0)
 

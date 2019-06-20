@@ -6,8 +6,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-
-
 # from torchsummary import summary
 
 
@@ -228,6 +226,8 @@ class InceptionI3d(nn.Module):
         :param in_frames: (int, optional) The number of frames in the input video (default 8).
                            Legal values: 8, 16
         :param in_channels: (int, optional) The number of channels in the input tensor (default 3).
+        :param pretrained: (bool, optional) True if the model should load pretrained weights; False otherwise.
+        :param weights_path: (str, optional) The path at which the pretrained weights are located.
         Raises:
             ValueError: if 'final_ endpoint' is not recognized.
             ValueError: if 'in_frames' is not a legal value.
@@ -397,7 +397,7 @@ class InceptionI3d(nn.Module):
         :param x: (tensor) The batch of videos input to the network.
                    Must be a tensor of size: (bsz, 3, 8, 112, 112) for this application.
         :return: A tensor representing the feature map representation of the 'action' in the video.
-                 Shape of output is: (bsz, 1024, 1, 7, 7) for this application.
+                 Shape of output is: (bsz, 256, 4, 7, 7) for this application.
         """
         for end_point in self.VALID_ENDPOINTS:
             if end_point in self.end_points:
@@ -422,60 +422,19 @@ class InceptionI3d(nn.Module):
     #     return self.avg_pool(x)
 
 
-def I3D(name='modified_inception_i3d', final_endpoint='Mixed_5c_small', in_frames=8, in_channels=3,
-        pretrained=False, weights_path=''):
-    model = InceptionI3d(name=name, final_endpoint=final_endpoint, in_frames=in_frames, in_channels=in_channels)
-    # if pretrained:
-    #     state_dict = load_layer_weights(weights_path, final_endpoint='Mixed_5c_small')
-    #     model.load_state_dict(state_dict)
-    return model
-
-
-def load_layer_weights(weights_path, final_endpoint):
-    VALID_ENDPOINTS = (
-        'Conv3d_1a_7x7',
-        'MaxPool3d_2a_3x3',
-        'Conv3d_2b_1x1',
-        'Conv3d_2c_3x3',
-        'MaxPool3d_3a_3x3',
-        'Mixed_3b',
-        'Mixed_3c',
-        'MaxPool3d_4a_3x3',
-        'Mixed_4b',
-        'Mixed_4c',
-        'Mixed_4d',
-        'Mixed_4e',
-        'Mixed_4f',
-        'MaxPool3d_5a_2x2',
-        'MaxPool3d_5a_1x1',
-        'Mixed_5b',
-        # 'Mixed_5c',
-        'Mixed_5c_small',
-        'Logits',
-        'Predictions',
-    )
+def load_layer_weights(weights_path):
     state_dict = torch.load(weights_path)
     remove_layers = ['Mixed_5c', 'Logits', 'Predictions']
     remove_layers.extend([l.lower() for l in remove_layers])
-    new_state_dict = {}  # state_dict.copy()
-    # print(new_state_dict)
-    # print(new_state_dict.keys())
+    new_state_dict = {}
     for item, state in state_dict.items():
         layer = item[:item.index('.')]
+        # if the state is not one of the layers to remove, then use it
         if layer not in remove_layers:
             new_state_dict[item] = state
-        # bad_state = False
-        # for layer in remove_layers:
-        #     print(item)
-        #     print(state)
-        # if layer in item:
-        #     bad_state = True
-        #     new_state_dict = new_state_dict.pop(item)
-        # if not bad_state:
-        #     print(item)
-        #     new_state_dict[item] = state
 
     return new_state_dict
+
 
 # if __name__ == "__main__":
 #     print_summary = True

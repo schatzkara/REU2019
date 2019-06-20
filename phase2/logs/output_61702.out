@@ -1,0 +1,24 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+True
+Traceback (most recent call last):
+  File "trainingLoop.py", line 234, in <module>
+    model = FullNetwork(vp_value_count= 1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 63, in __init__
+    self.vgg = vgg16(pretrained=True, weights_path=vgg_weights_path)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 168, in vgg16
+    return _vgg('vgg16', 'D', 15, False, pretrained, weights_path, progress, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 118, in _vgg
+    pretrained=pretrained, weights_path=weights_path, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 56, in __init__
+    self.load_state_dict(torch.load(weights_path))
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/serialization.py", line 303, in load
+    return _load(f, map_location, pickle_module)
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/serialization.py", line 459, in _load
+    magic_number = pickle_module.load(f)
+TypeError: file must have 'read' and 'readline' attributes

@@ -30,8 +30,8 @@ PRECROP = False
 NUM_EPOCHS = 1000
 LR = 1e-4
 
-weight_file_name = './weights/net_panoptic_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN, PRECROP,
-                                                                        NUM_EPOCHS, LR)
+weight_file_name = './weights/phase1_net_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                          PRECROP, NUM_EPOCHS, LR)
 
 
 def train(epoch):
@@ -48,15 +48,15 @@ def train(epoch):
     model.train()
 
     for batch_idx, (view1vid, view2vid) in enumerate(trainloader):
-        view1vid, view2vid = view1vid.to(device), view2vid.to(device)
         view1img, view2img = get_first_frame(view1vid), get_first_frame(view2vid)
-        view1img, view2img = view1img.to(device), view2img.to(device)
+        view1vid, view2vid, view1img, view2img = view1vid.to(device), view2vid.to(device), \
+                                                 view1img.to(device), view2img.to(device)
 
         optimizer.zero_grad()
 
         output_v1, output_v2, rep_v1, rep_v2 = model(vid1=view1vid, vid2=view2vid, img1=view1img, img2=view2img)
         rep_v1, rep_v2 = rep_v1.detach(), rep_v2.detach()
-        # loss (normalized)
+        # loss
         con_loss = criterion(rep_v1, rep_v2)
         recon1_loss = criterion(output_v1, view1vid)
         recon2_loss = criterion(output_v2, view2vid)
@@ -90,7 +90,7 @@ def test(epoch):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
     :param epoch: (int) The current epoch in which the model is testing/validating.
-    :return: None
+    :return: (float) The total loss for the epoch.
     """
     running_total_loss = 0.0
     running_con_loss = 0.0
@@ -100,12 +100,13 @@ def test(epoch):
     model.eval()
 
     for batch_idx, (view1vid, view2vid) in enumerate(testloader):
-        view1vid, view2vid = view1vid.to(device), view2vid.to(device)
         view1img, view2img = get_first_frame(view1vid), get_first_frame(view2vid)
-        view1img, view2img = view1img.to(device), view2img.to(device)
+        view1vid, view2vid, view1img, view2img = view1vid.to(device), view2vid.to(device), \
+                                                 view1img.to(device), view2img.to(device)
 
         with torch.no_grad():
             output_v1, output_v2, rep_v1, rep_v2 = model(vid1=view1vid, vid2=view2vid, img1=view1img, img2=view2img)
+            # loss
             con_loss = criterion(rep_v1, rep_v2)
             recon1_loss = criterion(output_v1, view1vid)
             recon2_loss = criterion(output_v2, view2vid)
@@ -159,6 +160,10 @@ def get_first_frame(vid_batch):
 
 
 def train_model():
+    """
+    Function to carry out the model's training and validation over all epochs.
+    :return: None
+    """
     min_loss = 0.0
     start_time = time.time()
     for epoch in range(NUM_EPOCHS):
@@ -166,6 +171,7 @@ def train_model():
         train(epoch)
         print('Validation...')
         loss = test(epoch)
+        # if the loss reaches a min, then save the model weights
         if epoch == 0 or loss < min_loss:
             min_loss = loss
             torch.save(model.state_dict(), weight_file_name)
@@ -178,7 +184,7 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
-    print('Parameters:')
+    print('Parameters for training:')
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))

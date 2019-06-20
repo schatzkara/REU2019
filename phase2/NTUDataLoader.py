@@ -1,7 +1,5 @@
 # phase 2
 
-# THIS VERSION INCLUDES VIEWPOINT INFORMATION
-
 from torch.utils.data.dataset import Dataset
 import os
 import numpy as np
@@ -14,8 +12,8 @@ class NTUDataset(Dataset):
 
     def __init__(self, root_dir, data_file, param_file,
                  resize_height, resize_width, clip_len,
-                 height=135, width=240,
-                 skip_len=1, view1=1, view2=2, random_views=False, random_all=False,
+                 height=135, width=240, skip_len=1,
+                 view1=1, view2=2, random_views=False, random_all=False,
                  precrop=False):
         """
         Initializes the NTU Dataset object used for extracting samples to run through the network.
@@ -56,6 +54,10 @@ class NTUDataset(Dataset):
         self.view_params = self.load_view_params()
 
     def load_view_params(self):
+        """
+        Function to load the params associated with the camera view for the NTU Dataset.
+        :return: A
+        """
         view_params = np.loadtxt(self.param_file)
 
         # normalize the distances
@@ -74,7 +76,7 @@ class NTUDataset(Dataset):
         """
         Function to get a single sample from the dataset. All modifications to the sample are done here.
         :param idx: (int) The index of the sample to get.
-        :return: 2 tensors representing the sample video from 2 different viewpoints
+        :return: 2 float representing the viewing angles, and 2 tensors representing the sample video from 2 viewpoints
         """
         if self.random_all:
             self.get_random_views()
@@ -103,13 +105,13 @@ class NTUDataset(Dataset):
         while self.view2 == self.view1:
             self.view2 = np.random.randint(1, 4)
 
-    # CHANGED
     def process_index(self, index):
         """
         Function to process the information that the data file contains about the sample.
         The line of information contains the sample name as well as the number of available frames from each view
         :param index: (int) The index of the sample.
-        :return: the action class, sample_id, and two ints representing the number of frames in view1 and view2
+        :return: the action class, sample_id, two floats representing the viewpoint angles, and two ints representing
+                 the number of frames in view1 and view2
         """
         sample_info = self.data_file[index].split(' ')
         sample_id = sample_info[0][sample_info[0].index('/') + 1:]
@@ -138,9 +140,14 @@ class NTUDataset(Dataset):
 
         return info
 
-    # ADDED
     @staticmethod
     def get_viewing_angle(rid, cam):
+        """
+        Function to get the camera viewing angles.
+        :param rid: (int) The repetition ID of the sample video. Legal values are 1 and 2.
+        :param cam: (int) The camera ID. Legal values are 1, 2, and 3.
+        :return: float representing the camera viewing angle.
+        """
         vpt = 0.
         pi = 22 / 7.
         # rid-1 implies face towards cam3; rid-2 implies face towards cam2; cam1 is the center camera
@@ -203,8 +210,6 @@ class NTUDataset(Dataset):
         """
         Function to generate a random starting frame index for cropping the temporal dimension of the video.
         :param frame_count: (int) The number of available frames in the sample video.
-        :param clip_len: (int) The number of frames desired in the sample clip.
-        :param skip_len: (int) The number of frames to skip between each when creating the clip.
         :return: The starting frame index for the sample.
         """
         max_frame = frame_count - (self.skip_len * self.clip_len)
@@ -216,12 +221,9 @@ class NTUDataset(Dataset):
     def rand_pixel_index(self):
         """
         Function to generate a random starting pixel for cropping the height and width of the frames.
-        :param height: (int) The height of the video.
-        :param width: (int) The width of the video.
-        :param desired_height: (int) The desired height of the video.
-        :param desired_width: (int) The desired width of the video.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
+        # if the frame is precropped, then 50 pixels are removed from the right and left each.
         if self.precrop:
             width = self.width - 100
         else:
@@ -235,13 +237,8 @@ class NTUDataset(Dataset):
         """
         Function to load the video frames for the sample.
         :param vid_path: (str) The path at which the sample video is located.
-        :param clip_len: (int) The number of frames desired in the sample clip.
-        :param skip_len: (int) The number of frames to skip between each when creating the clip.
         :param frame_index: (int) The starting frame index for the sample.
         :param pixel_index: (tuple: int, int) The height and width indices of the pixel at which to crop.
-        :param resize_height: (int) The desired frame height.
-        :param resize_width: (int) The desired frame width.
-        :param channels: (int) The number of channels in each frame.
         :return: np array representing the sample video clip.
         """
         buffer = np.empty((self.clip_len, self.resize_height, self.resize_width, self.channels), np.dtype('float32'))
@@ -262,7 +259,7 @@ class NTUDataset(Dataset):
             # crop the frame (next 3 lines)
             height_index, width_index = pixel_index
             frame = self.crop_frame(frame=frame,
-                                    height_index=height_index, width_index=width_index)
+                                    h_index=height_index, w_index=width_index)
             # normalize
             frame = NTUDataset.normalize_frame(frame)
 
@@ -280,26 +277,28 @@ class NTUDataset(Dataset):
         """
         return str(frame_num).zfill(3) + '.jpg'
 
-    def crop_frame(self, frame, height_index, width_index):
+    def crop_frame(self, frame, h_index, w_index):
         """
         Function that crops a frame.
         :param frame: (array-like) The frame to crop.
-        :param height_index: (int) The height index to start the crop.
-        :param width_index: (int) The width index to start the crop.
-        :param desired_height: (int) The desired height of the cropped frame.
-        :param desired_width: (int) The desired width of the cropped frame.
+        :param h_index: (int) The height index to start the crop.
+        :param w_index: (int) The width index to start the crop.
         :return: np array representing the cropped frame
         """
         frame = np.array(frame).astype(np.float32)
         if self.precrop:
             frame = frame[:, 50:-50]
-        cropped_frame = frame[height_index:height_index + self.resize_height,
-                        width_index:width_index + self.resize_width]
+        cropped_frame = frame[h_index:h_index + self.resize_height, w_index:w_index + self.resize_width]
 
         return cropped_frame
 
     @staticmethod
     def normalize_frame(frame):
+        """
+        Function to normalize the pixel values in the frame to be between 0 and 1.
+        :param frame: (array-like) The frame to be normalized.
+        :return: (np array) The normalized frame.
+        """
         frame = np.array(frame).astype(np.float32)
         return np.divide(frame, 255.0)
 

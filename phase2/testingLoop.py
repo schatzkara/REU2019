@@ -1,5 +1,3 @@
-# phase 2
-
 import time
 import torch
 import torch.nn as nn
@@ -13,11 +11,12 @@ import numpy as np
 # directory information
 data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
 # 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135/'
-# train_splits = '/home/yogesh/kara/data/train.list'
 test_splits = '/home/yogesh/kara/data/val.list'
-# 'C:/Users/Owner/Documents/UCF/Project/SSCVAS/data/shortestval.list'
+# 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/NTU/val.list'
 weights_path = '/home/yogesh/kara/REU2019/weights/net_32_8_2_True_1000_0.0001.pt'
-# 'C:/Users/Owner/Documents/UCF/Project/REU2019/weights/test_net_32_8_2_True_1000_0001.pt'
+output_video_dir = '/home/yogesh/kara/REU2019/videos/'
+# 'C:/Users/Owner/Documents/UCF/Project/REU2019/videos'
+
 
 # data parameters
 PRINT_PARAMS = True
@@ -33,10 +32,6 @@ PRECROP = True
 
 # training parameters
 NUM_EPOCHS = 1
-# LR = 1e-4
-
-# weight_file_name = './weights/net_{}_{}_{}_{}'.format(BATCH_SIZE, FRAMES, NUM_EPOCHS, LR)
-output_video_dir = '/home/yogesh/kara/REU2019/videos/'  # 'C:/Users/Owner/Documents/UCF/Project/REU2019/videos'
 
 
 def test(epoch):
@@ -114,34 +109,49 @@ def get_first_frame(vid_batch):
 
 
 def convert_to_vid(tensor, view, batch_num, input):  # whether it was an input or output
+    """
+    Function to convert a tensor to a series of .jpg video frames
+    :param tensor: (tensor) The tensor to be converted.
+    :param view: (int) The view that the video is from: 1 or 2.
+    :param batch_num: (int) The batch that the tensor is from.
+    :param input: (bool) True if the tensor was a network input; False if it was a network output.
+    :return: None
+    """
     bsz, channels, frames, height, width = tensor.size()
+    # loop through each video in the batch
     for i in range(bsz):
         vid = tensor[i]
         if input:
             vid_path = os.path.join(output_video_dir, 'input')
+            if not os.path.exists(vid_path):
+                os.mkdir(vid_path)
         else:
             vid_path = os.path.join(output_video_dir, 'output')
+            if not os.path.exists(vid_path):
+                os.mkdir(vidpath)
         assert os.path.exists(vid_path), 'Vid path DNE.'
         save_frames(vid_path, vid, batch_num, i, view)
 
 
 def save_frames(vid_path, vid, batch_num, vid_num, view):
+    """
+    Function to save the frames of a video to .jpgs.
+    :param vid_path: (str) The path at which to save the video frames.
+    :param vid: (tensor) The video to be saved.
+    :param batch_num: (int) The batch that the video is from.
+    :param vid_num: (int) The position of the video in the batch.
+    :param view: (int) The view that the video is from: 1 or 2.
+    :return: None
+    """
     channels, frames, height, width = vid.size()
-    vid_path = os.path.join(vid_path, str(batch_num), str(vid_num), str(view))
-    if not os.path.exists(vid_path):
-        os.mkdir(vid_path)
+    vid_path = make_vid_path(vid_path, batch_num+1, vid_num+1, view)
     for i in range(frames):
         frame_name = make_frame_name(i + 1)
         frame_path = os.path.join(vid_path, frame_name)
         # extract one frame as np array
-        frame = vid[:, i, :, :].squeeze().cpu()
-        # if device == 'cuda':
-        #     frame.cpu()
-        frame = frame.numpy()
+        frame = vid[:, i, :, :].squeeze().cpu().numpy()
         frame = denormalize_frame(frame)
-        # pytorch tensor is (channels, height, width)
-        # np is (height, width, channels)
-        frame = np.transpose(frame, (1, 2, 0))
+        frame = from_tensor(frame)
 
         try:
             cv2.imwrite(frame_path, frame)
@@ -149,6 +159,30 @@ def save_frames(vid_path, vid, batch_num, vid_num, view):
             print('The image did not successfully save.')
 
         assert os.path.exists(frame_path), 'The image does not exist.'
+
+
+def make_vid_path(vid_path, batch_num, vid_num, view):
+    """
+    Function to make the path to save the video. Makes sure that the necessary paths exist.
+    :param vid_path: (str) The path that holds all the video frames.
+    :param batch_num: (int) The batch that the video is from.
+    :param vid_num: (int) The position of the video in the batch.
+    :param view: (int) The view that the video is from: 1 or 2.
+    :return:
+    """
+    batch_num, vid_num, view = str(batch_num), str(vid_num), str(view)
+    batch_path = os.path.join(vid_path, batch_num)
+    vid_path = os.path.join(vid_path, batch_num, vid_num)
+    view_path = os.path.join(vid_path, batch_num, vid_num, view)
+    if not os.path.exists(vid_path):
+        os.mkdir(vid_path)
+    if not os.path.exists(batch_path):
+        os.mkdir(batch_path)
+    if not os.path.exists(vid_path):
+        os.mkdir(vid_path)
+    if not os.path.exists(view_path):
+        os.mkdir(view_path)
+    return view_path
 
 
 def make_frame_name(frame_num):
@@ -161,11 +195,33 @@ def make_frame_name(frame_num):
 
 
 def denormalize_frame(frame):
+    """
+    Function to denormalize the pixel values in the frame to be between 0 and 255.
+    :param frame: (array-like) The frame to be denormalized.
+    :return: (np array) The denormalized frame.
+    """
     frame = np.array(frame).astype(np.float32)
     return np.multiply(frame, 255.0)
 
 
+def from_tensor(sample):
+    """
+    Function to convert the sample clip from a tensor to a numpy array.
+    :param sample: (tensor) The sample to convert.
+    :return: a numpy array representing the sample clip.
+    """
+    # pytorch tensor is (channels, height, width)
+    # np is (height, width, channels)
+    sample = np.transpose(sample, (1, 2, 0))
+
+    return sample
+
+
 def test_model():
+    """
+    Function to test the model over all epochs.
+    :return: None
+    """
     start_time = time.time()
     for epoch in range(NUM_EPOCHS):
         test(epoch)
@@ -178,13 +234,12 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
-    print('Parameters:')
+    print('Parameters for testing:')
     print('Batch size: {}'.format(BATCH_SIZE))
     print('Tensor size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
     print('Precrop: {}'.format(PRECROP))
     print('Total Epochs: {}'.format(NUM_EPOCHS))
-    # print('Learning Rate: {}'.format(LR))
 
 
 if __name__ == '__main__':
@@ -200,7 +255,6 @@ if __name__ == '__main__':
     # model
     model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
     model.load_state_dict(torch.load(weights_path))
-    # model = torch.load(weights_path)
     # print('Model Built.')
     model = model.to(device)
 
@@ -211,7 +265,9 @@ if __name__ == '__main__':
         cudnn.benchmark = True
 
     criterion = nn.MSELoss()
-    # optimizer = optim.Adam(model.parameters(), lr=LR)  # other parameters???
+
+    if not os.path.exists(output_video_dir):
+        os.mkdir(output_video_dir)
 
     # data
     testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
