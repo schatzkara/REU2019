@@ -1,0 +1,16 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+Traceback (most recent call last):
+  File "phase2/trainingLoop.py", line 226, in <module>
+    model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 63, in __init__
+    self.vgg.load_state_dict(torch.load(vgg_weights_path))
+  File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/nn/modules/module.py", line 721, in load_state_dict
+    self.__class__.__name__, "\n\t".join(error_msgs)))
+RuntimeError: Error(s) in loading state_dict for VGG:
+	Unexpected key(s) in state_dict: "features.17.weight", "features.17.bias", "features.19.weight", "features.19.bias", "features.21.weight", "features.21.bias", "features.24.weight", "features.24.bias", "features.26.weight", "features.26.bias", "features.28.weight", "features.28.bias". 

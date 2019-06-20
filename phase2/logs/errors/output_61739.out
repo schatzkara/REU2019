@@ -1,0 +1,31 @@
+1.1.0
+Parameters:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 2
+Precrop: False
+Total Epochs: 1000
+Learning Rate: 0.0001
+Training...
+Traceback (most recent call last):
+  File "trainpan328.py", line 259, in <module>
+    train_model()
+  File "trainpan328.py", line 198, in train_model
+    train(epoch)
+  File "trainpan328.py", line 50, in train
+    for batch_idx, (vp1, vp2, vid1, vid2) in enumerate(trainloader):
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 582, in __next__
+    return self._process_next_batch(batch)
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/dataloader.py", line 608, in _process_next_batch
+    raise batch.exc_type(batch.exc_msg)
+AssertionError: Traceback (most recent call last):
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py", line 99, in _worker_loop
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/utils/data/_utils/worker.py", line 99, in <listcomp>
+    samples = collate_fn([dataset[i] for i in batch_indices])
+  File "/home/yogesh/kara/REU2019/phase2/PanopticDataLoader.py", line 69, in __getitem__
+    frame_index=frame_index, pixel_index=pixel_index)
+  File "/home/yogesh/kara/REU2019/phase2/PanopticDataLoader.py", line 171, in load_frames
+    assert os.path.exists(frame_path), 'Frame path {} DNE.'.format(frame_path)
+AssertionError: Frame path /home/c2-2/yogesh/datasets/panoptic/rgb_data/171204_pose5/samples/vga_20_17/16000_16125/041.png DNE.
+

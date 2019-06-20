@@ -2,19 +2,17 @@ import time
 import torch
 import torch.nn as nn
 from network import FullNetwork
-from NTUDataLoader import NTUDataset
+from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 import os
 import cv2
 import numpy as np
 
 # directory information
-data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
-# 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135/'
-test_splits = '/home/yogesh/kara/data/val.list'
-# 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/NTU/val.list'
-weights_path = '/home/yogesh/kara/REU2019/weights/net_32_8_2_True_1000_0.0001.pt'
-output_video_dir = '/home/yogesh/kara/REU2019/videos/'
+data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
+test_splits = '/home/yogesh/kara/data/panoptic/mod_test.list'
+weights_path = '/home/yogesh/kara/REU2019/phase1/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
+output_video_dir = 'home/yogesh/kara/REU2019/phase1/videos/pan_66epochs/'
 # 'C:/Users/Owner/Documents/UCF/Project/REU2019/videos'
 
 
@@ -28,7 +26,7 @@ FRAMES = 8
 SKIP_LEN = 2
 HEIGHT = 112
 WIDTH = 112
-PRECROP = True
+PRECROP = False
 
 # training parameters
 NUM_EPOCHS = 1
@@ -61,7 +59,7 @@ def test(epoch):
 
             # save videos
             convert_to_vid(view1vid, 1, batch_idx, True), convert_to_vid(view2vid, 2, batch_idx, True)
-            convert_to_vid(output_v1, 1, batch_idx, False), convert_to_vid(output_v1, 2, batch_idx, False)
+            convert_to_vid(output_v1, 1, batch_idx, False), convert_to_vid(output_v2, 2, batch_idx, False)
 
         running_total_loss += loss.item()
         running_con_loss += con_loss.item()
@@ -73,18 +71,18 @@ def test(epoch):
                                                                         "{0:.5f}".format(recon1_loss),
                                                                         "{0:.5f}".format(recon2_loss)))
 
-    print('Validation Epoch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
-                                                                             "{0:.5f}".format((
-                                                                                     running_total_loss / len(
-                                                                                 testloader))),
-                                                                             "{0:.5f}".format((running_con_loss / len(
-                                                                                 testloader))),
-                                                                             "{0:.5f}".format((
-                                                                                     running_recon1_loss / len(
-                                                                                 testloader))),
-                                                                             "{0:.5f}".format((
-                                                                                     running_recon2_loss / len(
-                                                                                 testloader)))))
+    print('Testing Epoch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
+                                                                          "{0:.5f}".format((
+                                                                                  running_total_loss / len(
+                                                                              testloader))),
+                                                                          "{0:.5f}".format((running_con_loss / len(
+                                                                              testloader))),
+                                                                          "{0:.5f}".format((
+                                                                                  running_recon1_loss / len(
+                                                                              testloader))),
+                                                                          "{0:.5f}".format((
+                                                                                  running_recon2_loss / len(
+                                                                              testloader)))))
 
 
 def get_first_frame(vid_batch):
@@ -121,19 +119,19 @@ def convert_to_vid(tensor, view, batch_num, input):  # whether it was an input o
     # loop through each video in the batch
     for i in range(bsz):
         vid = tensor[i]
-        if input:
-            vid_path = os.path.join(output_video_dir, 'input')
-            if not os.path.exists(vid_path):
-                os.mkdir(vid_path)
-        else:
-            vid_path = os.path.join(output_video_dir, 'output')
-            if not os.path.exists(vid_path):
-                os.mkdir(vidpath)
-        assert os.path.exists(vid_path), 'Vid path DNE.'
-        save_frames(vid_path, vid, batch_num, i, view)
+        # if input:
+        #     vid_path = os.path.join(output_video_dir, 'input')
+        #     if not os.path.exists(vid_path):
+        #         os.mkdir(vid_path)
+        # else:
+        #     vid_path = os.path.join(output_video_dir, 'output')
+        #     if not os.path.exists(vid_path):
+        #         os.mkdir(vid_path)
+        # assert os.path.exists(vid_path), 'Vid path DNE.'
+        save_frames(output_video_dir, vid, batch_num, i, view, input)
 
 
-def save_frames(vid_path, vid, batch_num, vid_num, view):
+def save_frames(vid_path, vid, batch_num, vid_num, view, input):
     """
     Function to save the frames of a video to .jpgs.
     :param vid_path: (str) The path at which to save the video frames.
@@ -144,7 +142,7 @@ def save_frames(vid_path, vid, batch_num, vid_num, view):
     :return: None
     """
     channels, frames, height, width = vid.size()
-    vid_path = make_vid_path(vid_path, batch_num+1, vid_num+1, view)
+    vid_path = make_vid_path(vid_path, batch_num + 1, vid_num + 1, view, input)
     for i in range(frames):
         frame_name = make_frame_name(i + 1)
         frame_path = os.path.join(vid_path, frame_name)
@@ -161,7 +159,7 @@ def save_frames(vid_path, vid, batch_num, vid_num, view):
         assert os.path.exists(frame_path), 'The image does not exist.'
 
 
-def make_vid_path(vid_path, batch_num, vid_num, view):
+def make_vid_path(vid_path, batch_num, vid_num, view, input):
     """
     Function to make the path to save the video. Makes sure that the necessary paths exist.
     :param vid_path: (str) The path that holds all the video frames.
@@ -172,17 +170,23 @@ def make_vid_path(vid_path, batch_num, vid_num, view):
     """
     batch_num, vid_num, view = str(batch_num), str(vid_num), str(view)
     batch_path = os.path.join(vid_path, batch_num)
-    vid_path = os.path.join(vid_path, batch_num, vid_num)
+    vid_num_path = os.path.join(vid_path, batch_num, vid_num)
     view_path = os.path.join(vid_path, batch_num, vid_num, view)
+    if input:
+        full_path = os.path.join(vid_path, batch_path, vid_num, view, 'input')
+    else:
+        full_path = os.path.join(vid_path, batch_path, vid_num, view, 'output')
     if not os.path.exists(vid_path):
         os.mkdir(vid_path)
     if not os.path.exists(batch_path):
         os.mkdir(batch_path)
-    if not os.path.exists(vid_path):
-        os.mkdir(vid_path)
+    if not os.path.exists(vid_num_path):
+        os.mkdir(vid_num_path)
     if not os.path.exists(view_path):
         os.mkdir(view_path)
-    return view_path
+    if not os.path.exists(full_path):
+        os.mkdir(full_path)
+    return full_path
 
 
 def make_frame_name(frame_num):
@@ -219,7 +223,7 @@ def from_tensor(sample):
 
 def test_model():
     """
-    Function to test the model over all epochs.
+    Function to carry out the model's testing over all epochs.
     :return: None
     """
     start_time = time.time()
@@ -234,6 +238,7 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
+    print('Panoptic')
     print('Parameters for testing:')
     print('Batch size: {}'.format(BATCH_SIZE))
     print('Tensor size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
@@ -270,10 +275,10 @@ if __name__ == '__main__':
         os.mkdir(output_video_dir)
 
     # data
-    testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
-                         resize_height=HEIGHT, resize_width=WIDTH,
-                         clip_len=FRAMES, skip_len=SKIP_LEN,
-                         random_all=True, precrop=PRECROP)
+    testset = PanopticDataset(root_dir=data_root_dir, data_file=test_splits,
+                              resize_height=HEIGHT, resize_width=WIDTH,
+                              clip_len=FRAMES, skip_len=SKIP_LEN,
+                              random_all=True, precrop=PRECROP)
     testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     test_model()

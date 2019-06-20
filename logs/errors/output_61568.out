@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "testingLoop.py", line 4, in <module>
+    from phase1.network import FullNetwork
+ModuleNotFoundError: No module named 'phase1'

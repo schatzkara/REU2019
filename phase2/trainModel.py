@@ -1,41 +1,61 @@
 # phase 2
 
+import os
 import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from network import FullNetwork
 from NTUDataLoader import NTUDataset
+from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
-# directory information
-data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
-train_splits = '/home/yogesh/kara/data/train.list'
-test_splits = '/home/yogesh/kara/data/val.list'
-param_file = '/home/yogesh/kara/data/view.params'
+
+DATASET = 'NTU'  # 'Panoptic'
 
 # data parameters
-PRINT_PARAMS = True
-# VIEW1 = 1
-# VIEW2 = 2
-RANDOM_ALL = True
-BATCH_SIZE = 32
+BATCH_SIZE = 20
 CHANNELS = 3
-FRAMES = 8
+FRAMES = 16
 SKIP_LEN = 2
 HEIGHT = 112
 WIDTH = 112
-PRECROP = True
 
 # training parameters
 NUM_EPOCHS = 1000
 LR = 1e-4
 
-weight_file_name = './weights/phase2_net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                          PRECROP, NUM_EPOCHS, LR)
+
+def ntu_config():
+    # NTU directory information
+    data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
+    if FRAMES * SKIP_LEN >= 32:
+        train_split = '/home/yogesh/kara/data/train16.list'
+        test_split = '/home/yogesh/kara/data/val16.list'
+    else:
+        train_split = '/home/yogesh/kara/data/train.list'
+        test_split = '/home/yogesh/kara/data/val.list'
+    param_file = '/home/yogesh/kara/data/view.params'
+    if not os.path.exists('./weights'):
+        os.mkdir('./weights')
+    weight_file = './weights/net2_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                         PRECROP, NUM_EPOCHS, LR)
+    return data_root_dir, train_split, test_split, param_file, weight_file
 
 
-def train(epoch):
+def panoptic_config():
+    # Panoptic directory information
+    data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
+    train_split = '/home/yogesh/kara/data/panoptic/mod_train.list'
+    test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
+    if not os.path.exists('./weights'):
+        os.mkdir('./weights')
+    weight_file = './weights/net2_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                         PRECROP, NUM_EPOCHS, LR)
+    return data_root_dir, train_split, test_split, weight_file
+
+
+def training_loop(epoch):
     """
     Function carrying out the training loop for the Full Network for a single epoch.
     :param epoch: (int) The current epoch in which the model is training.
@@ -100,7 +120,7 @@ def train(epoch):
                                                                                             trainloader)))))
 
 
-def test(epoch):
+def testing_loop(epoch):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
     :param epoch: (int) The current epoch in which the model is testing/validating.
@@ -194,12 +214,12 @@ def train_model():
     start_time = time.time()
     for epoch in range(NUM_EPOCHS):
         print('Training...')
-        train(epoch)
+        training_loop(epoch)
         print('Validation...')
-        loss = test(epoch)
+        loss = testing_loop(epoch)
         if epoch == 0 or loss < min_loss:
             min_loss = loss
-            torch.save(model.state_dict(), weight_file_name)
+            torch.save(model.state_dict(), weight_file)
     end_time = time.time()
     print('Time: {}'.format(end_time - start_time))
 
@@ -209,7 +229,7 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
-    print('Parameters for training:')
+    print('Parameters for training on {}'.format(DATASET))
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
@@ -223,35 +243,67 @@ if __name__ == '__main__':
     Main function to carry out the training loop. 
     This function creates the model and data loaders. Then, it trains the model.
     """
-    if PRINT_PARAMS:
-        print_params()
-
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+    RANDOM_ALL = True
+    PRECROP = True if DATASET.lower() == 'ntu' else False
 
-    # model
-    model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
-    model = model.to(device)
+    if DATASET.lower() == 'ntu':
+        data_root_dir, train_split, test_split, param_file, weight_file = ntu_config()
 
+        # model
+        model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = model.to(device)
+
+        if device == 'cuda':
+            net = torch.nn.DataParallel(model)
+            cudnn.benchmark = True
+
+        criterion = nn.MSELoss()
+        optimizer = optim.Adam(model.parameters(), lr=LR)
+
+        # data
+        trainset = NTUDataset(root_dir=data_root_dir, data_file=train_split, param_file=param_file,
+                              resize_height=HEIGHT, resize_width=WIDTH,
+                              clip_len=FRAMES, skip_len=SKIP_LEN,
+                              random_all=RANDOM_ALL, precrop=PRECROP)
+        trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
+
+        testset = NTUDataset(root_dir=data_root_dir, data_file=test_split, param_file=param_file,
+                             resize_height=HEIGHT, resize_width=WIDTH,
+                             clip_len=FRAMES, skip_len=SKIP_LEN,
+                             random_all=RANDOM_ALL, precrop=PRECROP)
+        testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
+
+    elif DATASET.lower() == 'panoptic':
+        data_root_dir, train_split, test_split, weight_file = panoptic_config()
+
+        # model
+        model = FullNetwork(vp_value_count=3, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = model.to(device)
+
+        if device == 'cuda':
+            net = torch.nn.DataParallel(model)
+            cudnn.benchmark = True
+
+        criterion = nn.MSELoss()
+        optimizer = optim.Adam(model.parameters(), lr=LR)
+
+        # data
+        trainset = PanopticDataset(root_dir=data_root_dir, data_file=train_split,
+                                   resize_height=HEIGHT, resize_width=WIDTH,
+                                   clip_len=FRAMES, skip_len=SKIP_LEN,
+                                   random_all=RANDOM_ALL, precrop=PRECROP)
+        trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
+
+        testset = PanopticDataset(root_dir=data_root_dir, data_file=test_split,
+                                  resize_height=HEIGHT, resize_width=WIDTH,
+                                  clip_len=FRAMES, skip_len=SKIP_LEN,
+                                  random_all=RANDOM_ALL, precrop=PRECROP)
+        testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
+
+    else:
+        print('This network has only been set up to train on the NTU and Panoptic datasets.')
+
+    print_params()
     print(model)
-
-    if device == 'cuda':
-        net = torch.nn.DataParallel(model)
-        cudnn.benchmark = True
-
-    criterion = nn.MSELoss()
-    optimizer = optim.Adam(model.parameters(), lr=LR)
-
-    # data
-    trainset = NTUDataset(root_dir=data_root_dir, data_file=train_splits, param_file=param_file,
-                          resize_height=HEIGHT, resize_width=WIDTH,
-                          clip_len=FRAMES, skip_len=SKIP_LEN,
-                          random_all=RANDOM_ALL, precrop=PRECROP)
-    trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
-
-    testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits, param_file=param_file,
-                         resize_height=HEIGHT, resize_width=WIDTH,
-                         clip_len=FRAMES, skip_len=SKIP_LEN,
-                         random_all=RANDOM_ALL, precrop=PRECROP)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
-
     train_model()

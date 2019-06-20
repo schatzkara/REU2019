@@ -1,0 +1,26 @@
+Panoptic
+Parameters for training:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 2
+Precrop: False
+Total Epochs: 1000
+Learning Rate: 0.0001
+Training...
+	Batch 10/122 Loss:0.08144 con1:0.00214 con2:0.00218 recon1:0.04000 recon2:0.03711
+	Batch 20/122 Loss:0.05441 con1:0.00095 con2:0.00095 recon1:0.02571 recon2:0.02680
+	Batch 30/122 Loss:0.03755 con1:0.00053 con2:0.00053 recon1:0.01787 recon2:0.01862
+	Batch 40/122 Loss:0.03280 con1:0.00033 con2:0.00032 recon1:0.01607 recon2:0.01608
+	Batch 50/122 Loss:0.02442 con1:0.00024 con2:0.00023 recon1:0.01211 recon2:0.01184
+	Batch 60/122 Loss:0.02112 con1:0.00019 con2:0.00019 recon1:0.00996 recon2:0.01079
+	Batch 70/122 Loss:0.02134 con1:0.00016 con2:0.00016 recon1:0.01046 recon2:0.01056
+	Batch 80/122 Loss:0.01732 con1:0.00015 con2:0.00014 recon1:0.00849 recon2:0.00853
+	Batch 90/122 Loss:0.01385 con1:0.00014 con2:0.00013 recon1:0.00632 recon2:0.00726
+	Batch 100/122 Loss:0.01601 con1:0.00013 con2:0.00013 recon1:0.00867 recon2:0.00708
+	Batch 110/122 Loss:0.01462 con1:0.00012 con2:0.00011 recon1:0.00748 recon2:0.00691
+	Batch 120/122 Loss:0.01155 con1:0.00009 con2:0.00009 recon1:0.00559 recon2:0.00579
+Training Epoch 1/1000 Loss:0.04020 con1:0.00048 con2:0.00048 recon1:0.01968 recon2:0.01954
+Validation...
+	Batch 10/17 Loss:0.02452 con1:0.00009 con2: 0.00009 recon1:0.01218 recon2:0.01215
+Validation Epoch 1/1000 Loss:0.01553 con1:0.00010 con2:0.00010 recon1:0.00761 recon2:0.00772
+Training...

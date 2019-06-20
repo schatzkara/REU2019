@@ -1,0 +1,4 @@
+  File "testingLoop.py", line 160
+    else if not os.path.exists(os.path.join(vid_path, str(batch_num))):
+          ^
+SyntaxError: invalid syntax

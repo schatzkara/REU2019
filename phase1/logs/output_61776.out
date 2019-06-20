@@ -1,0 +1,621 @@
+Parameters for training:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 2
+Precrop: False
+Total Epochs: 1000
+Learning Rate: 0.0001
+FullNetwork(
+  (vgg): VGG(
+    (features): Sequential(
+      (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace)
+      (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace)
+      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (6): ReLU(inplace)
+      (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (8): ReLU(inplace)
+      (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (11): ReLU(inplace)
+      (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (13): ReLU(inplace)
+      (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (15): ReLU(inplace)
+      (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (17): Conv2d(256, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (18): ReLU(inplace)
+      (19): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (20): ReLU(inplace)
+      (21): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (22): ReLU(inplace)
+      (23): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (24): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (25): ReLU(inplace)
+      (26): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (27): ReLU(inplace)
+      (28): Conv2d(512, 512, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (29): ReLU(inplace)
+    )
+    (avgpool): AdaptiveAvgPool2d(output_size=(7, 7))
+    (classifier): Sequential(
+      (0): Linear(in_features=25088, out_features=4096, bias=True)
+      (1): ReLU(inplace)
+      (2): Dropout(p=0.5)
+      (3): Linear(in_features=4096, out_features=4096, bias=True)
+      (4): ReLU(inplace)
+      (5): Dropout(p=0.5)
+      (6): Linear(in_features=4096, out_features=1000, bias=True)
+    )
+  )
+  (i3d): InceptionI3d(
+    (logits): Unit3D(
+      (conv3d): Conv3d(1024, 157, kernel_size=[1, 1, 1], stride=(1, 1, 1))
+    )
+    (Conv3d_1a_7x7): Unit3D(
+      (conv3d): Conv3d(3, 64, kernel_size=[7, 7, 7], stride=(2, 2, 2), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_2a_3x3): MaxPool3dSamePadding(kernel_size=[1, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Conv3d_2b_1x1): Unit3D(
+      (conv3d): Conv3d(64, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (Conv3d_2c_3x3): Unit3D(
+      (conv3d): Conv3d(64, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_3a_3x3): MaxPool3dSamePadding(kernel_size=[1, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_3b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(192, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(192, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(192, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 32, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(192, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_3c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(256, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 96, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(256, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_4a_3x3): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(2, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_4b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(480, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(480, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 208, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(208, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(480, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 48, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(480, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(112, 224, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(224, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4d): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 256, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4e): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 144, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(144, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(144, 288, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(288, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4f): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(528, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(528, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(528, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(528, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_5a_1x1): MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(2, 1, 1), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_5b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_5c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 384, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(384, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(192, 384, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(384, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 48, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(48, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+  )
+  (gen): Generator(
+    (conv2d): Conv2d(1536, 1024, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (upsamp1): Upsample(scale_factor=2.0, mode=nearest)
+    (conv3d_1a): Conv3d(1024, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(256, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (upsamp2): Upsample(scale_factor=2.0, mode=nearest)
+    (conv3d_2a): Conv3d(256, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_2b): Conv3d(128, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (upsamp3): Upsample(scale_factor=2.0, mode=nearest)
+    (conv3d_3a): Conv3d(128, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_3b): Conv3d(64, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (upsamp4): Upsample(scale_factor=2.0, mode=nearest)
+    (conv3d_4): Conv3d(64, 3, kernel_size=(1, 1, 1), stride=(1, 1, 1))
+  )
+)
+Training...
+	Batch 10/122 Loss:0.51879 con:0.31113 recon1:0.09941 recon2:0.10825
+	Batch 20/122 Loss:0.39254 con:0.31267 recon1:0.03970 recon2:0.04017
+	Batch 30/122 Loss:0.33931 con:0.27386 recon1:0.03347 recon2:0.03197
+	Batch 40/122 Loss:0.31575 con:0.26590 recon1:0.02650 recon2:0.02336
+	Batch 50/122 Loss:0.29191 con:0.24227 recon1:0.02206 recon2:0.02758
+	Batch 60/122 Loss:0.27985 con:0.24441 recon1:0.01810 recon2:0.01734
+	Batch 70/122 Loss:0.27985 con:0.24504 recon1:0.01750 recon2:0.01731
+	Batch 80/122 Loss:0.28084 con:0.25090 recon1:0.01621 recon2:0.01374
+	Batch 90/122 Loss:0.27571 con:0.24755 recon1:0.01395 recon2:0.01421
+	Batch 100/122 Loss:0.25613 con:0.23068 recon1:0.01369 recon2:0.01177
+	Batch 110/122 Loss:0.26055 con:0.23320 recon1:0.01197 recon2:0.01537
+	Batch 120/122 Loss:0.26501 con:0.24039 recon1:0.01264 recon2:0.01198
+Training Epoch 1/1000 Loss:0.32128 con:0.26037 recon1:0.03054 recon2:0.03037
+Validation...
+	Batch 10/17 Loss:0.30805 con:0.26019 recon1:0.02294 recon2:0.02493
+Validation Epoch 1/1000 Loss:0.24777 con:0.22010 recon1:0.01382 recon2:0.01385
+Training...
+	Batch 10/122 Loss:0.26669 con:0.24209 recon1:0.01181 recon2:0.01279
+	Batch 20/122 Loss:0.25233 con:0.23025 recon1:0.01118 recon2:0.01090
+	Batch 30/122 Loss:0.25055 con:0.23064 recon1:0.00976 recon2:0.01014
+	Batch 40/122 Loss:0.25797 con:0.23322 recon1:0.01384 recon2:0.01091
+	Batch 50/122 Loss:0.25574 con:0.23302 recon1:0.01139 recon2:0.01132
+	Batch 60/122 Loss:0.25673 con:0.23559 recon1:0.01052 recon2:0.01061
+	Batch 70/122 Loss:0.27262 con:0.24686 recon1:0.01285 recon2:0.01291
+	Batch 80/122 Loss:0.25057 con:0.23096 recon1:0.01001 recon2:0.00960
+	Batch 90/122 Loss:0.24558 con:0.22428 recon1:0.00978 recon2:0.01151
+	Batch 100/122 Loss:0.26166 con:0.23941 recon1:0.01134 recon2:0.01092
+	Batch 110/122 Loss:0.25349 con:0.23336 recon1:0.00958 recon2:0.01055
+	Batch 120/122 Loss:0.24963 con:0.23115 recon1:0.00867 recon2:0.00981
+Training Epoch 2/1000 Loss:0.25604 con:0.23409 recon1:0.01095 recon2:0.01100
+Validation...
+	Batch 10/17 Loss:0.31366 con:0.27892 recon1:0.01594 recon2:0.01879
+Validation Epoch 2/1000 Loss:0.25301 con:0.23260 recon1:0.01012 recon2:0.01028
+Training...
+	Batch 10/122 Loss:0.25106 con:0.22417 recon1:0.01433 recon2:0.01256
+	Batch 20/122 Loss:0.24690 con:0.22865 recon1:0.00923 recon2:0.00901
+	Batch 30/122 Loss:0.26078 con:0.24142 recon1:0.00934 recon2:0.01002
+	Batch 40/122 Loss:0.25322 con:0.23506 recon1:0.00927 recon2:0.00888
+	Batch 50/122 Loss:0.24869 con:0.23084 recon1:0.00856 recon2:0.00929
+	Batch 60/122 Loss:0.23996 con:0.22096 recon1:0.00937 recon2:0.00963
+	Batch 70/122 Loss:0.26342 con:0.24222 recon1:0.01229 recon2:0.00891
+	Batch 80/122 Loss:0.23384 con:0.21476 recon1:0.01000 recon2:0.00908
+	Batch 90/122 Loss:0.24242 con:0.22471 recon1:0.00894 recon2:0.00877
+	Batch 100/122 Loss:0.24871 con:0.22924 recon1:0.00869 recon2:0.01078
+	Batch 110/122 Loss:0.24433 con:0.22575 recon1:0.00904 recon2:0.00954
+	Batch 120/122 Loss:0.24705 con:0.23106 recon1:0.00732 recon2:0.00867
+Training Epoch 3/1000 Loss:0.25002 con:0.23090 recon1:0.00962 recon2:0.00950
+Validation...
+	Batch 10/17 Loss:0.30892 con:0.27690 recon1:0.01482 recon2:0.01720
+Validation Epoch 3/1000 Loss:0.25293 con:0.23203 recon1:0.01043 recon2:0.01047
+Training...
+	Batch 10/122 Loss:0.24653 con:0.22807 recon1:0.00903 recon2:0.00944
+	Batch 20/122 Loss:0.24570 con:0.22831 recon1:0.00898 recon2:0.00841
+	Batch 30/122 Loss:0.23768 con:0.22102 recon1:0.00788 recon2:0.00878
+	Batch 40/122 Loss:0.24081 con:0.22425 recon1:0.00849 recon2:0.00807
+	Batch 50/122 Loss:0.24291 con:0.22729 recon1:0.00822 recon2:0.00740
+	Batch 60/122 Loss:0.24221 con:0.22691 recon1:0.00779 recon2:0.00751
+	Batch 70/122 Loss:0.24142 con:0.22282 recon1:0.00957 recon2:0.00902
+	Batch 80/122 Loss:0.24092 con:0.22391 recon1:0.00830 recon2:0.00871
+	Batch 90/122 Loss:0.23218 con:0.21811 recon1:0.00766 recon2:0.00641
+	Batch 100/122 Loss:0.23610 con:0.22088 recon1:0.00803 recon2:0.00720
+	Batch 110/122 Loss:0.25544 con:0.23856 recon1:0.00844 recon2:0.00843
+	Batch 120/122 Loss:0.23171 con:0.21785 recon1:0.00698 recon2:0.00687
+Training Epoch 4/1000 Loss:0.24417 con:0.22717 recon1:0.00845 recon2:0.00854
+Validation...
+	Batch 10/17 Loss:0.30495 con:0.27823 recon1:0.01231 recon2:0.01441
+Validation Epoch 4/1000 Loss:0.24940 con:0.23257 recon1:0.00841 recon2:0.00842
+Training...
+	Batch 10/122 Loss:0.23701 con:0.21884 recon1:0.00892 recon2:0.00925
+	Batch 20/122 Loss:0.23579 con:0.22057 recon1:0.00753 recon2:0.00769
+	Batch 30/122 Loss:0.25335 con:0.23182 recon1:0.01392 recon2:0.00762
+	Batch 40/122 Loss:0.23879 con:0.22194 recon1:0.00841 recon2:0.00844
+	Batch 50/122 Loss:0.24511 con:0.23004 recon1:0.00723 recon2:0.00785
+	Batch 60/122 Loss:0.24961 con:0.23178 recon1:0.00909 recon2:0.00874
+	Batch 70/122 Loss:0.23292 con:0.21423 recon1:0.01023 recon2:0.00846
+	Batch 80/122 Loss:0.22552 con:0.20983 recon1:0.00670 recon2:0.00899
+	Batch 90/122 Loss:0.23735 con:0.22294 recon1:0.00798 recon2:0.00643
+	Batch 100/122 Loss:0.23786 con:0.22273 recon1:0.00738 recon2:0.00775
+	Batch 110/122 Loss:0.23998 con:0.22355 recon1:0.00870 recon2:0.00774
+	Batch 120/122 Loss:0.23605 con:0.22081 recon1:0.00757 recon2:0.00766
+Training Epoch 5/1000 Loss:0.24079 con:0.22452 recon1:0.00821 recon2:0.00805
+Validation...
+	Batch 10/17 Loss:0.29962 con:0.27426 recon1:0.01170 recon2:0.01366
+Validation Epoch 5/1000 Loss:0.24434 con:0.22854 recon1:0.00788 recon2:0.00792
+Training...
+	Batch 10/122 Loss:0.24360 con:0.22493 recon1:0.00908 recon2:0.00959
+	Batch 20/122 Loss:0.23475 con:0.22048 recon1:0.00705 recon2:0.00722
+	Batch 30/122 Loss:0.23274 con:0.21989 recon1:0.00658 recon2:0.00627
+	Batch 40/122 Loss:0.23261 con:0.21866 recon1:0.00724 recon2:0.00671
+	Batch 50/122 Loss:0.24083 con:0.22735 recon1:0.00674 recon2:0.00675
+	Batch 60/122 Loss:0.24004 con:0.22512 recon1:0.00754 recon2:0.00737
+	Batch 70/122 Loss:0.25042 con:0.23035 recon1:0.01052 recon2:0.00955
+	Batch 80/122 Loss:0.23260 con:0.21709 recon1:0.00777 recon2:0.00774
+	Batch 90/122 Loss:0.23142 con:0.21635 recon1:0.00784 recon2:0.00722
+	Batch 100/122 Loss:0.24375 con:0.22917 recon1:0.00720 recon2:0.00738
+	Batch 110/122 Loss:0.23233 con:0.21812 recon1:0.00708 recon2:0.00712
+	Batch 120/122 Loss:0.23274 con:0.21931 recon1:0.00689 recon2:0.00653
+Training Epoch 6/1000 Loss:0.23751 con:0.22229 recon1:0.00764 recon2:0.00758
+Validation...
+	Batch 10/17 Loss:0.29667 con:0.27206 recon1:0.01140 recon2:0.01321
+Validation Epoch 6/1000 Loss:0.24190 con:0.22652 recon1:0.00767 recon2:0.00772
+Training...
+	Batch 10/122 Loss:0.24580 con:0.22811 recon1:0.01014 recon2:0.00755
+	Batch 20/122 Loss:0.23232 con:0.21947 recon1:0.00650 recon2:0.00636
+	Batch 30/122 Loss:0.23791 con:0.22270 recon1:0.00658 recon2:0.00864
+	Batch 40/122 Loss:0.24870 con:0.23231 recon1:0.00779 recon2:0.00860
+	Batch 50/122 Loss:0.23872 con:0.22219 recon1:0.00798 recon2:0.00855
+	Batch 60/122 Loss:0.23661 con:0.22094 recon1:0.00705 recon2:0.00861
+	Batch 70/122 Loss:0.24363 con:0.22824 recon1:0.00762 recon2:0.00777
+	Batch 80/122 Loss:0.24554 con:0.23188 recon1:0.00681 recon2:0.00685
+	Batch 90/122 Loss:0.22503 con:0.21213 recon1:0.00661 recon2:0.00629
+	Batch 100/122 Loss:0.23003 con:0.21720 recon1:0.00619 recon2:0.00664
+	Batch 110/122 Loss:0.22539 con:0.21332 recon1:0.00622 recon2:0.00585
+	Batch 120/122 Loss:0.22634 con:0.21393 recon1:0.00611 recon2:0.00631
+Training Epoch 7/1000 Loss:0.23430 con:0.22018 recon1:0.00714 recon2:0.00697
+Validation...
+	Batch 10/17 Loss:0.29022 con:0.26695 recon1:0.01077 recon2:0.01250
+Validation Epoch 7/1000 Loss:0.23649 con:0.22245 recon1:0.00700 recon2:0.00704
+Training...
+	Batch 10/122 Loss:0.22580 con:0.21260 recon1:0.00631 recon2:0.00689
+	Batch 20/122 Loss:0.23936 con:0.22529 recon1:0.00781 recon2:0.00626
+	Batch 30/122 Loss:0.23377 con:0.22150 recon1:0.00619 recon2:0.00609
+	Batch 40/122 Loss:0.22625 con:0.21334 recon1:0.00670 recon2:0.00621
+	Batch 50/122 Loss:0.23052 con:0.21269 recon1:0.00864 recon2:0.00920
+	Batch 60/122 Loss:0.39944 con:0.20755 recon1:0.09377 recon2:0.09813
+	Batch 70/122 Loss:1.96881 con:0.08285 recon1:1.06824 recon2:0.81771
+	Batch 80/122 Loss:6.64761 con:0.00485 recon1:2.90700 recon2:3.73576
+	Batch 90/122 Loss:0.20291 con:0.00089 recon1:0.11893 recon2:0.08309
+	Batch 100/122 Loss:0.23603 con:0.00211 recon1:0.04868 recon2:0.18523
+	Batch 110/122 Loss:0.16882 con:0.00031 recon1:0.07167 recon2:0.09684
+	Batch 120/122 Loss:0.11080 con:0.00004 recon1:0.05459 recon2:0.05617
+Training Epoch 8/1000 Loss:6.05205 con:0.12213 recon1:5.52179 recon2:0.40814
+Validation...
+	Batch 10/17 Loss:10.76184 con:0.00090 recon1:5.79189 recon2:4.96904
+Validation Epoch 8/1000 Loss:10.73212 con:0.00073 recon1:5.45501 recon2:5.27638
+Training...
+	Batch 10/122 Loss:0.24257 con:0.00003 recon1:0.13536 recon2:0.10718
+	Batch 20/122 Loss:4.38602 con:0.00003 recon1:3.40392 recon2:0.98207
+	Batch 30/122 Loss:0.46803 con:0.00002 recon1:0.35777 recon2:0.11023
+	Batch 40/122 Loss:0.23161 con:0.00002 recon1:0.12860 recon2:0.10298
+	Batch 50/122 Loss:0.09718 con:0.00001 recon1:0.04734 recon2:0.04983
+	Batch 60/122 Loss:0.16262 con:0.00001 recon1:0.08986 recon2:0.07275
+	Batch 70/122 Loss:0.08976 con:0.00001 recon1:0.04282 recon2:0.04692
+	Batch 80/122 Loss:0.07737 con:0.00000 recon1:0.04103 recon2:0.03633
+	Batch 90/122 Loss:0.07044 con:0.00001 recon1:0.03578 recon2:0.03465
+	Batch 100/122 Loss:0.07239 con:0.00001 recon1:0.03618 recon2:0.03620
+	Batch 110/122 Loss:0.06301 con:0.00000 recon1:0.03150 recon2:0.03151
+	Batch 120/122 Loss:0.06930 con:0.00001 recon1:0.03271 recon2:0.03658
+Training Epoch 9/1000 Loss:2.18000 con:0.00003 recon1:0.57102 recon2:1.60896
+Validation...
+	Batch 10/17 Loss:0.12131 con:0.00000 recon1:0.06389 recon2:0.05743
+Validation Epoch 9/1000 Loss:0.08776 con:0.00000 recon1:0.04437 recon2:0.04339
+Training...
+	Batch 10/122 Loss:4.70342 con:0.00000 recon1:2.15086 recon2:2.55256
+	Batch 20/122 Loss:1.09436 con:0.00000 recon1:0.53849 recon2:0.55587
+	Batch 30/122 Loss:78.66013 con:0.00000 recon1:38.21620 recon2:40.44393
+	Batch 40/122 Loss:22.80107 con:0.00000 recon1:10.14553 recon2:12.65554
+	Batch 50/122 Loss:5.93281 con:0.00000 recon1:2.61445 recon2:3.31836
+	Batch 60/122 Loss:3.28844 con:0.00000 recon1:1.63510 recon2:1.65335
+	Batch 70/122 Loss:2.18892 con:0.00000 recon1:1.25223 recon2:0.93668
+	Batch 80/122 Loss:6.19992 con:0.00000 recon1:3.00611 recon2:3.19381
+	Batch 90/122 Loss:2.36572 con:0.00000 recon1:1.22583 recon2:1.13989
+	Batch 100/122 Loss:1.20351 con:0.00000 recon1:0.64415 recon2:0.55936
+	Batch 110/122 Loss:0.51978 con:0.00000 recon1:0.28646 recon2:0.23332
+	Batch 120/122 Loss:9.58693 con:0.00000 recon1:4.79276 recon2:4.79417
+Training Epoch 10/1000 Loss:1813.15769 con:0.00002 recon1:1018.68579 recon2:794.47190
+Validation...
+	Batch 10/17 Loss:88.50333 con:0.00000 recon1:41.27263 recon2:47.23070
+Validation Epoch 10/1000 Loss:80.45160 con:0.00000 recon1:40.24690 recon2:40.20470
+Training...
+	Batch 10/122 Loss:250.94131 con:0.00000 recon1:146.95183 recon2:103.98949
+	Batch 20/122 Loss:154.25510 con:0.00000 recon1:68.22902 recon2:86.02608
+	Batch 30/122 Loss:2361.17896 con:0.00000 recon1:1169.63501 recon2:1191.54395
+	Batch 40/122 Loss:297.90430 con:0.00000 recon1:149.02475 recon2:148.87956
+	Batch 50/122 Loss:188.18826 con:0.00000 recon1:72.71809 recon2:115.47018
+	Batch 60/122 Loss:232.86938 con:0.00000 recon1:116.90272 recon2:115.96667
+	Batch 70/122 Loss:45.88768 con:0.00000 recon1:24.98203 recon2:20.90565
+	Batch 80/122 Loss:13.74547 con:0.00000 recon1:1.36944 recon2:12.37602
+	Batch 90/122 Loss:45.12426 con:0.00000 recon1:22.43007 recon2:22.69419
+	Batch 100/122 Loss:20.36324 con:0.00000 recon1:13.83448 recon2:6.52876
+	Batch 110/122 Loss:6.21884 con:0.00000 recon1:2.97061 recon2:3.24822
+	Batch 120/122 Loss:2.76190 con:0.00000 recon1:1.86325 recon2:0.89865
+Training Epoch 11/1000 Loss:22761370.78076 con:0.00003 recon1:1189391.07561 recon2:21571979.18055
+Validation...
+	Batch 10/17 Loss:31.88846 con:0.00000 recon1:16.02788 recon2:15.86058
+Validation Epoch 11/1000 Loss:31.76127 con:0.00000 recon1:15.87829 recon2:15.88299
+Training...
+	Batch 10/122 Loss:262038.76562 con:0.00000 recon1:129904.93750 recon2:132133.82812
+	Batch 20/122 Loss:81355.40625 con:0.00000 recon1:26129.01953 recon2:55226.38281
+	Batch 30/122 Loss:50254.82031 con:0.00000 recon1:24134.43164 recon2:26120.38867
+	Batch 40/122 Loss:31259.38086 con:0.00000 recon1:15669.54395 recon2:15589.83691
+	Batch 50/122 Loss:11682.92773 con:0.00000 recon1:5710.91309 recon2:5972.01465
+	Batch 60/122 Loss:4608.89062 con:0.00000 recon1:2534.85083 recon2:2074.03955
+	Batch 70/122 Loss:1547.83032 con:0.00000 recon1:779.88947 recon2:767.94086
+	Batch 80/122 Loss:9027.85547 con:0.00000 recon1:2625.77808 recon2:6402.07764
+	Batch 90/122 Loss:1132.03442 con:0.00000 recon1:564.80438 recon2:567.23010
+	Batch 100/122 Loss:4151.17090 con:0.00000 recon1:3648.40869 recon2:502.76196
+	Batch 110/122 Loss:5399.76123 con:0.00000 recon1:584.87018 recon2:4814.89111
+	Batch 120/122 Loss:1007.88611 con:0.00000 recon1:711.53473 recon2:296.35141
+Training Epoch 12/1000 Loss:167075626.13754 con:0.00021 recon1:136598984.07461 recon2:30476644.16137
+Validation...
+	Batch 10/17 Loss:143535.03125 con:0.00000 recon1:72088.87500 recon2:71446.16406
+Validation Epoch 12/1000 Loss:143901.09835 con:0.00000 recon1:72186.64706 recon2:71714.44991
+Training...
+	Batch 10/122 Loss:396838.03125 con:0.00000 recon1:198517.73438 recon2:198320.29688
+	Batch 20/122 Loss:816197.12500 con:0.00000 recon1:392033.18750 recon2:424163.96875
+	Batch 30/122 Loss:656892.06250 con:0.00000 recon1:322909.50000 recon2:333982.56250
+	Batch 40/122 Loss:580520.37500 con:0.00000 recon1:272129.93750 recon2:308390.46875
+	Batch 50/122 Loss:486930.87500 con:0.00000 recon1:236873.46875 recon2:250057.39062
+	Batch 60/122 Loss:426878.71875 con:0.00000 recon1:207416.78125 recon2:219461.93750
+	Batch 70/122 Loss:397800.90625 con:0.00000 recon1:187750.09375 recon2:210050.81250
+	Batch 80/122 Loss:347082.37500 con:0.00000 recon1:173319.28125 recon2:173763.10938
+	Batch 90/122 Loss:412691.71875 con:0.00000 recon1:256754.06250 recon2:155937.65625
+	Batch 100/122 Loss:284978.81250 con:0.00000 recon1:144137.17188 recon2:140841.65625
+	Batch 110/122 Loss:282574.31250 con:0.00000 recon1:151167.60938 recon2:131406.68750
+	Batch 120/122 Loss:257261.93750 con:0.00000 recon1:122395.61719 recon2:134866.31250
+Training Epoch 13/1000 Loss:21986132.25945 con:0.00001 recon1:21291889.78900 recon2:694242.70100
+Validation...
+	Batch 10/17 Loss:19731.82422 con:0.00000 recon1:9869.30176 recon2:9862.52246
+Validation Epoch 13/1000 Loss:19941.76080 con:0.00000 recon1:9989.70473 recon2:9952.05612
+Training...
+	Batch 10/122 Loss:3414221.00000 con:0.00001 recon1:1165446.12500 recon2:2248774.75000
+	Batch 20/122 Loss:2424519.75000 con:0.00001 recon1:1277753.75000 recon2:1146766.00000
+	Batch 30/122 Loss:1461254.50000 con:0.00000 recon1:736949.81250 recon2:724304.75000
+	Batch 40/122 Loss:879174.62500 con:0.00000 recon1:466653.28125 recon2:412521.37500
+	Batch 50/122 Loss:487753.00000 con:0.00000 recon1:274881.31250 recon2:212871.68750
+	Batch 60/122 Loss:209646.84375 con:0.00000 recon1:101655.77344 recon2:107991.07812
+	Batch 70/122 Loss:377008.00000 con:0.00001 recon1:56575.48047 recon2:320432.53125
+	Batch 80/122 Loss:70671.75000 con:0.00001 recon1:38679.47656 recon2:31992.27539
+	Batch 90/122 Loss:31087.05078 con:0.00000 recon1:14193.20410 recon2:16893.84570
+	Batch 100/122 Loss:14655.99805 con:0.00001 recon1:5488.26172 recon2:9167.73633
+	Batch 110/122 Loss:7589.05078 con:0.00000 recon1:4803.68848 recon2:2785.36230
+	Batch 120/122 Loss:5215.17480 con:0.00000 recon1:1966.51929 recon2:3248.65527
+Training Epoch 14/1000 Loss:16932468.84529 con:0.00001 recon1:10979180.99937 recon2:5953287.84700
+Validation...
+	Batch 10/17 Loss:2178.97314 con:0.00000 recon1:1129.02869 recon2:1049.94446
+Validation Epoch 14/1000 Loss:4157.08475 con:0.00000 recon1:2242.56517 recon2:1914.51962
+Training...
+	Batch 10/122 Loss:63519.61719 con:0.00000 recon1:31240.74805 recon2:32278.87109
+	Batch 20/122 Loss:65116.95312 con:0.00000 recon1:31668.07227 recon2:33448.87891
+	Batch 30/122 Loss:65666.06250 con:0.00000 recon1:34277.61328 recon2:31388.45312
+	Batch 40/122 Loss:58383.74219 con:0.00000 recon1:30161.07227 recon2:28222.66992
+	Batch 50/122 Loss:52018.96094 con:0.00000 recon1:24872.63867 recon2:27146.32031
+	Batch 60/122 Loss:54803.23438 con:0.00000 recon1:25973.09961 recon2:28830.13672
+	Batch 70/122 Loss:85140.98438 con:0.00001 recon1:29227.02734 recon2:55913.96094
+	Batch 80/122 Loss:60419.69531 con:0.00000 recon1:36245.95703 recon2:24173.73633
+	Batch 90/122 Loss:282888.78125 con:0.00001 recon1:260502.53125 recon2:22386.25586
+	Batch 100/122 Loss:41699.38281 con:0.00000 recon1:20590.27148 recon2:21109.10938
+	Batch 110/122 Loss:40622.17578 con:0.00000 recon1:21283.72656 recon2:19338.44922
+	Batch 120/122 Loss:37192.75000 con:0.00000 recon1:17969.86133 recon2:19222.88867
+Training Epoch 15/1000 Loss:2971534.82660 con:0.00000 recon1:360067.14471 recon2:2611467.68207
+Validation...
+	Batch 10/17 Loss:35808.59375 con:0.00000 recon1:17797.26172 recon2:18011.33008
+Validation Epoch 15/1000 Loss:35685.29021 con:0.00000 recon1:17784.71358 recon2:17900.57617
+Training...
+	Batch 10/122 Loss:28974.79688 con:0.00000 recon1:15762.50488 recon2:13212.29297
+	Batch 20/122 Loss:22749.91016 con:0.00000 recon1:11338.01562 recon2:11411.89551
+	Batch 30/122 Loss:20642.91016 con:0.00000 recon1:10332.56250 recon2:10310.34863
+	Batch 40/122 Loss:19272.43359 con:0.00000 recon1:9962.13281 recon2:9310.30078
+	Batch 50/122 Loss:19136.58203 con:0.00000 recon1:9399.02246 recon2:9737.55957
+	Batch 60/122 Loss:18310.57422 con:0.00000 recon1:8957.49805 recon2:9353.07520
+	Batch 70/122 Loss:18216.29297 con:0.00000 recon1:8644.53809 recon2:9571.75586
+	Batch 80/122 Loss:24329.09375 con:0.00000 recon1:15704.04980 recon2:8625.04395
+	Batch 90/122 Loss:17076.67969 con:0.00000 recon1:8520.33984 recon2:8556.33887
+	Batch 100/122 Loss:16698.33203 con:0.00000 recon1:8628.12891 recon2:8070.20410
+	Batch 110/122 Loss:16525.92188 con:0.00000 recon1:8136.12012 recon2:8389.80273
+	Batch 120/122 Loss:15982.64355 con:0.00000 recon1:8176.18945 recon2:7806.45410
+Training Epoch 16/1000 Loss:57498336.18434 con:0.00007 recon1:2969926.30627 recon2:54528409.09290
+Validation...
+	Batch 10/17 Loss:1692.11475 con:0.00000 recon1:839.66058 recon2:852.45422
+Validation Epoch 16/1000 Loss:1690.61200 con:0.00000 recon1:841.51882 recon2:849.09318
+Training...
+	Batch 10/122 Loss:352206.62500 con:0.00000 recon1:176734.01562 recon2:175472.59375
+	Batch 20/122 Loss:627650.75000 con:0.00000 recon1:318109.43750 recon2:309541.28125
+	Batch 30/122 Loss:1169164.00000 con:0.00002 recon1:826231.25000 recon2:342932.71875
+	Batch 40/122 Loss:538995.37500 con:0.00000 recon1:271217.87500 recon2:267777.46875
+	Batch 50/122 Loss:630429.25000 con:0.00001 recon1:366808.65625 recon2:263620.56250
+	Batch 60/122 Loss:326738.78125 con:0.00000 recon1:162136.85938 recon2:164601.92188
+	Batch 70/122 Loss:505961.62500 con:0.00001 recon1:198951.35938 recon2:307010.25000
+	Batch 80/122 Loss:945335.25000 con:0.00002 recon1:102487.45312 recon2:842847.81250
+	Batch 90/122 Loss:162553.40625 con:0.00001 recon1:86553.33594 recon2:76000.07812
+	Batch 100/122 Loss:127096.35938 con:0.00000 recon1:59851.55078 recon2:67244.80469
+	Batch 110/122 Loss:112037.33594 con:0.00000 recon1:59457.90625 recon2:52579.42969
+	Batch 120/122 Loss:95894.56250 con:0.00000 recon1:44911.59375 recon2:50982.97266
+Training Epoch 17/1000 Loss:53750357.80385 con:0.00002 recon1:53343769.17558 recon2:406587.77229
+Validation...
+	Batch 10/17 Loss:83593.17969 con:0.00000 recon1:40405.46094 recon2:43187.71875
+Validation Epoch 17/1000 Loss:83260.96645 con:0.00000 recon1:41408.21324 recon2:41852.75345
+Training...

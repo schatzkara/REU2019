@@ -765,3 +765,120 @@ print(x.keys())
 
 
 
+import torch
+import torch.nn as nn
+
+split = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/160906_ian2/samples/vga_11_21/7500_7625'.split('/')
+
+print(split)
+
+x = torch.zeros(32, 4, 16, 28, 28)
+
+x.cpu()
+
+x = nn.functional.interpolate(x, size=(16, 56, 56), mode='nearest')
+
+print(x.size())
+
+
+
+
+
+import torch
+
+vp = torch.ones(32, 3)
+
+bsz = vp.size()[0]
+
+buffer = torch.zeros(bsz, 3, 16, 28, 28)
+for c in range(16):
+    for d in range(28):
+        for e in range(28):
+            buffer[:, :, c, d, e] = vp
+
+print(buffer)
+
+
+
+
+
+
+
+import torch
+import _pickle as pickle
+import os
+
+x = torch.ones(2, 2)
+print(-x)
+
+y = torch.tensor([[1, 0], [0, 1]], dtype=torch.float32)
+
+print(x - y)
+
+x = torch.ones(32)
+print(x.size())
+
+x = torch.unsqueeze(x, dim=1)
+print(x.size())
+
+cal_file = 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl'
+view_id = 'vga_10_08'
+
+with open(cal_file, 'rb') as fp:
+    cal = pickle.load(fp)
+
+print(cal.keys())
+
+# c_data = cal[view_id[4:]]
+#
+# print(cal)
+# print(c_data)
+
+print(os.path.exists(''))
+
+
+
+
+
+
+
+from phase2.PanopticDataLoader import PanopticDataset
+import torch
+
+data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
+test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/Panoptic/one.list'
+
+# VIEW1 = 1
+# VIEW2 = 2
+BATCH_SIZE = 32
+CHANNELS = 3
+FRAMES = 8
+SKIP_LEN = 2
+HEIGHT = 112
+WIDTH = 112
+PRECROP = False
+
+if __name__ == '__main__':
+    testset = PanopticDataset(root_dir=data_root_dir, data_file=test_splits,
+                              resize_height=HEIGHT, resize_width=WIDTH,
+                              clip_len=FRAMES, skip_len=SKIP_LEN,
+                              random_all=True, precrop=PRECROP)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=1)
+
+    for batch_idx, (vp1, vp2, view1vid, view2vid) in enumerate(testloader):
+        print(view1vid.size())
+        # print(view1vid)
+        print(view2vid.size())
+        # print(view2vid)
+        print(vp1)
+        print(vp2)
+        print(vp1.size())
+
+
+
+
+
+
+
+
+

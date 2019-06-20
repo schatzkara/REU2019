@@ -1,0 +1,9 @@
+Parameters:
+Batch Size: 32
+Tensor Size: (3,8,112,112)
+Skip Length: 2
+Precrop: False
+Total Epochs: 1000
+Learning Rate: 0.0001
+Training...
+slurmstepd: error: *** JOB 61811 ON c2-3 CANCELLED AT 2019-06-20T14:48:11 ***

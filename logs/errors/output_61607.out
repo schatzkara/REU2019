@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "phase2/trainingLoop.py", line 7, in <module>
+    from phase2.network import FullNetwork
+ModuleNotFoundError: No module named 'phase2'

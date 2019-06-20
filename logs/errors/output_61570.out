@@ -1,0 +1,4 @@
+  File "testingLoop.py", line 130
+    if not os.path.exists(vid_path):
+                                   ^
+SyntaxError: invalid syntax

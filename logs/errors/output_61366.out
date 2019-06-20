@@ -352,7 +352,7 @@ AssertionError: Traceback (most recent call last):
   File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in <listcomp>
     samples = collate_fn([dataset[i] for i in batch_indices])
   File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 64, in __getitem__
-    frame_index = PanopticDataset.rand_frame_index(view1path, view2path, frame_count, self.clip_len, self.skip_len)
+    frame_index = NTUDataset.rand_frame_index(view1path, view2path, frame_count, self.clip_len, self.skip_len)
   File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 174, in rand_frame_index
     assert max_frame > 1, 'Not enough frames to sample from.'
 AssertionError: Not enough frames to sample from.

@@ -348,7 +348,7 @@ ValueError: Traceback (most recent call last):
   File "/share/apps/anaconda3/lib/python3.6/site-packages/torch/utils/data/dataloader.py", line 57, in <listcomp>
     samples = collate_fn([dataset[i] for i in batch_indices])
   File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 64, in __getitem__
-    frame_index = PanopticDataset.rand_frame_index(view1path, view2path, frame_count, self.clip_len, self.skip_len)
+    frame_index = NTUDataset.rand_frame_index(view1path, view2path, frame_count, self.clip_len, self.skip_len)
   File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 176, in rand_frame_index
     frame_index = np.random.randint(0, max_frame)
   File "mtrand.pyx", line 993, in mtrand.RandomState.randint

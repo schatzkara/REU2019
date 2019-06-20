@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "phase2/trainingLoop.py", line 7, in <module>
+    from network import FullNetwork
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 5, in <module>
+    from modifiedVGG import vgg16
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 7, in <module>
+    from torchsummary import summary
+ModuleNotFoundError: No module named 'torchsummary'

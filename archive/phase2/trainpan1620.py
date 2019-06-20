@@ -30,8 +30,8 @@ PRECROP = False
 NUM_EPOCHS = 1000
 LR = 1e-4
 
-weight_file_name = './weights/net_panoptic_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                        PRECROP, NUM_EPOCHS, LR)
+weight_file_name = './weights/phase2_net_panoptic_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                               PRECROP, NUM_EPOCHS, LR)
 
 
 def train(epoch):

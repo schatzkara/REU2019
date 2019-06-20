@@ -1,6 +1,6 @@
 Traceback (most recent call last):
   File "train1616.py", line 6, in <module>
-    from NTUDataLoader import PanopticDataset
+    from NTUDataLoader import NTUDataset
   File "/home/yogesh/kara/REU2019/NTUDataLoader.py", line 180
     print(path1)
     ^
