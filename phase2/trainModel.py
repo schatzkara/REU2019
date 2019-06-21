@@ -10,8 +10,7 @@ from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
-
-DATASET = 'NTU'  # 'Panoptic'
+DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -38,8 +37,8 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net2_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                         PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net2_ntu2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                   PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
@@ -50,8 +49,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net2_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                         PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net2_pan2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                    PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, weight_file
 
 

@@ -10,12 +10,12 @@ from PanopticDataLoader import PanopticDataset
 from outputVideoCoversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
-DATASET = 'NTU'  # 'Panoptic'
+DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 32
+BATCH_SIZE = 20
 CHANNELS = 3
-FRAMES = 8
+FRAMES = 16
 SKIP_LEN = 2
 HEIGHT = 112
 WIDTH = 112
@@ -28,10 +28,11 @@ def ntu_config():
         test_split = '/home/yogesh/kara/data/val16.list'
     else:
         test_split = '/home/yogesh/kara/data/val.list'
-    weights_path = '/home/yogesh/kara/REU2019/weights/net2_32_8_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/'
+    param_file = '/home/yogesh/kara/data/view.params'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/phase2_net_ntu_20_16_2_True_1000_0.0001.pt'
+    output_video_dir = './videos/ntu_35epochs'
 
-    return data_root_dir, test_split, weights_path, output_video_dir
+    return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
 
 def panoptic_config():
@@ -40,8 +41,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/weights/net2_32_8_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
+    output_video_dir = './videos/pan_35epochs'
 
     return data_root_dir, test_split, weights_path, output_video_dir
 
@@ -158,7 +159,7 @@ if __name__ == '__main__':
     PRECROP = True if DATASET.lower() == 'ntu' else False
 
     if DATASET.lower() == 'ntu':
-        data_root_dir, test_split, weights_path, output_video_dir = ntu_config()
+        data_root_dir, test_split, param_file, weights_path, output_video_dir = ntu_config()
 
         # model
         model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))

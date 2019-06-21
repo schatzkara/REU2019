@@ -1,11 +1,21 @@
 from graphing.plotting import single_plot, multi_line_plot
 from graphing.getData import get_parameters, get_epoch_metrics
 
-root_dir = 'logs/'
-starting_epoch = 200
-skip_epoch = 2
-ending_epoch = 420
-metrics = ['loss', 'con', 'recon1', 'recon2']
+model_phase = 2  # 1 or 2
+
+job_numbers = [61813]
+
+root_dir = './logstograph/'
+file_name_start, file_name_end = 'output_', '.out'
+starting_epoch = 15
+skip_epoch = 1
+ending_epoch = 35
+if model_phase == 1:
+    metrics = ['loss', 'con', 'recon1', 'recon2']
+elif model_phase == 2:
+    metrics = ['loss', 'con1', 'con2', 'recon1', 'recon2']
+else:
+    print('There are only 2 model phases.')
 
 
 def plot_multiple_files(file1, file2, *args):
@@ -43,10 +53,11 @@ def plot_multiple_files_together(file1, file2, *args):
         val_x = []
         val_y = []
         for file in file_list:
+            print(file)
             param_dict = get_parameters(file)
             print(param_dict)
             total_epochs = param_dict['total epochs']
-            training_metrics, val_metrics = get_epoch_metrics(file)
+            training_metrics, val_metrics = get_epoch_metrics(file, model_phase)
             all_y_data = training_metrics[metric][starting_epoch:ending_epoch]
             # print(y_data)
             y_data = [all_y_data[i] for i in range(0, len(all_y_data), skip_epoch)]
@@ -76,10 +87,11 @@ def plot_one_file(file_path):
     :param file_path: (str) The path of the file to plot.
     :return: None
     """
+    print(file_path)
     param_dict = get_parameters(file_path)
     print(param_dict)
     total_epochs = param_dict['total epochs']
-    training_metrics, val_metrics = get_epoch_metrics(file_path)
+    training_metrics, val_metrics = get_epoch_metrics(file_path, model_phase)
 
     for metric in metrics:
         all_y_data = training_metrics[metric][starting_epoch:ending_epoch]
@@ -99,6 +111,10 @@ def plot_one_file(file_path):
                     title='Validation {} vs. Epochs'.format(metric),
                     x_label='Epochs', y_label='Validation {}'.format(metric))
 
+        print(metric)
+        print(x_data)
+        print(y_data)
+
 
 if __name__ == '__main__':
     # file_list = os.listdir(root_dir)
@@ -117,4 +133,9 @@ if __name__ == '__main__':
     file_list = ['./cluster/REU2019/logs/output_61462.out',
                  './cluster/REU2019/logs/output_61469.out',
                  './cluster/REU2019/logs/output_61471.out']
-    plot_multiple_files_together(*file_list)
+
+    file_list = [root_dir + file_name_start + str(job_id) + file_name_end for job_id in job_numbers]
+    if len(file_list) == 1:
+        plot_one_file(file_list[0])
+    else:
+        plot_multiple_files_together(*file_list)

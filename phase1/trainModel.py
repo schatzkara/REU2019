@@ -10,7 +10,7 @@ from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
-DATASET = 'NTU'  # 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
 BATCH_SIZE = 20

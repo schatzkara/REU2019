@@ -10,12 +10,12 @@ from PanopticDataLoader import PanopticDataset
 from outputVideoCoversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
-DATASET = 'NTU'  # 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 32
+BATCH_SIZE = 20
 CHANNELS = 3
-FRAMES = 8
+FRAMES = 16
 SKIP_LEN = 2
 HEIGHT = 112
 WIDTH = 112
@@ -28,7 +28,7 @@ def ntu_config():
         test_split = '/home/yogesh/kara/data/val16.list'
     else:
         test_split = '/home/yogesh/kara/data/val.list'
-    weights_path = '/home/yogesh/kara/REU2019/weights/net_32_8_2_True_1000_0.0001.pt'
+    weights_path = '/home/yogesh/kara/REU2019/weights/net_20_16_2_True_1000_0.0001.pt'
     output_video_dir = './videos/'
 
     return data_root_dir, test_split, weights_path, output_video_dir
@@ -40,8 +40,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/weights/net_32_8_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/'
+    weights_path = '/home/yogesh/kara/REU2019/phase1/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
+    output_video_dir = './videos/pan_100epochs'
 
     return data_root_dir, test_split, weights_path, output_video_dir
 

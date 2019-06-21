@@ -1,5 +1,6 @@
 import os
 import cv2
+import numpy as np
 
 
 def convert_to_vid(tensor, output_dir, batch_num, view, input):  # whether it was an input or output

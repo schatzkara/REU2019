@@ -9,7 +9,7 @@ from mpl_toolkits.mplot3d import Axes3D
 
 data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
 # 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
-sample = '150303_celloScene1'
+sample = '150821_dance5'
 width = height = 128
 resize_width = resize_height = 112
 
@@ -101,11 +101,13 @@ def plot_cameras(cam_positions):
     ax.scatter(xs, ys, zs)
     for cam in cam_positions:
         x, y, z = cam_positions[cam]
-        ax.text(x, y, z, cam, size=10, zorder=1, color='k')
+        id = cam[4:]
+        ax.text(x, y, z, id, size=10, zorder=1, color='k')
     plt.show()
 
 
 if __name__ == '__main__':
+    sample = input('What sample? ')
     cam_positions = get_camera_positions(sample)
     print(cam_positions)
     plot_cameras(cam_positions=cam_positions)

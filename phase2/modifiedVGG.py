@@ -27,30 +27,47 @@ class VGG(nn.Module):
         :param weights_path: (str) The path at which to pretrained weights are located.
         """
         super(VGG, self).__init__()
-        self.features = features
+        # modified so that not all the layers are used
+        self.features = features[:num_layers]
         self.num_layers = num_layers
         self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
-        self.classifier = nn.Sequential(
-            nn.Linear(512 * 7 * 7, 4096),
-            nn.ReLU(True),
-            nn.Dropout(),
-            nn.Linear(4096, 4096),
-            nn.ReLU(True),
-            nn.Dropout(),
-            nn.Linear(4096, num_classes),
-        )
+        # self.classifier = nn.Sequential(
+        #     nn.Linear(512 * 7 * 7, 4096),
+        #     nn.ReLU(True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 4096),
+        #     nn.ReLU(True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, num_classes),
+        # )
         if init_weights:
             self._initialize_weights()
 
+        # if pretrained:
+        #     self.load_state_dict(torch.load(weights_path))
         if pretrained:
-            self.load_state_dict(torch.load(weights_path))
+            self.load_weights(weights_path=weights_path)
 
         self.final_layer = nn.Conv2d(256, 32, kernel_size=3, padding=1)
         self.final_relu = nn.ReLU(inplace=True)
 
+    def load_weights(self, weights_path):
+        state_dict = torch.load(weights_path)
+        bad_weights = ["features.17", "features.19", "features.21", "features.24",
+                       "features.26", "features.28", "classifier.0", "classifier.3",
+                       "classifier.6"]
+        new_state_dict = {}
+        for key, weight in state_dict.items():
+            first_per = key.index('.')
+            second_per = key[first_per + 1:].index('.')
+            id_ = key[:first_per + second_per + 1]
+            if id_ not in bad_weights:
+                new_state_dict[key] = weight
+        self.load_state_dict(new_state_dict)
+
     def forward(self, x):
         # modified so that not all the layers are used
-        self.features = self.features[:self.num_layers]
+        self.features = self.features
         x = self.features(x)
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)

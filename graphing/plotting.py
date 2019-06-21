@@ -14,7 +14,7 @@ def single_plot(x_data, y_data, title, x_label, y_label):
     plt.figure(1, (18, 8))  # something, plot size
     plt.subplot(111)
     plt.plot(x_data, y_data)
-    # plt.title(title)
+    plt.title(title)
     plt.xlabel(x_label, fontsize=12)
     plt.ylabel(y_label, fontsize=12)
     # plt.legend(['Train', 'Test'], loc='upper left')

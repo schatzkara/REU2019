@@ -16,9 +16,7 @@ output file format:
     print('Time: {}'.format(end_time - start_time))
 """
 
-parameter_keys = ['views', 'batch size', 'tensor size', 'skip length', 'precrop', 'total epochs', 'learning rate', 'time']
-epoch_metrics_keys = {'training': 'training epoch', 'val': 'validation epoch'}
-metrics = ['loss', 'con', 'recon1', 'recon2']
+model_phase = 1  # 2
 
 
 def get_parameters(output_file):
@@ -27,6 +25,8 @@ def get_parameters(output_file):
     :param output_file: (str) The path for the file that contains the experiment terminal output.
     :return: (dict) A dictionary with keys as parameter names and values as parameter values.
     """
+    parameter_keys = ['batch size', 'tensor size', 'skip length', 'precrop', 'total epochs', 'learning rate', 'time']
+
     parameters = {}
     with open(output_file, 'r') as f:
         for line in f:
@@ -46,13 +46,22 @@ def get_parameters(output_file):
     return parameters
 
 
-def get_epoch_metrics(output_file):
+def get_epoch_metrics(output_file, model_phase):
     """
     Function to get the metric values for each epoch.
     :param output_file: (str) The path for the file that contains the experiment terminal output.
+    :param model_phase: (int) The phase of the model that the output file is from.
     :return: (dict, dict) A dictionary representing the training metrics and another representing the val metrics.
               Keys are metric names and values are a list of the metric values for each epoch.
     """
+    epoch_metrics_keys = {'training': 'training epoch', 'val': 'validation epoch'}
+    if model_phase == 1:
+        metrics = ['loss', 'con', 'recon1', 'recon2']
+    elif model_phase == 2:
+        metrics = ['loss', 'con1', 'con2', 'recon1', 'recon2']
+    else:
+        print('There are only 2 model phases.')
+
     # these dictionaries will hold lists for each metric
     training_metrics = {}
     val_metrics = {}
@@ -181,6 +190,6 @@ if __name__ == '__main__':
     file_path = 'logs/old_format/output_61075.out'
     param_dict = get_parameters(file_path)
     print(param_dict)
-    epoch_metrics = get_epoch_metrics(file_path)
+    epoch_metrics = get_epoch_metrics(file_path, model_phase)
     print(epoch_metrics)
     training_metrics, val_metrics = epoch_metrics
