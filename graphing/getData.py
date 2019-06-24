@@ -16,7 +16,7 @@ output file format:
     print('Time: {}'.format(end_time - start_time))
 """
 
-model_phase = 1  # 2
+model_phase = 2  # 1 or 2
 
 
 def get_parameters(output_file):
@@ -187,9 +187,13 @@ def get_old_old_epoch_metrics(output_file):
 
 
 if __name__ == '__main__':
-    file_path = 'logs/old_format/output_61075.out'
+    file_path = './logstograph/output_61861.out'
     param_dict = get_parameters(file_path)
     print(param_dict)
     epoch_metrics = get_epoch_metrics(file_path, model_phase)
     print(epoch_metrics)
     training_metrics, val_metrics = epoch_metrics
+    val_loss = val_metrics['loss']
+    print(val_loss)
+    min_loss = min(val_loss)
+    print(min_loss)

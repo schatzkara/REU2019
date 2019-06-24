@@ -3,13 +3,13 @@ from graphing.getData import get_parameters, get_epoch_metrics
 
 model_phase = 2  # 1 or 2
 
-job_numbers = [61813]
+job_numbers = [61861]
 
 root_dir = './logstograph/'
 file_name_start, file_name_end = 'output_', '.out'
-starting_epoch = 15
+starting_epoch = 0
 skip_epoch = 1
-ending_epoch = 35
+ending_epoch = 154
 if model_phase == 1:
     metrics = ['loss', 'con', 'recon1', 'recon2']
 elif model_phase == 2:
