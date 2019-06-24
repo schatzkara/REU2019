@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "testModel.py", line 164, in <module>
+    model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 67, in __init__
+    self.vgg = vgg16(pretrained=True, weights_path=vgg_weights_path)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 167, in vgg16
+    return _vgg('vgg16', 'D', False, pretrained=pretrained, progress=progress, weights_path=weights_path, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 117, in _vgg
+    pretrained=pretrained, weights_path=weights_path, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 32, in __init__
+    self.num_layers = num_layers[:self.num_layers]
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/modules/module.py", line 539, in __getattr__
+    type(self).__name__, name))
+AttributeError: 'VGG' object has no attribute 'num_layers'

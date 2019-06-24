@@ -1,0 +1,6 @@
+Traceback (most recent call last):
+  File "testModel.py", line 165, in <module>
+    model.load_state_dict(torch.load(weights_path))
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/serialization.py", line 382, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: '/home/yogesh/kara/REU2019/weights/phase2/phase2_net_ntu_20_16_2_True_1000_0.0001.pt'

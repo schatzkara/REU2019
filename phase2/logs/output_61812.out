@@ -1233,3 +1233,397 @@ Validation...
 	Batch 10/17 Loss:0.01085 con1:0.00000 con2: 0.00000 recon1:0.00565 recon2:0.00520
 Validation Epoch 62/1000 Loss:0.00575 con1:0.00000 con2:0.00000 recon1:0.00284 recon2:0.00291
 Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00564 con1:0.00000 con2:0.00000 recon1:0.00291 recon2:0.00274
+	Batch 20/122 Loss:0.00474 con1:0.00000 con2:0.00000 recon1:0.00265 recon2:0.00209
+	Batch 30/122 Loss:0.00414 con1:0.00000 con2:0.00000 recon1:0.00220 recon2:0.00194
+	Batch 40/122 Loss:0.00637 con1:0.00000 con2:0.00000 recon1:0.00309 recon2:0.00328
+	Batch 50/122 Loss:0.00624 con1:0.00000 con2:0.00000 recon1:0.00372 recon2:0.00251
+	Batch 60/122 Loss:0.00394 con1:0.00000 con2:0.00000 recon1:0.00213 recon2:0.00181
+	Batch 70/122 Loss:0.00478 con1:0.00000 con2:0.00000 recon1:0.00303 recon2:0.00175
+	Batch 80/122 Loss:0.00421 con1:0.00000 con2:0.00000 recon1:0.00211 recon2:0.00210
+	Batch 90/122 Loss:0.00586 con1:0.00000 con2:0.00000 recon1:0.00299 recon2:0.00287
+	Batch 100/122 Loss:0.00304 con1:0.00000 con2:0.00000 recon1:0.00154 recon2:0.00150
+	Batch 110/122 Loss:0.00392 con1:0.00000 con2:0.00000 recon1:0.00187 recon2:0.00205
+	Batch 120/122 Loss:0.00727 con1:0.00000 con2:0.00000 recon1:0.00309 recon2:0.00418
+Training Epoch 63/1000 Loss:0.00476 con1:0.00000 con2:0.00000 recon1:0.00237 recon2:0.00239
+Validation...
+	Batch 10/17 Loss:0.00963 con1:0.00000 con2: 0.00000 recon1:0.00504 recon2:0.00458
+Validation Epoch 63/1000 Loss:0.00524 con1:0.00000 con2:0.00000 recon1:0.00259 recon2:0.00265
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00398 con1:0.00000 con2:0.00000 recon1:0.00197 recon2:0.00201
+	Batch 20/122 Loss:0.00283 con1:0.00000 con2:0.00000 recon1:0.00146 recon2:0.00136
+	Batch 30/122 Loss:0.00510 con1:0.00000 con2:0.00000 recon1:0.00304 recon2:0.00206
+	Batch 40/122 Loss:0.00511 con1:0.00000 con2:0.00000 recon1:0.00270 recon2:0.00241
+	Batch 50/122 Loss:0.00594 con1:0.00000 con2:0.00000 recon1:0.00334 recon2:0.00261
+	Batch 60/122 Loss:0.00406 con1:0.00000 con2:0.00000 recon1:0.00214 recon2:0.00191
+	Batch 70/122 Loss:0.00528 con1:0.00000 con2:0.00000 recon1:0.00238 recon2:0.00290
+	Batch 80/122 Loss:0.00440 con1:0.00000 con2:0.00000 recon1:0.00232 recon2:0.00208
+	Batch 90/122 Loss:0.00651 con1:0.00000 con2:0.00000 recon1:0.00250 recon2:0.00400
+	Batch 100/122 Loss:0.00548 con1:0.00000 con2:0.00000 recon1:0.00298 recon2:0.00249
+	Batch 110/122 Loss:0.00498 con1:0.00000 con2:0.00000 recon1:0.00265 recon2:0.00233
+	Batch 120/122 Loss:0.00414 con1:0.00000 con2:0.00000 recon1:0.00192 recon2:0.00222
+Training Epoch 64/1000 Loss:0.00465 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00237
+Validation...
+	Batch 10/17 Loss:0.00941 con1:0.00000 con2: 0.00000 recon1:0.00493 recon2:0.00448
+Validation Epoch 64/1000 Loss:0.00512 con1:0.00000 con2:0.00000 recon1:0.00253 recon2:0.00259
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00355 con1:0.00000 con2:0.00000 recon1:0.00180 recon2:0.00175
+	Batch 20/122 Loss:0.00446 con1:0.00000 con2:0.00000 recon1:0.00227 recon2:0.00220
+	Batch 30/122 Loss:0.00591 con1:0.00000 con2:0.00000 recon1:0.00259 recon2:0.00332
+	Batch 40/122 Loss:0.00475 con1:0.00000 con2:0.00000 recon1:0.00232 recon2:0.00243
+	Batch 50/122 Loss:0.00438 con1:0.00000 con2:0.00000 recon1:0.00271 recon2:0.00167
+	Batch 60/122 Loss:0.00768 con1:0.00000 con2:0.00000 recon1:0.00381 recon2:0.00387
+	Batch 70/122 Loss:0.00382 con1:0.00000 con2:0.00000 recon1:0.00198 recon2:0.00184
+	Batch 80/122 Loss:0.00520 con1:0.00000 con2:0.00000 recon1:0.00345 recon2:0.00175
+	Batch 90/122 Loss:0.00478 con1:0.00000 con2:0.00000 recon1:0.00243 recon2:0.00235
+	Batch 100/122 Loss:0.00350 con1:0.00000 con2:0.00000 recon1:0.00181 recon2:0.00169
+	Batch 110/122 Loss:0.00473 con1:0.00000 con2:0.00000 recon1:0.00209 recon2:0.00264
+	Batch 120/122 Loss:0.00477 con1:0.00000 con2:0.00000 recon1:0.00249 recon2:0.00228
+Training Epoch 65/1000 Loss:0.00465 con1:0.00000 con2:0.00000 recon1:0.00237 recon2:0.00228
+Validation...
+	Batch 10/17 Loss:0.00944 con1:0.00000 con2: 0.00000 recon1:0.00495 recon2:0.00449
+Validation Epoch 65/1000 Loss:0.00516 con1:0.00000 con2:0.00000 recon1:0.00255 recon2:0.00261
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00274 con1:0.00000 con2:0.00000 recon1:0.00161 recon2:0.00113
+	Batch 20/122 Loss:0.00411 con1:0.00000 con2:0.00000 recon1:0.00222 recon2:0.00190
+	Batch 30/122 Loss:0.00568 con1:0.00000 con2:0.00000 recon1:0.00233 recon2:0.00335
+	Batch 40/122 Loss:0.00590 con1:0.00000 con2:0.00000 recon1:0.00231 recon2:0.00359
+	Batch 50/122 Loss:0.00486 con1:0.00000 con2:0.00000 recon1:0.00295 recon2:0.00191
+	Batch 60/122 Loss:0.00392 con1:0.00000 con2:0.00000 recon1:0.00201 recon2:0.00191
+	Batch 70/122 Loss:0.00337 con1:0.00000 con2:0.00000 recon1:0.00186 recon2:0.00151
+	Batch 80/122 Loss:0.00454 con1:0.00000 con2:0.00000 recon1:0.00167 recon2:0.00288
+	Batch 90/122 Loss:0.00478 con1:0.00000 con2:0.00000 recon1:0.00264 recon2:0.00214
+	Batch 100/122 Loss:0.00543 con1:0.00000 con2:0.00000 recon1:0.00260 recon2:0.00283
+	Batch 110/122 Loss:0.00309 con1:0.00000 con2:0.00000 recon1:0.00154 recon2:0.00154
+	Batch 120/122 Loss:0.00408 con1:0.00000 con2:0.00000 recon1:0.00193 recon2:0.00215
+Training Epoch 66/1000 Loss:0.00458 con1:0.00000 con2:0.00000 recon1:0.00226 recon2:0.00232
+Validation...
+	Batch 10/17 Loss:0.00944 con1:0.00000 con2: 0.00000 recon1:0.00497 recon2:0.00447
+Validation Epoch 66/1000 Loss:0.00523 con1:0.00000 con2:0.00000 recon1:0.00258 recon2:0.00265
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00506 con1:0.00000 con2:0.00000 recon1:0.00280 recon2:0.00226
+	Batch 20/122 Loss:0.00395 con1:0.00000 con2:0.00000 recon1:0.00150 recon2:0.00246
+	Batch 30/122 Loss:0.00354 con1:0.00000 con2:0.00000 recon1:0.00211 recon2:0.00143
+	Batch 40/122 Loss:0.00398 con1:0.00000 con2:0.00000 recon1:0.00204 recon2:0.00194
+	Batch 50/122 Loss:0.00353 con1:0.00000 con2:0.00000 recon1:0.00178 recon2:0.00175
+	Batch 60/122 Loss:0.00449 con1:0.00000 con2:0.00000 recon1:0.00210 recon2:0.00239
+	Batch 70/122 Loss:0.00822 con1:0.00000 con2:0.00000 recon1:0.00374 recon2:0.00448
+	Batch 80/122 Loss:0.00439 con1:0.00000 con2:0.00000 recon1:0.00223 recon2:0.00216
+	Batch 90/122 Loss:0.00378 con1:0.00000 con2:0.00000 recon1:0.00169 recon2:0.00210
+	Batch 100/122 Loss:0.00531 con1:0.00000 con2:0.00000 recon1:0.00253 recon2:0.00277
+	Batch 110/122 Loss:0.00598 con1:0.00000 con2:0.00000 recon1:0.00335 recon2:0.00263
+	Batch 120/122 Loss:0.00539 con1:0.00000 con2:0.00000 recon1:0.00274 recon2:0.00265
+Training Epoch 67/1000 Loss:0.00466 con1:0.00000 con2:0.00000 recon1:0.00229 recon2:0.00236
+Validation...
+	Batch 10/17 Loss:0.00949 con1:0.00000 con2: 0.00000 recon1:0.00502 recon2:0.00448
+Validation Epoch 67/1000 Loss:0.00517 con1:0.00000 con2:0.00000 recon1:0.00256 recon2:0.00261
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00430 con1:0.00000 con2:0.00000 recon1:0.00219 recon2:0.00210
+	Batch 20/122 Loss:0.00373 con1:0.00000 con2:0.00000 recon1:0.00169 recon2:0.00204
+	Batch 30/122 Loss:0.00412 con1:0.00000 con2:0.00000 recon1:0.00191 recon2:0.00221
+	Batch 40/122 Loss:0.00441 con1:0.00000 con2:0.00000 recon1:0.00162 recon2:0.00279
+	Batch 50/122 Loss:0.00607 con1:0.00000 con2:0.00000 recon1:0.00232 recon2:0.00375
+	Batch 60/122 Loss:0.00434 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00206
+	Batch 70/122 Loss:0.00336 con1:0.00000 con2:0.00000 recon1:0.00160 recon2:0.00176
+	Batch 80/122 Loss:0.00604 con1:0.00000 con2:0.00000 recon1:0.00304 recon2:0.00300
+	Batch 90/122 Loss:0.00553 con1:0.00000 con2:0.00000 recon1:0.00299 recon2:0.00254
+	Batch 100/122 Loss:0.00750 con1:0.00000 con2:0.00000 recon1:0.00315 recon2:0.00436
+	Batch 110/122 Loss:0.00701 con1:0.00000 con2:0.00000 recon1:0.00385 recon2:0.00316
+	Batch 120/122 Loss:0.00422 con1:0.00000 con2:0.00000 recon1:0.00234 recon2:0.00188
+Training Epoch 68/1000 Loss:0.00479 con1:0.00000 con2:0.00000 recon1:0.00241 recon2:0.00238
+Validation...
+	Batch 10/17 Loss:0.00961 con1:0.00000 con2: 0.00000 recon1:0.00503 recon2:0.00458
+Validation Epoch 68/1000 Loss:0.00527 con1:0.00000 con2:0.00000 recon1:0.00261 recon2:0.00266
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00478 con1:0.00000 con2:0.00000 recon1:0.00234 recon2:0.00244
+	Batch 20/122 Loss:0.00503 con1:0.00000 con2:0.00000 recon1:0.00279 recon2:0.00223
+	Batch 30/122 Loss:0.00365 con1:0.00000 con2:0.00000 recon1:0.00191 recon2:0.00174
+	Batch 40/122 Loss:0.00335 con1:0.00000 con2:0.00000 recon1:0.00167 recon2:0.00169
+	Batch 50/122 Loss:0.00403 con1:0.00000 con2:0.00000 recon1:0.00211 recon2:0.00192
+	Batch 60/122 Loss:0.00701 con1:0.00000 con2:0.00000 recon1:0.00430 recon2:0.00271
+	Batch 70/122 Loss:0.00535 con1:0.00000 con2:0.00000 recon1:0.00205 recon2:0.00330
+	Batch 80/122 Loss:0.00431 con1:0.00000 con2:0.00000 recon1:0.00243 recon2:0.00188
+	Batch 90/122 Loss:0.00537 con1:0.00000 con2:0.00000 recon1:0.00286 recon2:0.00251
+	Batch 100/122 Loss:0.00528 con1:0.00000 con2:0.00000 recon1:0.00277 recon2:0.00251
+	Batch 110/122 Loss:0.00856 con1:0.00000 con2:0.00000 recon1:0.00238 recon2:0.00618
+	Batch 120/122 Loss:0.00424 con1:0.00000 con2:0.00000 recon1:0.00232 recon2:0.00191
+Training Epoch 69/1000 Loss:0.00467 con1:0.00000 con2:0.00000 recon1:0.00233 recon2:0.00234
+Validation...
+	Batch 10/17 Loss:0.00939 con1:0.00000 con2: 0.00000 recon1:0.00492 recon2:0.00448
+Validation Epoch 69/1000 Loss:0.00508 con1:0.00000 con2:0.00000 recon1:0.00251 recon2:0.00257
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00437 con1:0.00000 con2:0.00000 recon1:0.00216 recon2:0.00221
+	Batch 20/122 Loss:0.00399 con1:0.00000 con2:0.00000 recon1:0.00195 recon2:0.00204
+	Batch 30/122 Loss:0.00441 con1:0.00000 con2:0.00000 recon1:0.00200 recon2:0.00241
+	Batch 40/122 Loss:0.00253 con1:0.00000 con2:0.00000 recon1:0.00126 recon2:0.00128
+	Batch 50/122 Loss:0.00379 con1:0.00000 con2:0.00000 recon1:0.00196 recon2:0.00183
+	Batch 60/122 Loss:0.00423 con1:0.00000 con2:0.00000 recon1:0.00192 recon2:0.00231
+	Batch 70/122 Loss:0.00480 con1:0.00000 con2:0.00000 recon1:0.00242 recon2:0.00239
+	Batch 80/122 Loss:0.00501 con1:0.00000 con2:0.00000 recon1:0.00253 recon2:0.00248
+	Batch 90/122 Loss:0.00422 con1:0.00000 con2:0.00000 recon1:0.00189 recon2:0.00234
+	Batch 100/122 Loss:0.00378 con1:0.00000 con2:0.00000 recon1:0.00187 recon2:0.00190
+	Batch 110/122 Loss:0.00515 con1:0.00000 con2:0.00000 recon1:0.00285 recon2:0.00230
+	Batch 120/122 Loss:0.00300 con1:0.00000 con2:0.00000 recon1:0.00146 recon2:0.00154
+Training Epoch 70/1000 Loss:0.00461 con1:0.00000 con2:0.00000 recon1:0.00231 recon2:0.00229
+Validation...
+	Batch 10/17 Loss:0.00944 con1:0.00000 con2: 0.00000 recon1:0.00495 recon2:0.00449
+Validation Epoch 70/1000 Loss:0.00513 con1:0.00000 con2:0.00000 recon1:0.00253 recon2:0.00259
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00324 con1:0.00000 con2:0.00000 recon1:0.00154 recon2:0.00170
+	Batch 20/122 Loss:0.00757 con1:0.00000 con2:0.00000 recon1:0.00426 recon2:0.00332
+	Batch 30/122 Loss:0.00485 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00256
+	Batch 40/122 Loss:0.00633 con1:0.00000 con2:0.00000 recon1:0.00293 recon2:0.00341
+	Batch 50/122 Loss:0.00383 con1:0.00000 con2:0.00000 recon1:0.00199 recon2:0.00185
+	Batch 60/122 Loss:0.00405 con1:0.00000 con2:0.00000 recon1:0.00176 recon2:0.00229
+	Batch 70/122 Loss:0.00816 con1:0.00000 con2:0.00000 recon1:0.00576 recon2:0.00240
+	Batch 80/122 Loss:0.00521 con1:0.00000 con2:0.00000 recon1:0.00275 recon2:0.00246
+	Batch 90/122 Loss:0.00481 con1:0.00000 con2:0.00000 recon1:0.00131 recon2:0.00349
+	Batch 100/122 Loss:0.00505 con1:0.00000 con2:0.00000 recon1:0.00257 recon2:0.00248
+	Batch 110/122 Loss:0.00653 con1:0.00000 con2:0.00000 recon1:0.00218 recon2:0.00436
+	Batch 120/122 Loss:0.00459 con1:0.00000 con2:0.00000 recon1:0.00216 recon2:0.00243
+Training Epoch 71/1000 Loss:0.00465 con1:0.00000 con2:0.00000 recon1:0.00237 recon2:0.00228
+Validation...
+	Batch 10/17 Loss:0.00962 con1:0.00000 con2: 0.00000 recon1:0.00502 recon2:0.00460
+Validation Epoch 71/1000 Loss:0.00520 con1:0.00000 con2:0.00000 recon1:0.00257 recon2:0.00262
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00575 con1:0.00000 con2:0.00000 recon1:0.00364 recon2:0.00211
+	Batch 20/122 Loss:0.00486 con1:0.00000 con2:0.00000 recon1:0.00218 recon2:0.00267
+	Batch 30/122 Loss:0.00743 con1:0.00000 con2:0.00000 recon1:0.00234 recon2:0.00509
+	Batch 40/122 Loss:0.00308 con1:0.00000 con2:0.00000 recon1:0.00137 recon2:0.00171
+	Batch 50/122 Loss:0.00373 con1:0.00000 con2:0.00000 recon1:0.00156 recon2:0.00217
+	Batch 60/122 Loss:0.00465 con1:0.00000 con2:0.00000 recon1:0.00268 recon2:0.00196
+	Batch 70/122 Loss:0.00492 con1:0.00000 con2:0.00000 recon1:0.00293 recon2:0.00200
+	Batch 80/122 Loss:0.00724 con1:0.00000 con2:0.00000 recon1:0.00371 recon2:0.00353
+	Batch 90/122 Loss:0.00407 con1:0.00000 con2:0.00000 recon1:0.00236 recon2:0.00171
+	Batch 100/122 Loss:0.00622 con1:0.00000 con2:0.00000 recon1:0.00412 recon2:0.00209
+	Batch 110/122 Loss:0.00230 con1:0.00000 con2:0.00000 recon1:0.00124 recon2:0.00106
+	Batch 120/122 Loss:0.00242 con1:0.00000 con2:0.00000 recon1:0.00107 recon2:0.00135
+Training Epoch 72/1000 Loss:0.00453 con1:0.00000 con2:0.00000 recon1:0.00226 recon2:0.00227
+Validation...
+	Batch 10/17 Loss:0.00930 con1:0.00000 con2: 0.00000 recon1:0.00491 recon2:0.00440
+Validation Epoch 72/1000 Loss:0.00511 con1:0.00000 con2:0.00000 recon1:0.00253 recon2:0.00258
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00501 con1:0.00000 con2:0.00000 recon1:0.00250 recon2:0.00251
+	Batch 20/122 Loss:0.00501 con1:0.00000 con2:0.00000 recon1:0.00255 recon2:0.00246
+	Batch 30/122 Loss:0.00578 con1:0.00000 con2:0.00000 recon1:0.00328 recon2:0.00250
+	Batch 40/122 Loss:0.00463 con1:0.00000 con2:0.00000 recon1:0.00299 recon2:0.00164
+	Batch 50/122 Loss:0.00402 con1:0.00000 con2:0.00000 recon1:0.00221 recon2:0.00181
+	Batch 60/122 Loss:0.00457 con1:0.00000 con2:0.00000 recon1:0.00206 recon2:0.00251
+	Batch 70/122 Loss:0.00367 con1:0.00000 con2:0.00000 recon1:0.00144 recon2:0.00223
+	Batch 80/122 Loss:0.00369 con1:0.00000 con2:0.00000 recon1:0.00169 recon2:0.00200
+	Batch 90/122 Loss:0.00398 con1:0.00000 con2:0.00000 recon1:0.00184 recon2:0.00214
+	Batch 100/122 Loss:0.00372 con1:0.00000 con2:0.00000 recon1:0.00177 recon2:0.00195
+	Batch 110/122 Loss:0.00435 con1:0.00000 con2:0.00000 recon1:0.00257 recon2:0.00178
+	Batch 120/122 Loss:0.00403 con1:0.00000 con2:0.00000 recon1:0.00192 recon2:0.00211
+Training Epoch 73/1000 Loss:0.00470 con1:0.00000 con2:0.00000 recon1:0.00237 recon2:0.00234
+Validation...
+	Batch 10/17 Loss:0.00930 con1:0.00000 con2: 0.00000 recon1:0.00489 recon2:0.00441
+Validation Epoch 73/1000 Loss:0.00509 con1:0.00000 con2:0.00000 recon1:0.00252 recon2:0.00257
+Training...
+	Batch 10/122 Loss:0.00471 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00243
+	Batch 20/122 Loss:0.00677 con1:0.00000 con2:0.00000 recon1:0.00322 recon2:0.00355
+	Batch 30/122 Loss:0.00559 con1:0.00000 con2:0.00000 recon1:0.00221 recon2:0.00339
+	Batch 40/122 Loss:0.00645 con1:0.00000 con2:0.00000 recon1:0.00376 recon2:0.00269
+	Batch 50/122 Loss:0.00383 con1:0.00000 con2:0.00000 recon1:0.00202 recon2:0.00181
+	Batch 60/122 Loss:0.00466 con1:0.00000 con2:0.00000 recon1:0.00224 recon2:0.00242
+	Batch 70/122 Loss:0.00521 con1:0.00000 con2:0.00000 recon1:0.00258 recon2:0.00263
+	Batch 80/122 Loss:0.00442 con1:0.00000 con2:0.00000 recon1:0.00178 recon2:0.00264
+	Batch 90/122 Loss:0.00437 con1:0.00000 con2:0.00000 recon1:0.00195 recon2:0.00242
+	Batch 100/122 Loss:0.00614 con1:0.00000 con2:0.00000 recon1:0.00257 recon2:0.00357
+	Batch 110/122 Loss:0.00523 con1:0.00000 con2:0.00000 recon1:0.00269 recon2:0.00254
+	Batch 120/122 Loss:0.00380 con1:0.00000 con2:0.00000 recon1:0.00190 recon2:0.00189
+Training Epoch 74/1000 Loss:0.00470 con1:0.00000 con2:0.00000 recon1:0.00238 recon2:0.00232
+Validation...
+	Batch 10/17 Loss:0.00921 con1:0.00000 con2: 0.00000 recon1:0.00485 recon2:0.00436
+Validation Epoch 74/1000 Loss:0.00507 con1:0.00000 con2:0.00000 recon1:0.00251 recon2:0.00256
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00333 con1:0.00000 con2:0.00000 recon1:0.00169 recon2:0.00164
+	Batch 20/122 Loss:0.00493 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00266
+	Batch 30/122 Loss:0.00281 con1:0.00000 con2:0.00000 recon1:0.00135 recon2:0.00146
+	Batch 40/122 Loss:0.00428 con1:0.00000 con2:0.00000 recon1:0.00217 recon2:0.00210
+	Batch 50/122 Loss:0.00471 con1:0.00000 con2:0.00000 recon1:0.00247 recon2:0.00224
+	Batch 60/122 Loss:0.00364 con1:0.00000 con2:0.00000 recon1:0.00190 recon2:0.00174
+	Batch 70/122 Loss:0.00416 con1:0.00000 con2:0.00000 recon1:0.00209 recon2:0.00207
+	Batch 80/122 Loss:0.00435 con1:0.00000 con2:0.00000 recon1:0.00239 recon2:0.00196
+	Batch 90/122 Loss:0.00631 con1:0.00000 con2:0.00000 recon1:0.00293 recon2:0.00338
+	Batch 100/122 Loss:0.00325 con1:0.00000 con2:0.00000 recon1:0.00167 recon2:0.00158
+	Batch 110/122 Loss:0.00376 con1:0.00000 con2:0.00000 recon1:0.00213 recon2:0.00163
+	Batch 120/122 Loss:0.00539 con1:0.00000 con2:0.00000 recon1:0.00263 recon2:0.00276
+Training Epoch 75/1000 Loss:0.00455 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00226
+Validation...
+	Batch 10/17 Loss:0.00932 con1:0.00000 con2: 0.00000 recon1:0.00491 recon2:0.00441
+Validation Epoch 75/1000 Loss:0.00508 con1:0.00000 con2:0.00000 recon1:0.00251 recon2:0.00257
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00496 con1:0.00000 con2:0.00000 recon1:0.00262 recon2:0.00234
+	Batch 20/122 Loss:0.00386 con1:0.00000 con2:0.00000 recon1:0.00195 recon2:0.00191
+	Batch 30/122 Loss:0.00483 con1:0.00000 con2:0.00000 recon1:0.00254 recon2:0.00229
+	Batch 40/122 Loss:0.00407 con1:0.00000 con2:0.00000 recon1:0.00222 recon2:0.00185
+	Batch 50/122 Loss:0.00503 con1:0.00000 con2:0.00000 recon1:0.00246 recon2:0.00257
+	Batch 60/122 Loss:0.00549 con1:0.00000 con2:0.00000 recon1:0.00239 recon2:0.00310
+	Batch 70/122 Loss:0.00405 con1:0.00000 con2:0.00000 recon1:0.00202 recon2:0.00203
+	Batch 80/122 Loss:0.00403 con1:0.00000 con2:0.00000 recon1:0.00147 recon2:0.00256
+	Batch 90/122 Loss:0.00381 con1:0.00000 con2:0.00000 recon1:0.00192 recon2:0.00189
+	Batch 100/122 Loss:0.00547 con1:0.00000 con2:0.00000 recon1:0.00320 recon2:0.00227
+	Batch 110/122 Loss:0.00353 con1:0.00000 con2:0.00000 recon1:0.00177 recon2:0.00176
+	Batch 120/122 Loss:0.00537 con1:0.00000 con2:0.00000 recon1:0.00207 recon2:0.00330
+Training Epoch 76/1000 Loss:0.00473 con1:0.00000 con2:0.00000 recon1:0.00228 recon2:0.00245
+Validation...
+	Batch 10/17 Loss:0.00993 con1:0.00000 con2: 0.00000 recon1:0.00518 recon2:0.00475
+Validation Epoch 76/1000 Loss:0.00523 con1:0.00000 con2:0.00000 recon1:0.00259 recon2:0.00264
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00336 con1:0.00000 con2:0.00000 recon1:0.00174 recon2:0.00162
+	Batch 20/122 Loss:0.00381 con1:0.00000 con2:0.00000 recon1:0.00197 recon2:0.00184
+	Batch 30/122 Loss:0.00506 con1:0.00000 con2:0.00000 recon1:0.00212 recon2:0.00294
+	Batch 40/122 Loss:0.00403 con1:0.00000 con2:0.00000 recon1:0.00200 recon2:0.00202
+	Batch 50/122 Loss:0.00654 con1:0.00000 con2:0.00000 recon1:0.00223 recon2:0.00431
+	Batch 60/122 Loss:0.00336 con1:0.00000 con2:0.00000 recon1:0.00183 recon2:0.00153
+	Batch 70/122 Loss:0.00390 con1:0.00000 con2:0.00000 recon1:0.00175 recon2:0.00215
+	Batch 80/122 Loss:0.00638 con1:0.00000 con2:0.00000 recon1:0.00251 recon2:0.00387
+	Batch 90/122 Loss:0.00417 con1:0.00000 con2:0.00000 recon1:0.00174 recon2:0.00243
+	Batch 100/122 Loss:0.00496 con1:0.00000 con2:0.00000 recon1:0.00323 recon2:0.00174
+	Batch 110/122 Loss:0.00371 con1:0.00000 con2:0.00000 recon1:0.00200 recon2:0.00171
+	Batch 120/122 Loss:0.00438 con1:0.00000 con2:0.00000 recon1:0.00187 recon2:0.00251
+Training Epoch 77/1000 Loss:0.00463 con1:0.00000 con2:0.00000 recon1:0.00234 recon2:0.00229
+Validation...
+	Batch 10/17 Loss:0.00934 con1:0.00000 con2: 0.00000 recon1:0.00491 recon2:0.00443
+Validation Epoch 77/1000 Loss:0.00509 con1:0.00000 con2:0.00000 recon1:0.00251 recon2:0.00258
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00283 con1:0.00000 con2:0.00000 recon1:0.00144 recon2:0.00139
+	Batch 20/122 Loss:0.00463 con1:0.00000 con2:0.00000 recon1:0.00269 recon2:0.00194
+	Batch 30/122 Loss:0.00425 con1:0.00000 con2:0.00000 recon1:0.00199 recon2:0.00225
+	Batch 40/122 Loss:0.00708 con1:0.00000 con2:0.00000 recon1:0.00348 recon2:0.00360
+	Batch 50/122 Loss:0.00479 con1:0.00000 con2:0.00000 recon1:0.00229 recon2:0.00250
+	Batch 60/122 Loss:0.00443 con1:0.00000 con2:0.00000 recon1:0.00236 recon2:0.00206
+	Batch 70/122 Loss:0.00441 con1:0.00000 con2:0.00000 recon1:0.00246 recon2:0.00196
+	Batch 80/122 Loss:0.00371 con1:0.00000 con2:0.00000 recon1:0.00188 recon2:0.00182
+	Batch 90/122 Loss:0.00463 con1:0.00000 con2:0.00000 recon1:0.00261 recon2:0.00202
+	Batch 100/122 Loss:0.00388 con1:0.00000 con2:0.00000 recon1:0.00194 recon2:0.00195
+	Batch 110/122 Loss:0.00296 con1:0.00000 con2:0.00000 recon1:0.00154 recon2:0.00142
+	Batch 120/122 Loss:0.00607 con1:0.00000 con2:0.00000 recon1:0.00300 recon2:0.00307
+Training Epoch 78/1000 Loss:0.00437 con1:0.00000 con2:0.00000 recon1:0.00220 recon2:0.00217
+Validation...
+	Batch 10/17 Loss:0.00955 con1:0.00000 con2: 0.00000 recon1:0.00501 recon2:0.00454
+Validation Epoch 78/1000 Loss:0.00518 con1:0.00000 con2:0.00000 recon1:0.00256 recon2:0.00262
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00429 con1:0.00000 con2:0.00000 recon1:0.00204 recon2:0.00225
+	Batch 20/122 Loss:0.00352 con1:0.00000 con2:0.00000 recon1:0.00180 recon2:0.00171
+	Batch 30/122 Loss:0.00380 con1:0.00000 con2:0.00000 recon1:0.00222 recon2:0.00158
+	Batch 40/122 Loss:0.00494 con1:0.00000 con2:0.00000 recon1:0.00243 recon2:0.00251
+	Batch 50/122 Loss:0.00600 con1:0.00000 con2:0.00000 recon1:0.00242 recon2:0.00358
+	Batch 60/122 Loss:0.00358 con1:0.00000 con2:0.00000 recon1:0.00170 recon2:0.00189
+	Batch 70/122 Loss:0.00341 con1:0.00000 con2:0.00000 recon1:0.00190 recon2:0.00151
+	Batch 80/122 Loss:0.00806 con1:0.00000 con2:0.00000 recon1:0.00230 recon2:0.00576
+	Batch 90/122 Loss:0.00420 con1:0.00000 con2:0.00000 recon1:0.00203 recon2:0.00217
+	Batch 100/122 Loss:0.00478 con1:0.00000 con2:0.00000 recon1:0.00257 recon2:0.00221
+	Batch 110/122 Loss:0.00512 con1:0.00000 con2:0.00000 recon1:0.00263 recon2:0.00249
+	Batch 120/122 Loss:0.00582 con1:0.00000 con2:0.00000 recon1:0.00269 recon2:0.00313
+Training Epoch 79/1000 Loss:0.00456 con1:0.00000 con2:0.00000 recon1:0.00223 recon2:0.00234
+Validation...
+	Batch 10/17 Loss:0.00936 con1:0.00000 con2: 0.00000 recon1:0.00491 recon2:0.00444
+Validation Epoch 79/1000 Loss:0.00504 con1:0.00000 con2:0.00000 recon1:0.00249 recon2:0.00255
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00479 con1:0.00000 con2:0.00000 recon1:0.00254 recon2:0.00225
+	Batch 20/122 Loss:0.00501 con1:0.00000 con2:0.00000 recon1:0.00262 recon2:0.00239
+	Batch 30/122 Loss:0.00409 con1:0.00000 con2:0.00000 recon1:0.00162 recon2:0.00247
+	Batch 40/122 Loss:0.00302 con1:0.00000 con2:0.00000 recon1:0.00151 recon2:0.00150
+	Batch 50/122 Loss:0.00511 con1:0.00000 con2:0.00000 recon1:0.00261 recon2:0.00249
+	Batch 60/122 Loss:0.00522 con1:0.00000 con2:0.00000 recon1:0.00251 recon2:0.00271
+	Batch 70/122 Loss:0.00312 con1:0.00000 con2:0.00000 recon1:0.00175 recon2:0.00137
+	Batch 80/122 Loss:0.00456 con1:0.00000 con2:0.00000 recon1:0.00234 recon2:0.00222
+	Batch 90/122 Loss:0.00277 con1:0.00000 con2:0.00000 recon1:0.00149 recon2:0.00128
+	Batch 100/122 Loss:0.00413 con1:0.00000 con2:0.00000 recon1:0.00214 recon2:0.00200
+	Batch 110/122 Loss:0.00450 con1:0.00000 con2:0.00000 recon1:0.00212 recon2:0.00238
+	Batch 120/122 Loss:0.00508 con1:0.00000 con2:0.00000 recon1:0.00238 recon2:0.00270
+Training Epoch 80/1000 Loss:0.00456 con1:0.00000 con2:0.00000 recon1:0.00231 recon2:0.00225
+Validation...
+	Batch 10/17 Loss:0.00910 con1:0.00000 con2: 0.00000 recon1:0.00478 recon2:0.00432
+Validation Epoch 80/1000 Loss:0.00499 con1:0.00000 con2:0.00000 recon1:0.00246 recon2:0.00253
+Training...
+151125_mafia vga_10_08 /home/c2-2/yogesh/datasets/panoptic/rgb_data/151125_mafia/calibration_151125_mafia.pkl
+	Batch 10/122 Loss:0.00384 con1:0.00000 con2:0.00000 recon1:0.00201 recon2:0.00184
+	Batch 20/122 Loss:0.00546 con1:0.00000 con2:0.00000 recon1:0.00357 recon2:0.00189
+	Batch 30/122 Loss:0.00318 con1:0.00000 con2:0.00000 recon1:0.00164 recon2:0.00155
+	Batch 40/122 Loss:0.00460 con1:0.00000 con2:0.00000 recon1:0.00231 recon2:0.00229
+	Batch 50/122 Loss:0.00378 con1:0.00000 con2:0.00000 recon1:0.00184 recon2:0.00194
+	Batch 60/122 Loss:0.00610 con1:0.00000 con2:0.00000 recon1:0.00284 recon2:0.00327
+	Batch 70/122 Loss:0.00415 con1:0.00000 con2:0.00000 recon1:0.00218 recon2:0.00196
+	Batch 80/122 Loss:0.00388 con1:0.00000 con2:0.00000 recon1:0.00213 recon2:0.00175
+	Batch 90/122 Loss:0.00473 con1:0.00000 con2:0.00000 recon1:0.00190 recon2:0.00283
+	Batch 100/122 Loss:0.00327 con1:0.00000 con2:0.00000 recon1:0.00163 recon2:0.00164
+	Batch 110/122 Loss:0.00313 con1:0.00000 con2:0.00000 recon1:0.00169 recon2:0.00144
+	Batch 120/122 Loss:0.00551 con1:0.00000 con2:0.00000 recon1:0.00322 recon2:0.00229
+Training Epoch 81/1000 Loss:0.00446 con1:0.00000 con2:0.00000 recon1:0.00223 recon2:0.00224
+Validation...
+	Batch 10/17 Loss:0.00912 con1:0.00000 con2: 0.00000 recon1:0.00482 recon2:0.00431
+Validation Epoch 81/1000 Loss:0.00504 con1:0.00000 con2:0.00000 recon1:0.00248 recon2:0.00256
+Training...
+	Batch 10/122 Loss:0.00466 con1:0.00000 con2:0.00000 recon1:0.00243 recon2:0.00224
+	Batch 20/122 Loss:0.00401 con1:0.00000 con2:0.00000 recon1:0.00210 recon2:0.00191
+	Batch 30/122 Loss:0.00421 con1:0.00000 con2:0.00000 recon1:0.00244 recon2:0.00177
+	Batch 40/122 Loss:0.00399 con1:0.00000 con2:0.00000 recon1:0.00176 recon2:0.00222
+	Batch 50/122 Loss:0.00380 con1:0.00000 con2:0.00000 recon1:0.00183 recon2:0.00196
+	Batch 60/122 Loss:0.00382 con1:0.00000 con2:0.00000 recon1:0.00212 recon2:0.00170
+	Batch 70/122 Loss:0.00359 con1:0.00000 con2:0.00000 recon1:0.00201 recon2:0.00158
+	Batch 80/122 Loss:0.00613 con1:0.00000 con2:0.00000 recon1:0.00347 recon2:0.00266
+	Batch 90/122 Loss:0.00367 con1:0.00000 con2:0.00000 recon1:0.00151 recon2:0.00215
+	Batch 100/122 Loss:0.00380 con1:0.00000 con2:0.00000 recon1:0.00215 recon2:0.00165
+	Batch 110/122 Loss:0.00381 con1:0.00000 con2:0.00000 recon1:0.00157 recon2:0.00224
+	Batch 120/122 Loss:0.00587 con1:0.00000 con2:0.00000 recon1:0.00295 recon2:0.00292
+Training Epoch 82/1000 Loss:0.00426 con1:0.00000 con2:0.00000 recon1:0.00209 recon2:0.00216
+Validation...
+	Batch 10/17 Loss:0.00934 con1:0.00000 con2: 0.00000 recon1:0.00492 recon2:0.00442
+Validation Epoch 82/1000 Loss:0.00509 con1:0.00000 con2:0.00000 recon1:0.00250 recon2:0.00258
+Training...

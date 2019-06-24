@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "testModel.py", line 175, in <module>
+    testset = NTUDataset(root_dir=data_root_dir, data_file=test_split, param_file=param_file,
+NameError: name 'param_file' is not defined

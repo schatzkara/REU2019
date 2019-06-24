@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "testModel.py", line 164, in <module>
+    model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+  File "/home/yogesh/kara/REU2019/phase2/network.py", line 67, in __init__
+    self.vgg = vgg16(pretrained=True, weights_path=vgg_weights_path)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 167, in vgg16
+    return _vgg('vgg16', 'D', False, pretrained=pretrained, progress=progress, weights_path=weights_path, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 117, in _vgg
+    pretrained=pretrained, weights_path=weights_path, **kwargs)
+  File "/home/yogesh/kara/REU2019/phase2/modifiedVGG.py", line 47, in __init__
+    self.load_state_dict(torch.load(weights_path))
+  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/modules/module.py", line 777, in load_state_dict
+    self.__class__.__name__, "\n\t".join(error_msgs)))
+RuntimeError: Error(s) in loading state_dict for VGG:
+	Unexpected key(s) in state_dict: "features.17.weight", "features.17.bias", "features.19.weight", "features.19.bias", "features.21.weight", "features.21.bias", "features.24.weight", "features.24.bias", "features.26.weight", "features.26.bias", "features.28.weight", "features.28.bias". 
