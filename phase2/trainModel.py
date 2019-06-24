@@ -38,7 +38,7 @@ def ntu_config():
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
     weight_file = './weights/net2_ntu2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                   PRECROP, NUM_EPOCHS, LR)
+                                                                    PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 

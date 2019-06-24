@@ -72,7 +72,7 @@ class FullNetwork(nn.Module):
         self.exp = Expander(vp_value_count=self.vp_value_count, out_frames=self.out_frames, out_size=28)
         self.trans = Transformer(in_channels=32 + self.vp_value_count)
 
-        self.gen = Generator(in_channels=32 + 32, out_frames=self.out_frames)
+        self.gen = Generator(in_channels=32, out_frames=self.out_frames)
         # print('%s Model Successfully Built \n' % self.net_name)
 
     def forward(self, vp_diff, vid1, vid2, img1, img2):
@@ -96,7 +96,8 @@ class FullNetwork(nn.Module):
         """
         app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # bsz,32,28,28
 
-        # app_v1, app_v2 = self.expand_app_encoding(app=app_v1), self.expand_app_encoding(app=app_v2)  # bsz,32,8/16,28,28
+        # app_v1, app_v2 =
+        # self.expand_app_encoding(app=app_v1), self.expand_app_encoding(app=app_v2)  # bsz,32,8/16,28,28
         app_v1, app_v2 = torch.unsqueeze(app_v1, dim=2), torch.unsqueeze(app_v2, dim=2)  # dim=frames
 
         rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,256,4,7,7
@@ -113,7 +114,7 @@ class FullNetwork(nn.Module):
         kp_v1_est, kp_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # bsz,32,8/16,28,28
 
         # appearance encoding + key points
-        gen_input1, gen_input2 = torch.cat([app_v1, kp_v2], dim=1), torch.cat([app_v2, kp_v1], dim=1)  # dim=channels
+        gen_input1, gen_input2 = torch.cat([app_v1, kp_v2], dim=2), torch.cat([app_v2, kp_v1], dim=2)  # dim=frames
 
         # these are the videos that get returned
         output_v1, output_v2 = self.gen(gen_input1), self.gen(gen_input2)  # bsz,3,8/16,112,112

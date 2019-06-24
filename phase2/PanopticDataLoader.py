@@ -13,6 +13,7 @@ class PanopticDataset(Dataset):
     def __init__(self, root_dir, data_file, resize_height, resize_width, clip_len,
                  height=128, width=128, frame_count=125,
                  skip_len=1, num_views=None, random_views=False, random_all=False,
+                 close_views=False, view_dist_max=None,
                  precrop=False):
         """
         Initializes the Panoptic Dataset object used for extracting samples to run through the network.
@@ -51,6 +52,8 @@ class PanopticDataset(Dataset):
         # if random_views:
         #     self.get_random_views(self.num_views)
         self.random_all = random_all
+        self.close_views = close_views
+        self.view_dist_max = view_dist_max
         self.precrop = precrop
 
     def __len__(self):
@@ -121,7 +124,8 @@ class PanopticDataset(Dataset):
 
         path_exists = False
         cal_info_avail = False
-        while not path_exists or not cal_info_avail:
+        close_enough = True
+        while not path_exists or not cal_info_avail or not close_enough:
             if self.random_all:
                 self.get_random_view(num_options=num_cams, view_num=view_num)
             # print(self.view2idx)
@@ -134,12 +138,36 @@ class PanopticDataset(Dataset):
             viewpath = self.get_vid_path(path_head=sample_path_head, path_tail=sample_path_tail, view_num=view_num)
             path_exists = os.path.exists(viewpath)
             # print(viewpath)
+            if not path_exists:
+                continue
 
             if view_num == 1:
                 view_id = self.view1
             elif view_num == 2:
                 view_id = self.view2
             cal_info_avail = self.check_cal_info(seq_id=sample_name, view_id=view_id)
+            if not cal_info_avail:
+                continue
+
+            if self.close_views:
+                if view_num == 1:
+                    close_enough = True
+                if view_num == 2:
+                    pos1 = self.get_view(seq_id=sample_name, view_id=self.view1, x_pos=0, y_pos=0)
+                    pos2 = self.get_view(seq_id=sample_name, view_id=self.view2, x_pos=0, y_pos=0)
+                    if PanopticDataset.euclidean_distance(pos1, pos2) > self.view_dist_max:
+                        close_enough = False
+                    else:
+                        close_enough = True
+
+    @staticmethod
+    def euclidean_distance(x, y):
+        x, y = np.array(x), np.array(y)
+        diff = x - y
+        square = np.multiply(diff, diff)
+        sum = np.sum(square)
+        dist = np.sqrt(sum)
+        return dist
 
     def check_cal_info(self, seq_id, view_id):
         cal_file = os.path.join(self.root_dir, seq_id, 'calibration_' + seq_id + '.pkl')
@@ -346,7 +374,6 @@ class PanopticDataset(Dataset):
         # return np.array([x, y, z, c_x, c_y, f_x, f_y, dc[0], dc[1], dc[2] * 100, dc[3] * 100, dc[4], pan, van])
         # print('x{}y{}z{}pan{}van{}'.format(x, y, z, pan, van))
         return np.array([x, y, z, pan, van])
-
 
 
 '''class PanopticDataset(Dataset):

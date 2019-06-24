@@ -6,10 +6,9 @@ import _pickle as pickle
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
-data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
-# 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
-sample = '150821_dance5'
+# data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
+data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
+sample = '150303_celloScene1'  # '150821_dance5'
 width = height = 128
 resize_width = resize_height = 112
 
@@ -96,14 +95,32 @@ def plot_cameras(cam_positions):
     # print(ys)
     # print(zs)
 
+    pos1 = None
+    pos2 = None
+
     fig = plt.figure(1, (16, 16))
     ax = fig.add_subplot(111, projection='3d')
     ax.scatter(xs, ys, zs)
     for cam in cam_positions:
         x, y, z = cam_positions[cam]
         id = cam[4:]
+        if id == '10_06':
+            pos1 = [x, y, z]
+        if id == '11_18':
+            pos2 = [x, y, z]
         ax.text(x, y, z, id, size=10, zorder=1, color='k')
+
+    print(euclidean_distance(np.array(pos1), np.array(pos2)))
+
     plt.show()
+
+
+def euclidean_distance(x, y):
+    diff = x - y
+    square = np.multiply(diff, diff)
+    sum = np.sum(square)
+    dist = np.sqrt(sum)
+    return dist
 
 
 if __name__ == '__main__':

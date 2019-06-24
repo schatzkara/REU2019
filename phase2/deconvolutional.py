@@ -48,14 +48,14 @@ class Deconv(nn.Module):
         """
         Function to compute a single forward pass through the network, according to the architecture.
         :param x: (tensor) The input tensor from which to generate the keypoints.
-                   Must be a tensor of shape: (bsz, 256, 16, 7, 7) for this application.
+                   Must be a tensor of shape: (bsz, 256, 4, 7, 7) for this application.
         :return: A tensor representing the keypoints of the input video.
                  Shape of output is: (bsz, 32, 8/16, 28, 28) for this application.
         """
         x = self.conv3d_1a(x)
         x = self.conv3d_1b(x)
 
-        x = f.interpolate(x, scale_factor=2, mode='nearest')
+        x = f.interpolate(x, size=(int(self.out_frames/2), 14, 14), mode='nearest')
         x = self.conv3d_2a(x)
         x = self.conv3d_2b(x)
 
