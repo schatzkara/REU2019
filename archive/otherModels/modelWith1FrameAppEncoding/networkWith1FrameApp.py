@@ -121,19 +121,19 @@ class FullNetwork(nn.Module):
 
         return output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est
 
-    def expand_app_encoding(self, app):
-        """
-        Function to repeat the appearance encoding along the depth. Makes the depth equivalent to the input video depth.
-        :param app: (tensor) The appearance encoding to expand.
-        :return: The expanded appearance encoding.
-        """
-        bsz, channels, height, width = app.size()
-        buffer = torch.zeros(bsz, channels, self.out_frames, height, width)
-        for frame in range(self.out_frames):
-            buffer[:, :, frame, :, :] = app
-        buffer = buffer.to(device)
-
-        return buffer
+    # def expand_app_encoding(self, app):
+    #     """
+    #     Function to repeat the appearance encoding along the depth. Makes the depth equivalent to the input video depth.
+    #     :param app: (tensor) The appearance encoding to expand.
+    #     :return: The expanded appearance encoding.
+    #     """
+    #     bsz, channels, height, width = app.size()
+    #     buffer = torch.zeros(bsz, channels, self.out_frames, height, width)
+    #     for frame in range(self.out_frames):
+    #         buffer[:, :, frame, :, :] = app
+    #     buffer = buffer.to(device)
+    #
+    #     return buffer
 
 
 # if __name__ == "__main__":

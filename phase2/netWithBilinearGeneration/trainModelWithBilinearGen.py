@@ -5,12 +5,12 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from network import FullNetwork
+from networkWithBilinearGen import FullNetwork
 from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
-DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -37,7 +37,7 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net2_ntu2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+    weight_file = './weights/netbi_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                     PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
@@ -49,7 +49,7 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net2_pan2_closeviews_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+    weight_file = './weights/netbi_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                     PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, weight_file
 
@@ -229,12 +229,11 @@ def print_params():
     :return: None
     """
     print('Parameters for training on {}'.format(DATASET))
-    print('With close views')
+    print('With Bilinear Generation')
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
     print('Precrop: {}'.format(PRECROP))
-    print('Close Views: {}'.format(VIEW_DIST_MAX))
     print('Total Epochs: {}'.format(NUM_EPOCHS))
     print('Learning Rate: {}'.format(LR))
 
@@ -247,8 +246,6 @@ if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     RANDOM_ALL = True
     PRECROP = True if DATASET.lower() == 'ntu' else False
-    CLOSE_VIEWS = False if DATASET.lower() == 'ntu' else True
-    VIEW_DIST_MAX = None if DATASET.lower() == 'ntu' else 2
 
     if DATASET.lower() == 'ntu':
         data_root_dir, train_split, test_split, param_file, weight_file = ntu_config()
@@ -295,15 +292,13 @@ if __name__ == '__main__':
         trainset = PanopticDataset(root_dir=data_root_dir, data_file=train_split,
                                    resize_height=HEIGHT, resize_width=WIDTH,
                                    clip_len=FRAMES, skip_len=SKIP_LEN,
-                                   random_all=RANDOM_ALL, close_views=CLOSE_VIEWS, view_dist_max=VIEW_DIST_MAX,
-                                   precrop=PRECROP)
+                                   random_all=RANDOM_ALL, precrop=PRECROP)
         trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
 
         testset = PanopticDataset(root_dir=data_root_dir, data_file=test_split,
                                   resize_height=HEIGHT, resize_width=WIDTH,
                                   clip_len=FRAMES, skip_len=SKIP_LEN,
-                                  random_all=RANDOM_ALL, close_views=CLOSE_VIEWS, view_dist_max=VIEW_DIST_MAX,
-                                  precrop=PRECROP)
+                                  random_all=RANDOM_ALL, precrop=PRECROP)
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:

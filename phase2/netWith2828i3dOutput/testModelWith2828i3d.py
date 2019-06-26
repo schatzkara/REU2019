@@ -4,16 +4,16 @@ import os
 import time
 import torch
 import torch.nn as nn
-from networkWith1FrameApp import FullNetwork
+from networkWith2828i3d import FullNetwork
 from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
-from outputVideoCoversion import convert_to_vid
+from fullOutputConversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
 DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 20
+BATCH_SIZE = 16
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
@@ -29,8 +29,8 @@ def ntu_config():
     else:
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
-    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net3_ntu2_20_16_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/ntu_net3_2epochs'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net6_ntu_16_16_2_True_1000_0.0001.pt'
+    output_video_dir = './videos/ntu_2828i3d_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
@@ -41,8 +41,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net3_pan2_20_16_2_False_1000_0.0001.pt'
-    output_video_dir = './videos/pan_net3'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net6_pan_16_16_2_False_1000_0.0001.pt'
+    output_video_dir = './videos/pan_2828i3d_/'
 
     return data_root_dir, test_split, weights_path, output_video_dir
 
@@ -72,10 +72,10 @@ def test():
                                                                                  img1=img1, img2=img2)
 
             # save videos
-            convert_to_vid(vid1, output_video_dir, batch_idx + 1, 1, True)
-            convert_to_vid(vid2, output_video_dir, batch_idx + 1, 2, True)
-            convert_to_vid(output_vid1, output_video_dir, batch_idx + 1, 1, False)
-            convert_to_vid(output_vid2, output_video_dir, batch_idx + 1, 2, False)
+            convert_to_vid(vid1, output_video_dir, batch_idx + 1, 1, 'input')
+            convert_to_vid(vid2, output_video_dir, batch_idx + 1, 2, 'input')
+            convert_to_vid(output_vid1, output_video_dir, batch_idx + 1, 1, 'output')
+            convert_to_vid(output_vid2, output_video_dir, batch_idx + 1, 2, 'output')
 
             # loss
             con1_loss = criterion(kp_v1, kp_v1_est)
@@ -143,7 +143,7 @@ def print_params():
     :return: None
     """
     print('Parameters for testing on {}:'.format(DATASET))
-    print('With 1 Frame App Encoding')
+    print('With 28x28 I3D Output')
     print('Batch size: {}'.format(BATCH_SIZE))
     print('Tensor size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
@@ -197,7 +197,8 @@ if __name__ == '__main__':
         testset = PanopticDataset(root_dir=data_root_dir, data_file=test_split,
                                   resize_height=HEIGHT, resize_width=WIDTH,
                                   clip_len=FRAMES, skip_len=SKIP_LEN,
-                                  random_all=RANDOM_ALL, precrop=PRECROP)
+                                  random_all=RANDOM_ALL,
+                                  precrop=PRECROP)
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:

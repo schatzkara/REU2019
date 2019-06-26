@@ -6,7 +6,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import numpy as np
-# from torchsummary import summary
+from torchsummary import summary
 
 
 class MaxPool3dSamePadding(nn.MaxPool3d):
@@ -440,10 +440,10 @@ def load_layer_weights(weights_path):
     return new_state_dict
 
 
-# if __name__ == "__main__":
-#     print_summary = True
-#
-#     i3d = InceptionI3d(final_endpoint='Mixed_5c_small', in_frames=16)
-#
-#     if print_summary:
-#         summary(i3d, input_size=(3, 16, 112, 112))
+if __name__ == "__main__":
+    print_summary = True
+
+    i3d = InceptionI3d(final_endpoint='Mixed_5c_small', in_frames=16)
+
+    if print_summary:
+        summary(i3d, input_size=(3, 16, 112, 112))

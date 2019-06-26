@@ -4,7 +4,7 @@ import os
 import time
 import torch
 import torch.nn as nn
-from network import FullNetwork
+from networkWithBilinearGen import FullNetwork
 from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 from fullOutputConversion import convert_to_vid
@@ -20,7 +20,6 @@ SKIP_LEN = 2
 HEIGHT = 112
 WIDTH = 112
 
-PRINT_KP = True
 
 def ntu_config():
     # NTU directory information
@@ -30,8 +29,8 @@ def ntu_config():
     else:
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
-    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net2_ntu2_20_16_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/ntu_104epochs_full'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/netbi_ntu_20_16_2_True_1000_0.0001.pt'
+    output_video_dir = './videos/ntu_bi_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
@@ -42,8 +41,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
-    output_video_dir = './videos/pan_150epochs_full'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/netbi_pan_20_16_2_False_1000_0.0001.pt'
+    output_video_dir = './videos/pan_bi_'
 
     return data_root_dir, test_split, weights_path, output_video_dir
 
@@ -77,11 +76,6 @@ def test():
             convert_to_vid(vid2, output_video_dir, batch_idx + 1, 2, 'input')
             convert_to_vid(output_vid1, output_video_dir, batch_idx + 1, 1, 'output')
             convert_to_vid(output_vid2, output_video_dir, batch_idx + 1, 2, 'output')
-            if PRINT_KP:
-                convert_to_vid(kp_v1, output_video_dir, batch_idx + 1, 1, 'kp')
-                convert_to_vid(kp_v2, output_video_dir, batch_idx + 1, 2, 'kp')
-                convert_to_vid(kp_v1_est, output_video_dir, batch_idx + 1, 1, 'estkp')
-                convert_to_vid(kp_v2_est, output_video_dir, batch_idx + 1, 2, 'estkp')
 
             # loss
             con1_loss = criterion(kp_v1, kp_v1_est)

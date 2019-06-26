@@ -5,15 +5,15 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from networkWith16Framei3d import FullNetwork
+from networkUsingTransformed import FullNetwork
 from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
-DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 16
+BATCH_SIZE = 20
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
@@ -37,8 +37,8 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net4_ntu2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                    PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/nettrans_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                       PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
@@ -49,8 +49,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net4_pan2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                    PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/nettrans_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                       PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, weight_file
 
 
@@ -229,7 +229,7 @@ def print_params():
     :return: None
     """
     print('Parameters for training on {}'.format(DATASET))
-    print('With 8 Frame I3D Output')
+    print('Using Transformed KP as Generator Input')
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
