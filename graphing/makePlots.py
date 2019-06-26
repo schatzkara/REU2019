@@ -3,13 +3,13 @@ from graphing.getData import get_parameters, get_epoch_metrics
 
 model_phase = 2  # 1 or 2
 
-job_numbers = [61861]
+job_numbers = [62157]
 
 root_dir = './logstograph/'
 file_name_start, file_name_end = 'output_', '.out'
-starting_epoch = 0
+starting_epoch = 10
 skip_epoch = 1
-ending_epoch = 154
+ending_epoch = 200
 if model_phase == 1:
     metrics = ['loss', 'con', 'recon1', 'recon2']
 elif model_phase == 2:
@@ -56,6 +56,7 @@ def plot_multiple_files_together(file1, file2, *args):
             print(file)
             param_dict = get_parameters(file)
             print(param_dict)
+            print('Num Epochs Run: {}'.format(len(training_metrics[metric])))
             total_epochs = param_dict['total epochs']
             training_metrics, val_metrics = get_epoch_metrics(file, model_phase)
             all_y_data = training_metrics[metric][starting_epoch:ending_epoch]
@@ -92,6 +93,7 @@ def plot_one_file(file_path):
     print(param_dict)
     total_epochs = param_dict['total epochs']
     training_metrics, val_metrics = get_epoch_metrics(file_path, model_phase)
+    print('Num Epochs Run: {}'.format(len(training_metrics['loss'])))
 
     for metric in metrics:
         all_y_data = training_metrics[metric][starting_epoch:ending_epoch]

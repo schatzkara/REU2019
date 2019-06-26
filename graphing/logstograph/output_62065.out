@@ -1,0 +1,1590 @@
+Parameters for training on NTU
+Batch Size: 20
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Total Epochs: 1000
+Learning Rate: 0.0001
+FullNetwork(
+  (vgg): VGG(
+    (features): Sequential(
+      (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace)
+      (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace)
+      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (6): ReLU(inplace)
+      (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (8): ReLU(inplace)
+      (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (11): ReLU(inplace)
+      (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (13): ReLU(inplace)
+      (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    )
+    (avgpool): AdaptiveAvgPool2d(output_size=(7, 7))
+    (final_layer): Conv2d(256, 32, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+    (final_relu): ReLU(inplace)
+  )
+  (i3d): InceptionI3d(
+    (Conv3d_1a_7x7): Unit3D(
+      (conv3d): Conv3d(3, 64, kernel_size=[7, 7, 7], stride=(2, 2, 2), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_2a_3x3): MaxPool3dSamePadding(kernel_size=[1, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Conv3d_2b_1x1): Unit3D(
+      (conv3d): Conv3d(64, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (Conv3d_2c_3x3): Unit3D(
+      (conv3d): Conv3d(64, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_3a_3x3): MaxPool3dSamePadding(kernel_size=[2, 3, 3], stride=(2, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_3b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(192, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(192, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(192, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 32, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(192, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_3c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(256, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 96, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(256, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_4a_3x3): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_4b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(480, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(480, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 208, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(208, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(480, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 48, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(480, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(112, 224, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(224, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4d): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 256, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4e): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 144, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(144, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(144, 288, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(288, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4f): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(528, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(528, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(528, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(528, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_5a_1x1): MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_5b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (final_layer): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 48, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(48, 96, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 12, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(12, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(12, 32, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+  )
+  (deconv): Deconv(
+    (conv3d_1a): Conv3d(256, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(256, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_2a): Conv3d(128, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_2b): Conv3d(64, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  )
+  (exp): Expander(
+    (conv3d_1a): Conv3d(1, 4, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(4, 1, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  )
+  (trans): Transformer(
+    (conv3d_1a): Conv3d(33, 33, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(33, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1c): Conv3d(32, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  )
+  (gen): Generator(
+    (conv3d_1a): Conv3d(64, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(256, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_2a): Conv3d(128, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_2b): Conv3d(64, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_3a): Conv3d(32, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_3b): Conv3d(16, 3, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  )
+)
+Training...
+	Batch 10/672 Loss:0.14179 con1:0.00059 con2:0.00058 recon1:0.06963 recon2:0.07099
+	Batch 20/672 Loss:0.09313 con1:0.00032 con2:0.00032 recon1:0.04579 recon2:0.04670
+	Batch 30/672 Loss:0.06508 con1:0.00024 con2:0.00024 recon1:0.03159 recon2:0.03300
+	Batch 40/672 Loss:0.04773 con1:0.00019 con2:0.00018 recon1:0.02400 recon2:0.02336
+	Batch 50/672 Loss:0.04332 con1:0.00013 con2:0.00014 recon1:0.02175 recon2:0.02131
+	Batch 60/672 Loss:0.03712 con1:0.00010 con2:0.00010 recon1:0.01828 recon2:0.01864
+	Batch 70/672 Loss:0.03295 con1:0.00009 con2:0.00008 recon1:0.01628 recon2:0.01649
+	Batch 80/672 Loss:0.02880 con1:0.00008 con2:0.00007 recon1:0.01433 recon2:0.01432
+	Batch 90/672 Loss:0.02811 con1:0.00007 con2:0.00007 recon1:0.01362 recon2:0.01435
+	Batch 100/672 Loss:0.02926 con1:0.00006 con2:0.00006 recon1:0.01463 recon2:0.01450
+	Batch 110/672 Loss:0.02762 con1:0.00006 con2:0.00006 recon1:0.01367 recon2:0.01383
+	Batch 120/672 Loss:0.02637 con1:0.00005 con2:0.00005 recon1:0.01327 recon2:0.01300
+	Batch 130/672 Loss:0.03065 con1:0.00005 con2:0.00005 recon1:0.01480 recon2:0.01576
+	Batch 140/672 Loss:0.02558 con1:0.00005 con2:0.00004 recon1:0.01300 recon2:0.01250
+	Batch 150/672 Loss:0.02319 con1:0.00004 con2:0.00004 recon1:0.01152 recon2:0.01160
+	Batch 160/672 Loss:0.02426 con1:0.00004 con2:0.00004 recon1:0.01196 recon2:0.01222
+	Batch 170/672 Loss:0.02915 con1:0.00004 con2:0.00004 recon1:0.01448 recon2:0.01459
+	Batch 180/672 Loss:0.02285 con1:0.00003 con2:0.00004 recon1:0.01086 recon2:0.01192
+	Batch 190/672 Loss:0.02278 con1:0.00003 con2:0.00003 recon1:0.01122 recon2:0.01150
+	Batch 200/672 Loss:0.02193 con1:0.00003 con2:0.00003 recon1:0.01086 recon2:0.01101
+	Batch 210/672 Loss:0.02263 con1:0.00003 con2:0.00003 recon1:0.01146 recon2:0.01111
+	Batch 220/672 Loss:0.02123 con1:0.00003 con2:0.00003 recon1:0.01039 recon2:0.01079
+	Batch 230/672 Loss:0.02401 con1:0.00003 con2:0.00003 recon1:0.01253 recon2:0.01142
+	Batch 240/672 Loss:0.02325 con1:0.00002 con2:0.00003 recon1:0.01202 recon2:0.01119
+	Batch 250/672 Loss:0.02092 con1:0.00003 con2:0.00003 recon1:0.00986 recon2:0.01101
+	Batch 260/672 Loss:0.02419 con1:0.00002 con2:0.00002 recon1:0.01159 recon2:0.01255
+	Batch 270/672 Loss:0.02380 con1:0.00002 con2:0.00002 recon1:0.01143 recon2:0.01233
+	Batch 280/672 Loss:0.01960 con1:0.00002 con2:0.00002 recon1:0.00950 recon2:0.01005
+	Batch 290/672 Loss:0.02059 con1:0.00002 con2:0.00002 recon1:0.01008 recon2:0.01048
+	Batch 300/672 Loss:0.02610 con1:0.00002 con2:0.00002 recon1:0.01250 recon2:0.01356
+	Batch 310/672 Loss:0.02114 con1:0.00002 con2:0.00002 recon1:0.01112 recon2:0.00998
+	Batch 320/672 Loss:0.02248 con1:0.00002 con2:0.00002 recon1:0.01155 recon2:0.01089
+	Batch 330/672 Loss:0.02090 con1:0.00002 con2:0.00002 recon1:0.01027 recon2:0.01059
+	Batch 340/672 Loss:0.02195 con1:0.00002 con2:0.00002 recon1:0.01123 recon2:0.01068
+	Batch 350/672 Loss:0.01715 con1:0.00002 con2:0.00002 recon1:0.00820 recon2:0.00891
+	Batch 360/672 Loss:0.01790 con1:0.00002 con2:0.00002 recon1:0.00867 recon2:0.00920
+	Batch 370/672 Loss:0.02043 con1:0.00002 con2:0.00002 recon1:0.01021 recon2:0.01018
+	Batch 380/672 Loss:0.02042 con1:0.00002 con2:0.00002 recon1:0.01005 recon2:0.01034
+	Batch 390/672 Loss:0.01764 con1:0.00001 con2:0.00001 recon1:0.00839 recon2:0.00922
+	Batch 400/672 Loss:0.02002 con1:0.00002 con2:0.00002 recon1:0.00972 recon2:0.01028
+	Batch 410/672 Loss:0.01698 con1:0.00002 con2:0.00002 recon1:0.00829 recon2:0.00866
+	Batch 420/672 Loss:0.01663 con1:0.00002 con2:0.00002 recon1:0.00868 recon2:0.00792
+	Batch 430/672 Loss:0.01814 con1:0.00002 con2:0.00002 recon1:0.00880 recon2:0.00931
+	Batch 440/672 Loss:0.01750 con1:0.00001 con2:0.00001 recon1:0.00862 recon2:0.00885
+	Batch 450/672 Loss:0.01936 con1:0.00001 con2:0.00001 recon1:0.01008 recon2:0.00926
+	Batch 460/672 Loss:0.02320 con1:0.00001 con2:0.00001 recon1:0.01181 recon2:0.01136
+	Batch 470/672 Loss:0.01701 con1:0.00001 con2:0.00001 recon1:0.00868 recon2:0.00830
+	Batch 480/672 Loss:0.01728 con1:0.00001 con2:0.00001 recon1:0.00875 recon2:0.00850
+	Batch 490/672 Loss:0.01619 con1:0.00001 con2:0.00001 recon1:0.00775 recon2:0.00842
+	Batch 500/672 Loss:0.01788 con1:0.00001 con2:0.00001 recon1:0.00884 recon2:0.00901
+	Batch 510/672 Loss:0.01664 con1:0.00001 con2:0.00001 recon1:0.00857 recon2:0.00804
+	Batch 520/672 Loss:0.01586 con1:0.00001 con2:0.00001 recon1:0.00801 recon2:0.00782
+	Batch 530/672 Loss:0.01629 con1:0.00001 con2:0.00001 recon1:0.00802 recon2:0.00825
+	Batch 540/672 Loss:0.01806 con1:0.00001 con2:0.00001 recon1:0.00881 recon2:0.00924
+	Batch 550/672 Loss:0.02224 con1:0.00001 con2:0.00001 recon1:0.01129 recon2:0.01093
+	Batch 560/672 Loss:0.01616 con1:0.00001 con2:0.00001 recon1:0.00771 recon2:0.00843
+	Batch 570/672 Loss:0.01693 con1:0.00001 con2:0.00001 recon1:0.00843 recon2:0.00848
+	Batch 580/672 Loss:0.01788 con1:0.00001 con2:0.00001 recon1:0.00886 recon2:0.00900
+	Batch 590/672 Loss:0.01882 con1:0.00001 con2:0.00001 recon1:0.00934 recon2:0.00945
+	Batch 600/672 Loss:0.01650 con1:0.00001 con2:0.00001 recon1:0.00813 recon2:0.00836
+	Batch 610/672 Loss:0.02128 con1:0.00001 con2:0.00001 recon1:0.01064 recon2:0.01061
+	Batch 620/672 Loss:0.01807 con1:0.00001 con2:0.00001 recon1:0.00904 recon2:0.00900
+	Batch 630/672 Loss:0.01966 con1:0.00001 con2:0.00001 recon1:0.00980 recon2:0.00984
+	Batch 640/672 Loss:0.01801 con1:0.00001 con2:0.00001 recon1:0.00891 recon2:0.00908
+	Batch 650/672 Loss:0.01792 con1:0.00001 con2:0.00001 recon1:0.00920 recon2:0.00870
+	Batch 660/672 Loss:0.01429 con1:0.00001 con2:0.00001 recon1:0.00706 recon2:0.00721
+	Batch 670/672 Loss:0.01629 con1:0.00001 con2:0.00001 recon1:0.00811 recon2:0.00815
+Training Epoch 1/1000 Loss:0.02752 con1:0.00006 con2:0.00006 recon1:0.01370 recon2:0.01371
+Validation...
+	Batch 10/276 Loss:0.01302 con1:0.00001 con2: 0.00001 recon1:0.00658 recon2:0.00642
+	Batch 20/276 Loss:0.01183 con1:0.00001 con2: 0.00001 recon1:0.00611 recon2:0.00571
+	Batch 30/276 Loss:0.01364 con1:0.00001 con2: 0.00001 recon1:0.00672 recon2:0.00690
+	Batch 40/276 Loss:0.02165 con1:0.00002 con2: 0.00002 recon1:0.01157 recon2:0.01004
+	Batch 50/276 Loss:0.01412 con1:0.00001 con2: 0.00001 recon1:0.00722 recon2:0.00688
+	Batch 60/276 Loss:0.01517 con1:0.00001 con2: 0.00001 recon1:0.00740 recon2:0.00776
+	Batch 70/276 Loss:0.01580 con1:0.00001 con2: 0.00001 recon1:0.00807 recon2:0.00771
+	Batch 80/276 Loss:0.01726 con1:0.00001 con2: 0.00001 recon1:0.00883 recon2:0.00841
+	Batch 90/276 Loss:0.01140 con1:0.00001 con2: 0.00001 recon1:0.00579 recon2:0.00559
+	Batch 100/276 Loss:0.01249 con1:0.00001 con2: 0.00001 recon1:0.00625 recon2:0.00622
+	Batch 110/276 Loss:0.01069 con1:0.00001 con2: 0.00001 recon1:0.00529 recon2:0.00538
+	Batch 120/276 Loss:0.01762 con1:0.00001 con2: 0.00001 recon1:0.00956 recon2:0.00804
+	Batch 130/276 Loss:0.01402 con1:0.00001 con2: 0.00001 recon1:0.00700 recon2:0.00700
+	Batch 140/276 Loss:0.02242 con1:0.00001 con2: 0.00001 recon1:0.01066 recon2:0.01174
+	Batch 150/276 Loss:0.01546 con1:0.00001 con2: 0.00001 recon1:0.00763 recon2:0.00781
+	Batch 160/276 Loss:0.02021 con1:0.00001 con2: 0.00001 recon1:0.00952 recon2:0.01067
+	Batch 170/276 Loss:0.01770 con1:0.00001 con2: 0.00001 recon1:0.00869 recon2:0.00899
+	Batch 180/276 Loss:0.01329 con1:0.00001 con2: 0.00001 recon1:0.00678 recon2:0.00648
+	Batch 190/276 Loss:0.01262 con1:0.00001 con2: 0.00001 recon1:0.00588 recon2:0.00672
+	Batch 200/276 Loss:0.01880 con1:0.00001 con2: 0.00001 recon1:0.01002 recon2:0.00876
+	Batch 210/276 Loss:0.02109 con1:0.00001 con2: 0.00001 recon1:0.01088 recon2:0.01019
+	Batch 220/276 Loss:0.01373 con1:0.00001 con2: 0.00001 recon1:0.00660 recon2:0.00711
+	Batch 230/276 Loss:0.04160 con1:0.00001 con2: 0.00001 recon1:0.02012 recon2:0.02145
+	Batch 240/276 Loss:0.01211 con1:0.00001 con2: 0.00001 recon1:0.00618 recon2:0.00591
+	Batch 250/276 Loss:0.01262 con1:0.00001 con2: 0.00001 recon1:0.00653 recon2:0.00607
+	Batch 260/276 Loss:0.01164 con1:0.00001 con2: 0.00001 recon1:0.00566 recon2:0.00596
+	Batch 270/276 Loss:0.01484 con1:0.00001 con2: 0.00001 recon1:0.00742 recon2:0.00740
+Validation Epoch 1/1000 Loss:0.01613 con1:0.00001 con2:0.00001 recon1:0.00805 recon2:0.00806
+Training...
+	Batch 10/672 Loss:0.01620 con1:0.00001 con2:0.00001 recon1:0.00790 recon2:0.00827
+	Batch 20/672 Loss:0.01761 con1:0.00001 con2:0.00001 recon1:0.00872 recon2:0.00886
+	Batch 30/672 Loss:0.01766 con1:0.00001 con2:0.00001 recon1:0.00812 recon2:0.00951
+	Batch 40/672 Loss:0.01543 con1:0.00001 con2:0.00001 recon1:0.00789 recon2:0.00752
+	Batch 50/672 Loss:0.01491 con1:0.00001 con2:0.00001 recon1:0.00727 recon2:0.00762
+	Batch 60/672 Loss:0.01635 con1:0.00001 con2:0.00001 recon1:0.00839 recon2:0.00794
+	Batch 70/672 Loss:0.01650 con1:0.00001 con2:0.00001 recon1:0.00834 recon2:0.00813
+	Batch 80/672 Loss:0.01466 con1:0.00001 con2:0.00001 recon1:0.00756 recon2:0.00708
+	Batch 90/672 Loss:0.01524 con1:0.00001 con2:0.00001 recon1:0.00736 recon2:0.00787
+	Batch 100/672 Loss:0.01709 con1:0.00001 con2:0.00001 recon1:0.00866 recon2:0.00841
+	Batch 110/672 Loss:0.01605 con1:0.00001 con2:0.00001 recon1:0.00788 recon2:0.00816
+	Batch 120/672 Loss:0.01771 con1:0.00001 con2:0.00001 recon1:0.00882 recon2:0.00888
+	Batch 130/672 Loss:0.01556 con1:0.00001 con2:0.00001 recon1:0.00780 recon2:0.00774
+	Batch 140/672 Loss:0.01457 con1:0.00001 con2:0.00001 recon1:0.00717 recon2:0.00738
+	Batch 150/672 Loss:0.01864 con1:0.00001 con2:0.00001 recon1:0.00966 recon2:0.00896
+	Batch 160/672 Loss:0.01523 con1:0.00001 con2:0.00001 recon1:0.00755 recon2:0.00767
+	Batch 170/672 Loss:0.01775 con1:0.00001 con2:0.00001 recon1:0.00859 recon2:0.00913
+	Batch 180/672 Loss:0.01422 con1:0.00001 con2:0.00001 recon1:0.00721 recon2:0.00699
+	Batch 190/672 Loss:0.01603 con1:0.00001 con2:0.00001 recon1:0.00806 recon2:0.00795
+	Batch 200/672 Loss:0.01550 con1:0.00001 con2:0.00001 recon1:0.00714 recon2:0.00834
+	Batch 210/672 Loss:0.01908 con1:0.00001 con2:0.00001 recon1:0.00985 recon2:0.00921
+	Batch 220/672 Loss:0.01520 con1:0.00001 con2:0.00001 recon1:0.00756 recon2:0.00761
+	Batch 230/672 Loss:0.01705 con1:0.00001 con2:0.00001 recon1:0.00855 recon2:0.00848
+	Batch 240/672 Loss:0.01220 con1:0.00001 con2:0.00001 recon1:0.00602 recon2:0.00616
+	Batch 250/672 Loss:0.01648 con1:0.00001 con2:0.00001 recon1:0.00779 recon2:0.00867
+	Batch 260/672 Loss:0.01562 con1:0.00001 con2:0.00001 recon1:0.00774 recon2:0.00787
+	Batch 270/672 Loss:0.01709 con1:0.00001 con2:0.00001 recon1:0.00958 recon2:0.00749
+	Batch 280/672 Loss:0.01949 con1:0.00001 con2:0.00001 recon1:0.00973 recon2:0.00975
+	Batch 290/672 Loss:0.01672 con1:0.00001 con2:0.00001 recon1:0.00858 recon2:0.00813
+	Batch 300/672 Loss:0.01610 con1:0.00001 con2:0.00001 recon1:0.00789 recon2:0.00819
+	Batch 310/672 Loss:0.01739 con1:0.00001 con2:0.00001 recon1:0.00867 recon2:0.00870
+	Batch 320/672 Loss:0.01250 con1:0.00001 con2:0.00001 recon1:0.00610 recon2:0.00639
+	Batch 330/672 Loss:0.01975 con1:0.00001 con2:0.00001 recon1:0.00923 recon2:0.01050
+	Batch 340/672 Loss:0.01610 con1:0.00001 con2:0.00001 recon1:0.00819 recon2:0.00789
+	Batch 350/672 Loss:0.01276 con1:0.00001 con2:0.00001 recon1:0.00639 recon2:0.00635
+	Batch 360/672 Loss:0.01404 con1:0.00001 con2:0.00001 recon1:0.00677 recon2:0.00725
+	Batch 370/672 Loss:0.01550 con1:0.00001 con2:0.00001 recon1:0.00773 recon2:0.00775
+	Batch 380/672 Loss:0.01645 con1:0.00001 con2:0.00001 recon1:0.00840 recon2:0.00804
+	Batch 390/672 Loss:0.01342 con1:0.00001 con2:0.00001 recon1:0.00653 recon2:0.00687
+	Batch 400/672 Loss:0.01626 con1:0.00001 con2:0.00001 recon1:0.00805 recon2:0.00819
+	Batch 410/672 Loss:0.01892 con1:0.00001 con2:0.00001 recon1:0.00965 recon2:0.00924
+	Batch 420/672 Loss:0.01573 con1:0.00001 con2:0.00001 recon1:0.00778 recon2:0.00793
+	Batch 430/672 Loss:0.01378 con1:0.00001 con2:0.00001 recon1:0.00726 recon2:0.00650
+	Batch 440/672 Loss:0.01307 con1:0.00001 con2:0.00001 recon1:0.00694 recon2:0.00612
+	Batch 450/672 Loss:0.01290 con1:0.00001 con2:0.00001 recon1:0.00636 recon2:0.00652
+	Batch 460/672 Loss:0.01674 con1:0.00001 con2:0.00001 recon1:0.00846 recon2:0.00826
+	Batch 470/672 Loss:0.01685 con1:0.00001 con2:0.00001 recon1:0.00848 recon2:0.00835
+	Batch 480/672 Loss:0.01585 con1:0.00001 con2:0.00001 recon1:0.00771 recon2:0.00812
+	Batch 490/672 Loss:0.01376 con1:0.00001 con2:0.00001 recon1:0.00671 recon2:0.00705
+	Batch 500/672 Loss:0.01568 con1:0.00001 con2:0.00001 recon1:0.00756 recon2:0.00811
+	Batch 510/672 Loss:0.01744 con1:0.00001 con2:0.00001 recon1:0.00890 recon2:0.00853
+	Batch 520/672 Loss:0.01667 con1:0.00001 con2:0.00001 recon1:0.00813 recon2:0.00853
+	Batch 530/672 Loss:0.01536 con1:0.00001 con2:0.00001 recon1:0.00814 recon2:0.00721
+	Batch 540/672 Loss:0.01800 con1:0.00001 con2:0.00001 recon1:0.00933 recon2:0.00866
+	Batch 550/672 Loss:0.01813 con1:0.00001 con2:0.00001 recon1:0.00885 recon2:0.00926
+	Batch 560/672 Loss:0.01577 con1:0.00001 con2:0.00001 recon1:0.00764 recon2:0.00811
+	Batch 570/672 Loss:0.01404 con1:0.00001 con2:0.00001 recon1:0.00720 recon2:0.00683
+	Batch 580/672 Loss:0.01620 con1:0.00001 con2:0.00001 recon1:0.00802 recon2:0.00817
+	Batch 590/672 Loss:0.01480 con1:0.00001 con2:0.00001 recon1:0.00728 recon2:0.00750
+	Batch 600/672 Loss:0.01728 con1:0.00001 con2:0.00001 recon1:0.00840 recon2:0.00886
+	Batch 610/672 Loss:0.01370 con1:0.00001 con2:0.00001 recon1:0.00655 recon2:0.00713
+	Batch 620/672 Loss:0.01476 con1:0.00001 con2:0.00001 recon1:0.00696 recon2:0.00779
+	Batch 630/672 Loss:0.01331 con1:0.00000 con2:0.00000 recon1:0.00685 recon2:0.00645
+	Batch 640/672 Loss:0.01743 con1:0.00001 con2:0.00001 recon1:0.00876 recon2:0.00865
+	Batch 650/672 Loss:0.01216 con1:0.00000 con2:0.00000 recon1:0.00620 recon2:0.00595
+	Batch 660/672 Loss:0.01476 con1:0.00001 con2:0.00001 recon1:0.00754 recon2:0.00720
+	Batch 670/672 Loss:0.01557 con1:0.00001 con2:0.00001 recon1:0.00749 recon2:0.00807
+Training Epoch 2/1000 Loss:0.01605 con1:0.00001 con2:0.00001 recon1:0.00800 recon2:0.00804
+Validation...
+	Batch 10/276 Loss:0.01066 con1:0.00000 con2: 0.00000 recon1:0.00535 recon2:0.00530
+	Batch 20/276 Loss:0.00963 con1:0.00001 con2: 0.00001 recon1:0.00498 recon2:0.00464
+	Batch 30/276 Loss:0.01099 con1:0.00000 con2: 0.00000 recon1:0.00542 recon2:0.00556
+	Batch 40/276 Loss:0.01981 con1:0.00003 con2: 0.00003 recon1:0.01070 recon2:0.00904
+	Batch 50/276 Loss:0.01154 con1:0.00001 con2: 0.00001 recon1:0.00590 recon2:0.00563
+	Batch 60/276 Loss:0.01294 con1:0.00001 con2: 0.00001 recon1:0.00631 recon2:0.00661
+	Batch 70/276 Loss:0.01392 con1:0.00001 con2: 0.00001 recon1:0.00711 recon2:0.00680
+	Batch 80/276 Loss:0.01479 con1:0.00001 con2: 0.00001 recon1:0.00752 recon2:0.00726
+	Batch 90/276 Loss:0.00923 con1:0.00000 con2: 0.00000 recon1:0.00468 recon2:0.00454
+	Batch 100/276 Loss:0.01027 con1:0.00000 con2: 0.00000 recon1:0.00515 recon2:0.00511
+	Batch 110/276 Loss:0.00858 con1:0.00000 con2: 0.00000 recon1:0.00425 recon2:0.00432
+	Batch 120/276 Loss:0.01549 con1:0.00001 con2: 0.00001 recon1:0.00851 recon2:0.00697
+	Batch 130/276 Loss:0.01168 con1:0.00000 con2: 0.00000 recon1:0.00581 recon2:0.00587
+	Batch 140/276 Loss:0.02035 con1:0.00001 con2: 0.00001 recon1:0.00962 recon2:0.01072
+	Batch 150/276 Loss:0.01311 con1:0.00001 con2: 0.00001 recon1:0.00648 recon2:0.00662
+	Batch 160/276 Loss:0.01854 con1:0.00001 con2: 0.00001 recon1:0.00869 recon2:0.00983
+	Batch 170/276 Loss:0.01569 con1:0.00001 con2: 0.00001 recon1:0.00771 recon2:0.00796
+	Batch 180/276 Loss:0.01098 con1:0.00000 con2: 0.00000 recon1:0.00566 recon2:0.00531
+	Batch 190/276 Loss:0.01058 con1:0.00000 con2: 0.00000 recon1:0.00489 recon2:0.00568
+	Batch 200/276 Loss:0.01649 con1:0.00000 con2: 0.00000 recon1:0.00890 recon2:0.00758
+	Batch 210/276 Loss:0.01845 con1:0.00001 con2: 0.00001 recon1:0.00955 recon2:0.00889
+	Batch 220/276 Loss:0.01140 con1:0.00000 con2: 0.00000 recon1:0.00551 recon2:0.00589
+	Batch 230/276 Loss:0.04039 con1:0.00002 con2: 0.00002 recon1:0.01955 recon2:0.02080
+	Batch 240/276 Loss:0.00982 con1:0.00000 con2: 0.00000 recon1:0.00505 recon2:0.00476
+	Batch 250/276 Loss:0.01041 con1:0.00000 con2: 0.00001 recon1:0.00537 recon2:0.00504
+	Batch 260/276 Loss:0.00943 con1:0.00000 con2: 0.00000 recon1:0.00461 recon2:0.00481
+	Batch 270/276 Loss:0.01256 con1:0.00001 con2: 0.00001 recon1:0.00627 recon2:0.00627
+Validation Epoch 2/1000 Loss:0.01392 con1:0.00001 con2:0.00001 recon1:0.00695 recon2:0.00696
+Training...
+	Batch 10/672 Loss:0.01587 con1:0.00002 con2:0.00002 recon1:0.00793 recon2:0.00790
+	Batch 20/672 Loss:0.01528 con1:0.00001 con2:0.00001 recon1:0.00754 recon2:0.00773
+	Batch 30/672 Loss:0.01622 con1:0.00001 con2:0.00001 recon1:0.00796 recon2:0.00826
+	Batch 40/672 Loss:0.01409 con1:0.00001 con2:0.00001 recon1:0.00694 recon2:0.00713
+	Batch 50/672 Loss:0.01490 con1:0.00001 con2:0.00001 recon1:0.00731 recon2:0.00758
+	Batch 60/672 Loss:0.01601 con1:0.00001 con2:0.00001 recon1:0.00813 recon2:0.00786
+	Batch 70/672 Loss:0.01664 con1:0.00001 con2:0.00001 recon1:0.00873 recon2:0.00790
+	Batch 80/672 Loss:0.01301 con1:0.00001 con2:0.00000 recon1:0.00646 recon2:0.00654
+	Batch 90/672 Loss:0.01486 con1:0.00001 con2:0.00001 recon1:0.00663 recon2:0.00821
+	Batch 100/672 Loss:0.01367 con1:0.00000 con2:0.00000 recon1:0.00675 recon2:0.00690
+	Batch 110/672 Loss:0.01630 con1:0.00002 con2:0.00001 recon1:0.00835 recon2:0.00792
+	Batch 120/672 Loss:0.01246 con1:0.00001 con2:0.00001 recon1:0.00604 recon2:0.00640
+	Batch 130/672 Loss:0.01560 con1:0.00001 con2:0.00001 recon1:0.00735 recon2:0.00823
+	Batch 140/672 Loss:0.01534 con1:0.00001 con2:0.00001 recon1:0.00795 recon2:0.00738
+	Batch 150/672 Loss:0.01505 con1:0.00001 con2:0.00001 recon1:0.00742 recon2:0.00761
+	Batch 160/672 Loss:0.01333 con1:0.00001 con2:0.00001 recon1:0.00666 recon2:0.00665
+	Batch 170/672 Loss:0.01499 con1:0.00001 con2:0.00001 recon1:0.00784 recon2:0.00713
+	Batch 180/672 Loss:0.01412 con1:0.00001 con2:0.00001 recon1:0.00661 recon2:0.00749
+	Batch 190/672 Loss:0.01205 con1:0.00000 con2:0.00000 recon1:0.00586 recon2:0.00618
+	Batch 200/672 Loss:0.01479 con1:0.00001 con2:0.00001 recon1:0.00761 recon2:0.00717
+	Batch 210/672 Loss:0.01503 con1:0.00001 con2:0.00001 recon1:0.00731 recon2:0.00771
+	Batch 220/672 Loss:0.01521 con1:0.00001 con2:0.00001 recon1:0.00750 recon2:0.00769
+	Batch 230/672 Loss:0.01396 con1:0.00001 con2:0.00001 recon1:0.00756 recon2:0.00638
+	Batch 240/672 Loss:0.01361 con1:0.00001 con2:0.00001 recon1:0.00658 recon2:0.00702
+	Batch 250/672 Loss:0.01403 con1:0.00001 con2:0.00001 recon1:0.00690 recon2:0.00712
+	Batch 260/672 Loss:0.01277 con1:0.00001 con2:0.00001 recon1:0.00617 recon2:0.00658
+	Batch 270/672 Loss:0.01299 con1:0.00000 con2:0.00000 recon1:0.00644 recon2:0.00654
+	Batch 280/672 Loss:0.01831 con1:0.00001 con2:0.00001 recon1:0.00921 recon2:0.00908
+	Batch 290/672 Loss:0.01449 con1:0.00001 con2:0.00001 recon1:0.00766 recon2:0.00682
+	Batch 300/672 Loss:0.01667 con1:0.00001 con2:0.00001 recon1:0.00821 recon2:0.00844
+	Batch 310/672 Loss:0.01523 con1:0.00001 con2:0.00001 recon1:0.00768 recon2:0.00754
+	Batch 320/672 Loss:0.02022 con1:0.00001 con2:0.00001 recon1:0.00932 recon2:0.01088
+	Batch 330/672 Loss:0.01516 con1:0.00001 con2:0.00001 recon1:0.00767 recon2:0.00748
+	Batch 340/672 Loss:0.01398 con1:0.00001 con2:0.00001 recon1:0.00695 recon2:0.00702
+	Batch 350/672 Loss:0.01390 con1:0.00001 con2:0.00001 recon1:0.00696 recon2:0.00692
+	Batch 360/672 Loss:0.01295 con1:0.00001 con2:0.00001 recon1:0.00668 recon2:0.00625
+	Batch 370/672 Loss:0.01425 con1:0.00001 con2:0.00001 recon1:0.00686 recon2:0.00738
+	Batch 380/672 Loss:0.01659 con1:0.00001 con2:0.00001 recon1:0.00829 recon2:0.00828
+	Batch 390/672 Loss:0.01207 con1:0.00001 con2:0.00001 recon1:0.00617 recon2:0.00588
+	Batch 400/672 Loss:0.01547 con1:0.00001 con2:0.00001 recon1:0.00745 recon2:0.00801
+	Batch 410/672 Loss:0.01353 con1:0.00001 con2:0.00001 recon1:0.00684 recon2:0.00667
+	Batch 420/672 Loss:0.01657 con1:0.00001 con2:0.00001 recon1:0.00866 recon2:0.00789
+	Batch 430/672 Loss:0.01701 con1:0.00001 con2:0.00001 recon1:0.00826 recon2:0.00873
+	Batch 440/672 Loss:0.01691 con1:0.00001 con2:0.00001 recon1:0.00807 recon2:0.00882
+	Batch 450/672 Loss:0.01534 con1:0.00001 con2:0.00001 recon1:0.00768 recon2:0.00765
+	Batch 460/672 Loss:0.01333 con1:0.00001 con2:0.00001 recon1:0.00648 recon2:0.00683
+	Batch 470/672 Loss:0.01283 con1:0.00001 con2:0.00001 recon1:0.00627 recon2:0.00655
+	Batch 480/672 Loss:0.01212 con1:0.00001 con2:0.00001 recon1:0.00618 recon2:0.00593
+	Batch 490/672 Loss:0.01344 con1:0.00001 con2:0.00001 recon1:0.00664 recon2:0.00678
+	Batch 500/672 Loss:0.01360 con1:0.00000 con2:0.00000 recon1:0.00625 recon2:0.00734
+	Batch 510/672 Loss:0.01204 con1:0.00000 con2:0.00000 recon1:0.00572 recon2:0.00631
+	Batch 520/672 Loss:0.01161 con1:0.00001 con2:0.00001 recon1:0.00605 recon2:0.00555
+	Batch 530/672 Loss:0.01262 con1:0.00001 con2:0.00001 recon1:0.00634 recon2:0.00626
+	Batch 540/672 Loss:0.01235 con1:0.00000 con2:0.00000 recon1:0.00605 recon2:0.00630
+	Batch 550/672 Loss:0.01320 con1:0.00000 con2:0.00000 recon1:0.00660 recon2:0.00659
+	Batch 560/672 Loss:0.01201 con1:0.00001 con2:0.00002 recon1:0.00575 recon2:0.00623
+	Batch 570/672 Loss:0.01367 con1:0.00001 con2:0.00001 recon1:0.00678 recon2:0.00687
+	Batch 580/672 Loss:0.01434 con1:0.00000 con2:0.00000 recon1:0.00756 recon2:0.00677
+	Batch 590/672 Loss:0.01579 con1:0.00001 con2:0.00001 recon1:0.00798 recon2:0.00779
+	Batch 600/672 Loss:0.01293 con1:0.00000 con2:0.00000 recon1:0.00634 recon2:0.00659
+	Batch 610/672 Loss:0.01350 con1:0.00001 con2:0.00001 recon1:0.00678 recon2:0.00670
+	Batch 620/672 Loss:0.01627 con1:0.00001 con2:0.00001 recon1:0.00859 recon2:0.00766
+	Batch 630/672 Loss:0.01410 con1:0.00001 con2:0.00000 recon1:0.00698 recon2:0.00711
+	Batch 640/672 Loss:0.01763 con1:0.00000 con2:0.00000 recon1:0.01020 recon2:0.00742
+	Batch 650/672 Loss:0.01375 con1:0.00001 con2:0.00001 recon1:0.00713 recon2:0.00661
+	Batch 660/672 Loss:0.01402 con1:0.00001 con2:0.00000 recon1:0.00733 recon2:0.00668
+	Batch 670/672 Loss:0.01158 con1:0.00001 con2:0.00001 recon1:0.00579 recon2:0.00578
+Training Epoch 3/1000 Loss:0.01474 con1:0.00001 con2:0.00001 recon1:0.00736 recon2:0.00737
+Validation...
+	Batch 10/276 Loss:0.01014 con1:0.00000 con2: 0.00000 recon1:0.00508 recon2:0.00505
+	Batch 20/276 Loss:0.00920 con1:0.00000 con2: 0.00000 recon1:0.00477 recon2:0.00442
+	Batch 30/276 Loss:0.01039 con1:0.00000 con2: 0.00000 recon1:0.00513 recon2:0.00525
+	Batch 40/276 Loss:0.01879 con1:0.00005 con2: 0.00005 recon1:0.01015 recon2:0.00854
+	Batch 50/276 Loss:0.01091 con1:0.00000 con2: 0.00000 recon1:0.00558 recon2:0.00532
+	Batch 60/276 Loss:0.01233 con1:0.00000 con2: 0.00000 recon1:0.00603 recon2:0.00629
+	Batch 70/276 Loss:0.01342 con1:0.00000 con2: 0.00000 recon1:0.00684 recon2:0.00658
+	Batch 80/276 Loss:0.01435 con1:0.00000 con2: 0.00000 recon1:0.00730 recon2:0.00704
+	Batch 90/276 Loss:0.00887 con1:0.00000 con2: 0.00000 recon1:0.00451 recon2:0.00436
+	Batch 100/276 Loss:0.00982 con1:0.00000 con2: 0.00000 recon1:0.00492 recon2:0.00490
+	Batch 110/276 Loss:0.00821 con1:0.00000 con2: 0.00000 recon1:0.00408 recon2:0.00412
+	Batch 120/276 Loss:0.01498 con1:0.00000 con2: 0.00000 recon1:0.00822 recon2:0.00675
+	Batch 130/276 Loss:0.01113 con1:0.00000 con2: 0.00000 recon1:0.00552 recon2:0.00560
+	Batch 140/276 Loss:0.01978 con1:0.00000 con2: 0.00000 recon1:0.00932 recon2:0.01045
+	Batch 150/276 Loss:0.01251 con1:0.00001 con2: 0.00001 recon1:0.00617 recon2:0.00631
+	Batch 160/276 Loss:0.01802 con1:0.00002 con2: 0.00002 recon1:0.00843 recon2:0.00955
+	Batch 170/276 Loss:0.01485 con1:0.00002 con2: 0.00002 recon1:0.00734 recon2:0.00748
+	Batch 180/276 Loss:0.01049 con1:0.00000 con2: 0.00000 recon1:0.00540 recon2:0.00508
+	Batch 190/276 Loss:0.01020 con1:0.00000 con2: 0.00000 recon1:0.00473 recon2:0.00547
+	Batch 200/276 Loss:0.01593 con1:0.00000 con2: 0.00000 recon1:0.00860 recon2:0.00733
+	Batch 210/276 Loss:0.01793 con1:0.00001 con2: 0.00001 recon1:0.00928 recon2:0.00863
+	Batch 220/276 Loss:0.01089 con1:0.00000 con2: 0.00000 recon1:0.00528 recon2:0.00560
+	Batch 230/276 Loss:0.03904 con1:0.00005 con2: 0.00005 recon1:0.01885 recon2:0.02008
+	Batch 240/276 Loss:0.00932 con1:0.00000 con2: 0.00000 recon1:0.00479 recon2:0.00451
+	Batch 250/276 Loss:0.00997 con1:0.00000 con2: 0.00000 recon1:0.00513 recon2:0.00484
+	Batch 260/276 Loss:0.00899 con1:0.00000 con2: 0.00000 recon1:0.00441 recon2:0.00457
+	Batch 270/276 Loss:0.01208 con1:0.00000 con2: 0.00000 recon1:0.00602 recon2:0.00606
+Validation Epoch 3/1000 Loss:0.01338 con1:0.00001 con2:0.00001 recon1:0.00668 recon2:0.00669
+Training...
+	Batch 10/672 Loss:0.01299 con1:0.00001 con2:0.00001 recon1:0.00693 recon2:0.00605
+	Batch 20/672 Loss:0.01361 con1:0.00001 con2:0.00001 recon1:0.00644 recon2:0.00716
+	Batch 30/672 Loss:0.01465 con1:0.00001 con2:0.00001 recon1:0.00727 recon2:0.00737
+	Batch 40/672 Loss:0.01346 con1:0.00001 con2:0.00001 recon1:0.00650 recon2:0.00695
+	Batch 50/672 Loss:0.01558 con1:0.00001 con2:0.00001 recon1:0.00778 recon2:0.00778
+	Batch 60/672 Loss:0.01565 con1:0.00001 con2:0.00001 recon1:0.00771 recon2:0.00792
+	Batch 70/672 Loss:0.01603 con1:0.00001 con2:0.00001 recon1:0.00726 recon2:0.00875
+	Batch 80/672 Loss:0.01536 con1:0.00001 con2:0.00001 recon1:0.00765 recon2:0.00769
+	Batch 90/672 Loss:0.01482 con1:0.00001 con2:0.00001 recon1:0.00762 recon2:0.00717
+	Batch 100/672 Loss:0.01447 con1:0.00001 con2:0.00001 recon1:0.00759 recon2:0.00687
+	Batch 110/672 Loss:0.01636 con1:0.00001 con2:0.00001 recon1:0.00889 recon2:0.00745
+	Batch 120/672 Loss:0.01159 con1:0.00000 con2:0.00000 recon1:0.00543 recon2:0.00615
+	Batch 130/672 Loss:0.01376 con1:0.00001 con2:0.00001 recon1:0.00709 recon2:0.00666
+	Batch 140/672 Loss:0.01487 con1:0.00001 con2:0.00001 recon1:0.00749 recon2:0.00736
+	Batch 150/672 Loss:0.01204 con1:0.00001 con2:0.00000 recon1:0.00605 recon2:0.00598
+	Batch 160/672 Loss:0.01640 con1:0.00000 con2:0.00000 recon1:0.00821 recon2:0.00818
+	Batch 170/672 Loss:0.01464 con1:0.00002 con2:0.00002 recon1:0.00752 recon2:0.00708
+	Batch 180/672 Loss:0.01412 con1:0.00000 con2:0.00000 recon1:0.00710 recon2:0.00701
+	Batch 190/672 Loss:0.01546 con1:0.00001 con2:0.00001 recon1:0.00771 recon2:0.00774
+	Batch 200/672 Loss:0.01086 con1:0.00000 con2:0.00000 recon1:0.00511 recon2:0.00574
+	Batch 210/672 Loss:0.01495 con1:0.00001 con2:0.00001 recon1:0.00664 recon2:0.00829
+	Batch 220/672 Loss:0.01147 con1:0.00000 con2:0.00000 recon1:0.00566 recon2:0.00580
+	Batch 230/672 Loss:0.01268 con1:0.00001 con2:0.00000 recon1:0.00595 recon2:0.00671
+	Batch 240/672 Loss:0.01515 con1:0.00001 con2:0.00001 recon1:0.00754 recon2:0.00759
+	Batch 250/672 Loss:0.01462 con1:0.00001 con2:0.00001 recon1:0.00775 recon2:0.00687
+	Batch 260/672 Loss:0.01622 con1:0.00001 con2:0.00001 recon1:0.00779 recon2:0.00841
+	Batch 270/672 Loss:0.01476 con1:0.00001 con2:0.00001 recon1:0.00694 recon2:0.00781
+	Batch 280/672 Loss:0.01604 con1:0.00000 con2:0.00001 recon1:0.00815 recon2:0.00788
+	Batch 290/672 Loss:0.01556 con1:0.00000 con2:0.00000 recon1:0.00760 recon2:0.00796
+	Batch 300/672 Loss:0.01370 con1:0.00001 con2:0.00001 recon1:0.00681 recon2:0.00686
+	Batch 310/672 Loss:0.01376 con1:0.00001 con2:0.00001 recon1:0.00685 recon2:0.00690
+	Batch 320/672 Loss:0.01713 con1:0.00001 con2:0.00001 recon1:0.00899 recon2:0.00813
+	Batch 330/672 Loss:0.01435 con1:0.00001 con2:0.00002 recon1:0.00737 recon2:0.00695
+	Batch 340/672 Loss:0.01663 con1:0.00001 con2:0.00001 recon1:0.00851 recon2:0.00810
+	Batch 350/672 Loss:0.01169 con1:0.00001 con2:0.00001 recon1:0.00597 recon2:0.00571
+	Batch 360/672 Loss:0.01351 con1:0.00001 con2:0.00001 recon1:0.00709 recon2:0.00641
+	Batch 370/672 Loss:0.01311 con1:0.00001 con2:0.00001 recon1:0.00670 recon2:0.00640
+	Batch 380/672 Loss:0.01262 con1:0.00001 con2:0.00001 recon1:0.00625 recon2:0.00636
+	Batch 390/672 Loss:0.01380 con1:0.00000 con2:0.00001 recon1:0.00719 recon2:0.00659
+	Batch 400/672 Loss:0.01280 con1:0.00001 con2:0.00001 recon1:0.00635 recon2:0.00643
+	Batch 410/672 Loss:0.01156 con1:0.00000 con2:0.00000 recon1:0.00569 recon2:0.00586
+	Batch 420/672 Loss:0.01330 con1:0.00000 con2:0.00000 recon1:0.00696 recon2:0.00633
+	Batch 430/672 Loss:0.01207 con1:0.00002 con2:0.00001 recon1:0.00585 recon2:0.00620
+	Batch 440/672 Loss:0.01213 con1:0.00000 con2:0.00000 recon1:0.00576 recon2:0.00636
+	Batch 450/672 Loss:0.01578 con1:0.00001 con2:0.00001 recon1:0.00749 recon2:0.00828
+	Batch 460/672 Loss:0.01200 con1:0.00002 con2:0.00002 recon1:0.00601 recon2:0.00595
+	Batch 470/672 Loss:0.01317 con1:0.00001 con2:0.00001 recon1:0.00701 recon2:0.00616
+	Batch 480/672 Loss:0.01696 con1:0.00000 con2:0.00000 recon1:0.00878 recon2:0.00817
+	Batch 490/672 Loss:0.01189 con1:0.00001 con2:0.00001 recon1:0.00599 recon2:0.00589
+	Batch 500/672 Loss:0.01526 con1:0.00001 con2:0.00001 recon1:0.00753 recon2:0.00772
+	Batch 510/672 Loss:0.01135 con1:0.00000 con2:0.00000 recon1:0.00542 recon2:0.00593
+	Batch 520/672 Loss:0.01192 con1:0.00001 con2:0.00001 recon1:0.00621 recon2:0.00570
+	Batch 530/672 Loss:0.01275 con1:0.00001 con2:0.00001 recon1:0.00668 recon2:0.00605
+	Batch 540/672 Loss:0.01228 con1:0.00001 con2:0.00002 recon1:0.00594 recon2:0.00631
+	Batch 550/672 Loss:0.01262 con1:0.00001 con2:0.00001 recon1:0.00622 recon2:0.00639
+	Batch 560/672 Loss:0.01276 con1:0.00001 con2:0.00001 recon1:0.00626 recon2:0.00649
+	Batch 570/672 Loss:0.01179 con1:0.00001 con2:0.00001 recon1:0.00598 recon2:0.00580
+	Batch 580/672 Loss:0.01383 con1:0.00001 con2:0.00001 recon1:0.00686 recon2:0.00696
+	Batch 590/672 Loss:0.01618 con1:0.00001 con2:0.00001 recon1:0.00790 recon2:0.00826
+	Batch 600/672 Loss:0.01068 con1:0.00001 con2:0.00001 recon1:0.00521 recon2:0.00546
+	Batch 610/672 Loss:0.01323 con1:0.00001 con2:0.00001 recon1:0.00670 recon2:0.00651
+	Batch 620/672 Loss:0.01509 con1:0.00000 con2:0.00000 recon1:0.00697 recon2:0.00811
+	Batch 630/672 Loss:0.01332 con1:0.00000 con2:0.00000 recon1:0.00672 recon2:0.00660
+	Batch 640/672 Loss:0.01800 con1:0.00001 con2:0.00001 recon1:0.00868 recon2:0.00930
+	Batch 650/672 Loss:0.01319 con1:0.00001 con2:0.00002 recon1:0.00679 recon2:0.00637
+	Batch 660/672 Loss:0.01265 con1:0.00000 con2:0.00000 recon1:0.00659 recon2:0.00605
+	Batch 670/672 Loss:0.01340 con1:0.00000 con2:0.00000 recon1:0.00719 recon2:0.00620
+Training Epoch 4/1000 Loss:0.01406 con1:0.00001 con2:0.00001 recon1:0.00704 recon2:0.00701
+Validation...
+	Batch 10/276 Loss:0.00948 con1:0.00000 con2: 0.00000 recon1:0.00473 recon2:0.00474
+	Batch 20/276 Loss:0.00859 con1:0.00000 con2: 0.00000 recon1:0.00448 recon2:0.00411
+	Batch 30/276 Loss:0.00966 con1:0.00000 con2: 0.00000 recon1:0.00478 recon2:0.00488
+	Batch 40/276 Loss:0.01830 con1:0.00008 con2: 0.00007 recon1:0.00987 recon2:0.00828
+	Batch 50/276 Loss:0.01020 con1:0.00000 con2: 0.00000 recon1:0.00522 recon2:0.00498
+	Batch 60/276 Loss:0.01177 con1:0.00000 con2: 0.00000 recon1:0.00577 recon2:0.00599
+	Batch 70/276 Loss:0.01286 con1:0.00000 con2: 0.00000 recon1:0.00654 recon2:0.00631
+	Batch 80/276 Loss:0.01383 con1:0.00000 con2: 0.00000 recon1:0.00703 recon2:0.00679
+	Batch 90/276 Loss:0.00835 con1:0.00000 con2: 0.00000 recon1:0.00425 recon2:0.00409
+	Batch 100/276 Loss:0.00922 con1:0.00000 con2: 0.00000 recon1:0.00464 recon2:0.00457
+	Batch 110/276 Loss:0.00765 con1:0.00000 con2: 0.00000 recon1:0.00379 recon2:0.00385
+	Batch 120/276 Loss:0.01447 con1:0.00000 con2: 0.00000 recon1:0.00796 recon2:0.00651
+	Batch 130/276 Loss:0.01050 con1:0.00000 con2: 0.00000 recon1:0.00519 recon2:0.00530
+	Batch 140/276 Loss:0.01937 con1:0.00000 con2: 0.00000 recon1:0.00912 recon2:0.01024
+	Batch 150/276 Loss:0.01183 con1:0.00001 con2: 0.00001 recon1:0.00584 recon2:0.00597
+	Batch 160/276 Loss:0.01752 con1:0.00002 con2: 0.00002 recon1:0.00820 recon2:0.00928
+	Batch 170/276 Loss:0.01425 con1:0.00003 con2: 0.00003 recon1:0.00698 recon2:0.00721
+	Batch 180/276 Loss:0.00988 con1:0.00000 con2: 0.00000 recon1:0.00510 recon2:0.00477
+	Batch 190/276 Loss:0.00968 con1:0.00000 con2: 0.00000 recon1:0.00449 recon2:0.00518
+	Batch 200/276 Loss:0.01541 con1:0.00000 con2: 0.00000 recon1:0.00833 recon2:0.00707
+	Batch 210/276 Loss:0.01740 con1:0.00001 con2: 0.00001 recon1:0.00899 recon2:0.00838
+	Batch 220/276 Loss:0.01024 con1:0.00000 con2: 0.00000 recon1:0.00499 recon2:0.00524
+	Batch 230/276 Loss:0.03830 con1:0.00010 con2: 0.00010 recon1:0.01854 recon2:0.01957
+	Batch 240/276 Loss:0.00870 con1:0.00000 con2: 0.00000 recon1:0.00448 recon2:0.00422
+	Batch 250/276 Loss:0.00939 con1:0.00000 con2: 0.00000 recon1:0.00484 recon2:0.00455
+	Batch 260/276 Loss:0.00837 con1:0.00000 con2: 0.00000 recon1:0.00411 recon2:0.00425
+	Batch 270/276 Loss:0.01152 con1:0.00001 con2: 0.00001 recon1:0.00570 recon2:0.00581
+Validation Epoch 4/1000 Loss:0.01280 con1:0.00001 con2:0.00001 recon1:0.00639 recon2:0.00639
+Training...
+	Batch 10/672 Loss:0.01472 con1:0.00000 con2:0.00000 recon1:0.00740 recon2:0.00731
+	Batch 20/672 Loss:0.01111 con1:0.00000 con2:0.00000 recon1:0.00571 recon2:0.00539
+	Batch 30/672 Loss:0.01482 con1:0.00001 con2:0.00001 recon1:0.00738 recon2:0.00742
+	Batch 40/672 Loss:0.01546 con1:0.00001 con2:0.00001 recon1:0.00729 recon2:0.00815
+	Batch 50/672 Loss:0.01808 con1:0.00001 con2:0.00001 recon1:0.00771 recon2:0.01035
+	Batch 60/672 Loss:0.01629 con1:0.00001 con2:0.00001 recon1:0.00818 recon2:0.00809
+	Batch 70/672 Loss:0.01270 con1:0.00000 con2:0.00000 recon1:0.00605 recon2:0.00664
+	Batch 80/672 Loss:0.01681 con1:0.00001 con2:0.00001 recon1:0.00875 recon2:0.00803
+	Batch 90/672 Loss:0.01408 con1:0.00000 con2:0.00000 recon1:0.00685 recon2:0.00722
+	Batch 100/672 Loss:0.01776 con1:0.00001 con2:0.00001 recon1:0.00878 recon2:0.00896
+	Batch 110/672 Loss:0.01401 con1:0.00001 con2:0.00001 recon1:0.00687 recon2:0.00712
+	Batch 120/672 Loss:0.01425 con1:0.00001 con2:0.00001 recon1:0.00683 recon2:0.00740
+	Batch 130/672 Loss:0.01447 con1:0.00001 con2:0.00001 recon1:0.00734 recon2:0.00711
+	Batch 140/672 Loss:0.01262 con1:0.00000 con2:0.00000 recon1:0.00650 recon2:0.00611
+	Batch 150/672 Loss:0.01388 con1:0.00001 con2:0.00001 recon1:0.00668 recon2:0.00718
+	Batch 160/672 Loss:0.01433 con1:0.00001 con2:0.00001 recon1:0.00751 recon2:0.00680
+	Batch 170/672 Loss:0.01054 con1:0.00000 con2:0.00000 recon1:0.00542 recon2:0.00511
+	Batch 180/672 Loss:0.01266 con1:0.00000 con2:0.00000 recon1:0.00614 recon2:0.00651
+	Batch 190/672 Loss:0.01045 con1:0.00001 con2:0.00001 recon1:0.00534 recon2:0.00509
+	Batch 200/672 Loss:0.01364 con1:0.00001 con2:0.00001 recon1:0.00672 recon2:0.00691
+	Batch 210/672 Loss:0.01361 con1:0.00000 con2:0.00000 recon1:0.00667 recon2:0.00693
+	Batch 220/672 Loss:0.01093 con1:0.00001 con2:0.00001 recon1:0.00558 recon2:0.00532
+	Batch 230/672 Loss:0.01195 con1:0.00001 con2:0.00001 recon1:0.00606 recon2:0.00587
+	Batch 240/672 Loss:0.01741 con1:0.00002 con2:0.00002 recon1:0.00859 recon2:0.00877
+	Batch 250/672 Loss:0.01279 con1:0.00000 con2:0.00000 recon1:0.00650 recon2:0.00627
+	Batch 260/672 Loss:0.01331 con1:0.00001 con2:0.00001 recon1:0.00701 recon2:0.00628
+	Batch 270/672 Loss:0.01581 con1:0.00001 con2:0.00001 recon1:0.00839 recon2:0.00741
+	Batch 280/672 Loss:0.01418 con1:0.00000 con2:0.00000 recon1:0.00695 recon2:0.00721
+	Batch 290/672 Loss:0.01291 con1:0.00001 con2:0.00001 recon1:0.00663 recon2:0.00625
+	Batch 300/672 Loss:0.01755 con1:0.00001 con2:0.00001 recon1:0.00881 recon2:0.00873
+	Batch 310/672 Loss:0.01707 con1:0.00000 con2:0.00000 recon1:0.00973 recon2:0.00733
+	Batch 320/672 Loss:0.01329 con1:0.00001 con2:0.00001 recon1:0.00673 recon2:0.00654
+	Batch 330/672 Loss:0.01536 con1:0.00002 con2:0.00002 recon1:0.00790 recon2:0.00743
+	Batch 340/672 Loss:0.01257 con1:0.00001 con2:0.00001 recon1:0.00631 recon2:0.00624
+	Batch 350/672 Loss:0.01400 con1:0.00001 con2:0.00002 recon1:0.00697 recon2:0.00700
+	Batch 360/672 Loss:0.01188 con1:0.00000 con2:0.00000 recon1:0.00616 recon2:0.00571
+	Batch 370/672 Loss:0.01357 con1:0.00001 con2:0.00002 recon1:0.00649 recon2:0.00705
+	Batch 380/672 Loss:0.02134 con1:0.00003 con2:0.00003 recon1:0.01077 recon2:0.01051
+	Batch 390/672 Loss:0.01485 con1:0.00001 con2:0.00001 recon1:0.00697 recon2:0.00786
+	Batch 400/672 Loss:0.01369 con1:0.00001 con2:0.00001 recon1:0.00656 recon2:0.00711
+	Batch 410/672 Loss:0.01570 con1:0.00001 con2:0.00001 recon1:0.00784 recon2:0.00784
+	Batch 420/672 Loss:0.01150 con1:0.00001 con2:0.00001 recon1:0.00589 recon2:0.00560
+	Batch 430/672 Loss:0.01140 con1:0.00000 con2:0.00000 recon1:0.00571 recon2:0.00568
+	Batch 440/672 Loss:0.01513 con1:0.00001 con2:0.00001 recon1:0.00803 recon2:0.00709
+	Batch 450/672 Loss:0.01119 con1:0.00001 con2:0.00001 recon1:0.00544 recon2:0.00574
+	Batch 460/672 Loss:0.01508 con1:0.00002 con2:0.00002 recon1:0.00757 recon2:0.00748
+	Batch 470/672 Loss:0.01712 con1:0.00000 con2:0.00000 recon1:0.00844 recon2:0.00866
+	Batch 480/672 Loss:0.01471 con1:0.00000 con2:0.00000 recon1:0.00733 recon2:0.00737
+	Batch 490/672 Loss:0.01074 con1:0.00000 con2:0.00000 recon1:0.00546 recon2:0.00528
+	Batch 500/672 Loss:0.01185 con1:0.00001 con2:0.00001 recon1:0.00604 recon2:0.00580
+	Batch 510/672 Loss:0.01270 con1:0.00001 con2:0.00001 recon1:0.00606 recon2:0.00662
+	Batch 520/672 Loss:0.01213 con1:0.00001 con2:0.00001 recon1:0.00628 recon2:0.00584
+	Batch 530/672 Loss:0.01264 con1:0.00000 con2:0.00000 recon1:0.00656 recon2:0.00607
+	Batch 540/672 Loss:0.01515 con1:0.00000 con2:0.00001 recon1:0.00780 recon2:0.00735
+	Batch 550/672 Loss:0.01513 con1:0.00001 con2:0.00001 recon1:0.00749 recon2:0.00762
+	Batch 560/672 Loss:0.01688 con1:0.00001 con2:0.00001 recon1:0.00830 recon2:0.00856
+	Batch 570/672 Loss:0.01695 con1:0.00000 con2:0.00000 recon1:0.00829 recon2:0.00866
+	Batch 580/672 Loss:0.01004 con1:0.00000 con2:0.00000 recon1:0.00497 recon2:0.00507
+	Batch 590/672 Loss:0.02076 con1:0.00001 con2:0.00001 recon1:0.00994 recon2:0.01081
+	Batch 600/672 Loss:0.01239 con1:0.00000 con2:0.00000 recon1:0.00655 recon2:0.00583
+	Batch 610/672 Loss:0.01295 con1:0.00001 con2:0.00001 recon1:0.00657 recon2:0.00636
+	Batch 620/672 Loss:0.01335 con1:0.00002 con2:0.00001 recon1:0.00697 recon2:0.00634
+	Batch 630/672 Loss:0.01273 con1:0.00000 con2:0.00000 recon1:0.00649 recon2:0.00624
+	Batch 640/672 Loss:0.01160 con1:0.00000 con2:0.00000 recon1:0.00587 recon2:0.00572
+	Batch 650/672 Loss:0.01178 con1:0.00002 con2:0.00002 recon1:0.00616 recon2:0.00558
+	Batch 660/672 Loss:0.01283 con1:0.00001 con2:0.00001 recon1:0.00642 recon2:0.00639
+	Batch 670/672 Loss:0.01162 con1:0.00001 con2:0.00001 recon1:0.00563 recon2:0.00598
+Training Epoch 5/1000 Loss:0.01352 con1:0.00001 con2:0.00001 recon1:0.00677 recon2:0.00673
+Validation...
+	Batch 10/276 Loss:0.00891 con1:0.00000 con2: 0.00000 recon1:0.00442 recon2:0.00448
+	Batch 20/276 Loss:0.00799 con1:0.00000 con2: 0.00000 recon1:0.00416 recon2:0.00381
+	Batch 30/276 Loss:0.00896 con1:0.00000 con2: 0.00000 recon1:0.00444 recon2:0.00452
+	Batch 40/276 Loss:0.01817 con1:0.00004 con2: 0.00004 recon1:0.00991 recon2:0.00819
+	Batch 50/276 Loss:0.00956 con1:0.00000 con2: 0.00000 recon1:0.00487 recon2:0.00468
+	Batch 60/276 Loss:0.01125 con1:0.00001 con2: 0.00001 recon1:0.00550 recon2:0.00574
+	Batch 70/276 Loss:0.01248 con1:0.00001 con2: 0.00001 recon1:0.00634 recon2:0.00613
+	Batch 80/276 Loss:0.01308 con1:0.00001 con2: 0.00001 recon1:0.00666 recon2:0.00641
+	Batch 90/276 Loss:0.00770 con1:0.00000 con2: 0.00000 recon1:0.00393 recon2:0.00376
+	Batch 100/276 Loss:0.00863 con1:0.00000 con2: 0.00000 recon1:0.00435 recon2:0.00428
+	Batch 110/276 Loss:0.00710 con1:0.00000 con2: 0.00000 recon1:0.00351 recon2:0.00358
+	Batch 120/276 Loss:0.01393 con1:0.00001 con2: 0.00001 recon1:0.00769 recon2:0.00622
+	Batch 130/276 Loss:0.01002 con1:0.00000 con2: 0.00000 recon1:0.00494 recon2:0.00507
+	Batch 140/276 Loss:0.01909 con1:0.00001 con2: 0.00001 recon1:0.00899 recon2:0.01009
+	Batch 150/276 Loss:0.01133 con1:0.00001 con2: 0.00001 recon1:0.00559 recon2:0.00572
+	Batch 160/276 Loss:0.01733 con1:0.00002 con2: 0.00002 recon1:0.00808 recon2:0.00920
+	Batch 170/276 Loss:0.01418 con1:0.00002 con2: 0.00002 recon1:0.00694 recon2:0.00720
+	Batch 180/276 Loss:0.00930 con1:0.00000 con2: 0.00000 recon1:0.00484 recon2:0.00445
+	Batch 190/276 Loss:0.00914 con1:0.00000 con2: 0.00000 recon1:0.00421 recon2:0.00493
+	Batch 200/276 Loss:0.01489 con1:0.00001 con2: 0.00001 recon1:0.00810 recon2:0.00677
+	Batch 210/276 Loss:0.01678 con1:0.00001 con2: 0.00001 recon1:0.00868 recon2:0.00808
+	Batch 220/276 Loss:0.00964 con1:0.00000 con2: 0.00000 recon1:0.00473 recon2:0.00491
+	Batch 230/276 Loss:0.03901 con1:0.00008 con2: 0.00008 recon1:0.01903 recon2:0.01983
+	Batch 240/276 Loss:0.00813 con1:0.00000 con2: 0.00000 recon1:0.00419 recon2:0.00394
+	Batch 250/276 Loss:0.00889 con1:0.00000 con2: 0.00000 recon1:0.00454 recon2:0.00434
+	Batch 260/276 Loss:0.00780 con1:0.00000 con2: 0.00000 recon1:0.00383 recon2:0.00396
+	Batch 270/276 Loss:0.01085 con1:0.00001 con2: 0.00001 recon1:0.00539 recon2:0.00544
+Validation Epoch 5/1000 Loss:0.01231 con1:0.00001 con2:0.00001 recon1:0.00614 recon2:0.00615
+Training...
+	Batch 10/672 Loss:0.01308 con1:0.00001 con2:0.00001 recon1:0.00658 recon2:0.00649
+	Batch 20/672 Loss:0.02345 con1:0.00001 con2:0.00001 recon1:0.01195 recon2:0.01147
+	Batch 30/672 Loss:0.01565 con1:0.00001 con2:0.00001 recon1:0.00810 recon2:0.00754
+	Batch 40/672 Loss:0.01388 con1:0.00001 con2:0.00001 recon1:0.00662 recon2:0.00726
+	Batch 50/672 Loss:0.01251 con1:0.00001 con2:0.00001 recon1:0.00652 recon2:0.00598
+	Batch 60/672 Loss:0.01083 con1:0.00000 con2:0.00000 recon1:0.00520 recon2:0.00562
+	Batch 70/672 Loss:0.01334 con1:0.00001 con2:0.00001 recon1:0.00692 recon2:0.00640
+	Batch 80/672 Loss:0.01447 con1:0.00001 con2:0.00001 recon1:0.00747 recon2:0.00699
+	Batch 90/672 Loss:0.01500 con1:0.00001 con2:0.00001 recon1:0.00728 recon2:0.00771
+	Batch 100/672 Loss:0.01106 con1:0.00000 con2:0.00000 recon1:0.00574 recon2:0.00532
+	Batch 110/672 Loss:0.01399 con1:0.00002 con2:0.00002 recon1:0.00727 recon2:0.00668
+	Batch 120/672 Loss:0.01141 con1:0.00001 con2:0.00001 recon1:0.00556 recon2:0.00583
+	Batch 130/672 Loss:0.01024 con1:0.00000 con2:0.00000 recon1:0.00526 recon2:0.00497
+	Batch 140/672 Loss:0.01212 con1:0.00000 con2:0.00000 recon1:0.00562 recon2:0.00650
+	Batch 150/672 Loss:0.01280 con1:0.00001 con2:0.00001 recon1:0.00663 recon2:0.00615
+	Batch 160/672 Loss:0.01240 con1:0.00002 con2:0.00001 recon1:0.00603 recon2:0.00634
+	Batch 170/672 Loss:0.01376 con1:0.00001 con2:0.00001 recon1:0.00676 recon2:0.00699
+	Batch 180/672 Loss:0.01594 con1:0.00001 con2:0.00001 recon1:0.00814 recon2:0.00778
+	Batch 190/672 Loss:0.01212 con1:0.00001 con2:0.00001 recon1:0.00624 recon2:0.00587
+	Batch 200/672 Loss:0.01274 con1:0.00001 con2:0.00001 recon1:0.00640 recon2:0.00633
+	Batch 210/672 Loss:0.01149 con1:0.00000 con2:0.00000 recon1:0.00563 recon2:0.00585
+	Batch 220/672 Loss:0.01556 con1:0.00001 con2:0.00001 recon1:0.00811 recon2:0.00743
+	Batch 230/672 Loss:0.01136 con1:0.00000 con2:0.00000 recon1:0.00546 recon2:0.00589
+	Batch 240/672 Loss:0.01438 con1:0.00002 con2:0.00002 recon1:0.00651 recon2:0.00783
+	Batch 250/672 Loss:0.01445 con1:0.00001 con2:0.00001 recon1:0.00709 recon2:0.00733
+	Batch 260/672 Loss:0.01535 con1:0.00000 con2:0.00000 recon1:0.00798 recon2:0.00737
+	Batch 270/672 Loss:0.01027 con1:0.00001 con2:0.00001 recon1:0.00500 recon2:0.00526
+	Batch 280/672 Loss:0.01573 con1:0.00002 con2:0.00002 recon1:0.00802 recon2:0.00767
+	Batch 290/672 Loss:0.01374 con1:0.00001 con2:0.00001 recon1:0.00669 recon2:0.00704
+	Batch 300/672 Loss:0.01125 con1:0.00001 con2:0.00000 recon1:0.00575 recon2:0.00549
+	Batch 310/672 Loss:0.01336 con1:0.00001 con2:0.00001 recon1:0.00689 recon2:0.00646
+	Batch 320/672 Loss:0.01002 con1:0.00000 con2:0.00000 recon1:0.00490 recon2:0.00511
+	Batch 330/672 Loss:0.01644 con1:0.00000 con2:0.00000 recon1:0.00707 recon2:0.00937
+	Batch 340/672 Loss:0.01725 con1:0.00001 con2:0.00001 recon1:0.00930 recon2:0.00794
+	Batch 350/672 Loss:0.01006 con1:0.00001 con2:0.00001 recon1:0.00487 recon2:0.00517
+	Batch 360/672 Loss:0.00988 con1:0.00000 con2:0.00000 recon1:0.00511 recon2:0.00476
+	Batch 370/672 Loss:0.01298 con1:0.00000 con2:0.00000 recon1:0.00655 recon2:0.00643
+	Batch 380/672 Loss:0.01123 con1:0.00000 con2:0.00000 recon1:0.00568 recon2:0.00555
+	Batch 390/672 Loss:0.01175 con1:0.00001 con2:0.00001 recon1:0.00565 recon2:0.00609
+	Batch 400/672 Loss:0.01183 con1:0.00001 con2:0.00001 recon1:0.00575 recon2:0.00607
+	Batch 410/672 Loss:0.01483 con1:0.00001 con2:0.00001 recon1:0.00780 recon2:0.00701
+	Batch 420/672 Loss:0.01110 con1:0.00000 con2:0.00000 recon1:0.00561 recon2:0.00548
+	Batch 430/672 Loss:0.01177 con1:0.00000 con2:0.00000 recon1:0.00608 recon2:0.00568
+	Batch 440/672 Loss:0.01165 con1:0.00000 con2:0.00000 recon1:0.00577 recon2:0.00588
+	Batch 450/672 Loss:0.01467 con1:0.00000 con2:0.00000 recon1:0.00730 recon2:0.00736
+	Batch 460/672 Loss:0.01238 con1:0.00000 con2:0.00000 recon1:0.00583 recon2:0.00654
+	Batch 470/672 Loss:0.01543 con1:0.00001 con2:0.00000 recon1:0.00791 recon2:0.00751
+	Batch 480/672 Loss:0.01577 con1:0.00001 con2:0.00001 recon1:0.00763 recon2:0.00811
+	Batch 490/672 Loss:0.01622 con1:0.00002 con2:0.00002 recon1:0.00836 recon2:0.00782
+	Batch 500/672 Loss:0.01655 con1:0.00001 con2:0.00001 recon1:0.00860 recon2:0.00793
+	Batch 510/672 Loss:0.01203 con1:0.00001 con2:0.00001 recon1:0.00633 recon2:0.00569
+	Batch 520/672 Loss:0.01735 con1:0.00001 con2:0.00001 recon1:0.00848 recon2:0.00886
+	Batch 530/672 Loss:0.01793 con1:0.00001 con2:0.00001 recon1:0.00771 recon2:0.01021
+	Batch 540/672 Loss:0.01396 con1:0.00000 con2:0.00000 recon1:0.00622 recon2:0.00774
+	Batch 550/672 Loss:0.01358 con1:0.00000 con2:0.00000 recon1:0.00636 recon2:0.00722
+	Batch 560/672 Loss:0.01270 con1:0.00001 con2:0.00001 recon1:0.00632 recon2:0.00637
+	Batch 570/672 Loss:0.01644 con1:0.00001 con2:0.00001 recon1:0.00843 recon2:0.00800
+	Batch 580/672 Loss:0.01122 con1:0.00001 con2:0.00001 recon1:0.00537 recon2:0.00584
+	Batch 590/672 Loss:0.01166 con1:0.00001 con2:0.00001 recon1:0.00554 recon2:0.00610
+	Batch 600/672 Loss:0.01211 con1:0.00000 con2:0.00000 recon1:0.00616 recon2:0.00594
+	Batch 610/672 Loss:0.01139 con1:0.00000 con2:0.00001 recon1:0.00570 recon2:0.00569
+	Batch 620/672 Loss:0.01292 con1:0.00000 con2:0.00000 recon1:0.00683 recon2:0.00608
+	Batch 630/672 Loss:0.01178 con1:0.00001 con2:0.00001 recon1:0.00592 recon2:0.00584
+	Batch 640/672 Loss:0.01161 con1:0.00000 con2:0.00000 recon1:0.00532 recon2:0.00628
+	Batch 650/672 Loss:0.01224 con1:0.00000 con2:0.00000 recon1:0.00626 recon2:0.00597
+	Batch 660/672 Loss:0.01323 con1:0.00000 con2:0.00000 recon1:0.00678 recon2:0.00644
+	Batch 670/672 Loss:0.01387 con1:0.00000 con2:0.00000 recon1:0.00664 recon2:0.00722
+Training Epoch 6/1000 Loss:0.01300 con1:0.00001 con2:0.00001 recon1:0.00648 recon2:0.00650
+Validation...
+	Batch 10/276 Loss:0.00883 con1:0.00000 con2: 0.00000 recon1:0.00437 recon2:0.00445
+	Batch 20/276 Loss:0.00806 con1:0.00000 con2: 0.00000 recon1:0.00417 recon2:0.00388
+	Batch 30/276 Loss:0.00893 con1:0.00000 con2: 0.00000 recon1:0.00445 recon2:0.00449
+	Batch 40/276 Loss:0.01752 con1:0.00002 con2: 0.00002 recon1:0.00959 recon2:0.00790
+	Batch 50/276 Loss:0.00948 con1:0.00000 con2: 0.00000 recon1:0.00482 recon2:0.00466
+	Batch 60/276 Loss:0.01119 con1:0.00000 con2: 0.00000 recon1:0.00548 recon2:0.00570
+	Batch 70/276 Loss:0.01245 con1:0.00000 con2: 0.00000 recon1:0.00633 recon2:0.00611
+	Batch 80/276 Loss:0.01325 con1:0.00000 con2: 0.00000 recon1:0.00676 recon2:0.00648
+	Batch 90/276 Loss:0.00784 con1:0.00000 con2: 0.00000 recon1:0.00402 recon2:0.00382
+	Batch 100/276 Loss:0.00867 con1:0.00000 con2: 0.00000 recon1:0.00438 recon2:0.00428
+	Batch 110/276 Loss:0.00721 con1:0.00000 con2: 0.00000 recon1:0.00355 recon2:0.00365
+	Batch 120/276 Loss:0.01384 con1:0.00000 con2: 0.00000 recon1:0.00759 recon2:0.00623
+	Batch 130/276 Loss:0.00985 con1:0.00000 con2: 0.00000 recon1:0.00485 recon2:0.00500
+	Batch 140/276 Loss:0.01879 con1:0.00000 con2: 0.00000 recon1:0.00888 recon2:0.00991
+	Batch 150/276 Loss:0.01108 con1:0.00001 con2: 0.00001 recon1:0.00547 recon2:0.00560
+	Batch 160/276 Loss:0.01696 con1:0.00001 con2: 0.00001 recon1:0.00792 recon2:0.00902
+	Batch 170/276 Loss:0.01376 con1:0.00001 con2: 0.00001 recon1:0.00673 recon2:0.00700
+	Batch 180/276 Loss:0.00925 con1:0.00000 con2: 0.00000 recon1:0.00479 recon2:0.00446
+	Batch 190/276 Loss:0.00909 con1:0.00000 con2: 0.00000 recon1:0.00423 recon2:0.00486
+	Batch 200/276 Loss:0.01483 con1:0.00000 con2: 0.00000 recon1:0.00806 recon2:0.00677
+	Batch 210/276 Loss:0.01656 con1:0.00000 con2: 0.00000 recon1:0.00851 recon2:0.00804
+	Batch 220/276 Loss:0.00958 con1:0.00000 con2: 0.00000 recon1:0.00471 recon2:0.00487
+	Batch 230/276 Loss:0.03762 con1:0.00003 con2: 0.00003 recon1:0.01826 recon2:0.01931
+	Batch 240/276 Loss:0.00809 con1:0.00000 con2: 0.00000 recon1:0.00416 recon2:0.00393
+	Batch 250/276 Loss:0.00891 con1:0.00000 con2: 0.00000 recon1:0.00455 recon2:0.00435
+	Batch 260/276 Loss:0.00784 con1:0.00000 con2: 0.00000 recon1:0.00386 recon2:0.00398
+	Batch 270/276 Loss:0.01081 con1:0.00000 con2: 0.00000 recon1:0.00538 recon2:0.00543
+Validation Epoch 6/1000 Loss:0.01215 con1:0.00001 con2:0.00001 recon1:0.00607 recon2:0.00607
+Training...
+	Batch 10/672 Loss:0.01293 con1:0.00001 con2:0.00001 recon1:0.00635 recon2:0.00655
+	Batch 20/672 Loss:0.01262 con1:0.00001 con2:0.00001 recon1:0.00643 recon2:0.00618
+	Batch 30/672 Loss:0.01255 con1:0.00001 con2:0.00001 recon1:0.00652 recon2:0.00602
+	Batch 40/672 Loss:0.01490 con1:0.00001 con2:0.00001 recon1:0.00754 recon2:0.00735
+	Batch 50/672 Loss:0.01396 con1:0.00001 con2:0.00001 recon1:0.00697 recon2:0.00698
+	Batch 60/672 Loss:0.01214 con1:0.00000 con2:0.00000 recon1:0.00606 recon2:0.00607
+	Batch 70/672 Loss:0.01727 con1:0.00001 con2:0.00001 recon1:0.00955 recon2:0.00771
+	Batch 80/672 Loss:0.01062 con1:0.00001 con2:0.00001 recon1:0.00541 recon2:0.00519
+	Batch 90/672 Loss:0.01204 con1:0.00001 con2:0.00001 recon1:0.00569 recon2:0.00633
+	Batch 100/672 Loss:0.01118 con1:0.00001 con2:0.00001 recon1:0.00577 recon2:0.00540
+	Batch 110/672 Loss:0.01154 con1:0.00001 con2:0.00001 recon1:0.00579 recon2:0.00573
+	Batch 120/672 Loss:0.01309 con1:0.00001 con2:0.00001 recon1:0.00649 recon2:0.00658
+	Batch 130/672 Loss:0.01055 con1:0.00001 con2:0.00000 recon1:0.00523 recon2:0.00531
+	Batch 140/672 Loss:0.01418 con1:0.00001 con2:0.00001 recon1:0.00716 recon2:0.00699
+	Batch 150/672 Loss:0.01208 con1:0.00001 con2:0.00001 recon1:0.00626 recon2:0.00581
+	Batch 160/672 Loss:0.01192 con1:0.00000 con2:0.00000 recon1:0.00628 recon2:0.00564
+	Batch 170/672 Loss:0.01338 con1:0.00000 con2:0.00000 recon1:0.00656 recon2:0.00681
+	Batch 180/672 Loss:0.01099 con1:0.00000 con2:0.00000 recon1:0.00550 recon2:0.00549
+	Batch 190/672 Loss:0.01229 con1:0.00001 con2:0.00001 recon1:0.00642 recon2:0.00586
+	Batch 200/672 Loss:0.01135 con1:0.00000 con2:0.00000 recon1:0.00587 recon2:0.00548
+	Batch 210/672 Loss:0.01202 con1:0.00001 con2:0.00001 recon1:0.00567 recon2:0.00633
+	Batch 220/672 Loss:0.01293 con1:0.00000 con2:0.00000 recon1:0.00666 recon2:0.00626
+	Batch 230/672 Loss:0.01201 con1:0.00000 con2:0.00000 recon1:0.00621 recon2:0.00580
+	Batch 240/672 Loss:0.01166 con1:0.00001 con2:0.00001 recon1:0.00592 recon2:0.00571
+	Batch 250/672 Loss:0.01260 con1:0.00001 con2:0.00001 recon1:0.00648 recon2:0.00611
+	Batch 260/672 Loss:0.01022 con1:0.00000 con2:0.00000 recon1:0.00507 recon2:0.00514
+	Batch 270/672 Loss:0.01393 con1:0.00001 con2:0.00001 recon1:0.00701 recon2:0.00690
+	Batch 280/672 Loss:0.01040 con1:0.00001 con2:0.00001 recon1:0.00508 recon2:0.00531
+	Batch 290/672 Loss:0.01341 con1:0.00001 con2:0.00001 recon1:0.00653 recon2:0.00686
+	Batch 300/672 Loss:0.01488 con1:0.00001 con2:0.00001 recon1:0.00751 recon2:0.00735
+	Batch 310/672 Loss:0.01067 con1:0.00001 con2:0.00001 recon1:0.00521 recon2:0.00543
+	Batch 320/672 Loss:0.01274 con1:0.00001 con2:0.00002 recon1:0.00668 recon2:0.00604
+	Batch 330/672 Loss:0.01478 con1:0.00001 con2:0.00001 recon1:0.00728 recon2:0.00748
+	Batch 340/672 Loss:0.01296 con1:0.00001 con2:0.00001 recon1:0.00668 recon2:0.00627
+	Batch 350/672 Loss:0.01106 con1:0.00000 con2:0.00000 recon1:0.00584 recon2:0.00521
+	Batch 360/672 Loss:0.01233 con1:0.00000 con2:0.00000 recon1:0.00617 recon2:0.00615
+	Batch 370/672 Loss:0.01360 con1:0.00001 con2:0.00001 recon1:0.00676 recon2:0.00682
+	Batch 380/672 Loss:0.01188 con1:0.00001 con2:0.00001 recon1:0.00565 recon2:0.00623
+	Batch 390/672 Loss:0.01693 con1:0.00001 con2:0.00001 recon1:0.00790 recon2:0.00900
+	Batch 400/672 Loss:0.01417 con1:0.00000 con2:0.00000 recon1:0.00699 recon2:0.00718
+	Batch 410/672 Loss:0.01592 con1:0.00001 con2:0.00001 recon1:0.00796 recon2:0.00794
+	Batch 420/672 Loss:0.00969 con1:0.00000 con2:0.00000 recon1:0.00487 recon2:0.00482
+	Batch 430/672 Loss:0.01225 con1:0.00000 con2:0.00000 recon1:0.00618 recon2:0.00607
+	Batch 440/672 Loss:0.01290 con1:0.00001 con2:0.00001 recon1:0.00661 recon2:0.00626
+	Batch 450/672 Loss:0.01134 con1:0.00001 con2:0.00000 recon1:0.00603 recon2:0.00530
+	Batch 460/672 Loss:0.01229 con1:0.00001 con2:0.00001 recon1:0.00582 recon2:0.00646
+	Batch 470/672 Loss:0.01128 con1:0.00000 con2:0.00000 recon1:0.00570 recon2:0.00557
+	Batch 480/672 Loss:0.01491 con1:0.00001 con2:0.00001 recon1:0.00740 recon2:0.00750
+	Batch 490/672 Loss:0.01150 con1:0.00000 con2:0.00000 recon1:0.00586 recon2:0.00563
+	Batch 500/672 Loss:0.01287 con1:0.00000 con2:0.00000 recon1:0.00667 recon2:0.00619
+	Batch 510/672 Loss:0.01052 con1:0.00000 con2:0.00000 recon1:0.00514 recon2:0.00536
+	Batch 520/672 Loss:0.01339 con1:0.00001 con2:0.00001 recon1:0.00641 recon2:0.00697
+	Batch 530/672 Loss:0.01024 con1:0.00001 con2:0.00001 recon1:0.00495 recon2:0.00528
+	Batch 540/672 Loss:0.01355 con1:0.00001 con2:0.00001 recon1:0.00705 recon2:0.00649
+	Batch 550/672 Loss:0.00983 con1:0.00001 con2:0.00001 recon1:0.00508 recon2:0.00473
+	Batch 560/672 Loss:0.01308 con1:0.00001 con2:0.00001 recon1:0.00664 recon2:0.00642
+	Batch 570/672 Loss:0.01093 con1:0.00000 con2:0.00000 recon1:0.00529 recon2:0.00563
+	Batch 580/672 Loss:0.01285 con1:0.00000 con2:0.00000 recon1:0.00648 recon2:0.00636
+	Batch 590/672 Loss:0.01439 con1:0.00001 con2:0.00001 recon1:0.00714 recon2:0.00722
+	Batch 600/672 Loss:0.01215 con1:0.00001 con2:0.00001 recon1:0.00619 recon2:0.00593
+	Batch 610/672 Loss:0.01255 con1:0.00001 con2:0.00001 recon1:0.00647 recon2:0.00607
+	Batch 620/672 Loss:0.01302 con1:0.00001 con2:0.00001 recon1:0.00657 recon2:0.00644
+	Batch 630/672 Loss:0.01227 con1:0.00001 con2:0.00001 recon1:0.00569 recon2:0.00657
+	Batch 640/672 Loss:0.00978 con1:0.00000 con2:0.00000 recon1:0.00550 recon2:0.00427
+	Batch 650/672 Loss:0.01243 con1:0.00001 con2:0.00001 recon1:0.00601 recon2:0.00640
+	Batch 660/672 Loss:0.01520 con1:0.00001 con2:0.00001 recon1:0.00740 recon2:0.00779
+	Batch 670/672 Loss:0.01301 con1:0.00001 con2:0.00001 recon1:0.00663 recon2:0.00636
+Training Epoch 7/1000 Loss:0.01256 con1:0.00001 con2:0.00001 recon1:0.00630 recon2:0.00625
+Validation...
+	Batch 10/276 Loss:0.00817 con1:0.00000 con2: 0.00000 recon1:0.00403 recon2:0.00413
+	Batch 20/276 Loss:0.00742 con1:0.00000 con2: 0.00000 recon1:0.00386 recon2:0.00355
+	Batch 30/276 Loss:0.00824 con1:0.00000 con2: 0.00000 recon1:0.00410 recon2:0.00414
+	Batch 40/276 Loss:0.01664 con1:0.00003 con2: 0.00003 recon1:0.00904 recon2:0.00753
+	Batch 50/276 Loss:0.00882 con1:0.00000 con2: 0.00000 recon1:0.00450 recon2:0.00432
+	Batch 60/276 Loss:0.01056 con1:0.00000 con2: 0.00000 recon1:0.00518 recon2:0.00538
+	Batch 70/276 Loss:0.01188 con1:0.00001 con2: 0.00001 recon1:0.00603 recon2:0.00583
+	Batch 80/276 Loss:0.01268 con1:0.00001 con2: 0.00001 recon1:0.00650 recon2:0.00616
+	Batch 90/276 Loss:0.00721 con1:0.00000 con2: 0.00000 recon1:0.00372 recon2:0.00349
+	Batch 100/276 Loss:0.00801 con1:0.00000 con2: 0.00000 recon1:0.00405 recon2:0.00395
+	Batch 110/276 Loss:0.00658 con1:0.00000 con2: 0.00000 recon1:0.00325 recon2:0.00332
+	Batch 120/276 Loss:0.01324 con1:0.00001 con2: 0.00001 recon1:0.00728 recon2:0.00594
+	Batch 130/276 Loss:0.00919 con1:0.00000 con2: 0.00000 recon1:0.00451 recon2:0.00467
+	Batch 140/276 Loss:0.01819 con1:0.00001 con2: 0.00001 recon1:0.00860 recon2:0.00957
+	Batch 150/276 Loss:0.01043 con1:0.00001 con2: 0.00001 recon1:0.00516 recon2:0.00525
+	Batch 160/276 Loss:0.01623 con1:0.00003 con2: 0.00002 recon1:0.00751 recon2:0.00867
+	Batch 170/276 Loss:0.01301 con1:0.00002 con2: 0.00002 recon1:0.00636 recon2:0.00661
+	Batch 180/276 Loss:0.00865 con1:0.00000 con2: 0.00000 recon1:0.00447 recon2:0.00417
+	Batch 190/276 Loss:0.00849 con1:0.00000 con2: 0.00000 recon1:0.00394 recon2:0.00455
+	Batch 200/276 Loss:0.01420 con1:0.00000 con2: 0.00000 recon1:0.00774 recon2:0.00645
+	Batch 210/276 Loss:0.01584 con1:0.00001 con2: 0.00001 recon1:0.00812 recon2:0.00770
+	Batch 220/276 Loss:0.00892 con1:0.00000 con2: 0.00000 recon1:0.00440 recon2:0.00452
+	Batch 230/276 Loss:0.03698 con1:0.00007 con2: 0.00007 recon1:0.01797 recon2:0.01887
+	Batch 240/276 Loss:0.00746 con1:0.00000 con2: 0.00000 recon1:0.00383 recon2:0.00362
+	Batch 250/276 Loss:0.00832 con1:0.00000 con2: 0.00000 recon1:0.00424 recon2:0.00407
+	Batch 260/276 Loss:0.00721 con1:0.00000 con2: 0.00000 recon1:0.00355 recon2:0.00365
+	Batch 270/276 Loss:0.01016 con1:0.00001 con2: 0.00001 recon1:0.00505 recon2:0.00509
+Validation Epoch 7/1000 Loss:0.01152 con1:0.00001 con2:0.00001 recon1:0.00574 recon2:0.00575
+Training...
+	Batch 10/672 Loss:0.01479 con1:0.00001 con2:0.00001 recon1:0.00726 recon2:0.00752
+	Batch 20/672 Loss:0.01117 con1:0.00000 con2:0.00000 recon1:0.00549 recon2:0.00567
+	Batch 30/672 Loss:0.01273 con1:0.00001 con2:0.00001 recon1:0.00678 recon2:0.00593
+	Batch 40/672 Loss:0.01540 con1:0.00002 con2:0.00002 recon1:0.00706 recon2:0.00829
+	Batch 50/672 Loss:0.01367 con1:0.00000 con2:0.00000 recon1:0.00703 recon2:0.00663
+	Batch 60/672 Loss:0.01288 con1:0.00000 con2:0.00000 recon1:0.00629 recon2:0.00658
+	Batch 70/672 Loss:0.01127 con1:0.00001 con2:0.00001 recon1:0.00577 recon2:0.00548
+	Batch 80/672 Loss:0.01088 con1:0.00000 con2:0.00000 recon1:0.00547 recon2:0.00541
+	Batch 90/672 Loss:0.01116 con1:0.00000 con2:0.00000 recon1:0.00523 recon2:0.00592
+	Batch 100/672 Loss:0.01056 con1:0.00000 con2:0.00000 recon1:0.00503 recon2:0.00552
+	Batch 110/672 Loss:0.01002 con1:0.00000 con2:0.00000 recon1:0.00490 recon2:0.00511
+	Batch 120/672 Loss:0.01225 con1:0.00001 con2:0.00001 recon1:0.00621 recon2:0.00601
+	Batch 130/672 Loss:0.01505 con1:0.00000 con2:0.00000 recon1:0.00731 recon2:0.00773
+	Batch 140/672 Loss:0.01059 con1:0.00001 con2:0.00001 recon1:0.00545 recon2:0.00512
+	Batch 150/672 Loss:0.01261 con1:0.00000 con2:0.00000 recon1:0.00612 recon2:0.00648
+	Batch 160/672 Loss:0.01320 con1:0.00004 con2:0.00003 recon1:0.00639 recon2:0.00674
+	Batch 170/672 Loss:0.01426 con1:0.00001 con2:0.00001 recon1:0.00757 recon2:0.00668
+	Batch 180/672 Loss:0.01275 con1:0.00001 con2:0.00001 recon1:0.00650 recon2:0.00624
+	Batch 190/672 Loss:0.01022 con1:0.00000 con2:0.00000 recon1:0.00533 recon2:0.00488
+	Batch 200/672 Loss:0.01045 con1:0.00001 con2:0.00001 recon1:0.00501 recon2:0.00543
+	Batch 210/672 Loss:0.01227 con1:0.00001 con2:0.00001 recon1:0.00592 recon2:0.00633
+	Batch 220/672 Loss:0.01070 con1:0.00001 con2:0.00001 recon1:0.00560 recon2:0.00508
+	Batch 230/672 Loss:0.00802 con1:0.00000 con2:0.00000 recon1:0.00406 recon2:0.00395
+	Batch 240/672 Loss:0.01226 con1:0.00001 con2:0.00001 recon1:0.00627 recon2:0.00596
+	Batch 250/672 Loss:0.01528 con1:0.00001 con2:0.00001 recon1:0.00788 recon2:0.00739
+	Batch 260/672 Loss:0.01277 con1:0.00001 con2:0.00001 recon1:0.00588 recon2:0.00688
+	Batch 270/672 Loss:0.01214 con1:0.00001 con2:0.00001 recon1:0.00574 recon2:0.00638
+	Batch 280/672 Loss:0.01122 con1:0.00000 con2:0.00000 recon1:0.00548 recon2:0.00574
+	Batch 290/672 Loss:0.01279 con1:0.00000 con2:0.00000 recon1:0.00627 recon2:0.00651
+	Batch 300/672 Loss:0.01247 con1:0.00000 con2:0.00000 recon1:0.00626 recon2:0.00620
+	Batch 310/672 Loss:0.00916 con1:0.00000 con2:0.00000 recon1:0.00461 recon2:0.00454
+	Batch 320/672 Loss:0.01308 con1:0.00001 con2:0.00001 recon1:0.00650 recon2:0.00656
+	Batch 330/672 Loss:0.01203 con1:0.00001 con2:0.00001 recon1:0.00611 recon2:0.00590
+	Batch 340/672 Loss:0.01418 con1:0.00001 con2:0.00001 recon1:0.00667 recon2:0.00750
+	Batch 350/672 Loss:0.01195 con1:0.00001 con2:0.00001 recon1:0.00595 recon2:0.00598
+	Batch 360/672 Loss:0.00947 con1:0.00001 con2:0.00001 recon1:0.00474 recon2:0.00472
+	Batch 370/672 Loss:0.00908 con1:0.00000 con2:0.00000 recon1:0.00463 recon2:0.00444
+	Batch 380/672 Loss:0.01552 con1:0.00001 con2:0.00001 recon1:0.00760 recon2:0.00791
+	Batch 390/672 Loss:0.01536 con1:0.00001 con2:0.00001 recon1:0.00758 recon2:0.00776
+	Batch 400/672 Loss:0.01532 con1:0.00000 con2:0.00000 recon1:0.00703 recon2:0.00829
+	Batch 410/672 Loss:0.01168 con1:0.00000 con2:0.00000 recon1:0.00595 recon2:0.00572
+	Batch 420/672 Loss:0.01128 con1:0.00000 con2:0.00000 recon1:0.00551 recon2:0.00576
+	Batch 430/672 Loss:0.01260 con1:0.00001 con2:0.00001 recon1:0.00677 recon2:0.00581
+	Batch 440/672 Loss:0.01251 con1:0.00001 con2:0.00001 recon1:0.00644 recon2:0.00607
+	Batch 450/672 Loss:0.01085 con1:0.00000 con2:0.00000 recon1:0.00530 recon2:0.00554
+	Batch 460/672 Loss:0.01073 con1:0.00000 con2:0.00000 recon1:0.00573 recon2:0.00500
+	Batch 470/672 Loss:0.01021 con1:0.00000 con2:0.00000 recon1:0.00486 recon2:0.00535
+	Batch 480/672 Loss:0.01437 con1:0.00001 con2:0.00001 recon1:0.00794 recon2:0.00642
+	Batch 490/672 Loss:0.01541 con1:0.00001 con2:0.00001 recon1:0.00787 recon2:0.00752
+	Batch 500/672 Loss:0.01260 con1:0.00001 con2:0.00001 recon1:0.00605 recon2:0.00654
+	Batch 510/672 Loss:0.01172 con1:0.00001 con2:0.00001 recon1:0.00597 recon2:0.00575
+	Batch 520/672 Loss:0.01422 con1:0.00001 con2:0.00001 recon1:0.00703 recon2:0.00717
+	Batch 530/672 Loss:0.01561 con1:0.00001 con2:0.00001 recon1:0.00855 recon2:0.00705
+	Batch 540/672 Loss:0.01449 con1:0.00001 con2:0.00001 recon1:0.00862 recon2:0.00585
+	Batch 550/672 Loss:0.01370 con1:0.00001 con2:0.00000 recon1:0.00659 recon2:0.00710
+	Batch 560/672 Loss:0.01338 con1:0.00001 con2:0.00001 recon1:0.00654 recon2:0.00683
+	Batch 570/672 Loss:0.01214 con1:0.00001 con2:0.00001 recon1:0.00546 recon2:0.00667
+	Batch 580/672 Loss:0.00889 con1:0.00000 con2:0.00000 recon1:0.00455 recon2:0.00433
+	Batch 590/672 Loss:0.01435 con1:0.00001 con2:0.00001 recon1:0.00669 recon2:0.00765
+	Batch 600/672 Loss:0.01411 con1:0.00002 con2:0.00002 recon1:0.00754 recon2:0.00653
+	Batch 610/672 Loss:0.01200 con1:0.00001 con2:0.00001 recon1:0.00659 recon2:0.00540
+	Batch 620/672 Loss:0.00981 con1:0.00000 con2:0.00000 recon1:0.00492 recon2:0.00488
+	Batch 630/672 Loss:0.01130 con1:0.00001 con2:0.00001 recon1:0.00568 recon2:0.00560
+	Batch 640/672 Loss:0.00949 con1:0.00001 con2:0.00001 recon1:0.00459 recon2:0.00488
+	Batch 650/672 Loss:0.01541 con1:0.00001 con2:0.00001 recon1:0.00655 recon2:0.00884
+	Batch 660/672 Loss:0.01434 con1:0.00001 con2:0.00001 recon1:0.00763 recon2:0.00669
+	Batch 670/672 Loss:0.01278 con1:0.00001 con2:0.00001 recon1:0.00623 recon2:0.00653
+Training Epoch 8/1000 Loss:0.01220 con1:0.00001 con2:0.00001 recon1:0.00610 recon2:0.00609
+Validation...
+	Batch 10/276 Loss:0.00775 con1:0.00000 con2: 0.00000 recon1:0.00383 recon2:0.00392
+	Batch 20/276 Loss:0.00709 con1:0.00000 con2: 0.00000 recon1:0.00372 recon2:0.00336
+	Batch 30/276 Loss:0.00782 con1:0.00000 con2: 0.00000 recon1:0.00388 recon2:0.00394
+	Batch 40/276 Loss:0.01573 con1:0.00003 con2: 0.00003 recon1:0.00853 recon2:0.00714
+	Batch 50/276 Loss:0.00836 con1:0.00000 con2: 0.00000 recon1:0.00427 recon2:0.00409
+	Batch 60/276 Loss:0.01015 con1:0.00000 con2: 0.00000 recon1:0.00498 recon2:0.00516
+	Batch 70/276 Loss:0.01148 con1:0.00000 con2: 0.00000 recon1:0.00581 recon2:0.00567
+	Batch 80/276 Loss:0.01236 con1:0.00001 con2: 0.00001 recon1:0.00636 recon2:0.00599
+	Batch 90/276 Loss:0.00694 con1:0.00000 con2: 0.00000 recon1:0.00358 recon2:0.00335
+	Batch 100/276 Loss:0.00763 con1:0.00000 con2: 0.00000 recon1:0.00386 recon2:0.00377
+	Batch 110/276 Loss:0.00621 con1:0.00000 con2: 0.00000 recon1:0.00307 recon2:0.00314
+	Batch 120/276 Loss:0.01290 con1:0.00001 con2: 0.00001 recon1:0.00708 recon2:0.00580
+	Batch 130/276 Loss:0.00884 con1:0.00000 con2: 0.00000 recon1:0.00434 recon2:0.00449
+	Batch 140/276 Loss:0.01799 con1:0.00001 con2: 0.00001 recon1:0.00849 recon2:0.00948
+	Batch 150/276 Loss:0.00996 con1:0.00001 con2: 0.00001 recon1:0.00492 recon2:0.00503
+	Batch 160/276 Loss:0.01569 con1:0.00003 con2: 0.00002 recon1:0.00729 recon2:0.00835
+	Batch 170/276 Loss:0.01240 con1:0.00002 con2: 0.00002 recon1:0.00606 recon2:0.00630
+	Batch 180/276 Loss:0.00827 con1:0.00000 con2: 0.00000 recon1:0.00429 recon2:0.00398
+	Batch 190/276 Loss:0.00823 con1:0.00000 con2: 0.00000 recon1:0.00382 recon2:0.00440
+	Batch 200/276 Loss:0.01392 con1:0.00000 con2: 0.00000 recon1:0.00757 recon2:0.00634
+	Batch 210/276 Loss:0.01554 con1:0.00000 con2: 0.00001 recon1:0.00797 recon2:0.00756
+	Batch 220/276 Loss:0.00858 con1:0.00000 con2: 0.00000 recon1:0.00423 recon2:0.00435
+	Batch 230/276 Loss:0.03541 con1:0.00007 con2: 0.00006 recon1:0.01728 recon2:0.01801
+	Batch 240/276 Loss:0.00709 con1:0.00000 con2: 0.00000 recon1:0.00366 recon2:0.00343
+	Batch 250/276 Loss:0.00796 con1:0.00000 con2: 0.00000 recon1:0.00408 recon2:0.00388
+	Batch 260/276 Loss:0.00683 con1:0.00000 con2: 0.00000 recon1:0.00336 recon2:0.00347
+	Batch 270/276 Loss:0.00986 con1:0.00001 con2: 0.00001 recon1:0.00489 recon2:0.00496
+Validation Epoch 8/1000 Loss:0.01111 con1:0.00001 con2:0.00001 recon1:0.00554 recon2:0.00555
+Training...
+	Batch 10/672 Loss:0.01144 con1:0.00001 con2:0.00001 recon1:0.00595 recon2:0.00547
+	Batch 20/672 Loss:0.00944 con1:0.00000 con2:0.00000 recon1:0.00448 recon2:0.00496
+	Batch 30/672 Loss:0.01047 con1:0.00000 con2:0.00000 recon1:0.00529 recon2:0.00517
+	Batch 40/672 Loss:0.01092 con1:0.00001 con2:0.00001 recon1:0.00541 recon2:0.00549
+	Batch 50/672 Loss:0.01332 con1:0.00001 con2:0.00001 recon1:0.00611 recon2:0.00719
+	Batch 60/672 Loss:0.00877 con1:0.00000 con2:0.00000 recon1:0.00446 recon2:0.00431
+	Batch 70/672 Loss:0.01140 con1:0.00000 con2:0.00000 recon1:0.00648 recon2:0.00491
+	Batch 80/672 Loss:0.01088 con1:0.00000 con2:0.00000 recon1:0.00541 recon2:0.00546
+	Batch 90/672 Loss:0.01156 con1:0.00001 con2:0.00001 recon1:0.00551 recon2:0.00604
+	Batch 100/672 Loss:0.01555 con1:0.00002 con2:0.00001 recon1:0.00678 recon2:0.00874
+	Batch 110/672 Loss:0.01370 con1:0.00000 con2:0.00000 recon1:0.00657 recon2:0.00712
+	Batch 120/672 Loss:0.01019 con1:0.00000 con2:0.00000 recon1:0.00474 recon2:0.00544
+	Batch 130/672 Loss:0.01100 con1:0.00001 con2:0.00001 recon1:0.00576 recon2:0.00523
+	Batch 140/672 Loss:0.01061 con1:0.00001 con2:0.00001 recon1:0.00534 recon2:0.00526
+	Batch 150/672 Loss:0.00927 con1:0.00000 con2:0.00000 recon1:0.00457 recon2:0.00469
+	Batch 160/672 Loss:0.01298 con1:0.00001 con2:0.00001 recon1:0.00639 recon2:0.00658
+	Batch 170/672 Loss:0.01242 con1:0.00001 con2:0.00001 recon1:0.00584 recon2:0.00657
+	Batch 180/672 Loss:0.01473 con1:0.00001 con2:0.00001 recon1:0.00764 recon2:0.00706
+	Batch 190/672 Loss:0.01274 con1:0.00000 con2:0.00000 recon1:0.00624 recon2:0.00650
+	Batch 200/672 Loss:0.01511 con1:0.00001 con2:0.00001 recon1:0.00803 recon2:0.00707
+	Batch 210/672 Loss:0.01179 con1:0.00001 con2:0.00001 recon1:0.00590 recon2:0.00588
+	Batch 220/672 Loss:0.01101 con1:0.00000 con2:0.00000 recon1:0.00561 recon2:0.00539
+	Batch 230/672 Loss:0.00996 con1:0.00000 con2:0.00001 recon1:0.00515 recon2:0.00480
+	Batch 240/672 Loss:0.01283 con1:0.00001 con2:0.00001 recon1:0.00645 recon2:0.00636
+	Batch 250/672 Loss:0.01268 con1:0.00000 con2:0.00000 recon1:0.00570 recon2:0.00697
+	Batch 260/672 Loss:0.00954 con1:0.00001 con2:0.00001 recon1:0.00488 recon2:0.00465
+	Batch 270/672 Loss:0.01318 con1:0.00001 con2:0.00001 recon1:0.00645 recon2:0.00672
+	Batch 280/672 Loss:0.01926 con1:0.00001 con2:0.00001 recon1:0.00942 recon2:0.00983
+	Batch 290/672 Loss:0.01104 con1:0.00002 con2:0.00002 recon1:0.00581 recon2:0.00520
+	Batch 300/672 Loss:0.01185 con1:0.00000 con2:0.00000 recon1:0.00602 recon2:0.00582
+	Batch 310/672 Loss:0.01000 con1:0.00001 con2:0.00001 recon1:0.00486 recon2:0.00513
+	Batch 320/672 Loss:0.01181 con1:0.00000 con2:0.00000 recon1:0.00587 recon2:0.00593
+	Batch 330/672 Loss:0.00981 con1:0.00002 con2:0.00002 recon1:0.00510 recon2:0.00469
+	Batch 340/672 Loss:0.01189 con1:0.00000 con2:0.00000 recon1:0.00577 recon2:0.00612
+	Batch 350/672 Loss:0.01222 con1:0.00001 con2:0.00001 recon1:0.00581 recon2:0.00639
+	Batch 360/672 Loss:0.01000 con1:0.00000 con2:0.00000 recon1:0.00473 recon2:0.00526
+	Batch 370/672 Loss:0.01027 con1:0.00000 con2:0.00000 recon1:0.00524 recon2:0.00503
+	Batch 380/672 Loss:0.01079 con1:0.00001 con2:0.00001 recon1:0.00521 recon2:0.00556
+	Batch 390/672 Loss:0.01123 con1:0.00001 con2:0.00001 recon1:0.00566 recon2:0.00555
+	Batch 400/672 Loss:0.01379 con1:0.00001 con2:0.00001 recon1:0.00704 recon2:0.00673
+	Batch 410/672 Loss:0.01271 con1:0.00000 con2:0.00000 recon1:0.00607 recon2:0.00664
+	Batch 420/672 Loss:0.01076 con1:0.00000 con2:0.00000 recon1:0.00543 recon2:0.00532
+	Batch 430/672 Loss:0.01252 con1:0.00001 con2:0.00001 recon1:0.00674 recon2:0.00577
+	Batch 440/672 Loss:0.01230 con1:0.00001 con2:0.00001 recon1:0.00610 recon2:0.00619
+	Batch 450/672 Loss:0.01238 con1:0.00001 con2:0.00001 recon1:0.00623 recon2:0.00614
+	Batch 460/672 Loss:0.01308 con1:0.00001 con2:0.00000 recon1:0.00597 recon2:0.00710
+	Batch 470/672 Loss:0.01277 con1:0.00001 con2:0.00001 recon1:0.00644 recon2:0.00630
+	Batch 480/672 Loss:0.01271 con1:0.00000 con2:0.00000 recon1:0.00631 recon2:0.00639
+	Batch 490/672 Loss:0.01128 con1:0.00001 con2:0.00001 recon1:0.00575 recon2:0.00552
+	Batch 500/672 Loss:0.01056 con1:0.00000 con2:0.00000 recon1:0.00527 recon2:0.00528
+	Batch 510/672 Loss:0.00869 con1:0.00000 con2:0.00000 recon1:0.00424 recon2:0.00445
+	Batch 520/672 Loss:0.01120 con1:0.00001 con2:0.00001 recon1:0.00570 recon2:0.00548
+	Batch 530/672 Loss:0.01077 con1:0.00000 con2:0.00000 recon1:0.00539 recon2:0.00537
+	Batch 540/672 Loss:0.01028 con1:0.00000 con2:0.00000 recon1:0.00540 recon2:0.00487
+	Batch 550/672 Loss:0.00997 con1:0.00000 con2:0.00001 recon1:0.00483 recon2:0.00513
+	Batch 560/672 Loss:0.01835 con1:0.00001 con2:0.00001 recon1:0.00911 recon2:0.00921
+	Batch 570/672 Loss:0.00991 con1:0.00000 con2:0.00000 recon1:0.00499 recon2:0.00491
+	Batch 580/672 Loss:0.00970 con1:0.00001 con2:0.00001 recon1:0.00512 recon2:0.00457
+	Batch 590/672 Loss:0.00999 con1:0.00000 con2:0.00000 recon1:0.00493 recon2:0.00506
+	Batch 600/672 Loss:0.01053 con1:0.00000 con2:0.00000 recon1:0.00532 recon2:0.00520
+	Batch 610/672 Loss:0.01005 con1:0.00000 con2:0.00000 recon1:0.00498 recon2:0.00505
+	Batch 620/672 Loss:0.01059 con1:0.00001 con2:0.00001 recon1:0.00538 recon2:0.00520
+	Batch 630/672 Loss:0.01024 con1:0.00001 con2:0.00001 recon1:0.00498 recon2:0.00524
+	Batch 640/672 Loss:0.01258 con1:0.00001 con2:0.00001 recon1:0.00587 recon2:0.00668
+	Batch 650/672 Loss:0.01018 con1:0.00001 con2:0.00001 recon1:0.00505 recon2:0.00511
+	Batch 660/672 Loss:0.01586 con1:0.00001 con2:0.00000 recon1:0.00741 recon2:0.00844
+	Batch 670/672 Loss:0.01056 con1:0.00000 con2:0.00000 recon1:0.00517 recon2:0.00538
+Training Epoch 9/1000 Loss:0.01178 con1:0.00001 con2:0.00001 recon1:0.00586 recon2:0.00591
+Validation...
+	Batch 10/276 Loss:0.00756 con1:0.00000 con2: 0.00000 recon1:0.00373 recon2:0.00383
+	Batch 20/276 Loss:0.00689 con1:0.00000 con2: 0.00000 recon1:0.00360 recon2:0.00328
+	Batch 30/276 Loss:0.00750 con1:0.00000 con2: 0.00000 recon1:0.00371 recon2:0.00379
+	Batch 40/276 Loss:0.01615 con1:0.00004 con2: 0.00004 recon1:0.00868 recon2:0.00739
+	Batch 50/276 Loss:0.00811 con1:0.00000 con2: 0.00000 recon1:0.00415 recon2:0.00396
+	Batch 60/276 Loss:0.01004 con1:0.00000 con2: 0.00000 recon1:0.00494 recon2:0.00508
+	Batch 70/276 Loss:0.01160 con1:0.00001 con2: 0.00001 recon1:0.00587 recon2:0.00571
+	Batch 80/276 Loss:0.01200 con1:0.00001 con2: 0.00001 recon1:0.00618 recon2:0.00580
+	Batch 90/276 Loss:0.00661 con1:0.00000 con2: 0.00000 recon1:0.00340 recon2:0.00321
+	Batch 100/276 Loss:0.00744 con1:0.00000 con2: 0.00000 recon1:0.00377 recon2:0.00366
+	Batch 110/276 Loss:0.00591 con1:0.00000 con2: 0.00000 recon1:0.00292 recon2:0.00298
+	Batch 120/276 Loss:0.01290 con1:0.00001 con2: 0.00001 recon1:0.00716 recon2:0.00572
+	Batch 130/276 Loss:0.00877 con1:0.00000 con2: 0.00000 recon1:0.00430 recon2:0.00446
+	Batch 140/276 Loss:0.01825 con1:0.00001 con2: 0.00001 recon1:0.00860 recon2:0.00963
+	Batch 150/276 Loss:0.00995 con1:0.00001 con2: 0.00001 recon1:0.00494 recon2:0.00499
+	Batch 160/276 Loss:0.01603 con1:0.00004 con2: 0.00003 recon1:0.00749 recon2:0.00848
+	Batch 170/276 Loss:0.01288 con1:0.00003 con2: 0.00003 recon1:0.00625 recon2:0.00658
+	Batch 180/276 Loss:0.00812 con1:0.00000 con2: 0.00000 recon1:0.00422 recon2:0.00389
+	Batch 190/276 Loss:0.00812 con1:0.00000 con2: 0.00000 recon1:0.00375 recon2:0.00437
+	Batch 200/276 Loss:0.01388 con1:0.00001 con2: 0.00001 recon1:0.00759 recon2:0.00627
+	Batch 210/276 Loss:0.01541 con1:0.00001 con2: 0.00001 recon1:0.00789 recon2:0.00750
+	Batch 220/276 Loss:0.00835 con1:0.00000 con2: 0.00000 recon1:0.00411 recon2:0.00423
+	Batch 230/276 Loss:0.03674 con1:0.00013 con2: 0.00012 recon1:0.01798 recon2:0.01851
+	Batch 240/276 Loss:0.00690 con1:0.00000 con2: 0.00000 recon1:0.00356 recon2:0.00333
+	Batch 250/276 Loss:0.00784 con1:0.00000 con2: 0.00000 recon1:0.00402 recon2:0.00381
+	Batch 260/276 Loss:0.00653 con1:0.00000 con2: 0.00000 recon1:0.00320 recon2:0.00333
+	Batch 270/276 Loss:0.00973 con1:0.00001 con2: 0.00001 recon1:0.00484 recon2:0.00488
+Validation Epoch 9/1000 Loss:0.01109 con1:0.00001 con2:0.00001 recon1:0.00554 recon2:0.00553
+Training...
+	Batch 10/672 Loss:0.01183 con1:0.00000 con2:0.00000 recon1:0.00563 recon2:0.00619
+	Batch 20/672 Loss:0.01201 con1:0.00000 con2:0.00000 recon1:0.00565 recon2:0.00635
+	Batch 30/672 Loss:0.01062 con1:0.00001 con2:0.00001 recon1:0.00550 recon2:0.00511
+	Batch 40/672 Loss:0.01038 con1:0.00000 con2:0.00000 recon1:0.00544 recon2:0.00494
+	Batch 50/672 Loss:0.01186 con1:0.00001 con2:0.00001 recon1:0.00596 recon2:0.00589
+	Batch 60/672 Loss:0.01209 con1:0.00001 con2:0.00001 recon1:0.00637 recon2:0.00570
+	Batch 70/672 Loss:0.00871 con1:0.00000 con2:0.00000 recon1:0.00428 recon2:0.00443
+	Batch 80/672 Loss:0.01165 con1:0.00000 con2:0.00000 recon1:0.00587 recon2:0.00577
+	Batch 90/672 Loss:0.01241 con1:0.00001 con2:0.00001 recon1:0.00646 recon2:0.00594
+	Batch 100/672 Loss:0.01288 con1:0.00001 con2:0.00000 recon1:0.00653 recon2:0.00634
+	Batch 110/672 Loss:0.01277 con1:0.00001 con2:0.00001 recon1:0.00593 recon2:0.00683
+	Batch 120/672 Loss:0.01492 con1:0.00001 con2:0.00001 recon1:0.00723 recon2:0.00768
+	Batch 130/672 Loss:0.01167 con1:0.00001 con2:0.00001 recon1:0.00579 recon2:0.00586
+	Batch 140/672 Loss:0.01313 con1:0.00001 con2:0.00001 recon1:0.00649 recon2:0.00663
+	Batch 150/672 Loss:0.01144 con1:0.00002 con2:0.00002 recon1:0.00555 recon2:0.00586
+	Batch 160/672 Loss:0.01159 con1:0.00001 con2:0.00001 recon1:0.00583 recon2:0.00574
+	Batch 170/672 Loss:0.01119 con1:0.00001 con2:0.00001 recon1:0.00575 recon2:0.00543
+	Batch 180/672 Loss:0.01074 con1:0.00000 con2:0.00000 recon1:0.00559 recon2:0.00515
+	Batch 190/672 Loss:0.01026 con1:0.00001 con2:0.00001 recon1:0.00510 recon2:0.00515
+	Batch 200/672 Loss:0.01418 con1:0.00001 con2:0.00001 recon1:0.00660 recon2:0.00756
+	Batch 210/672 Loss:0.00865 con1:0.00001 con2:0.00001 recon1:0.00413 recon2:0.00452
+	Batch 220/672 Loss:0.01098 con1:0.00000 con2:0.00000 recon1:0.00612 recon2:0.00485
+	Batch 230/672 Loss:0.00892 con1:0.00000 con2:0.00000 recon1:0.00466 recon2:0.00426
+	Batch 240/672 Loss:0.01354 con1:0.00000 con2:0.00000 recon1:0.00752 recon2:0.00602
+	Batch 250/672 Loss:0.01496 con1:0.00001 con2:0.00001 recon1:0.00770 recon2:0.00723
+	Batch 260/672 Loss:0.01144 con1:0.00000 con2:0.00000 recon1:0.00533 recon2:0.00610
+	Batch 270/672 Loss:0.01509 con1:0.00001 con2:0.00001 recon1:0.00774 recon2:0.00734
+	Batch 280/672 Loss:0.01240 con1:0.00001 con2:0.00001 recon1:0.00607 recon2:0.00632
+	Batch 290/672 Loss:0.01114 con1:0.00001 con2:0.00001 recon1:0.00571 recon2:0.00541
+	Batch 300/672 Loss:0.01155 con1:0.00000 con2:0.00000 recon1:0.00600 recon2:0.00554
+	Batch 310/672 Loss:0.01096 con1:0.00000 con2:0.00001 recon1:0.00545 recon2:0.00551
+	Batch 320/672 Loss:0.01280 con1:0.00001 con2:0.00001 recon1:0.00646 recon2:0.00632
+	Batch 330/672 Loss:0.01110 con1:0.00000 con2:0.00000 recon1:0.00558 recon2:0.00551
+	Batch 340/672 Loss:0.01208 con1:0.00000 con2:0.00000 recon1:0.00633 recon2:0.00574
+	Batch 350/672 Loss:0.01061 con1:0.00000 con2:0.00000 recon1:0.00520 recon2:0.00540
+	Batch 360/672 Loss:0.01027 con1:0.00000 con2:0.00000 recon1:0.00538 recon2:0.00489
+	Batch 370/672 Loss:0.01728 con1:0.00001 con2:0.00001 recon1:0.00901 recon2:0.00825
+	Batch 380/672 Loss:0.01158 con1:0.00000 con2:0.00000 recon1:0.00582 recon2:0.00575
+	Batch 390/672 Loss:0.01072 con1:0.00000 con2:0.00000 recon1:0.00512 recon2:0.00560
+	Batch 400/672 Loss:0.01472 con1:0.00001 con2:0.00001 recon1:0.00784 recon2:0.00687
+	Batch 410/672 Loss:0.01392 con1:0.00001 con2:0.00001 recon1:0.00739 recon2:0.00652
+	Batch 420/672 Loss:0.01230 con1:0.00001 con2:0.00001 recon1:0.00588 recon2:0.00641
+	Batch 430/672 Loss:0.01251 con1:0.00000 con2:0.00000 recon1:0.00639 recon2:0.00611
+	Batch 440/672 Loss:0.01049 con1:0.00001 con2:0.00001 recon1:0.00519 recon2:0.00528
+	Batch 450/672 Loss:0.00985 con1:0.00000 con2:0.00000 recon1:0.00476 recon2:0.00508
+	Batch 460/672 Loss:0.01137 con1:0.00000 con2:0.00000 recon1:0.00568 recon2:0.00568
+	Batch 470/672 Loss:0.01012 con1:0.00000 con2:0.00000 recon1:0.00526 recon2:0.00484
+	Batch 480/672 Loss:0.01253 con1:0.00001 con2:0.00001 recon1:0.00635 recon2:0.00616
+	Batch 490/672 Loss:0.01248 con1:0.00001 con2:0.00001 recon1:0.00669 recon2:0.00577
+	Batch 500/672 Loss:0.01193 con1:0.00000 con2:0.00000 recon1:0.00562 recon2:0.00631
+	Batch 510/672 Loss:0.00925 con1:0.00001 con2:0.00001 recon1:0.00425 recon2:0.00499
+	Batch 520/672 Loss:0.01320 con1:0.00000 con2:0.00000 recon1:0.00633 recon2:0.00686
+	Batch 530/672 Loss:0.01077 con1:0.00001 con2:0.00001 recon1:0.00488 recon2:0.00588
+	Batch 540/672 Loss:0.01132 con1:0.00001 con2:0.00001 recon1:0.00605 recon2:0.00525
+	Batch 550/672 Loss:0.00995 con1:0.00001 con2:0.00001 recon1:0.00468 recon2:0.00526
+	Batch 560/672 Loss:0.01010 con1:0.00000 con2:0.00000 recon1:0.00518 recon2:0.00491
+	Batch 570/672 Loss:0.01255 con1:0.00001 con2:0.00001 recon1:0.00578 recon2:0.00675
+	Batch 580/672 Loss:0.01121 con1:0.00001 con2:0.00001 recon1:0.00568 recon2:0.00552
+	Batch 590/672 Loss:0.00986 con1:0.00000 con2:0.00000 recon1:0.00490 recon2:0.00495
+	Batch 600/672 Loss:0.00997 con1:0.00000 con2:0.00000 recon1:0.00505 recon2:0.00492
+	Batch 610/672 Loss:0.01223 con1:0.00001 con2:0.00001 recon1:0.00578 recon2:0.00644
+	Batch 620/672 Loss:0.01202 con1:0.00001 con2:0.00001 recon1:0.00591 recon2:0.00610
+	Batch 630/672 Loss:0.01003 con1:0.00000 con2:0.00000 recon1:0.00439 recon2:0.00563
+	Batch 640/672 Loss:0.01557 con1:0.00001 con2:0.00001 recon1:0.00844 recon2:0.00711
+	Batch 650/672 Loss:0.01011 con1:0.00002 con2:0.00002 recon1:0.00490 recon2:0.00517
+	Batch 660/672 Loss:0.01167 con1:0.00001 con2:0.00001 recon1:0.00569 recon2:0.00597
+	Batch 670/672 Loss:0.00917 con1:0.00000 con2:0.00000 recon1:0.00460 recon2:0.00456
+Training Epoch 10/1000 Loss:0.01151 con1:0.00001 con2:0.00001 recon1:0.00574 recon2:0.00577
+Validation...
+	Batch 10/276 Loss:0.00729 con1:0.00000 con2: 0.00000 recon1:0.00361 recon2:0.00368
+	Batch 20/276 Loss:0.00671 con1:0.00000 con2: 0.00000 recon1:0.00351 recon2:0.00320
+	Batch 30/276 Loss:0.00730 con1:0.00000 con2: 0.00000 recon1:0.00361 recon2:0.00368
+	Batch 40/276 Loss:0.01533 con1:0.00003 con2: 0.00003 recon1:0.00827 recon2:0.00700
+	Batch 50/276 Loss:0.00785 con1:0.00000 con2: 0.00000 recon1:0.00401 recon2:0.00383
+	Batch 60/276 Loss:0.00977 con1:0.00000 con2: 0.00000 recon1:0.00481 recon2:0.00496
+	Batch 70/276 Loss:0.01114 con1:0.00001 con2: 0.00001 recon1:0.00564 recon2:0.00549
+	Batch 80/276 Loss:0.01198 con1:0.00000 con2: 0.00000 recon1:0.00619 recon2:0.00578
+	Batch 90/276 Loss:0.00652 con1:0.00000 con2: 0.00000 recon1:0.00336 recon2:0.00315
+	Batch 100/276 Loss:0.00721 con1:0.00000 con2: 0.00000 recon1:0.00365 recon2:0.00356
+	Batch 110/276 Loss:0.00577 con1:0.00000 con2: 0.00000 recon1:0.00286 recon2:0.00291
+	Batch 120/276 Loss:0.01256 con1:0.00001 con2: 0.00001 recon1:0.00694 recon2:0.00561
+	Batch 130/276 Loss:0.00838 con1:0.00000 con2: 0.00000 recon1:0.00411 recon2:0.00426
+	Batch 140/276 Loss:0.01766 con1:0.00001 con2: 0.00000 recon1:0.00832 recon2:0.00933
+	Batch 150/276 Loss:0.00951 con1:0.00001 con2: 0.00001 recon1:0.00472 recon2:0.00478
+	Batch 160/276 Loss:0.01534 con1:0.00002 con2: 0.00002 recon1:0.00713 recon2:0.00816
+	Batch 170/276 Loss:0.01214 con1:0.00002 con2: 0.00002 recon1:0.00584 recon2:0.00626
+	Batch 180/276 Loss:0.00786 con1:0.00000 con2: 0.00000 recon1:0.00406 recon2:0.00379
+	Batch 190/276 Loss:0.00788 con1:0.00000 con2: 0.00000 recon1:0.00366 recon2:0.00422
+	Batch 200/276 Loss:0.01355 con1:0.00000 con2: 0.00001 recon1:0.00741 recon2:0.00612
+	Batch 210/276 Loss:0.01504 con1:0.00000 con2: 0.00000 recon1:0.00767 recon2:0.00736
+	Batch 220/276 Loss:0.00811 con1:0.00000 con2: 0.00000 recon1:0.00399 recon2:0.00411
+	Batch 230/276 Loss:0.03506 con1:0.00007 con2: 0.00006 recon1:0.01706 recon2:0.01787
+	Batch 240/276 Loss:0.00668 con1:0.00000 con2: 0.00000 recon1:0.00344 recon2:0.00323
+	Batch 250/276 Loss:0.00760 con1:0.00000 con2: 0.00000 recon1:0.00389 recon2:0.00371
+	Batch 260/276 Loss:0.00640 con1:0.00000 con2: 0.00000 recon1:0.00314 recon2:0.00326
+	Batch 270/276 Loss:0.00947 con1:0.00001 con2: 0.00001 recon1:0.00468 recon2:0.00479
+Validation Epoch 10/1000 Loss:0.01071 con1:0.00001 con2:0.00001 recon1:0.00535 recon2:0.00535
+Training...
+	Batch 10/672 Loss:0.01211 con1:0.00001 con2:0.00001 recon1:0.00633 recon2:0.00576
+	Batch 20/672 Loss:0.00960 con1:0.00000 con2:0.00000 recon1:0.00460 recon2:0.00500
+	Batch 30/672 Loss:0.01393 con1:0.00001 con2:0.00001 recon1:0.00735 recon2:0.00656
+	Batch 40/672 Loss:0.01226 con1:0.00000 con2:0.00000 recon1:0.00611 recon2:0.00614
+	Batch 50/672 Loss:0.01650 con1:0.00001 con2:0.00001 recon1:0.00810 recon2:0.00838
+	Batch 60/672 Loss:0.42173 con1:0.00428 con2:0.00429 recon1:0.21138 recon2:0.20178
+	Batch 70/672 Loss:1.01243 con1:0.13452 con2:0.13443 recon1:0.36648 recon2:0.37701
+	Batch 80/672 Loss:292.92932 con1:3.23791 con2:4.02113 recon1:165.64340 recon2:120.02686
+	Batch 90/672 Loss:7.72772 con1:0.14654 con2:0.12871 recon1:3.14762 recon2:4.30484
+	Batch 100/672 Loss:10.10720 con1:0.03891 con2:0.04008 recon1:5.43805 recon2:4.59017
+	Batch 110/672 Loss:21.93946 con1:0.03058 con2:0.02773 recon1:9.37795 recon2:12.50321
+	Batch 120/672 Loss:29.74578 con1:0.09601 con2:0.10451 recon1:15.16517 recon2:14.38008
+	Batch 130/672 Loss:0.97836 con1:0.21955 con2:0.05982 recon1:0.26357 recon2:0.43541
+	Batch 140/672 Loss:0.65007 con1:0.06713 con2:0.06183 recon1:0.26479 recon2:0.25631
+	Batch 150/672 Loss:0.51301 con1:0.04859 con2:0.05134 recon1:0.20516 recon2:0.20791
+	Batch 160/672 Loss:0.46250 con1:0.02538 con2:0.05317 recon1:0.18804 recon2:0.19591
+	Batch 170/672 Loss:0.38233 con1:0.03281 con2:0.01702 recon1:0.17670 recon2:0.15580
+	Batch 180/672 Loss:0.35038 con1:0.02082 con2:0.03541 recon1:0.14930 recon2:0.14486
+	Batch 190/672 Loss:0.32117 con1:0.02261 con2:0.02280 recon1:0.13809 recon2:0.13767
+	Batch 200/672 Loss:0.29536 con1:0.01005 con2:0.01991 recon1:0.12373 recon2:0.14167
+	Batch 210/672 Loss:0.26089 con1:0.01590 con2:0.02217 recon1:0.10750 recon2:0.11533
+	Batch 220/672 Loss:0.26912 con1:0.01084 con2:0.02807 recon1:0.10877 recon2:0.12144
+	Batch 230/672 Loss:0.25758 con1:0.01286 con2:0.01674 recon1:0.11310 recon2:0.11488
+	Batch 240/672 Loss:0.24864 con1:0.01012 con2:0.02059 recon1:0.10600 recon2:0.11193
+	Batch 250/672 Loss:0.26730 con1:0.01616 con2:0.02707 recon1:0.11203 recon2:0.11205
+	Batch 260/672 Loss:0.23195 con1:0.00763 con2:0.01294 recon1:0.09961 recon2:0.11178
+	Batch 270/672 Loss:0.22699 con1:0.00760 con2:0.01337 recon1:0.09936 recon2:0.10666
+	Batch 280/672 Loss:0.22300 con1:0.00941 con2:0.01229 recon1:0.09829 recon2:0.10301
+	Batch 290/672 Loss:0.21999 con1:0.02520 con2:0.01073 recon1:0.09011 recon2:0.09395
+	Batch 300/672 Loss:0.21095 con1:0.01089 con2:0.01067 recon1:0.09106 recon2:0.09833
+	Batch 310/672 Loss:0.20517 con1:0.01287 con2:0.00850 recon1:0.09163 recon2:0.09216
+	Batch 320/672 Loss:0.20484 con1:0.00849 con2:0.01220 recon1:0.08927 recon2:0.09488
+	Batch 330/672 Loss:0.20209 con1:0.01468 con2:0.00661 recon1:0.09070 recon2:0.09010
+	Batch 340/672 Loss:0.19911 con1:0.01047 con2:0.01382 recon1:0.08568 recon2:0.08914
+	Batch 350/672 Loss:0.22407 con1:0.00588 con2:0.00584 recon1:0.11725 recon2:0.09510
+	Batch 360/672 Loss:0.20397 con1:0.00938 con2:0.00580 recon1:0.09792 recon2:0.09087
+	Batch 370/672 Loss:0.18976 con1:0.00618 con2:0.00861 recon1:0.08531 recon2:0.08966
+	Batch 380/672 Loss:0.20239 con1:0.01030 con2:0.00561 recon1:0.09891 recon2:0.08758
+	Batch 390/672 Loss:0.18690 con1:0.00559 con2:0.00680 recon1:0.08594 recon2:0.08857
+	Batch 400/672 Loss:0.19142 con1:0.01059 con2:0.01166 recon1:0.08012 recon2:0.08905
+	Batch 410/672 Loss:0.17259 con1:0.00724 con2:0.00663 recon1:0.08092 recon2:0.07780
+	Batch 420/672 Loss:0.18944 con1:0.00907 con2:0.00566 recon1:0.08592 recon2:0.08878
+	Batch 430/672 Loss:0.19042 con1:0.00462 con2:0.00699 recon1:0.08293 recon2:0.09588
+	Batch 440/672 Loss:0.17970 con1:0.00656 con2:0.00857 recon1:0.08143 recon2:0.08315
+	Batch 450/672 Loss:0.19873 con1:0.00610 con2:0.00431 recon1:0.10489 recon2:0.08343
+	Batch 460/672 Loss:0.18096 con1:0.00475 con2:0.00666 recon1:0.08357 recon2:0.08598
+	Batch 470/672 Loss:0.17781 con1:0.01306 con2:0.00624 recon1:0.07969 recon2:0.07881
+	Batch 480/672 Loss:0.18834 con1:0.01445 con2:0.00742 recon1:0.07961 recon2:0.08686
+	Batch 490/672 Loss:0.17006 con1:0.00632 con2:0.00469 recon1:0.08059 recon2:0.07845
+	Batch 500/672 Loss:0.17758 con1:0.00736 con2:0.00507 recon1:0.07935 recon2:0.08581
+	Batch 510/672 Loss:0.17518 con1:0.00485 con2:0.00847 recon1:0.07840 recon2:0.08346
+	Batch 520/672 Loss:0.16750 con1:0.00521 con2:0.00874 recon1:0.07333 recon2:0.08022
+	Batch 530/672 Loss:0.17219 con1:0.00501 con2:0.00510 recon1:0.07981 recon2:0.08227
+	Batch 540/672 Loss:0.16820 con1:0.00792 con2:0.00450 recon1:0.08195 recon2:0.07383
+	Batch 550/672 Loss:0.16052 con1:0.00487 con2:0.00521 recon1:0.07482 recon2:0.07562
+	Batch 560/672 Loss:0.16942 con1:0.00404 con2:0.00474 recon1:0.07566 recon2:0.08499
+	Batch 570/672 Loss:0.16182 con1:0.00466 con2:0.00581 recon1:0.07799 recon2:0.07336
+	Batch 580/672 Loss:0.16402 con1:0.00518 con2:0.00420 recon1:0.07996 recon2:0.07469
+	Batch 590/672 Loss:0.16847 con1:0.00947 con2:0.00497 recon1:0.07961 recon2:0.07442
+	Batch 600/672 Loss:0.16077 con1:0.00424 con2:0.00437 recon1:0.07796 recon2:0.07420
+	Batch 610/672 Loss:0.14973 con1:0.00517 con2:0.00748 recon1:0.06967 recon2:0.06741
+	Batch 620/672 Loss:0.16237 con1:0.00704 con2:0.00525 recon1:0.07433 recon2:0.07575
+	Batch 630/672 Loss:0.14795 con1:0.00465 con2:0.00858 recon1:0.06590 recon2:0.06883
+	Batch 640/672 Loss:0.15364 con1:0.00464 con2:0.00526 recon1:0.07228 recon2:0.07146
+	Batch 650/672 Loss:0.14906 con1:0.00495 con2:0.00494 recon1:0.06987 recon2:0.06930
+	Batch 660/672 Loss:0.15494 con1:0.00390 con2:0.00371 recon1:0.07552 recon2:0.07182
+	Batch 670/672 Loss:0.15684 con1:0.00879 con2:0.00468 recon1:0.07442 recon2:0.06894
+Training Epoch 11/1000 Loss:1.81364 con1:0.04445 con2:0.04595 recon1:0.78838 recon2:0.93486
+Validation...
+	Batch 10/276 Loss:0.14761 con1:0.00538 con2: 0.00542 recon1:0.07016 recon2:0.06666
+	Batch 20/276 Loss:0.13983 con1:0.00563 con2: 0.00521 recon1:0.06395 recon2:0.06504
+	Batch 30/276 Loss:0.15412 con1:0.00503 con2: 0.00485 recon1:0.07236 recon2:0.07188
+	Batch 40/276 Loss:0.15540 con1:0.00480 con2: 0.00464 recon1:0.07310 recon2:0.07285
+	Batch 50/276 Loss:0.15801 con1:0.00482 con2: 0.00515 recon1:0.07460 recon2:0.07344
+	Batch 60/276 Loss:0.15070 con1:0.00486 con2: 0.00505 recon1:0.06976 recon2:0.07104
+	Batch 70/276 Loss:0.14755 con1:0.00488 con2: 0.00521 recon1:0.07043 recon2:0.06704
+	Batch 80/276 Loss:0.15710 con1:0.00490 con2: 0.00480 recon1:0.07340 recon2:0.07399
+	Batch 90/276 Loss:0.14150 con1:0.00516 con2: 0.00465 recon1:0.06720 recon2:0.06449
+	Batch 100/276 Loss:0.14784 con1:0.00517 con2: 0.00514 recon1:0.06863 recon2:0.06890
+	Batch 110/276 Loss:0.14825 con1:0.00536 con2: 0.00466 recon1:0.06914 recon2:0.06909
+	Batch 120/276 Loss:0.15052 con1:0.00487 con2: 0.00476 recon1:0.07125 recon2:0.06963
+	Batch 130/276 Loss:0.14800 con1:0.00515 con2: 0.00523 recon1:0.06631 recon2:0.07130
+	Batch 140/276 Loss:0.16348 con1:0.00448 con2: 0.00508 recon1:0.07513 recon2:0.07879
+	Batch 150/276 Loss:0.15746 con1:0.00560 con2: 0.00542 recon1:0.07217 recon2:0.07427
+	Batch 160/276 Loss:0.14699 con1:0.00500 con2: 0.00507 recon1:0.06723 recon2:0.06969
+	Batch 170/276 Loss:0.14973 con1:0.00510 con2: 0.00518 recon1:0.06907 recon2:0.07038
+	Batch 180/276 Loss:0.15039 con1:0.00525 con2: 0.00537 recon1:0.07097 recon2:0.06880
+	Batch 190/276 Loss:0.14373 con1:0.00518 con2: 0.00530 recon1:0.06653 recon2:0.06671
+	Batch 200/276 Loss:0.16254 con1:0.00495 con2: 0.00484 recon1:0.07457 recon2:0.07819
+	Batch 210/276 Loss:0.16203 con1:0.00442 con2: 0.00487 recon1:0.07688 recon2:0.07585
+	Batch 220/276 Loss:0.15125 con1:0.00522 con2: 0.00497 recon1:0.06753 recon2:0.07353
+	Batch 230/276 Loss:0.15227 con1:0.00470 con2: 0.00541 recon1:0.07135 recon2:0.07082
+	Batch 240/276 Loss:0.15825 con1:0.00496 con2: 0.00484 recon1:0.07295 recon2:0.07551
+	Batch 250/276 Loss:0.15100 con1:0.00494 con2: 0.00520 recon1:0.07126 recon2:0.06960
+	Batch 260/276 Loss:0.14619 con1:0.00513 con2: 0.00494 recon1:0.06832 recon2:0.06779
+	Batch 270/276 Loss:0.14771 con1:0.00552 con2: 0.00556 recon1:0.06924 recon2:0.06740
+Validation Epoch 11/1000 Loss:0.15206 con1:0.00512 con2:0.00512 recon1:0.07089 recon2:0.07094
+Training...
+	Batch 10/672 Loss:0.15376 con1:0.00436 con2:0.00762 recon1:0.07086 recon2:0.07092
+	Batch 20/672 Loss:0.14107 con1:0.00534 con2:0.00415 recon1:0.06686 recon2:0.06473
+	Batch 30/672 Loss:0.15099 con1:0.00634 con2:0.00421 recon1:0.06959 recon2:0.07085
+	Batch 40/672 Loss:0.15327 con1:0.00576 con2:0.00416 recon1:0.07312 recon2:0.07023
+	Batch 50/672 Loss:0.14224 con1:0.00486 con2:0.00554 recon1:0.06515 recon2:0.06668
+	Batch 60/672 Loss:0.15105 con1:0.00735 con2:0.00417 recon1:0.07148 recon2:0.06806
+	Batch 70/672 Loss:0.14587 con1:0.00495 con2:0.00743 recon1:0.06707 recon2:0.06642
+	Batch 80/672 Loss:0.14520 con1:0.00372 con2:0.00415 recon1:0.06766 recon2:0.06967
+	Batch 90/672 Loss:0.14192 con1:0.00394 con2:0.00376 recon1:0.06771 recon2:0.06651
+	Batch 100/672 Loss:0.12831 con1:0.00443 con2:0.00507 recon1:0.05847 recon2:0.06034
+	Batch 110/672 Loss:0.14428 con1:0.00672 con2:0.00408 recon1:0.06758 recon2:0.06590
+	Batch 120/672 Loss:0.13878 con1:0.00452 con2:0.00366 recon1:0.06436 recon2:0.06624
+	Batch 130/672 Loss:0.13762 con1:0.00426 con2:0.00363 recon1:0.06591 recon2:0.06382
+	Batch 140/672 Loss:0.14330 con1:0.00532 con2:0.00420 recon1:0.06784 recon2:0.06593
+	Batch 150/672 Loss:0.13867 con1:0.00351 con2:0.00419 recon1:0.06442 recon2:0.06654
+	Batch 160/672 Loss:0.14728 con1:0.00428 con2:0.00379 recon1:0.07012 recon2:0.06909
+	Batch 170/672 Loss:0.13491 con1:0.00610 con2:0.00990 recon1:0.06228 recon2:0.05664
+	Batch 180/672 Loss:0.13691 con1:0.00368 con2:0.00391 recon1:0.06653 recon2:0.06279
+	Batch 190/672 Loss:0.13224 con1:0.00524 con2:0.00458 recon1:0.05787 recon2:0.06455
+	Batch 200/672 Loss:0.13778 con1:0.00384 con2:0.00370 recon1:0.06623 recon2:0.06402
+	Batch 210/672 Loss:0.13873 con1:0.00431 con2:0.00406 recon1:0.06391 recon2:0.06646
+	Batch 220/672 Loss:0.13707 con1:0.00530 con2:0.00499 recon1:0.06176 recon2:0.06502
+	Batch 230/672 Loss:0.14018 con1:0.00408 con2:0.00392 recon1:0.06753 recon2:0.06464
+	Batch 240/672 Loss:0.13937 con1:0.00530 con2:0.00743 recon1:0.06484 recon2:0.06180
+	Batch 250/672 Loss:0.13035 con1:0.00340 con2:0.00406 recon1:0.06150 recon2:0.06139
+	Batch 260/672 Loss:0.13481 con1:0.00341 con2:0.00409 recon1:0.06749 recon2:0.05981
+	Batch 270/672 Loss:0.13494 con1:0.00375 con2:0.00392 recon1:0.06277 recon2:0.06450
+	Batch 280/672 Loss:0.14330 con1:0.00432 con2:0.00910 recon1:0.06451 recon2:0.06537
+	Batch 290/672 Loss:0.14075 con1:0.00336 con2:0.00331 recon1:0.06620 recon2:0.06788
+	Batch 300/672 Loss:0.14608 con1:0.00359 con2:0.00492 recon1:0.06849 recon2:0.06907
+	Batch 310/672 Loss:0.13905 con1:0.00326 con2:0.00333 recon1:0.06410 recon2:0.06837
+	Batch 320/672 Loss:0.13551 con1:0.00358 con2:0.00349 recon1:0.06357 recon2:0.06488
+	Batch 330/672 Loss:0.13106 con1:0.00403 con2:0.00381 recon1:0.06334 recon2:0.05987
+	Batch 340/672 Loss:0.12471 con1:0.00359 con2:0.00377 recon1:0.06034 recon2:0.05701
+	Batch 350/672 Loss:0.13098 con1:0.00448 con2:0.00352 recon1:0.06252 recon2:0.06046
+	Batch 360/672 Loss:0.13776 con1:0.00531 con2:0.00428 recon1:0.06149 recon2:0.06668
+	Batch 370/672 Loss:0.13334 con1:0.00339 con2:0.00321 recon1:0.06563 recon2:0.06112
+	Batch 380/672 Loss:0.12273 con1:0.00365 con2:0.00339 recon1:0.05776 recon2:0.05793
+	Batch 390/672 Loss:0.12489 con1:0.00428 con2:0.00359 recon1:0.05991 recon2:0.05711
+	Batch 400/672 Loss:0.12490 con1:0.00328 con2:0.00321 recon1:0.06207 recon2:0.05634
+	Batch 410/672 Loss:0.12374 con1:0.00372 con2:0.00366 recon1:0.05899 recon2:0.05737
+	Batch 420/672 Loss:0.12850 con1:0.00399 con2:0.00327 recon1:0.06192 recon2:0.05932
+	Batch 430/672 Loss:0.13249 con1:0.00367 con2:0.00490 recon1:0.06028 recon2:0.06364
+	Batch 440/672 Loss:0.12309 con1:0.00460 con2:0.00350 recon1:0.05760 recon2:0.05740
+	Batch 450/672 Loss:0.12430 con1:0.00327 con2:0.00355 recon1:0.05814 recon2:0.05934
+	Batch 460/672 Loss:0.12034 con1:0.00333 con2:0.00338 recon1:0.05635 recon2:0.05728
+	Batch 470/672 Loss:0.12871 con1:0.00297 con2:0.00298 recon1:0.06099 recon2:0.06177
+	Batch 480/672 Loss:0.11725 con1:0.00642 con2:0.00499 recon1:0.05121 recon2:0.05463
+	Batch 490/672 Loss:0.12760 con1:0.00319 con2:0.00324 recon1:0.06057 recon2:0.06060
+	Batch 500/672 Loss:0.11726 con1:0.00398 con2:0.00415 recon1:0.05351 recon2:0.05562
+	Batch 510/672 Loss:0.12381 con1:0.00312 con2:0.00397 recon1:0.05555 recon2:0.06117
+	Batch 520/672 Loss:0.12290 con1:0.00348 con2:0.00336 recon1:0.06152 recon2:0.05453
+	Batch 530/672 Loss:0.11944 con1:0.00365 con2:0.00330 recon1:0.05790 recon2:0.05460
+	Batch 540/672 Loss:0.13037 con1:0.00345 con2:0.00329 recon1:0.06236 recon2:0.06128
+	Batch 550/672 Loss:0.13208 con1:0.00299 con2:0.00305 recon1:0.06248 recon2:0.06357
+	Batch 560/672 Loss:0.11671 con1:0.00363 con2:0.00308 recon1:0.05431 recon2:0.05569
+	Batch 570/672 Loss:0.11922 con1:0.00348 con2:0.00355 recon1:0.05809 recon2:0.05410
+	Batch 580/672 Loss:0.11988 con1:0.00350 con2:0.00486 recon1:0.05468 recon2:0.05683
+	Batch 590/672 Loss:0.12909 con1:0.00454 con2:0.00315 recon1:0.06170 recon2:0.05970
+	Batch 600/672 Loss:0.11979 con1:0.00366 con2:0.00417 recon1:0.05670 recon2:0.05526
+	Batch 610/672 Loss:0.11933 con1:0.00307 con2:0.00304 recon1:0.05721 recon2:0.05601
+	Batch 620/672 Loss:0.12753 con1:0.00335 con2:0.00514 recon1:0.05937 recon2:0.05968
+	Batch 630/672 Loss:0.12592 con1:0.00357 con2:0.00316 recon1:0.06210 recon2:0.05710
+	Batch 640/672 Loss:0.12740 con1:0.00353 con2:0.00308 recon1:0.05826 recon2:0.06253
+	Batch 650/672 Loss:0.12117 con1:0.00282 con2:0.00288 recon1:0.05952 recon2:0.05595
+	Batch 660/672 Loss:0.12605 con1:0.00279 con2:0.00325 recon1:0.06159 recon2:0.05843
+	Batch 670/672 Loss:0.11976 con1:0.00385 con2:0.00308 recon1:0.05670 recon2:0.05613
+Training Epoch 12/1000 Loss:0.13355 con1:0.00431 con2:0.00421 recon1:0.06255 recon2:0.06249
+Validation...
+	Batch 10/276 Loss:0.11451 con1:0.00338 con2: 0.00341 recon1:0.05598 recon2:0.05174
+	Batch 20/276 Loss:0.10795 con1:0.00357 con2: 0.00332 recon1:0.04810 recon2:0.05297
+	Batch 30/276 Loss:0.12125 con1:0.00326 con2: 0.00316 recon1:0.05735 recon2:0.05748
+	Batch 40/276 Loss:0.12145 con1:0.00309 con2: 0.00302 recon1:0.05792 recon2:0.05742
+	Batch 50/276 Loss:0.12472 con1:0.00312 con2: 0.00330 recon1:0.05929 recon2:0.05901
+	Batch 60/276 Loss:0.11695 con1:0.00315 con2: 0.00323 recon1:0.05464 recon2:0.05593
+	Batch 70/276 Loss:0.11458 con1:0.00313 con2: 0.00331 recon1:0.05625 recon2:0.05189
+	Batch 80/276 Loss:0.12485 con1:0.00314 con2: 0.00307 recon1:0.05903 recon2:0.05961
+	Batch 90/276 Loss:0.11108 con1:0.00334 con2: 0.00305 recon1:0.05232 recon2:0.05237
+	Batch 100/276 Loss:0.11662 con1:0.00332 con2: 0.00329 recon1:0.05507 recon2:0.05495
+	Batch 110/276 Loss:0.11603 con1:0.00340 con2: 0.00303 recon1:0.05396 recon2:0.05564
+	Batch 120/276 Loss:0.11789 con1:0.00310 con2: 0.00309 recon1:0.05752 recon2:0.05418
+	Batch 130/276 Loss:0.11566 con1:0.00329 con2: 0.00330 recon1:0.05170 recon2:0.05738
+	Batch 140/276 Loss:0.12777 con1:0.00290 con2: 0.00323 recon1:0.05945 recon2:0.06219
+	Batch 150/276 Loss:0.11883 con1:0.00347 con2: 0.00335 recon1:0.05534 recon2:0.05667
+	Batch 160/276 Loss:0.11451 con1:0.00318 con2: 0.00325 recon1:0.05265 recon2:0.05543
+	Batch 170/276 Loss:0.11556 con1:0.00318 con2: 0.00326 recon1:0.05445 recon2:0.05467
+	Batch 180/276 Loss:0.11814 con1:0.00336 con2: 0.00343 recon1:0.05634 recon2:0.05501
+	Batch 190/276 Loss:0.11083 con1:0.00328 con2: 0.00336 recon1:0.05238 recon2:0.05182
+	Batch 200/276 Loss:0.12894 con1:0.00309 con2: 0.00306 recon1:0.05950 recon2:0.06329
+	Batch 210/276 Loss:0.12715 con1:0.00286 con2: 0.00313 recon1:0.06053 recon2:0.06063
+	Batch 220/276 Loss:0.12006 con1:0.00335 con2: 0.00321 recon1:0.05402 recon2:0.05947
+	Batch 230/276 Loss:0.12145 con1:0.00299 con2: 0.00339 recon1:0.05899 recon2:0.05607
+	Batch 240/276 Loss:0.12180 con1:0.00315 con2: 0.00314 recon1:0.05723 recon2:0.05828
+	Batch 250/276 Loss:0.11669 con1:0.00320 con2: 0.00336 recon1:0.05575 recon2:0.05438
+	Batch 260/276 Loss:0.11418 con1:0.00334 con2: 0.00320 recon1:0.05286 recon2:0.05479
+	Batch 270/276 Loss:0.11427 con1:0.00346 con2: 0.00352 recon1:0.05468 recon2:0.05261
+Validation Epoch 12/1000 Loss:0.11856 con1:0.00326 con2:0.00326 recon1:0.05597 recon2:0.05608
+Training...
+	Batch 10/672 Loss:0.11293 con1:0.00367 con2:0.00341 recon1:0.05180 recon2:0.05405
+	Batch 20/672 Loss:0.11633 con1:0.00329 con2:0.00300 recon1:0.05501 recon2:0.05504
+	Batch 30/672 Loss:0.12079 con1:0.00280 con2:0.00371 recon1:0.05853 recon2:0.05575
+	Batch 40/672 Loss:0.11427 con1:0.00346 con2:0.00344 recon1:0.05226 recon2:0.05511
+	Batch 50/672 Loss:0.12414 con1:0.00297 con2:0.00353 recon1:0.06014 recon2:0.05749
+	Batch 60/672 Loss:0.11582 con1:0.00306 con2:0.00319 recon1:0.05511 recon2:0.05445
+	Batch 70/672 Loss:0.11775 con1:0.00310 con2:0.00400 recon1:0.05413 recon2:0.05652
+	Batch 80/672 Loss:0.11105 con1:0.00270 con2:0.00254 recon1:0.05420 recon2:0.05161
+	Batch 90/672 Loss:0.11504 con1:0.00322 con2:0.00280 recon1:0.05582 recon2:0.05320
+	Batch 100/672 Loss:0.12494 con1:0.00302 con2:0.00417 recon1:0.05877 recon2:0.05898
+	Batch 110/672 Loss:0.12525 con1:0.00297 con2:0.00273 recon1:0.06178 recon2:0.05776
+	Batch 120/672 Loss:0.11482 con1:0.00495 con2:0.00313 recon1:0.05303 recon2:0.05371
+	Batch 130/672 Loss:0.11866 con1:0.00519 con2:0.00401 recon1:0.05488 recon2:0.05457
+	Batch 140/672 Loss:0.12203 con1:0.00253 con2:0.00259 recon1:0.05819 recon2:0.05873
+	Batch 150/672 Loss:0.11974 con1:0.00378 con2:0.00285 recon1:0.05784 recon2:0.05527
+	Batch 160/672 Loss:0.11127 con1:0.00276 con2:0.00266 recon1:0.05505 recon2:0.05080
+	Batch 170/672 Loss:0.10827 con1:0.00311 con2:0.00447 recon1:0.05070 recon2:0.05000
+	Batch 180/672 Loss:0.11596 con1:0.00343 con2:0.00272 recon1:0.05596 recon2:0.05386
+	Batch 190/672 Loss:0.12025 con1:0.00434 con2:0.00283 recon1:0.05642 recon2:0.05665
+	Batch 200/672 Loss:0.12066 con1:0.00247 con2:0.00249 recon1:0.05804 recon2:0.05765
+	Batch 210/672 Loss:0.11704 con1:0.00283 con2:0.00413 recon1:0.05602 recon2:0.05406
+	Batch 220/672 Loss:0.11412 con1:0.00271 con2:0.00255 recon1:0.05345 recon2:0.05540
+	Batch 230/672 Loss:0.12603 con1:0.00286 con2:0.00391 recon1:0.05940 recon2:0.05985
+	Batch 240/672 Loss:0.11879 con1:0.00318 con2:0.00598 recon1:0.05460 recon2:0.05503
+	Batch 250/672 Loss:0.11774 con1:0.00278 con2:0.00404 recon1:0.05526 recon2:0.05565
+	Batch 260/672 Loss:0.11824 con1:0.00235 con2:0.00263 recon1:0.05660 recon2:0.05665
+	Batch 270/672 Loss:0.12160 con1:0.00249 con2:0.00248 recon1:0.06024 recon2:0.05638
+	Batch 280/672 Loss:0.11530 con1:0.00248 con2:0.00248 recon1:0.05478 recon2:0.05555
+	Batch 290/672 Loss:0.11005 con1:0.00244 con2:0.00236 recon1:0.05377 recon2:0.05147
+	Batch 300/672 Loss:0.11246 con1:0.00218 con2:0.00224 recon1:0.05463 recon2:0.05342
+	Batch 310/672 Loss:0.10853 con1:0.00285 con2:0.00363 recon1:0.05311 recon2:0.04893
+	Batch 320/672 Loss:0.11546 con1:0.00237 con2:0.00253 recon1:0.05626 recon2:0.05430
+	Batch 330/672 Loss:0.11380 con1:0.00276 con2:0.00250 recon1:0.05375 recon2:0.05480
+	Batch 340/672 Loss:0.11070 con1:0.00235 con2:0.00226 recon1:0.05235 recon2:0.05374
+	Batch 350/672 Loss:0.11443 con1:0.00232 con2:0.00229 recon1:0.05502 recon2:0.05481
+	Batch 360/672 Loss:0.11547 con1:0.00376 con2:0.00435 recon1:0.05314 recon2:0.05422
+	Batch 370/672 Loss:0.11256 con1:0.00241 con2:0.00276 recon1:0.05348 recon2:0.05391
+	Batch 380/672 Loss:0.11711 con1:0.00237 con2:0.00218 recon1:0.05688 recon2:0.05568
+	Batch 390/672 Loss:0.12102 con1:0.00231 con2:0.00270 recon1:0.06071 recon2:0.05530
+	Batch 400/672 Loss:0.10940 con1:0.00235 con2:0.00232 recon1:0.05197 recon2:0.05276
+	Batch 410/672 Loss:0.10871 con1:0.00248 con2:0.00339 recon1:0.05064 recon2:0.05220
+	Batch 420/672 Loss:0.10203 con1:0.00229 con2:0.00241 recon1:0.04795 recon2:0.04938
+	Batch 430/672 Loss:0.10745 con1:0.00288 con2:0.00412 recon1:0.04991 recon2:0.05054
+	Batch 440/672 Loss:0.11728 con1:0.00209 con2:0.00207 recon1:0.05683 recon2:0.05630
+	Batch 450/672 Loss:0.11428 con1:0.00230 con2:0.00250 recon1:0.05516 recon2:0.05432
+	Batch 460/672 Loss:0.11638 con1:0.00222 con2:0.00217 recon1:0.05594 recon2:0.05605
+	Batch 470/672 Loss:0.12038 con1:0.00242 con2:0.00236 recon1:0.05756 recon2:0.05803
+	Batch 480/672 Loss:0.11516 con1:0.00222 con2:0.00243 recon1:0.05648 recon2:0.05402
+	Batch 490/672 Loss:0.10623 con1:0.00223 con2:0.00220 recon1:0.05034 recon2:0.05146
+	Batch 500/672 Loss:0.10592 con1:0.00231 con2:0.00212 recon1:0.05127 recon2:0.05022
+	Batch 510/672 Loss:0.10871 con1:0.00217 con2:0.00258 recon1:0.05085 recon2:0.05311
+	Batch 520/672 Loss:0.10772 con1:0.00234 con2:0.00204 recon1:0.05247 recon2:0.05086
+	Batch 530/672 Loss:0.11275 con1:0.00216 con2:0.00230 recon1:0.05433 recon2:0.05395
+	Batch 540/672 Loss:0.11531 con1:0.00252 con2:0.00229 recon1:0.05716 recon2:0.05334
+	Batch 550/672 Loss:0.10750 con1:0.00205 con2:0.00198 recon1:0.04963 recon2:0.05384
+	Batch 560/672 Loss:0.11162 con1:0.00210 con2:0.00204 recon1:0.05383 recon2:0.05365
+	Batch 570/672 Loss:0.10896 con1:0.00223 con2:0.00272 recon1:0.05298 recon2:0.05103
+	Batch 580/672 Loss:0.11510 con1:0.00202 con2:0.00221 recon1:0.05468 recon2:0.05619
+	Batch 590/672 Loss:0.10208 con1:0.00244 con2:0.00282 recon1:0.04635 recon2:0.05047
+	Batch 600/672 Loss:0.11645 con1:0.00248 con2:0.00236 recon1:0.05715 recon2:0.05446
+	Batch 610/672 Loss:0.10679 con1:0.00262 con2:0.00207 recon1:0.05016 recon2:0.05194
+	Batch 620/672 Loss:0.10714 con1:0.00214 con2:0.00197 recon1:0.05190 recon2:0.05112
+	Batch 630/672 Loss:0.11047 con1:0.00204 con2:0.00200 recon1:0.05316 recon2:0.05327
+	Batch 640/672 Loss:0.11051 con1:0.00200 con2:0.00206 recon1:0.05392 recon2:0.05253
+	Batch 650/672 Loss:0.11506 con1:0.00216 con2:0.00196 recon1:0.05626 recon2:0.05468
+	Batch 660/672 Loss:0.10521 con1:0.00232 con2:0.00199 recon1:0.05056 recon2:0.05034
+	Batch 670/672 Loss:0.11323 con1:0.00227 con2:0.00206 recon1:0.05397 recon2:0.05494
+Training Epoch 13/1000 Loss:0.11381 con1:0.00272 con2:0.00270 recon1:0.05432 recon2:0.05407
+Validation...
+	Batch 10/276 Loss:0.10272 con1:0.00215 con2: 0.00216 recon1:0.05163 recon2:0.04678
+	Batch 20/276 Loss:0.09424 con1:0.00228 con2: 0.00213 recon1:0.04373 recon2:0.04609
+	Batch 30/276 Loss:0.10663 con1:0.00210 con2: 0.00205 recon1:0.05165 recon2:0.05084
+	Batch 40/276 Loss:0.10799 con1:0.00199 con2: 0.00196 recon1:0.05172 recon2:0.05233
+	Batch 50/276 Loss:0.11103 con1:0.00202 con2: 0.00212 recon1:0.05393 recon2:0.05295
+	Batch 60/276 Loss:0.10465 con1:0.00203 con2: 0.00207 recon1:0.04961 recon2:0.05094
+	Batch 70/276 Loss:0.10179 con1:0.00202 con2: 0.00211 recon1:0.05016 recon2:0.04750
+	Batch 80/276 Loss:0.11219 con1:0.00201 con2: 0.00197 recon1:0.05409 recon2:0.05412
+	Batch 90/276 Loss:0.09779 con1:0.00214 con2: 0.00197 recon1:0.04750 recon2:0.04619
+	Batch 100/276 Loss:0.10367 con1:0.00212 con2: 0.00211 recon1:0.04994 recon2:0.04950
+	Batch 110/276 Loss:0.10241 con1:0.00216 con2: 0.00195 recon1:0.04913 recon2:0.04916
+	Batch 120/276 Loss:0.10441 con1:0.00199 con2: 0.00197 recon1:0.05185 recon2:0.04859
+	Batch 130/276 Loss:0.10263 con1:0.00209 con2: 0.00209 recon1:0.04641 recon2:0.05204
+	Batch 140/276 Loss:0.11592 con1:0.00189 con2: 0.00209 recon1:0.05448 recon2:0.05745
+	Batch 150/276 Loss:0.10510 con1:0.00221 con2: 0.00214 recon1:0.04972 recon2:0.05103
+	Batch 160/276 Loss:0.10249 con1:0.00204 con2: 0.00209 recon1:0.04781 recon2:0.05055
+	Batch 170/276 Loss:0.10238 con1:0.00203 con2: 0.00207 recon1:0.04837 recon2:0.04992
+	Batch 180/276 Loss:0.10404 con1:0.00216 con2: 0.00221 recon1:0.05070 recon2:0.04896
+	Batch 190/276 Loss:0.09912 con1:0.00208 con2: 0.00214 recon1:0.04667 recon2:0.04824
+	Batch 200/276 Loss:0.11629 con1:0.00193 con2: 0.00193 recon1:0.05546 recon2:0.05696
+	Batch 210/276 Loss:0.11426 con1:0.00186 con2: 0.00200 recon1:0.05499 recon2:0.05541
+	Batch 220/276 Loss:0.10637 con1:0.00216 con2: 0.00210 recon1:0.04888 recon2:0.05322
+	Batch 230/276 Loss:0.10944 con1:0.00194 con2: 0.00217 recon1:0.05377 recon2:0.05157
+	Batch 240/276 Loss:0.10794 con1:0.00201 con2: 0.00201 recon1:0.05150 recon2:0.05243
+	Batch 250/276 Loss:0.10411 con1:0.00207 con2: 0.00215 recon1:0.05070 recon2:0.04920
+	Batch 260/276 Loss:0.10101 con1:0.00214 con2: 0.00206 recon1:0.04817 recon2:0.04863
+	Batch 270/276 Loss:0.10262 con1:0.00221 con2: 0.00225 recon1:0.05084 recon2:0.04732
+Validation Epoch 13/1000 Loss:0.10555 con1:0.00209 con2:0.00209 recon1:0.05066 recon2:0.05072
+Training...

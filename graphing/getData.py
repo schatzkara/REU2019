@@ -187,7 +187,7 @@ def get_old_old_epoch_metrics(output_file):
 
 
 if __name__ == '__main__':
-    file_path = './logstograph/output_61861.out'
+    file_path = './logstograph/output_61860.out'
     param_dict = get_parameters(file_path)
     print(param_dict)
     epoch_metrics = get_epoch_metrics(file_path, model_phase)
