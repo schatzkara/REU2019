@@ -6,28 +6,28 @@ import torch.nn.functional as f
 from torchsummary import summary
 
 
-class Deconv(nn.Module):
+class KPPredictor(nn.Module):
     """
-    Class representing the Deconvolutional network that is used to estimate the video keypoints.
+    Class representing the Keypoint Predictor network that is used to estimate the video keypoints.
     """
 
     VALID_OUT_FRAMES = (8, 16)
 
-    def __init__(self, in_channels, out_frames, out_size, deconv_name='Deconvolutional Network'):
+    def __init__(self, in_channels, out_frames, out_size, kpp_name='Keypoint Predictor'):
         """
-        Initializes the Deconvolutional network.
+        Initializes the Keypoint Predictor network.
         :param in_channels: (int) The number of channels in the input tensor.
         :param out_frames: (int) The number of frames desired in the generated output video.
                             Legal values: 8, 16
-        :param deconv_name: (str, optional) The name of the network (default 'Deconvolutinal Network').
+        :param kpp_name: (str, optional) The name of the network (default 'Keypoint Predictor').
         Raises:
             ValueError: if 'out_frames' is not a legal value.
         """
         if out_frames not in self.VALID_OUT_FRAMES:
             raise ValueError('Invalid number of frames in desired output: %d' % out_frames)
 
-        super(Deconv, self).__init__()
-        self.deconv_name = deconv_name
+        super(KPPredictor, self).__init__()
+        self.kpp_name = kpp_name
 
         self.out_frames = out_frames
         self.out_size = out_size
@@ -47,6 +47,8 @@ class Deconv(nn.Module):
                                    stride=(1, 1, 1), padding=(1, 1, 1))
         self.relu_2b = nn.ReLU(inplace=True)
 
+        self.softmax_layer = nn.Softmax(dim=3)
+
         # print('%s Model Successfully Built \n' % self.deconv_name)
 
     def forward(self, x):
@@ -65,14 +67,25 @@ class Deconv(nn.Module):
         x = self.relu_2b(self.conv3d_2b(x))
 
         x = f.interpolate(x, size=(self.out_frames, self.out_size, self.out_size), mode='trilinear')
+
+        x = self.softmax(x)
+
+        return x
+
+    def softmax(self, x):
+        bsz, channels, frames, height, width = x.size()
+        x = torch.reshape(x, (bsz, channels, frames, height * width))
+        x = self.softmax_layer(x)  # dim=flattened height x width
+        x = torch.reshape(x, (bsz, channels, frames, height, width))
+
         return x
 
 
 if __name__ == "__main__":
     print_summary = True
 
-    deconv = Deconv(in_channels=256, out_frames=16, out_size=14)
+    kpp = KPPredictor(in_channels=256, out_frames=16, out_size=14)
 
     if print_summary:
-        summary(deconv, input_size=(256, 4, 7, 7))
+        summary(kpp, input_size=(256, 4, 7, 7))
 #

@@ -77,14 +77,14 @@ def training_loop(epoch):
 
         optimizer.zero_grad()
 
-        output_vid1, output_vid2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
-                                                                             vid1=vid1, vid2=vid2,
-                                                                             img1=img1, img2=img2)
+        output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
+                                                                         vid1=vid1, vid2=vid2,
+                                                                         img1=img1, img2=img2)
         # loss
         con1_loss = criterion(kp_v1, kp_v1_est)
         con2_loss = criterion(kp_v2, kp_v2_est)
-        recon1_loss = criterion(output_vid1, vid1)
-        recon2_loss = criterion(output_vid2, vid2)
+        recon1_loss = criterion(output_v1, vid1)
+        recon2_loss = criterion(output_v2, vid2)
         loss = con1_loss + con2_loss + recon1_loss + recon2_loss
         loss.backward()
         optimizer.step()
@@ -95,29 +95,23 @@ def training_loop(epoch):
         running_recon1_loss += recon1_loss.item()
         running_recon2_loss += recon2_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(batch_idx + 1, len(trainloader),
-                                                                                     "{0:.5f}".format(loss),
-                                                                                     "{0:.5f}".format(con1_loss),
-                                                                                     "{0:.5f}".format(con2_loss),
-                                                                                     "{0:.5f}".format(recon1_loss),
-                                                                                     "{0:.5f}".format(recon2_loss)))
+            print('\tBatch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
+                batch_idx + 1,
+                len(trainloader),
+                "{0:.5f}".format(loss),
+                "{0:.5f}".format(con1_loss),
+                "{0:.5f}".format(con2_loss),
+                "{0:.5f}".format(recon1_loss),
+                "{0:.5f}".format(recon2_loss)))
 
-    print('Training Epoch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
-                                                                                    "{0:.5f}".format(
-                                                                                        (running_total_loss / len(
-                                                                                            trainloader))),
-                                                                                    "{0:.5f}".format(
-                                                                                        (running_con1_loss / len(
-                                                                                            trainloader))),
-                                                                                    "{0:.5f}".format(
-                                                                                        (running_con2_loss / len(
-                                                                                            trainloader))),
-                                                                                    "{0:.5f}".format(
-                                                                                        (running_recon1_loss / len(
-                                                                                            trainloader))),
-                                                                                    "{0:.5f}".format(
-                                                                                        (running_recon2_loss / len(
-                                                                                            trainloader)))))
+    print('Training Epoch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
+        epoch + 1,
+        NUM_EPOCHS,
+        "{0:.5f}".format((running_total_loss / len(trainloader))),
+        "{0:.5f}".format((running_con1_loss / len(trainloader))),
+        "{0:.5f}".format((running_con2_loss / len(trainloader))),
+        "{0:.5f}".format((running_recon1_loss / len(trainloader))),
+        "{0:.5f}".format((running_recon2_loss / len(trainloader)))))
 
 
 def testing_loop(epoch):
@@ -141,14 +135,14 @@ def testing_loop(epoch):
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            output_vid1, output_vid2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
-                                                                                 vid1=vid1, vid2=vid2,
-                                                                                 img1=img1, img2=img2)
+            output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
+                                                                             vid1=vid1, vid2=vid2,
+                                                                             img1=img1, img2=img2)
             # loss
             con1_loss = criterion(kp_v1, kp_v1_est)
             con2_loss = criterion(kp_v2, kp_v2_est)
-            recon1_loss = criterion(output_vid1, vid1)
-            recon2_loss = criterion(output_vid2, vid2)
+            recon1_loss = criterion(output_v1, vid1)
+            recon2_loss = criterion(output_v2, vid2)
             loss = con1_loss + con2_loss + recon1_loss + recon2_loss
 
         running_total_loss += loss.item()
@@ -157,31 +151,25 @@ def testing_loop(epoch):
         running_recon1_loss += recon1_loss.item()
         running_recon2_loss += recon2_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con1:{} con2: {} recon1:{} recon2:{}'.format(batch_idx + 1, len(testloader),
-                                                                                      "{0:.5f}".format(loss),
-                                                                                      "{0:.5f}".format(con1_loss),
-                                                                                      "{0:.5f}".format(con2_loss),
-                                                                                      "{0:.5f}".format(recon1_loss),
-                                                                                      "{0:.5f}".format(recon2_loss)))
+            print('\tBatch {}/{} Loss:{} con1:{} con2: {} recon1:{} recon2:{}'.format(
+                batch_idx + 1,
+                len(testloader),
+                "{0:.5f}".format(loss),
+                "{0:.5f}".format(con1_loss),
+                "{0:.5f}".format(con2_loss),
+                "{0:.5f}".format(recon1_loss),
+                "{0:.5f}".format(recon2_loss)))
 
-    print('Validation Epoch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
-                                                                                      "{0:.5f}".format(
-                                                                                          (running_total_loss / len(
-                                                                                              testloader))),
-                                                                                      "{0:.5f}".format(
-                                                                                          (running_con1_loss / len(
-                                                                                              testloader))),
-                                                                                      "{0:.5f}".format(
-                                                                                          (running_con2_loss / len(
-                                                                                              testloader))),
-                                                                                      "{0:.5f}".format((
-                                                                                              running_recon1_loss / len(
-                                                                                          testloader))),
-                                                                                      "{0:.5f}".format((
-                                                                                              running_recon2_loss / len(
-                                                                                          testloader)))))
+    print('Validation Epoch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
+        epoch + 1,
+        NUM_EPOCHS,
+        "{0:.5f}".format((running_total_loss / len(testloader))),
+        "{0:.5f}".format((running_con1_loss / len(testloader))),
+        "{0:.5f}".format((running_con2_loss / len(testloader))),
+        "{0:.5f}".format((running_recon1_loss / len(testloader))),
+        "{0:.5f}".format((running_recon2_loss / len(testloader)))))
 
-    return running_total_loss
+    return running_total_loss / len(testloader)
 
 
 def get_first_frame(vid_batch):

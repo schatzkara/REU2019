@@ -1,7 +1,0 @@
-Traceback (most recent call last):
-  File "testModel.py", line 165, in <module>
-    model.load_state_dict(torch.load(weights_path))
-  File "/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/modules/module.py", line 777, in load_state_dict
-    self.__class__.__name__, "\n\t".join(error_msgs)))
-RuntimeError: Error(s) in loading state_dict for FullNetwork:
-	Missing key(s) in state_dict: "vgg.features.17.weight", "vgg.features.17.bias", "vgg.features.19.weight", "vgg.features.19.bias", "vgg.features.21.weight", "vgg.features.21.bias", "vgg.features.24.weight", "vgg.features.24.bias", "vgg.features.26.weight", "vgg.features.26.bias", "vgg.features.28.weight", "vgg.features.28.bias". 

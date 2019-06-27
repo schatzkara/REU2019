@@ -4,10 +4,11 @@ import torch
 import torch.nn as nn
 from networks.modifiedVGG import vgg16
 from networks.modifiedI3D import InceptionI3d
-from networks.deconvolutional import Deconv
+from networks.kppredictor import KPPredictor
 from networks.expander import Expander
 from networks.transformer import Transformer
 from networks.generator import Generator
+
 # from torchsummary import summary
 
 """
@@ -67,7 +68,7 @@ class FullNetwork(nn.Module):
         self.i3d = InceptionI3d(final_endpoint='Mixed_5c_small', in_frames=self.out_frames,
                                 pretrained=True, weights_path=i3d_weights_path)
 
-        self.deconv = Deconv(in_channels=256, out_frames=self.out_frames, out_size=14)
+        self.kpp = KPPredictor(in_channels=256, out_frames=self.out_frames, out_size=14)
         self.exp = Expander(vp_value_count=self.vp_value_count, out_size=14)
         self.trans = Transformer(in_channels=32 + self.vp_value_count)
 
@@ -95,42 +96,39 @@ class FullNetwork(nn.Module):
         """
         vp1, vp2 = self.exp(vp_diff), self.exp(-vp_diff)  # bsz,1/3,14,14
 
-        app_v1, app_v2, app_v1_est, app_v2_est = self.appearance_pipeline(vp1, vp2, img1, img2)  # bsz,32,14,14
+        exp_app_v1, exp_app_v2 = self.appearance_pipeline(img1, img2)  # bsz,32,14,14
 
         kp_v1, kp_v2, kp_v1_est, kp_v2_est = self.action_pipeline(vp1, vp2, vid1, vid2)  # bsz,32,8/16,14,14
 
-        exp_app_v1, exp_app_v2 = self.expand_app_enc(app=app_v1), self.expand_app_enc(app=app_v2)  # bsz,32,8/16,14,14
-
         # appearance encoding + key points
-        gen_input1, gen_input2 = torch.cat([exp_app_v1, kp_v2], dim=1), torch.cat([exp_app_v2, kp_v1],
-                                                                                  dim=1)  # dim=channels
+        gen_input1, gen_input2 = torch.cat([exp_app_v1, kp_v2], dim=1), torch.cat([exp_app_v2, kp_v1], dim=1)  # channel
 
         # these are the videos that get returned
         output_v1, output_v2 = self.gen(gen_input1), self.gen(gen_input2)  # bsz,3,8/16,112,112
 
-        return output_v1, output_v2, app_v1, app_v2, app_v1_est, app_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est
+        return output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est
 
-    def appearance_pipeline(self, vp1, vp2, img1, img2):
+    def appearance_pipeline(self, img1, img2):
         app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # bsz,32,14,14
 
-        # appearance encoding + view point
-        trans_input1, trans_input2 = torch.cat([vp1, app_v2], dim=1), torch.cat([vp2, app_v1], dim=1)  # dim=channels
+        exp_app_v1, exp_app_v2 = self.expand_app_enc(app=app_v1), self.expand_app_enc(app=app_v2)  # bsz,32,8/16,14,14
 
-        app_v1_est, app_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # bsz,32,14,14
-
-        return app_v1, app_v2, app_v1_est, app_v2_est
+        return exp_app_v1, exp_app_v2
 
     def action_pipeline(self, vp1, vp2, vid1, vid2):
         rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,256,4,7,7
 
         # these are the keypoint feature maps that get returned
-        kp_v1, kp_v2 = self.deconv(rep_v1), self.deconv(rep_v2)  # bsz,32,8/16,14,14
+        kp_v1, kp_v2 = self.kpp(rep_v1), self.kpp(rep_v2)  # bsz,32,8/16,14,14
 
-        kp_v1_est, kp_v2_est = self.transform_kp(vp1, kp_v2), self.transform_kp(vp2, kp_v1)  # bsz,32,8/16,14,14
+        # key points + view point
+        trans_input1, trans_input2 = torch.cat([vp1, kp_v2], dim=1), torch.cat([vp2, kp_v1], dim=1)  # dim=channels
+
+        kp_v1_est, kp_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # bsz,32,8/16,14,14
 
         return kp_v1, kp_v2, kp_v1_est, kp_v2_est
 
-    def transform_kp(self, vp, kp):
+    '''def transform_kp(self, vp, kp):
         bsz, channels, frames, height, width = kp.size()
         buffer = torch.zeros(bsz, channels, frames, height, width)
         for i in range(frames):
@@ -141,7 +139,7 @@ class FullNetwork(nn.Module):
             buffer[:, :, i, :, :] = kp_frame_est
         buffer = buffer.to(device)
 
-        return buffer
+        return buffer'''
 
     def expand_app_enc(self, app):
         """

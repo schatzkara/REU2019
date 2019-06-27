@@ -30,7 +30,7 @@ def ntu_config():
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
     weights_path = '/home/yogesh/kara/REU2019/phase1.5/weights/net2_ntu2_20_16_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/ntu_104epochs_full'
+    output_video_dir = './videos/ntu_netsoftmax_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
@@ -42,7 +42,7 @@ def panoptic_config():
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
     weights_path = '/home/yogesh/kara/REU2019/phase1.5/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
-    output_video_dir = './videos/pan_150epochs_full'
+    output_video_dir = './videos/pan_netsoftmax_'
 
     return data_root_dir, test_split, weights_path, output_video_dir
 
@@ -67,21 +67,21 @@ def test():
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            output_vid1, output_vid2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
-                                                                                 vid1=vid1, vid2=vid2,
-                                                                                 img1=img1, img2=img2)
+            output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
+                                                                             vid1=vid1, vid2=vid2,
+                                                                             img1=img1, img2=img2)
 
             # save videos
             convert_to_vid(vid1, output_video_dir, batch_idx + 1, 1, 'input')
             convert_to_vid(vid2, output_video_dir, batch_idx + 1, 2, 'input')
-            convert_to_vid(output_vid1, output_video_dir, batch_idx + 1, 1, 'output')
-            convert_to_vid(output_vid2, output_video_dir, batch_idx + 1, 2, 'output')
+            convert_to_vid(output_v1, output_video_dir, batch_idx + 1, 1, 'output')
+            convert_to_vid(output_v2, output_video_dir, batch_idx + 1, 2, 'output')
 
             # loss
             con1_loss = criterion(kp_v1, kp_v1_est)
             con2_loss = criterion(kp_v2, kp_v2_est)
-            recon1_loss = criterion(output_vid1, vid1)
-            recon2_loss = criterion(output_vid2, vid2)
+            recon1_loss = criterion(output_v1, vid1)
+            recon2_loss = criterion(output_v2, vid2)
             loss = con1_loss + con2_loss + recon1_loss + recon2_loss
 
         running_total_loss += loss.item()
@@ -90,12 +90,14 @@ def test():
         running_recon1_loss += recon1_loss.item()
         running_recon2_loss += recon2_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con1:{} con2: {} recon1:{} recon2:{}'.format(batch_idx + 1, len(testloader),
-                                                                                      "{0:.5f}".format(loss),
-                                                                                      "{0:.5f}".format(con1_loss),
-                                                                                      "{0:.5f}".format(con2_loss),
-                                                                                      "{0:.5f}".format(recon1_loss),
-                                                                                      "{0:.5f}".format(recon2_loss)))
+            print('\tBatch {}/{} Loss:{} con1:{} con2: {} recon1:{} recon2:{}'.format(
+                batch_idx + 1,
+                len(testloader),
+                "{0:.5f}".format(loss),
+                "{0:.5f}".format(con1_loss),
+                "{0:.5f}".format(con2_loss),
+                "{0:.5f}".format(recon1_loss),
+                "{0:.5f}".format(recon2_loss)))
 
     print('Testing Complete Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
         "{0:.5f}".format((running_total_loss / len(testloader))),
