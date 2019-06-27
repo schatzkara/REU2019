@@ -16,7 +16,7 @@ output file format:
     print('Time: {}'.format(end_time - start_time))
 """
 
-model_phase = 2  # 1 or 2
+model_phase = 2  # 0, 1 or 2
 
 
 def get_parameters(output_file):
@@ -55,10 +55,12 @@ def get_epoch_metrics(output_file, model_phase):
               Keys are metric names and values are a list of the metric values for each epoch.
     """
     epoch_metrics_keys = {'training': 'training epoch', 'val': 'validation epoch'}
-    if model_phase == 1:
+    if model_phase == 0:
         metrics = ['loss', 'con', 'recon1', 'recon2']
-    elif model_phase == 2:
+    elif model_phase == 1:
         metrics = ['loss', 'con1', 'con2', 'recon1', 'recon2']
+    elif model_phase == 2:
+        metrics = ['loss', 'con1app', 'con2app', 'con1kp', 'con2kp', 'recon1', 'recon2']
     else:
         print('There are only 2 model phases.')
 
@@ -79,6 +81,7 @@ def get_epoch_metrics(output_file, model_phase):
                 line_parts = line.split(" ")
                 values = line_parts[1:]
                 for i in range(0, len(values)):
+                    print(values[i])
                     metric_name, metric_value = values[i].split(":")
                     # metric_name = values[i][:values[i].index(':')]
                     # metric_value = values[i+1]

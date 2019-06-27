@@ -1,19 +1,21 @@
 from graphing.plotting import single_plot, multi_line_plot
 from graphing.getData import get_parameters, get_epoch_metrics
 
-model_phase = 2  # 1 or 2
+model_phase = 2  # 0, 1 or 2
 
-job_numbers = [62157]
+job_numbers = [62231]
 
 root_dir = './logstograph/'
-file_name_start, file_name_end = 'output_', '.out'
-starting_epoch = 10
+file_name_start, file_name_end = 'output_', '.out2'
+starting_epoch = 0
 skip_epoch = 1
 ending_epoch = 200
-if model_phase == 1:
+if model_phase == 0:
     metrics = ['loss', 'con', 'recon1', 'recon2']
-elif model_phase == 2:
+elif model_phase == 1:
     metrics = ['loss', 'con1', 'con2', 'recon1', 'recon2']
+elif model_phase == 2:
+    metrics = ['loss', 'con1app', 'con2app', 'con1kp', 'con2kp', 'recon1', 'recon2']
 else:
     print('There are only 2 model phases.')
 
@@ -106,7 +108,7 @@ def plot_one_file(file_path):
                     title='Training {} vs. Epochs'.format(metric),
                     x_label='Epochs', y_label='Training {}'.format(metric))
 
-        all_y_data = val_metrics[metric][starting_epoch:]
+        all_y_data = val_metrics[metric][starting_epoch:ending_epoch]
         y_data = [all_y_data[i] for i in range(0, len(all_y_data), skip_epoch)]
         x_data = range(starting_epoch, starting_epoch + len(all_y_data), skip_epoch)
         single_plot(x_data=x_data, y_data=y_data,
@@ -132,9 +134,9 @@ if __name__ == '__main__':
     # file_list = ['./logs/output_61272.out', './logs/output_61276.out', './logs/output_61277.out']
     # file_list = ['./logs/output_61389.out', './logs/output_61390.out']
     # , './logs/output_61391.out']  './logs/output_61389.out',
-    file_list = ['./cluster/REU2019/logs/output_61462.out',
-                 './cluster/REU2019/logs/output_61469.out',
-                 './cluster/REU2019/logs/output_61471.out']
+    # file_list = ['./cluster/REU2019/logs/output_61462.out',
+    #              './cluster/REU2019/logs/output_61469.out',
+    #              './cluster/REU2019/logs/output_61471.out']
 
     file_list = [root_dir + file_name_start + str(job_id) + file_name_end for job_id in job_numbers]
     if len(file_list) == 1:
