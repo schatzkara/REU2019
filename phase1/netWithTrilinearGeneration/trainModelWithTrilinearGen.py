@@ -5,13 +5,12 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from networkWithReluTrans import FullNetwork
+from networkWithTrilinearGen import FullNetwork
 from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
-import sms
 
-DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -38,7 +37,7 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net2_ntu2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+    weight_file = './weights/netbi_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                     PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
@@ -50,7 +49,7 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net2_pan2_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+    weight_file = './weights/netbi_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                     PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, weight_file
 
@@ -217,11 +216,9 @@ def train_model():
         training_loop(epoch)
         print('Validation...')
         loss = testing_loop(epoch)
-        sms.send('Epoch {} Loss: {}'.format(epoch + 1, loss), "6304876751", "att")
         if epoch == 0 or loss < min_loss:
             min_loss = loss
             torch.save(model.state_dict(), weight_file)
-            sms.send('Weights saved', "6304876751", "att")
     end_time = time.time()
     print('Time: {}'.format(end_time - start_time))
 
@@ -232,6 +229,7 @@ def print_params():
     :return: None
     """
     print('Parameters for training on {}'.format(DATASET))
+    print('With Bilinear Generation')
     print('Batch Size: {}'.format(BATCH_SIZE))
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))

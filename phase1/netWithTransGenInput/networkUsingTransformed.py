@@ -6,7 +6,7 @@ from modifiedVGG import vgg16
 from modifiedI3D import InceptionI3d
 from deconvolutional import Deconv
 from expander import Expander
-from transformerWithRelu import Transformer
+from transformer import Transformer
 from generator import Generator
 
 # from torchsummary import summary
@@ -112,7 +112,7 @@ class FullNetwork(nn.Module):
         kp_v1_est, kp_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # bsz,32,8/16,28,28
 
         # appearance encoding + key points
-        gen_input1, gen_input2 = torch.cat([app_v1, kp_v2], dim=1), torch.cat([app_v2, kp_v1], dim=1)  # dim=channels
+        gen_input1, gen_input2 = torch.cat([app_v1, kp_v1_est], dim=1), torch.cat([app_v2, kp_v2_est], dim=1)  # dim=channels
 
         # these are the videos that get returned
         output_v1, output_v2 = self.gen(gen_input1), self.gen(gen_input2)  # bsz,3,8/16,112,112

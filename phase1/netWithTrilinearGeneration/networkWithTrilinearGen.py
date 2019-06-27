@@ -6,8 +6,8 @@ from modifiedVGG import vgg16
 from modifiedI3D import InceptionI3d
 from deconvolutional import Deconv
 from expander import Expander
-from transformerWithRelu import Transformer
-from generator import Generator
+from transformer import Transformer
+from generatorTrilinear import Generator
 
 # from torchsummary import summary
 

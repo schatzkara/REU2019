@@ -3,10 +3,10 @@
 import torch
 import torch.nn as nn
 from modifiedVGG import vgg16
-from modifiedI3D import InceptionI3d
-from deconvolutional import Deconv
+from I3D2828Output import InceptionI3d
+from deconv3 import Deconv
 from expander import Expander
-from transformerWithRelu import Transformer
+from transformer import Transformer
 from generator import Generator
 
 # from torchsummary import summary
@@ -98,7 +98,7 @@ class FullNetwork(nn.Module):
 
         app_v1, app_v2 = self.expand_app_encoding(app=app_v1), self.expand_app_encoding(app=app_v2)  # bsz,32,8/16,28,28
 
-        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,256,4,7,7
+        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,256,4,28,28
 
         # these are the keypoint feature maps that get returned
         kp_v1, kp_v2 = self.deconv(rep_v1), self.deconv(rep_v2)  # bsz,32,8/16,28,28

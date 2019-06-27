@@ -3,10 +3,10 @@
 import torch
 import torch.nn as nn
 from modifiedVGG import vgg16
-from modifiedI3D import InceptionI3d
+from I3D8FrameOutput import InceptionI3d
 from deconvolutional import Deconv
 from expander import Expander
-from transformerWithRelu import Transformer
+from transformer import Transformer
 from generator import Generator
 
 # from torchsummary import summary
