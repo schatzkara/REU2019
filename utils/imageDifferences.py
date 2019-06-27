@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 
-root_dir = 'C:/Users/Owner/Documents/UCF/REU2019/phase2/videos/ntu_100epochs/'
+root_dir = 'C:/Users/Owner/Documents/UCF/REU2019/phase1.5/videos/ntu_100epochs/'
 
 if __name__ == '__main__':
     batch_dirs = [os.path.join(root_dir, batch) for batch in os.listdir(root_dir)]

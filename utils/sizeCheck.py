@@ -1,7 +1,7 @@
 from torchsummary import summary
-from phase1.modifiedVGG import vgg16
-from phase1.modifiedI3D import InceptionI3d
-from phase1.generator import Generator
+from phase0.modifiedVGG import vgg16
+from phase0.modifiedI3D import InceptionI3d
+from phase0.generator import Generator
 
 image_size = (3, 112, 112)
 video_size = (3, 16, 112, 112)

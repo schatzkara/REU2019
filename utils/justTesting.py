@@ -29,7 +29,7 @@ def ntu_config():
     else:
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
-    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net2_ntu2_20_16_2_True_1000_0.0001.pt'
+    weights_path = '/home/yogesh/kara/REU2019/phase1.5/weights/net2_ntu2_20_16_2_True_1000_0.0001.pt'
     output_video_dir = './videos/just_testing'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
@@ -41,7 +41,7 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net2_pan2_20_16_2_False_1000_0.0001.pt'
+    weights_path = '/home/yogesh/kara/REU2019/phase1.5/weights/net2_pan2_20_16_2_False_1000_0.0001.pt'
     output_video_dir = './videos/just_testing'
 
     return data_root_dir, test_split, weights_path, output_video_dir

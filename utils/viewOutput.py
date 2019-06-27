@@ -1,7 +1,7 @@
 import os
 import cv2
 
-root_dir = 'C:/Users/Owner/Documents/UCF/Project/REU2019/phase1/videos/pan_100epochs'
+root_dir = 'C:/Users/Owner/Documents/UCF/Project/REU2019/phase0/videos/pan_100epochs'
 
 if __name__ == '__main__':
     batch_dirs = [os.path.join(root_dir, batch) for batch in os.listdir(root_dir)]
