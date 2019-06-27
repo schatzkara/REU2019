@@ -1,12 +1,32 @@
 import torch
+import torch.nn as nn
+import torch.nn.functional as f
+from torchsummary import summary
 
-weights_path = 'C:/Users/Owner/Documents/UCF/Project/REU2019/weights/vgg16-397923af.pth'
+if __name__ == "__main__":
+    # x = torch.randint(1, 3, (2, 2, 2, 2, 2))
+    # x = torch.tensor(x, dtype=torch.float32)
+    # x = torch.tensor([[[[[1., 2.], [2., 2.]],
+    #                     [[1., 2.], [2., 2.]]],
+    #                    [[[1., 2.], [2., 2.]],
+    #                     [[1., 2.], [2., 2.]]]],
+    #                   [[[[1., 2.], [2., 2.]],
+    #                     [[1., 2.], [2., 2.]]],
+    #                    [[[1., 2.], [2., 2.]],
+    #                     [[1., 2.], [2., 2.]]]]])
+    # print(x)
+    # x = f.interpolate(x, size=(4, 4, 4), mode='trilinear', align_corners=False)
+    # print(x)
 
-state_dict = torch.load(weights_path)
-
-for key, value in state_dict.items():
-    print(key)
-    first_per = key.index('.')
-    second_per = key[first_per + 1:].index('.')
-    id = key[:first_per + second_per + 1]
-    print(id)
+    x = torch.ones(2, 3, 4, 8, 8)
+    # print(torch.sum(x))
+    bsz, channels, frames, height, width = x.size()
+    x = torch.reshape(x, (bsz, channels, frames, height * width))
+    print(x.size())
+    x = nn.Softmax(dim=3)(x)
+    print(x.size())
+    x = torch.reshape(x, (bsz, channels, frames, height, width))
+    print(x.size())
+    for i in range(height * width):
+        print(x[:, :, :, i].size())
+        print(torch.sum(torch.squeeze(x[i, i, i, :])))

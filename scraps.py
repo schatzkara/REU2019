@@ -423,7 +423,7 @@ cv2.imwrite('./img.jpg', frame)
 
 
 
-from phase1.NTUDataLoader import NTUDataset
+from phase0.NTUDataLoader import NTUDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135/'
@@ -456,7 +456,7 @@ if __name__ == '__main__':
 
 
 # from PanopticDataLoader import PanopticDataset
-from phase2.NTUDataLoader import NTUDataset
+from phase2.data.NTUDataLoader import NTUDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135'
@@ -520,8 +520,8 @@ print(maxi)
 import time
 import torch
 import torch.nn as nn
-from phase1.network import FullNetwork
-from phase1.NTUDataLoader import NTUDataset
+from phase0.network import FullNetwork
+from phase0.NTUDataLoader import NTUDataset
 import torch.backends.cudnn as cudnn
 import os
 import cv2
@@ -842,7 +842,7 @@ print(os.path.exists(''))
 
 
 
-from phase2.PanopticDataLoader import PanopticDataset
+from phase2.data.PanopticDataLoader import PanopticDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
@@ -873,6 +873,41 @@ if __name__ == '__main__':
         print(vp1)
         print(vp2)
         print(vp1.size())
+
+
+
+
+import numpy as np
+import torch
+
+a = [1, 2, 3]
+b = [0, 1, 2]
+
+a = np.array(a)
+b = np.array(b)
+
+print(b - a)
+print(np.sum(np.abs(b - a)))
+
+a = torch.randn(2, 2, 2, 2)
+a = torch.unsqueeze(a, dim=2)
+print(a.size())
+
+
+
+
+import torch
+
+weights_path = 'C:/Users/Owner/Documents/UCF/Project/REU2019/weights/vgg16-397923af.pth'
+
+state_dict = torch.load(weights_path)
+
+for key, value in state_dict.items():
+    print(key)
+    first_per = key.index('.')
+    second_per = key[first_per + 1:].index('.')
+    id = key[:first_per + second_per + 1]
+    print(id)
 
 
 
