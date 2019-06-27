@@ -11,8 +11,8 @@ import numpy as np
 # directory information
 data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
 test_splits = '/home/yogesh/kara/data/panoptic/mod_test.list'
-weights_path = '/home/yogesh/kara/REU2019/phase1/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
-output_video_dir = '/home/yogesh/kara/REU2019/phase1/videos/pan_66epochs/'
+weights_path = '/home/yogesh/kara/REU2019/phase0/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
+output_video_dir = '/home/yogesh/kara/REU2019/phase0/videos/pan_66epochs/'
 # 'C:/Users/Owner/Documents/UCF/Project/REU2019/videos'
 
 

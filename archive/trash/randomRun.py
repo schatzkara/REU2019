@@ -2,7 +2,7 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from phase1.network import FullNetwork
+from phase0.network import FullNetwork
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 

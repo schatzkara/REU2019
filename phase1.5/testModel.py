@@ -4,10 +4,10 @@ import os
 import time
 import torch
 import torch.nn as nn
-from network import FullNetwork
-from NTUDataLoader import NTUDataset
-from PanopticDataLoader import PanopticDataset
-from outputVideoCoversion import convert_to_vid
+from networks.model import FullNetwork
+from data.NTUDataLoader import NTUDataset
+from data.PanopticDataLoader import PanopticDataset
+from data.outputConversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
 DATASET = 'NTU'  # 'NTU' or 'Panoptic'
@@ -28,10 +28,11 @@ def ntu_config():
         test_split = '/home/yogesh/kara/data/val16.list'
     else:
         test_split = '/home/yogesh/kara/data/val.list'
-    weights_path = '/home/yogesh/kara/REU2019/weights/net_20_16_2_True_1000_0.0001.pt'
-    output_video_dir = './videos/'
+    param_file = '/home/yogesh/kara/data/view.params'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net2_ntu_20_16_2_True_1000_0.0001.pt'
+    output_video_dir = './videos/net2_ntu_'
 
-    return data_root_dir, test_split, weights_path, output_video_dir
+    return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
 
 def panoptic_config():
@@ -40,8 +41,8 @@ def panoptic_config():
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/phase0/weights/net_panoptic_20_16_2_False_1000_0.0001.pt'
-    output_video_dir = './videos/pan_100epochs'
+    weights_path = '/home/yogesh/kara/REU2019/phase2/weights/net2_pan_20_16_2_False_1000_0.0001.pt'
+    output_video_dir = './videos/net2_pan_'
 
     return data_root_dir, test_split, weights_path, output_video_dir
 
@@ -52,46 +53,67 @@ def test():
     :return: None
     """
     running_total_loss = 0.0
-    running_con_loss = 0.0
+    running_con1app_loss = 0.0
+    running_con2app_loss = 0.0
+    running_con1kp_loss = 0.0
+    running_con2kp_loss = 0.0
     running_recon1_loss = 0.0
     running_recon2_loss = 0.0
 
     model.eval()
 
-    for batch_idx, (vid1, vid2) in enumerate(testloader):
+    for batch_idx, (vp_diff, vid1, vid2) in enumerate(testloader):
+        vp_diff = vp_diff.to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            output_vid1, output_vid2, rep_v1, rep_v2 = model(vid1=vid1, vid2=vid2, img1=img1, img2=img2)
+            output_v1, output_v2, app_v1, app_v2, app_v1_est, app_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(
+                vp_diff=vp_diff,
+                vid1=vid1, vid2=vid2,
+                img1=img1, img2=img2)
 
             # save videos
-            convert_to_vid(vid1, output_video_dir, batch_idx + 1, 1, True)
-            convert_to_vid(vid2, output_video_dir, batch_idx + 1, 2, True)
-            convert_to_vid(output_vid1, output_video_dir, batch_idx + 1, 1, False)
-            convert_to_vid(output_vid2, output_video_dir, batch_idx + 1, 2, False)
+            convert_to_vid(vid1, output_video_dir, batch_idx + 1, 1, 'input')
+            convert_to_vid(vid2, output_video_dir, batch_idx + 1, 2, 'input')
+            convert_to_vid(output_v1, output_video_dir, batch_idx + 1, 1, 'output')
+            convert_to_vid(output_v2, output_video_dir, batch_idx + 1, 2, 'output')
 
             # loss
-            con_loss = criterion(rep_v1, rep_v2)
-            recon1_loss = criterion(output_vid1, vid1)
-            recon2_loss = criterion(output_vid2, vid2)
-            loss = con_loss + recon1_loss + recon2_loss
+            con1app_loss = criterion(app_v1, app_v1_est)
+            con2app_loss = criterion(app_v2, app_v2_est)
+            con1kp_loss = criterion(kp_v1, kp_v1_est)
+            con2kp_loss = criterion(kp_v2, kp_v2_est)
+            recon1_loss = criterion(output_v1, vid1)
+            recon2_loss = criterion(output_v2, vid2)
+            loss = con1app_loss + con2app_loss + con1kp_loss + con2kp_loss + recon1_loss + recon2_loss
 
         running_total_loss += loss.item()
-        running_con_loss += con_loss.item()
+        running_con1app_loss += con1app_loss.item()
+        running_con2app_loss += con2app_loss.item()
+        running_con1kp_loss += con1kp_loss.item()
+        running_con2kp_loss += con2kp_loss.item()
         running_recon1_loss += recon1_loss.item()
         running_recon2_loss += recon2_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(batch_idx + 1, len(testloader),
-                                                                            "{0:.5f}".format(loss),
-                                                                            "{0:.5f}".format(con_loss),
-                                                                            "{0:.5f}".format(recon1_loss),
-                                                                            "{0:.5f}".format(recon2_loss)))
+            print('\tBatch {}/{} Loss:{} con1app:{} con2app:{} con1kp:{} con2kp:{} recon1:{} recon2:{}'.format(
+                batch_idx + 1,
+                len(testloader),
+                "{0:.5f}".format(loss),
+                "{0:.5f}".format(con1app_loss),
+                "{0:.5f}".format(con2app_loss),
+                "{0:.5f}".format(con1kp_loss),
+                "{0:.5f}".format(con2kp_loss),
+                "{0:.5f}".format(recon1_loss),
+                "{0:.5f}".format(recon2_loss)))
 
-    print('Testing Complete Loss:{} con:{} recon1:{} recon2:{}'.format(
+    print('Testing Complete Loss:{} con1app:{} con2app:{} con1kp:{} con2kp:{} recon1:{} recon2:{}'.format(
         "{0:.5f}".format((running_total_loss / len(testloader))),
-        "{0:.5f}".format((running_con_loss / len(testloader))),
+        "{0:.5f}".format((running_con1app_loss / len(testloader))),
+        "{0:.5f}".format((running_con2app_loss / len(testloader))),
+        "{0:.5f}".format((running_con1kp_loss / len(testloader))),
+        "{0:.5f}".format((running_con2kp_loss / len(testloader))),
         "{0:.5f}".format((running_recon1_loss / len(testloader))),
         "{0:.5f}".format((running_recon2_loss / len(testloader)))))
 
@@ -150,10 +172,10 @@ if __name__ == '__main__':
     PRECROP = True if DATASET.lower() == 'ntu' else False
 
     if DATASET.lower() == 'ntu':
-        data_root_dir, test_split, weights_path, output_video_dir = ntu_config()
+        data_root_dir, test_split, param_file, weights_path, output_video_dir = ntu_config()
 
         # model
-        model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
 
@@ -164,7 +186,7 @@ if __name__ == '__main__':
         criterion = nn.MSELoss()
 
         # data
-        testset = NTUDataset(root_dir=data_root_dir, data_file=test_split,
+        testset = NTUDataset(root_dir=data_root_dir, data_file=test_split, param_file=param_file,
                              resize_height=HEIGHT, resize_width=WIDTH,
                              clip_len=FRAMES, skip_len=SKIP_LEN,
                              random_all=RANDOM_ALL, precrop=PRECROP)
@@ -174,7 +196,7 @@ if __name__ == '__main__':
         data_root_dir, test_split, weights_path, output_video_dir = panoptic_config()
 
         # model
-        model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=3, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
 
