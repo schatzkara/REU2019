@@ -875,6 +875,57 @@ if __name__ == '__main__':
         print(vp1.size())
 
 
+from phase3.data.PanopticDataLoader import PanopticDataset
+import torch
+
+data_root_dir = 'C:/Users/Owner/Documents/UCF/panoptic/rgb_data/'
+test_splits = 'C:/Users/Owner/Documents/UCF/REU2019/data/Panoptic/one.list'
+close_cams_file = 'C:/Users/Owner/Documents/UCF/REU2019/data/Panoptic/closecams.list'
+
+
+BATCH_SIZE = 32
+CHANNELS = 3
+FRAMES = 8
+SKIP_LEN = 2
+HEIGHT = 112
+WIDTH = 112
+PRECROP = False
+
+if __name__ == '__main__':
+    testset = PanopticDataset(root_dir=data_root_dir, data_file=test_splits,
+                              resize_height=HEIGHT, resize_width=WIDTH,
+                              clip_len=FRAMES, skip_len=SKIP_LEN,
+                              random_all=True, close_views=True, close_cams_file=close_cams_file,
+                              precrop=PRECROP)
+    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=1)
+
+    for batch_idx, (vp1, vp2, view1vid, view2vid) in enumerate(testloader):
+        print(view1vid.size())
+        # print(view1vid)
+        print(view2vid.size())
+        # print(view2vid)
+        print(vp1)
+        print(vp2)
+        print(vp1.size())
+
+
+
+import torch
+import torch.nn as nn
+
+shrink = nn.MaxPool3d(kernel_size=(1, 2, 2), stride=(1, 2, 2))
+
+x = torch.zeros(20,3,16,112,112)
+
+y = shrink(x)
+
+print(y.size())
+
+
+
+
+
+
 
 
 import numpy as np
@@ -908,6 +959,89 @@ for key, value in state_dict.items():
     second_per = key[first_per + 1:].index('.')
     id = key[:first_per + second_per + 1]
     print(id)
+
+import torch
+import torch.nn as nn
+import torch.nn.functional as f
+from torchsummary import summary
+
+if __name__ == "__main__":
+    x = torch.randint(1, 3, (2, 2, 2, 2, 2))
+    x = torch.tensor(x, dtype=torch.float32)
+    x = torch.tensor([[[[[1., 2.], [2., 2.]],
+                        [[1., 2.], [2., 2.]]],
+                       [[[1., 2.], [2., 2.]],
+                        [[1., 2.], [2., 2.]]]],
+                      [[[[1., 2.], [2., 2.]],
+                        [[1., 2.], [2., 2.]]],
+                       [[[1., 2.], [2., 2.]],
+                        [[1., 2.], [2., 2.]]]]])
+    print(x)
+    x = f.interpolate(x, size=(4, 4, 4), mode='trilinear', align_corners=False)
+    print(x)
+
+    x = torch.ones(2, 3, 4, 8, 8)
+    print(torch.sum(x))
+    bsz, channels, frames, height, width = x.size()
+    x = torch.reshape(x, (bsz, channels, frames, height * width))
+    print(x.size())
+    x = nn.Softmax(dim=3)(x)
+    print(x.size())
+    x = torch.reshape(x, (bsz, channels, frames, height, width))
+    print(x.size())
+    for i in range(height * width):
+        print(x[:, :, :, i].size())
+        print(torch.sum(torch.squeeze(x[i, i, i, :])))
+
+    from phase2.data.outputConversion import convert_to_vid
+
+    x = torch.randn(2, 6, 8, 100, 100)
+
+    convert_to_vid(tensor=x, output_dir='./testOutput', batch_num=0, view=0, item_type='random')
+
+
+
+ samples = get_samples(data_root_dir)
+    vga_list = get_vga_list(panels, nodes)
+    for sample in samples:
+        cal_file = os.path.join(data_root_dir, sample, 'calibration_' + sample + '.pkl')
+
+        # load the calibration file
+        with open(cal_file, 'rb') as fp:
+            cal = pickle.load(fp)
+
+        cameras = list(cal.keys())
+        for vga in vga_list:
+            # print(vga)
+            cameras.remove(vga)
+        print(sample)
+        print(cameras)
+        print(len(cameras))
+
+
+
+
+
+my_list = [('a', 0), ('z', 25), ('h', 7), ('c', 2)]
+my_list.sort(key=lambda x: x[1])
+
+print(my_list)
+
+print(str(my_list))
+
+cam_file = 'C:/Users/Owner/Documents/UCF/REU2019/data/panoptic/closecams.list'
+
+close_cams_dict = {}
+with open(cam_file, 'r') as f:
+    for line in f:
+        cams = line.strip().split(' ')
+        close_cams_dict[cams[0]] = cams[1:]
+
+print(close_cams_dict)
+
+
+
+
 
 
 

@@ -1,6 +1,0 @@
-Traceback (most recent call last):
-  File "trainpan1620.py", line 7, in <module>
-    from network import FullNetwork
-  File "/home/yogesh/kara/REU2019/phase1/network.py", line 8, in <module>
-    from .modifiedVGG import vgg16
-ImportError: attempted relative import with no known parent package
