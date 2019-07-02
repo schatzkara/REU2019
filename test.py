@@ -1,7 +1,8 @@
-import torch
-import torch.nn as nn
-import tensorflow as tf
+# import torch
+# import torch.nn as nn
+# import tensorflow as tf
 import sys
+import numpy as np
 
 # tf.compat.v1.enable_eager_execution()
 
@@ -82,7 +83,12 @@ def get_coord(other_axis, axis_size):
 # print(ans1)
 # tf.print(ans2, output_stream=sys.stdout)
 
-x = torch.zeros(2, 2, 2)
-y = torch.ones(2, 2, 2)
-z = torch.cat([torch.unsqueeze(x, dim=3), torch.unsqueeze(y, dim=3)], dim=3)
-print(z.size())
+# x = torch.zeros(2, 2, 2)
+# y = torch.ones(2, 2, 2)
+# z = torch.cat([torch.unsqueeze(x, dim=3), torch.unsqueeze(y, dim=3)], dim=3)
+# print(z.size())
+
+x = [[[2, 2]]]
+display = np.hstack((None, x))
+
+print(display)

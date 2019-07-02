@@ -10,7 +10,7 @@ from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 
-DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
+DATASET = 'panoptic'  # 'NTU' or 'panoptic'
 
 # data parameters
 BATCH_SIZE = 16
@@ -43,7 +43,7 @@ def ntu_config():
 
 
 def panoptic_config():
-    # Panoptic directory information
+    # panoptic directory information
     data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
     train_split = '/home/yogesh/kara/data/panoptic/mod_train.list'
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
@@ -302,7 +302,7 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:
-        print('This network has only been set up to train on the NTU and Panoptic datasets.')
+        print('This network has only been set up to train on the NTU and panoptic datasets.')
 
     print_params()
     print(model)

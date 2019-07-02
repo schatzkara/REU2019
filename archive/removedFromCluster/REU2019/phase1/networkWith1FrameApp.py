@@ -79,7 +79,7 @@ class FullNetwork(nn.Module):
         """
         Function to compute a single forward pass through the network, according to the architecture.
         :param vp_diff (tensor) The difference between the two viewpoints.
-                        A scalar value for the NTU Dataset; a 3-tuple for the Panoptic Dataset.
+                        A scalar value for the NTU Dataset; a 3-tuple for the panoptic Dataset.
                         Must be a tensor of shape: (bsz, 1/3) for this application.
         :param vid1: (tensor) A video of the scene from the first viewpoint.
                       Must be a tensor of shape: (bsz, 3, 8/16, 112, 112) for this application.

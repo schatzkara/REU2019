@@ -456,7 +456,7 @@ if __name__ == '__main__':
 
 
 # from PanopticDataLoader import PanopticDataset
-from phase2.data.NTUDataLoader import NTUDataset
+from archive.phase2.data import NTUDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135'
@@ -523,9 +523,7 @@ import torch.nn as nn
 from phase0.network import FullNetwork
 from phase0.NTUDataLoader import NTUDataset
 import torch.backends.cudnn as cudnn
-import os
 import cv2
-import numpy as np
 
 # directory information
 data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
@@ -842,11 +840,11 @@ print(os.path.exists(''))
 
 
 
-from phase2.data.PanopticDataLoader import PanopticDataset
+from archive.phase2.data.PanopticDataLoader import PanopticDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
-test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/Panoptic/one.list'
+test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/panoptic/one.list'
 
 # VIEW1 = 1
 # VIEW2 = 2
@@ -875,12 +873,12 @@ if __name__ == '__main__':
         print(vp1.size())
 
 
-from phase3.data.PanopticDataLoader import PanopticDataset
+from data.panoptic.PanopticDataLoader import PanopticDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/panoptic/rgb_data/'
-test_splits = 'C:/Users/Owner/Documents/UCF/REU2019/data/Panoptic/one.list'
-close_cams_file = 'C:/Users/Owner/Documents/UCF/REU2019/data/Panoptic/closecams.list'
+test_splits = 'C:/Users/Owner/Documents/UCF/REU2019/data/panoptic/one.list'
+close_cams_file = 'C:/Users/Owner/Documents/UCF/REU2019/data/panoptic/closecams.list'
 
 
 BATCH_SIZE = 32
@@ -963,7 +961,6 @@ for key, value in state_dict.items():
 import torch
 import torch.nn as nn
 import torch.nn.functional as f
-from torchsummary import summary
 
 if __name__ == "__main__":
     x = torch.randint(1, 3, (2, 2, 2, 2, 2))
@@ -993,7 +990,7 @@ if __name__ == "__main__":
         print(x[:, :, :, i].size())
         print(torch.sum(torch.squeeze(x[i, i, i, :])))
 
-    from phase2.data.outputConversion import convert_to_vid
+    from archive.phase2.data.outputConversion import convert_to_vid
 
     x = torch.randn(2, 6, 8, 100, 100)
 

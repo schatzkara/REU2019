@@ -238,7 +238,7 @@ def print_params():
     Function to print out all the custom parameter information for the experiment.
     :return: None
     """
-    print('Panoptic')
+    print('panoptic')
     print('Parameters for testing:')
     print('Batch size: {}'.format(BATCH_SIZE))
     print('Tensor size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))

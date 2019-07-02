@@ -8,22 +8,22 @@ import _pickle as pickle
 
 
 class PanopticDataset(Dataset):
-    """Panoptic Dataset"""
+    """panoptic Dataset"""
 
     def __init__(self, root_dir, data_file, resize_height, resize_width, clip_len,
                  height=128, width=128, frame_count=125,
                  skip_len=1, num_views=None, random_views=False, random_all=False,
                  precrop=False):
         """
-        Initializes the Panoptic Dataset object used for extracting samples to run through the network.
+        Initializes the panoptic Dataset object used for extracting samples to run through the network.
         :param root_dir: (str) Directory with all the frames extracted from the videos.
         :param data_file: (str) Path to file containing the sample IDs.
         :param resize_height: (int) The desired frame height.
         :param resize_width: (int) The desired frame width.
         :param clip_len: (int) The number of frames desired in the sample clip.
-        :param height: (int, optional) The height of the frames in the dataset (default 128 for Panoptic Dataset).
-        :param width: (int, optional) The width of the frames in the dataset (default 128 for Panoptic Dataset).
-        :param frame_count: (int) The number of total frames in each sample (default 125 for Panoptic Dataset).
+        :param height: (int, optional) The height of the frames in the dataset (default 128 for panoptic Dataset).
+        :param width: (int, optional) The width of the frames in the dataset (default 128 for panoptic Dataset).
+        :param frame_count: (int) The number of total frames in each sample (default 125 for panoptic Dataset).
         :param skip_len: (int, optional) The number of frames to skip between each when creating the clip (default 1).
         :param num_views: (int, optional) The number of views available to choose from for all samples (default None).
         :param random_views: (boolean, optional) True to use 2 constant randomly generated views (default False).
@@ -119,9 +119,9 @@ class PanopticDataset(Dataset):
         :param num_views: (int) The number of available view to choose from.
         :return: 2 ints representing the viewpoints for the sample.
         """
-        self.view1, self.view2 = np.random.randint(1, num_views), np.random.randint(1, num_views)
+        self.view1, self.view2 = np.random.randint(0, num_views), np.random.randint(0, num_views)
         while self.view2 == self.view1:
-            self.view2 = np.random.randint(1, num_views)
+            self.view2 = np.random.randint(0, num_views)
 
     def get_vid_paths(self, path_head, path_tail):
         """

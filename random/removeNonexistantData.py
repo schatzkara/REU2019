@@ -3,9 +3,9 @@ import os
 data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
 # data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/panoptic/rgb_data/'
 train_splits = '/home/c2-2/yogesh/datasets/panoptic/train.list'
-# train_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/Panoptic/train.list'
+# train_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/panoptic/train.list'
 test_splits = '/home/c2-2/yogesh/datasets/panoptic/test.list'
-# test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/Panoptic/train.list'
+# test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/panoptic/train.list'
 
 if __name__ == '__main__':
     files_to_filter = [train_splits, test_splits]

@@ -11,7 +11,7 @@ from data.PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 import sms
 
-DATASET = 'NTU'  # 'NTU' or 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -38,21 +38,21 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net3_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                   PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net3_ntu_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                      PRECROP, CLOSE_VIEWS, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
 def panoptic_config():
-    # Panoptic directory information
+    # panoptic directory information
     data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
     train_split = '/home/yogesh/kara/data/panoptic/mod_train.list'
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net3_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                   PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net3_pan_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                      PRECROP, CLOSE_VIEWS, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, close_cams_file, weight_file
 
 
@@ -324,7 +324,7 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:
-        print('This network has only been set up to train on the NTU and Panoptic datasets.')
+        print('This network has only been set up to train on the NTU and panoptic datasets.')
 
     print_params()
     print(model)

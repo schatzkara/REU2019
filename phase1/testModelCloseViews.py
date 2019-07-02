@@ -10,7 +10,7 @@ from PanopticDataLoader import PanopticDataset
 from fullOutputConversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
-DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
+DATASET = 'panoptic'  # 'NTU' or 'panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -29,19 +29,19 @@ def ntu_config():
     else:
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
-    weights_path = '/home/yogesh/kara/REU2019/phase1.5/weights/net2_ntu2_20_16_2_True_1000_0.0001.pt'
+    weights_path = '/home/yogesh/kara/REU2019/phase0.5/weights/net2_ntu2_20_16_2_True_1000_0.0001.pt'
     output_video_dir = './videos/ntu_104epochs_full'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
 
 def panoptic_config():
-    # Panoptic directory information
+    # panoptic directory information
     data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = '/home/yogesh/kara/REU2019/phase1.5/weights/net2_pan2_closeviews_20_16_2_False_1000_0.0001.pt'
+    weights_path = '/home/yogesh/kara/REU2019/phase0.5/weights/net2_pan2_closeviews_20_16_2_False_1000_0.0001.pt'
     output_video_dir = './videos/pan_closeviews_27epochs/'
 
     return data_root_dir, test_split, weights_path, output_video_dir
@@ -205,7 +205,7 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:
-        print('This network has only been set up to run on the NTU and Panoptic datasets.')
+        print('This network has only been set up to run on the NTU and panoptic datasets.')
 
     print_params()
     print(model)

@@ -10,7 +10,7 @@ from data.PanopticDataLoader import PanopticDataset
 from data.outputConversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
-DATASET = 'NTU'  # 'NTU' or 'Panoptic'
+DATASET = 'NTU'  # 'NTU' or 'panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -37,7 +37,7 @@ def ntu_config():
 
 
 def panoptic_config():
-    # Panoptic directory information
+    # panoptic directory information
     data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
@@ -56,12 +56,12 @@ def test():
     :return: None
     """
     running_total_loss = 0.0
-    running_con1_loss = 0.0
-    running_con2_loss = 0.0
+    running_con_loss = 0.0
+    # running_con2_loss = 0.0
     running_recon1_loss = 0.0
     running_recon2_loss = 0.0
-    running_recon3_loss = 0.0
-    running_recon4_loss = 0.0
+    # running_recon3_loss = 0.0
+    # running_recon4_loss = 0.0
 
     model.eval()
 
@@ -72,9 +72,9 @@ def test():
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v1, gen_v2, recon_v1, recon_v2, rep_v1, rep_v2, rep_v1_est, rep_v2_est = model(vp_diff=vp_diff,
-                                                                                               vid1=vid1, vid2=vid2,
-                                                                                               img1=img1, img2=img2)
+            gen_v1, gen_v2, rep_v1, rep_v2 = model(vp_diff=vp_diff,
+                                                   vid1=vid1, vid2=vid2,
+                                                   img1=img1, img2=img2)
 
             # save videos
             convert_to_vid(tensor=vid1, output_dir=output_video_dir,
@@ -85,58 +85,53 @@ def test():
                            batch_num=batch_idx + 1, view=1, item_type='output')
             convert_to_vid(tensor=gen_v2, output_dir=output_video_dir,
                            batch_num=batch_idx + 1, view=2, item_type='output')
-            convert_to_vid(tensor=recon_v1, output_dir=output_video_dir,
-                           batch_num=batch_idx + 1, view=1, item_type='recon')
-            convert_to_vid(tensor=recon_v2, output_dir=output_video_dir,
-                           batch_num=batch_idx + 1, view=2, item_type='recon')
+            # convert_to_vid(tensor=recon_v1, output_dir=output_video_dir,
+            #                batch_num=batch_idx + 1, view=1, item_type='recon')
+            # convert_to_vid(tensor=recon_v2, output_dir=output_video_dir,
+            #                batch_num=batch_idx + 1, view=2, item_type='recon')
             convert_to_vid(tensor=rep_v1, output_dir=output_video_dir,
                            batch_num=batch_idx + 1, view=1, item_type='rep')
             convert_to_vid(tensor=rep_v2, output_dir=output_video_dir,
                            batch_num=batch_idx + 1, view=2, item_type='rep')
-            convert_to_vid(tensor=rep_v1_est, output_dir=output_video_dir,
-                           batch_num=batch_idx + 1, view=1, item_type='rep_est')
-            convert_to_vid(tensor=rep_v2_est, output_dir=output_video_dir,
-                           batch_num=batch_idx + 1, view=2, item_type='rep_est')
+            # convert_to_vid(tensor=rep_v1_est, output_dir=output_video_dir,
+            #                batch_num=batch_idx + 1, view=1, item_type='rep_est')
+            # convert_to_vid(tensor=rep_v2_est, output_dir=output_video_dir,
+            #                batch_num=batch_idx + 1, view=2, item_type='rep_est')
 
             # loss
             # consistency losses between video features
-            con1_loss = criterion(rep_v1, rep_v1_est)
-            con2_loss = criterion(rep_v2, rep_v2_est)
+            con_loss = criterion(rep_v1, rep_v2)
+            # con1_loss = criterion(rep_v1, rep_v1_est)
+            # con2_loss = criterion(rep_v2, rep_v2_est)
             # reconstruction losses for videos gen from new view
             recon1_loss = criterion(gen_v1, vid1)
             recon2_loss = criterion(gen_v2, vid2)
             # reconstruction losses for videos gen from features and same view
-            recon3_loss = criterion(recon_v1, vid1)
-            recon4_loss = criterion(recon_v2, vid2)
-            loss = con1_loss + con2_loss + recon1_loss + recon2_loss + recon3_loss + recon4_loss
+            # recon3_loss = criterion(recon_v1, vid1)
+            # recon4_loss = criterion(recon_v2, vid2)
+            loss = con_loss + recon1_loss + recon2_loss
 
         running_total_loss += loss.item()
-        running_con1_loss += con1_loss.item()
-        running_con2_loss += con2_loss.item()
+        running_con_loss += con_loss.item()
+        # running_con2_loss += con2_loss.item()
         running_recon1_loss += recon1_loss.item()
         running_recon2_loss += recon2_loss.item()
-        running_recon3_loss += recon3_loss.item()
-        running_recon4_loss += recon4_loss.item()
+        # running_recon3_loss += recon3_loss.item()
+        # running_recon4_loss += recon4_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con1:{} con2: {} recon1:{} recon2:{} recon3:{} recon4:{}'.format(
+            print('\tBatch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(
                 batch_idx + 1,
                 len(testloader),
                 "{0:.5f}".format(loss),
-                "{0:.5f}".format(con1_loss),
-                "{0:.5f}".format(con2_loss),
+                "{0:.5f}".format(con_loss),
                 "{0:.5f}".format(recon1_loss),
-                "{0:.5f}".format(recon2_loss),
-                "{0:.5f}".format(recon3_loss),
-                "{0:.5f}".format(recon4_loss)))
+                "{0:.5f}".format(recon2_loss)))
 
-    print('Testing Complete Loss:{} con1:{} con2:{} recon1:{} recon2:{} recon3:{} recon4:{}'.format(
+    print('Testing Complete Loss:{} con:{} recon1:{} recon2:{}'.format(
         "{0:.5f}".format((running_total_loss / len(testloader))),
-        "{0:.5f}".format((running_con1_loss / len(testloader))),
-        "{0:.5f}".format((running_con2_loss / len(testloader))),
+        "{0:.5f}".format((running_con_loss / len(testloader))),
         "{0:.5f}".format((running_recon1_loss / len(testloader))),
-        "{0:.5f}".format((running_recon2_loss / len(testloader))),
-        "{0:.5f}".format((running_recon3_loss / len(testloader))),
-        "{0:.5f}".format((running_recon4_loss / len(testloader)))))
+        "{0:.5f}".format((running_recon2_loss / len(testloader)))))
 
 
 def get_first_frame(vid_batch):
@@ -238,7 +233,7 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:
-        print('This network has only been set up to run on the NTU and Panoptic datasets.')
+        print('This network has only been set up to run on the NTU and panoptic datasets.')
 
     print_params()
     print(model)

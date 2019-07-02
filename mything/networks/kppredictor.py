@@ -190,7 +190,7 @@ class KPPredictor(nn.Module):
         """
         Generates [B,SHAPE_H,SHAPE_W,NMAPS] tensor of 2D gaussians,
         given the gaussian centers: MU [B, NMAPS, 2] tensor.
-        STD: is the fixed standard dev.
+        STD: is the fixed networks dev.
         """
         with tf.name_scope(None, 'gauss_map', [mu]):
             mu_y, mu_x = mu[:, :, 0:1], mu[:, :, 1:2]

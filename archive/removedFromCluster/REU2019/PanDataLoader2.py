@@ -8,7 +8,7 @@ import _pickle as pickle
 
 
 class PanopticDataset(Dataset):
-    """Panoptic Dataset"""
+    """panoptic Dataset"""
 
     def __init__(self, root_dir, data_file, resize_height, resize_width, clip_len,
                  height=128, width=128, frame_count=125,
