@@ -10,7 +10,7 @@ from data.PanopticDataLoader import PanopticDataset
 from data.outputConversion import convert_to_vid
 import torch.backends.cudnn as cudnn
 
-DATASET = 'NTU'  # 'NTU' or 'panoptic'
+DATASET = 'Panoptic'  # 'NTU' or 'Panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -31,13 +31,13 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     weights_path = './weights/netnocon_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                         PRECROP, 1000, 0.0001)
-    output_video_dir = './videos/ntu_net3_5epochs'
+    output_video_dir = './videos/ntu_netnocon_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
 
 def panoptic_config():
-    # panoptic directory information
+    # Panoptic directory information
     data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
@@ -45,7 +45,7 @@ def panoptic_config():
         os.mkdir('./weights')
     weights_path = './weights/netnocon_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                         PRECROP, 1000, 0.0001)
-    output_video_dir = './videos/pan_net3_'
+    output_video_dir = './videos/pan_netnocon_'
 
     return data_root_dir, test_split, close_cams_file, weights_path, output_video_dir
 
@@ -188,7 +188,7 @@ if __name__ == '__main__':
     RANDOM_ALL = True
     PRECROP = True if DATASET.lower() == 'ntu' else False
     VP_VALUE_COUNT = 1 if DATASET.lower() == 'ntu' else 3
-    CLOSE_VIEWS = True if DATASET.lower() == 'panoptic' else False
+    CLOSE_VIEWS = False  # True if DATASET.lower() == 'panoptic' else False
 
     if DATASET.lower() == 'ntu':
         data_root_dir, test_split, param_file, weights_path, output_video_dir = ntu_config()
@@ -212,7 +212,7 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     elif DATASET.lower() == 'panoptic':
-        data_root_dir, test_split, close_cams_file = weights_path, output_video_dir = panoptic_config()
+        data_root_dir, test_split, close_cams_file, weights_path, output_video_dir = panoptic_config()
 
         # model
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
@@ -233,7 +233,7 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:
-        print('This network has only been set up to run on the NTU and panoptic datasets.')
+        print('This network has only been set up to run on the NTU and Panoptic datasets.')
 
     print_params()
     print(model)

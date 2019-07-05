@@ -5,9 +5,12 @@ import numpy as np
 root_dir = '/home/yogesh/kara/REU2019/'
 # root_dir = 'C:/Users/Owner/Documents/UCF/output/'
 
-# vid_dir = 'phase3/videos/ntu_net3_41epochs/'
+vid_dir = 'KP/videos/ntu_netkp_/'
 # vid_dir = 'phase3/videos/pan_net3_57epochs/'
-vid_dir = 'noconsistency/videos/ntu_netnocon_50epochs/'
+# vid_dir = 'noconsistency/videos/ntu_netnocon_66e/'
+# vid_dir = 'noconKP/videos/ntu_netnocon_98e/'
+# vid_dir = 'noconsistency/videos/pan_netnocon_72e/'
+
 
 full_dir = os.path.join(root_dir, vid_dir)
 print(full_dir)
@@ -18,10 +21,15 @@ types_to_show = [
     'output',
     # 'recon',
     # 'rep',
-    # 'rep_est'
+    # 'rep_est',
+    # 'kp',
+    # 'kp_est'
 ]
 height = width = 112
 frames = 16
+if 'rep' in types_to_show:
+    frames = 4
+nkp = 32
 
 
 def make_frame_name(frame_num):
@@ -101,41 +109,123 @@ if __name__ == '__main__':
     for video in vid_dirs:
         print(video)
         for i in range(frames):
-            frame = make_frame_name(i + 1)
-            # k = 0
-            # first_path = os.path.join(vid, views[0], types_to_show[0], frame)
-            # display = cv2.imread(first_path)
-            # print(first_path)
-            # full_display = None
-            # display = None
-            all_displays = []
-            for v in possible_views:
-                view_path_ = os.path.join(video, str(v))
-                # print(view_path_)
-                displays = []
-                for type_ in types_to_show:
-                    # if view == views[0] and type == types_to_show[0]:
-                        # continue
-                    path = os.path.join(view_path_, type_, frame)
-                    addFrame = cv2.imread(path)
-                    # print(path)
-                    # if k == 0:
-                        # display = addFrame
-                    # else:
-                    # print(display.shape)
-                    # print(addFrame.shape)
-                    displays.append(addFrame)
-                display = np.hstack((displays))
-                all_displays.append(display)
-                # full_display = np.vstack((full_display, display))
-                # k += 1
-            # print(len(all_displays))
-            full_display = np.vstack((all_displays))
-            cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-            cv2.resizeWindow('image', 600, 600)
-            cv2.imshow('image', full_display)
-            cv2.waitKey(250)
-            # print(display)
-            # cv2.destroyAllWindows()
+            if 'output' in types_to_show:
+                frame = make_frame_name(i + 1)
+                # k = 0
+                # first_path = os.path.join(vid, views[0], types_to_show[0], frame)
+                # display = cv2.imread(first_path)
+                # print(first_path)
+                # full_display = None
+                # display = None
+                all_displays = []
+                for v in possible_views:
+                    view_path_ = os.path.join(video, str(v))
+                    # print(view_path_)
+                    displays = []
+                    for type_ in types_to_show:
+                        # if view == views[0] and type == types_to_show[0]:
+                            # continue
+                        path = os.path.join(view_path_, type_, frame)
+                        addFrame = cv2.imread(path)
+                        print(addFrame)
+                        # print(path)
+                        # if k == 0:
+                            # display = addFrame
+                        # else:
+                        # print(display.shape)
+                        # print(addFrame.shape)
+                        displays.append(addFrame)
+                    display = np.hstack((displays))
+                    all_displays.append(display)
+                    # full_display = np.vstack((full_display, display))
+                    # k += 1
+                # print(len(all_displays))
+                full_display = np.vstack((all_displays))
+                cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+                cv2.resizeWindow('image', 600, 600)
+                cv2.imshow('image', full_display)
+                cv2.waitKey(250)
+                # print(display)
+                # cv2.destroyAllWindows()
+
+            elif 'kp' in types_to_show:
+                for kp in range(nkp):
+                    frame = make_frame_name(i + 1)[:-4] + make_frame_name(kp + 1)
+                    # k = 0
+                    # first_path = os.path.join(vid, views[0], types_to_show[0], frame)
+                    # display = cv2.imread(first_path)
+                    # print(first_path)
+                    # full_display = None
+                    # display = None
+                    all_displays = []
+                    for v in possible_views:
+                        view_path_ = os.path.join(video, str(v))
+                        # print(view_path_)
+                        displays = []
+                        for type_ in types_to_show:
+                            # if view == views[0] and type == types_to_show[0]:
+                            # continue
+                            path = os.path.join(view_path_, type_, frame)
+                            addFrame = cv2.imread(path)
+                            # print(addFrame)
+                            # print(path)
+                            # if k == 0:
+                            # display = addFrame
+                            # else:
+                            # print(display.shape)
+                            # print(addFrame.shape)
+                            displays.append(addFrame)
+                        display = np.hstack((displays))
+                        all_displays.append(display)
+                        # full_display = np.vstack((full_display, display))
+                        # k += 1
+                    # print(len(all_displays))
+                    full_display = np.vstack((all_displays))
+                    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+                    cv2.resizeWindow('image', 600, 600)
+                    cv2.imshow('image', full_display)
+                    cv2.waitKey(250)
+                    # print(display)
+                    # cv2.destroyAllWindows()
+
+            elif 'rep' in types_to_show:
+                for kp in range(2):
+                    frame = make_frame_name(i + 1)[:-4] + make_frame_name(kp + 1)
+                    # k = 0
+                    # first_path = os.path.join(vid, views[0], types_to_show[0], frame)
+                    # display = cv2.imread(first_path)
+                    # print(first_path)
+                    # full_display = None
+                    # display = None
+                    all_displays = []
+                    for v in possible_views:
+                        view_path_ = os.path.join(video, str(v))
+                        # print(view_path_)
+                        displays = []
+                        for type_ in types_to_show:
+                            # if view == views[0] and type == types_to_show[0]:
+                            # continue
+                            path = os.path.join(view_path_, type_, frame)
+                            addFrame = cv2.imread(path)
+                            # print(addFrame)
+                            # print(path)
+                            # if k == 0:
+                            # display = addFrame
+                            # else:
+                            # print(display.shape)
+                            # print(addFrame.shape)
+                            displays.append(addFrame)
+                        display = np.hstack((displays))
+                        all_displays.append(display)
+                        # full_display = np.vstack((full_display, display))
+                        # k += 1
+                    # print(len(all_displays))
+                    full_display = np.vstack((all_displays))
+                    cv2.namedWindow('image', cv2.WINDOW_NORMAL)
+                    cv2.resizeWindow('image', 600, 600)
+                    cv2.imshow('image', full_display)
+                    cv2.waitKey(250)
+                    # print(display)
+                    # cv2.destroyAllWindows()
 
     print('done')

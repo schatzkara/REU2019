@@ -99,7 +99,7 @@ class FullNetwork(nn.Module):
         rep_v1, rep_v2 = self.action_pipeline(vid1, vid2)  # bsz,32,8/16,14,14
 
         # appearance encoding + video features
-        gen_input1, gen_input2 = torch.cat([exp_app_v2, rep_v1], dim=1), torch.cat([exp_app_v1, rep_v2], dim=1)
+        gen_input1, gen_input2 = torch.cat([exp_app_v1, rep_v2], dim=1), torch.cat([exp_app_v2, rep_v1], dim=1)
         # recon_input1, recon_input2 = torch.cat([exp_app_v1, rep_v1], dim=1), torch.cat([exp_app_v2, rep_v2], dim=1)
 
         # recon_v1, recon_v2 = self.gen(recon_input1), self.gen(recon_input2)  # bsz,3,8/16,112,112
@@ -116,7 +116,7 @@ class FullNetwork(nn.Module):
         return exp_app_v1, exp_app_v2
 
     def action_pipeline(self, vid1, vid2):
-        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,256,4,14,14
+        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,32,4,14,14
 
         # viewpoint change + video features
         # trans_input1, trans_input2 = torch.cat([vp1, rep_v2], dim=1), torch.cat([vp2, rep_v1], dim=1)  # dim=channels

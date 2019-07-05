@@ -1,6 +1,6 @@
 import time
 import torch
-from phase0.network import FullNetwork
+from old.phase0 import FullNetwork
 
 num_epochs = 100
 

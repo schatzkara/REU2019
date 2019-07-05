@@ -1,45 +1,17 @@
 import torch
-from utils.modelIOFuncs import get_first_frame
 import time
-import sms
+from utils import sms
+from utils.modelIOFuncs import get_first_frame, convert_outputs
+from utils.lossFuncs import calculate_loss, print_loss
 
 
-def print_loss(traintest, epochbatch, step, total_steps, loss_names, loss_values):
-    """
-    Function to print out the loss values.
-    :param traintest: "Training" or "Testing"
-    :param epochbatch: "Epoch" or "Batch"
-    :param step:
-    :param total_steps:
-    :param loss_names:
-    :param loss_values:
-    :return:
-    """
-    print_string = ''
-    if epochbatch.lower() == 'epoch':
-        print_string += traintest + ' '
-    else:
-        print_string += '\t'
-    print_string += epochbatch + '{}/{}'.format(step, total_steps)
-    for i in range(len(loss_values)):
-        name, value = loss_names[i], loss_values[i]
-        print_string += ' ' + name + ':{}'.format(value)
-    print(print_string)
-
-
-def training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainloader):
+def training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainloader, loss_weights=None):
     """
     Function carrying out the training loop for the Full Network for a single epoch.
     :param epoch: (int) The current epoch in which the model is training.
     :return: None
     """
-    running_total_loss = 0.0
-    running_con1_loss = 0.0
-    running_con2_loss = 0.0
-    running_recon1_loss = 0.0
-    running_recon2_loss = 0.0
-    running_recon3_loss = 0.0
-    running_recon4_loss = 0.0
+    running_losses = None
 
     model.train()
 
@@ -51,57 +23,31 @@ def training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainl
 
         optimizer.zero_grad()
 
-        gen_v1, gen_v2, recon_v1, recon_v2, rep_v1, rep_v2, rep_v1_est, rep_v2_est = model(vp_diff=vp_diff,
-                                                                                           vid1=vid1, vid2=vid2,
-                                                                                           img1=img1, img2=img2)
-        # loss
-        # consistency losses between video features
-        con1_loss = criterion(rep_v1, rep_v1_est)
-        con2_loss = criterion(rep_v2, rep_v2_est)
-        # reconstruction losses for videos gen from new view
-        recon1_loss = criterion(gen_v1, vid1)
-        recon2_loss = criterion(gen_v2, vid2)
-        # reconstruction losses for videos gen from features and same view
-        recon3_loss = criterion(recon_v1, vid1)
-        recon4_loss = criterion(recon_v2, vid2)
-        loss = con1_loss + con2_loss + recon1_loss + recon2_loss + recon3_loss + recon4_loss
+        outputs = model(vp_diff=vp_diff, vid1=vid1, vid2=vid2, img1=img1, img2=img2)
+
+        losses, running_losses = calculate_loss(criterion=criterion,
+                                                inputs=[vp_diff, vid1, vid2, img1, img2], outputs=outputs,
+                                                running_losses=running_losses, loss_weights=loss_weights)
+        loss = losses['loss']
         loss.backward()
         optimizer.step()
 
-        running_total_loss += loss.item()
-        running_con1_loss += con1_loss.item()
-        running_con2_loss += con2_loss.item()
-        running_recon1_loss += recon1_loss.item()
-        running_recon2_loss += recon2_loss.item()
-        running_recon3_loss += recon3_loss.item()
-        running_recon4_loss += recon4_loss.item()
-
         if (batch_idx + 1) % 10 == 0:
             print_loss(traintest='Training', epochbatch='Batch', step=batch_idx + 1, total_steps=len(trainloader),
-                       loss_names=['loss', 'con1', 'con2', 'recon1', 'recon2', 'recon3', 'recon4'],
-                       loss_values=[loss, con1_loss, con2_loss, recon1_loss, recon2_loss, recon3_loss, recon4_loss])
+                       loss_names=list(losses.keys()), loss_values=list(losses.values()))
 
-    epoch_loss_values = [running_total_loss, running_con1_loss, running_con2_loss, running_recon1_loss,
-                         running_recon2_loss, running_recon3_loss, running_recon4_loss]
-    epoch_loss_values = [val / len(trainloader) for val in epoch_loss_values]
+    epoch_loss_values = {name: val / len(trainloader) for name, val in running_losses.items()}
     print_loss(traintest='Training', epochbatch='Epoch', step=epoch + 1, total_steps=num_epochs,
-               loss_names=['loss', 'con1', 'con2', 'recon1', 'recon2', 'recon3', 'recon4'],
-               loss_values=epoch_loss_values)
+               loss_names=list(epoch_loss_values.keys()), loss_values=list(epoch_loss_values.values()))
 
 
-def testing_loop(epoch, num_epochs, model, criterion, device, testloader):
+def validation_loop(epoch, num_epochs, model, criterion, device, testloader, loss_weights=None):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
     :param epoch: (int) The current epoch in which the model is testing/validating.
     :return: None
     """
-    running_total_loss = 0.0
-    running_con1_loss = 0.0
-    running_con2_loss = 0.0
-    running_recon1_loss = 0.0
-    running_recon2_loss = 0.0
-    running_recon3_loss = 0.0
-    running_recon4_loss = 0.0
+    running_losses = None
 
     model.eval()
 
@@ -112,45 +58,66 @@ def testing_loop(epoch, num_epochs, model, criterion, device, testloader):
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v1, gen_v2, recon_v1, recon_v2, rep_v1, rep_v2, rep_v1_est, rep_v2_est = model(vp_diff=vp_diff,
-                                                                                               vid1=vid1, vid2=vid2,
-                                                                                               img1=img1, img2=img2)
-            # loss
-            # consistency losses between video features
-            con1_loss = criterion(rep_v1, rep_v1_est)
-            con2_loss = criterion(rep_v2, rep_v2_est)
-            # reconstruction losses for videos gen from new view
-            recon1_loss = criterion(gen_v1, vid1)
-            recon2_loss = criterion(gen_v2, vid2)
-            # reconstruction losses for videos gen from features and same view
-            recon3_loss = criterion(recon_v1, vid1)
-            recon4_loss = criterion(recon_v2, vid2)
-            loss = con1_loss + con2_loss + recon1_loss + recon2_loss + recon3_loss + recon4_loss
+            outputs = model(vp_diff=vp_diff, vid1=vid1, vid2=vid2, img1=img1, img2=img2)
 
-        running_total_loss += loss.item()
-        running_con1_loss += con1_loss.item()
-        running_con2_loss += con2_loss.item()
-        running_recon1_loss += recon1_loss.item()
-        running_recon2_loss += recon2_loss.item()
-        running_recon3_loss += recon3_loss.item()
-        running_recon4_loss += recon4_loss.item()
+            losses, running_losses = calculate_loss(criterion=criterion,
+                                                    inputs=[vp_diff, vid1, vid2, img1, img2], outputs=outputs,
+                                                    running_losses=running_losses, loss_weights=loss_weights)
+            loss = losses['loss']
 
         if (batch_idx + 1) % 10 == 0:
-            print_loss(traintest='Training', epochbatch='Batch', step=batch_idx + 1, total_steps=len(testloader),
-                       loss_names=['loss', 'con1', 'con2', 'recon1', 'recon2', 'recon3', 'recon4'],
-                       loss_values=[loss, con1_loss, con2_loss, recon1_loss, recon2_loss, recon3_loss, recon4_loss])
+            print_loss(traintest='Validation', epochbatch='Batch', step=batch_idx + 1, total_steps=len(testloader),
+                       loss_names=list(losses.keys()), loss_values=list(losses.values()))
 
-    epoch_loss_values = [running_total_loss, running_con1_loss, running_con2_loss, running_recon1_loss,
-                         running_recon2_loss, running_recon3_loss, running_recon4_loss]
-    epoch_loss_values = [val / len(testloader) for val in epoch_loss_values]
-    print_loss(traintest='Training', epochbatch='Epoch', step=epoch + 1, total_steps=num_epochs,
-               loss_names=['loss', 'con1', 'con2', 'recon1', 'recon2', 'recon3', 'recon4'],
-               loss_values=epoch_loss_values)
+    epoch_loss_values = {name: val / len(testloader) for name, val in running_losses.items()}
+    print_loss(traintest='Validation', epochbatch='Epoch', step=epoch + 1, total_steps=num_epochs,
+               loss_names=list(epoch_loss_values.keys()),
+               loss_values=list(epoch_loss_values.values()))
 
-    return running_total_loss / len(testloader)
+    total_loss = epoch_loss_values['loss']
+    return total_loss
 
 
-def train_model(num_epochs, model, optimizer, criterion, trainloader, testloader, device, weight_file):
+def testing_loop(model, criterion, device, testloader, output_dir, loss_weights=None):
+    """
+    Function to carry out the testing/validation loop for the Full Network for a single epoch.
+    :return: None
+    """
+    running_losses = None
+
+    model.eval()
+
+    for batch_idx, (vp_diff, vid1, vid2) in enumerate(testloader):
+        vp_diff = vp_diff.to(device)
+        vid1, vid2 = vid1.to(device), vid2.to(device)
+        img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
+        img1, img2 = img1.to(device), img2.to(device)
+
+        with torch.no_grad():
+            outputs = model(vp_diff=vp_diff, vid1=vid1, vid2=vid2, img1=img1, img2=img2)
+
+            # save videos
+            convert_outputs(inputs=[vp_diff, vid1, vid2, img1, img2], outputs=outputs,
+                            output_dir=output_dir, batch_num=batch_idx + 1)
+
+            # loss
+            losses, running_losses = calculate_loss(criterion=criterion,
+                                                    inputs=[vp_diff, vid1, vid2, img1, img2], outputs=outputs,
+                                                    running_losses=running_losses, loss_weights=loss_weights)
+            loss = losses['loss']
+
+        if (batch_idx + 1) % 10 == 0:
+            print_loss(traintest='Testing', epochbatch='Batch', step=batch_idx + 1, total_steps=len(testloader),
+                       loss_names=list(losses.keys()), loss_values=list(losses.values()))
+
+        epoch_loss_values = {name: val / len(testloader) for name, val in running_losses.items()}
+        print_loss(traintest='Testing', epochbatch='Epoch', step=1, total_steps=1,
+                   loss_names=list(epoch_loss_values.keys()),
+                   loss_values=list(epoch_loss_values.values()))
+
+
+def train_model(num_epochs, model, optimizer, criterion,
+                trainloader, testloader, device, weight_file, loss_weights=None):
     """
     Function to train and validate the model for all epochs.
     :return: None
@@ -159,13 +126,24 @@ def train_model(num_epochs, model, optimizer, criterion, trainloader, testloader
     start_time = time.time()
     for epoch in range(num_epochs):
         print('Training...')
-        training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainloader)
+        training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainloader, loss_weights)
         print('Validation...')
-        loss = testing_loop(epoch, num_epochs, model, criterion, device, testloader)
+        loss = validation_loop(epoch, num_epochs, model, criterion, device, testloader, loss_weights)
         sms.send('Epoch {} Loss: {}'.format(epoch + 1, loss), "6304876751", "att")
         if epoch == 0 or loss < min_loss:
             min_loss = loss
             torch.save(model.state_dict(), weight_file)
             sms.send('Weights saved', "6304876751", "att")
+    end_time = time.time()
+    print('Time: {}'.format(end_time - start_time))
+
+
+def test_model(model, criterion, device, testloader, output_dir, loss_weights=None):
+    """
+    Function to test the model.
+    :return: None
+    """
+    start_time = time.time()
+    testing_loop(model, criterion, device, testloader, output_dir, loss_weights)
     end_time = time.time()
     print('Time: {}'.format(end_time - start_time))

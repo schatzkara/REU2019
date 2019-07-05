@@ -103,7 +103,7 @@ class NTUDataset(Dataset):
 
     def get_random_views(self):
         """
-        Function to generate 2 random viewpoints for the sample.
+        Function to generate 2 randomStuff viewpoints for the sample.
         :return: 2 ints representing the viewpoints for the sample.
         """
         self.view1, self.view2 = np.random.randint(1, 4), np.random.randint(1, 4)
@@ -213,7 +213,7 @@ class NTUDataset(Dataset):
 
     def rand_frame_index(self, frame_count):
         """
-        Function to generate a random starting frame index for cropping the temporal dimension of the video.
+        Function to generate a randomStuff starting frame index for cropping the temporal dimension of the video.
         :param frame_count: (int) The number of available frames in the sample video.
         :return: The starting frame index for the sample.
         """
@@ -225,7 +225,7 @@ class NTUDataset(Dataset):
 
     def rand_pixel_index(self):
         """
-        Function to generate a random starting pixel for cropping the height and width of the frames.
+        Function to generate a randomStuff starting pixel for cropping the height and width of the frames.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
         # if the frame is precropped, then 50 pixels are removed from the right and left each.

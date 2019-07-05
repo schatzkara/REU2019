@@ -158,7 +158,7 @@ class PanopticDataset(Dataset):
 
     def get_random_views(self, num_views):
         """
-        Function to generate 2 random viewpoints for the sample.
+        Function to generate 2 randomStuff viewpoints for the sample.
         :return: 2 ints representing the viewpoints for the sample.
         """
         self.view1, self.view2 = np.random.randint(1, num_views), np.random.randint(1, num_views)
@@ -179,7 +179,7 @@ class PanopticDataset(Dataset):
 
     def rand_frame_index(self):
         """
-        Function to generate a random starting frame index for cropping the temporal dimension of the video.
+        Function to generate a randomStuff starting frame index for cropping the temporal dimension of the video.
         :return: The starting frame index for the sample.
         """
         max_frame = self.frame_count - (self.skip_len * self.clip_len)
@@ -190,7 +190,7 @@ class PanopticDataset(Dataset):
 
     def rand_pixel_index(self):
         """
-        Function to generate a random starting pixel for cropping the height and width of the frames.
+        Function to generate a randomStuff starting pixel for cropping the height and width of the frames.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
         if self.precrop:

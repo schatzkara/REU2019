@@ -2,7 +2,7 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from phase0.network import FullNetwork
+from old.phase0 import FullNetwork
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -28,7 +28,7 @@ criterion = nn.MSELoss()
 optimizer = optim.Adam(model.parameters(), lr=lr)  # other parameters???
 
 
-# generate random data
+# generate randomStuff data
 def generate_random_data():
     view1vids = torch.randn(DATASET_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH)
     view2vids = torch.randn(DATASET_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH)
@@ -141,7 +141,7 @@ def test(dataset, epoch):  # dataset is dict of 2 views with (1-PROP_TRAINING)*D
 
 
 def train_model():
-    print('Generating random data.')
+    print('Generating randomStuff data.')
     training_data, testing_data = generate_random_data()
     training_batches = create_batches(training_data)
     # for batch in training_batches.keys():

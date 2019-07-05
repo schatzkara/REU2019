@@ -182,7 +182,7 @@ class PanopticDataset(Dataset):
 
     def get_random_view(self, num_options, view_num):
         """
-        Function to generate 2 random viewpoints for the sample.
+        Function to generate 2 randomStuff viewpoints for the sample.
         :return: 2 ints representing the viewpoints for the sample.
         """
         if view_num == 1:
@@ -212,7 +212,7 @@ class PanopticDataset(Dataset):
 
     def rand_frame_index(self):
         """
-        Function to generate a random starting frame index for cropping the temporal dimension of the video.
+        Function to generate a randomStuff starting frame index for cropping the temporal dimension of the video.
         :return: The starting frame index for the sample.
         """
         max_frame = self.frame_count - (self.skip_len * self.clip_len)
@@ -223,7 +223,7 @@ class PanopticDataset(Dataset):
 
     def rand_pixel_index(self):
         """
-        Function to generate a random starting pixel for cropping the height and width of the frames.
+        Function to generate a randomStuff starting pixel for cropping the height and width of the frames.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
         if self.precrop:
@@ -511,15 +511,15 @@ class PanopticDataset(Dataset):
 
     def get_random_view(self, num_options, view_num):
         """
-        Function to generate 2 random viewpoints for the sample.
+        Function to generate 2 randomStuff viewpoints for the sample.
         :return: 2 ints representing the viewpoints for the sample.
         """
         if view_num == 1:
-            self.view1idx = np.random.randint(1, num_options)
+            self.view1idx = np.randomStuff.randint(1, num_options)
         elif view_num == 2:
-            self.view2idx = np.random.randint(1, num_options)
+            self.view2idx = np.randomStuff.randint(1, num_options)
             while self.view2idx == self.view1idx:
-                self.view2idx = np.random.randint(1, num_options)
+                self.view2idx = np.randomStuff.randint(1, num_options)
 
     def get_vid_path(self, path_head, path_tail, view_num):
         """
@@ -537,26 +537,26 @@ class PanopticDataset(Dataset):
 
     def rand_frame_index(self):
         """
-        Function to generate a random starting frame index for cropping the temporal dimension of the video.
+        Function to generate a randomStuff starting frame index for cropping the temporal dimension of the video.
         :return: The starting frame index for the sample.
         """
         max_frame = self.frame_count - (self.skip_len * self.clip_len)
         assert max_frame >= 1, 'Not enough frames to sample from.'
-        frame_index = np.random.randint(0, max_frame)
+        frame_index = np.randomStuff.randint(0, max_frame)
 
         return frame_index
 
     def rand_pixel_index(self):
         """
-        Function to generate a random starting pixel for cropping the height and width of the frames.
+        Function to generate a randomStuff starting pixel for cropping the height and width of the frames.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
         if self.precrop:
             width = self.width - 100
         else:
             width = self.width
-        height_index = np.random.randint(0, self.height - self.resize_height)
-        width_index = np.random.randint(0, width - self.resize_width)
+        height_index = np.randomStuff.randint(0, self.height - self.resize_height)
+        width_index = np.randomStuff.randint(0, width - self.resize_width)
 
         return height_index, width_index
 

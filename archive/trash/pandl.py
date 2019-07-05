@@ -1,7 +1,7 @@
 import numpy as np
 import keras
 import cPickle as pickle
-import random
+import randomStuff
 import params
 import cv2
 import os
@@ -168,7 +168,7 @@ class DataGenerator(keras.utils.Sequence):
         ids = np.random.randint(0, len(views_list), params.num_views + 1)
 
         num_req_frames = self.num_frames * self.skip_rate - self.skip_rate + 1
-        # select random start frame
+        # select randomStuff start frame
         # all views will have same starting point
         f_start = np.random.randint(0, params.fcount - num_req_frames)
 

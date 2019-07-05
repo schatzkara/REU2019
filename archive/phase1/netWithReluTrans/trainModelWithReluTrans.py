@@ -9,7 +9,7 @@ from networkWithReluTrans import FullNetwork
 from NTUDataLoader import NTUDataset
 from PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
-import sms
+from utils import sms
 
 DATASET = 'panoptic'  # 'NTU' or 'panoptic'
 

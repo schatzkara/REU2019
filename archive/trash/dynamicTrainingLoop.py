@@ -4,8 +4,8 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from phase0.network import FullNetwork
-from phase0.NTUDataLoader import NTUDataset
+from old.phase0 import FullNetwork
+from old.phase0 import NTUDataset
 import torch.backends.cudnn as cudnn
 
 # directory information

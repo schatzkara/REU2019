@@ -304,7 +304,7 @@ import torch
 x = torch.tensor([[1, 2], [1, 2]])
 print(x.size()[0])
 
-from random import sms
+from randomStuff import sms
 
 n = 5
 
@@ -423,7 +423,7 @@ cv2.imwrite('./img.jpg', frame)
 
 
 
-from phase0.NTUDataLoader import NTUDataset
+from old.phase0 import NTUDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135/'
@@ -520,8 +520,8 @@ print(maxi)
 import time
 import torch
 import torch.nn as nn
-from phase0.network import FullNetwork
-from phase0.NTUDataLoader import NTUDataset
+from old.phase0 import FullNetwork
+from old.phase0 import NTUDataset
 import torch.backends.cudnn as cudnn
 import cv2
 
@@ -994,7 +994,7 @@ if __name__ == "__main__":
 
     x = torch.randn(2, 6, 8, 100, 100)
 
-    convert_to_vid(tensor=x, output_dir='./testOutput', batch_num=0, view=0, item_type='random')
+    convert_to_vid(tensor=x, output_dir='./testOutput', batch_num=0, view=0, item_type='randomStuff')
 
 
 
