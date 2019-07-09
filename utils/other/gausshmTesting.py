@@ -65,8 +65,8 @@ heatmaps = get_gaussian_heatmaps(mean=gaussian_mean, stdev=0.01, map_size=(14, 1
 
 if __name__ == '__main__':
     bsz, nkp, frames = 20, 32, 16
-    height = width = 14
-    mheight = mwidth = 14
+    height = width = 28
+    mheight = mwidth = 28
 
     x = torch.randint(0, 256, (bsz, nkp, frames, height, width), dtype=torch.float32)
     # print(x)
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     # x_coord = torch.randint(0, width, (bsz, nkp, frames, 1), dtype=torch.float32)
     # print(y_coord, x_coord)
     gaussian_mean = torch.cat([y_coord, x_coord], dim=3)
-    ghm = get_gaussian_heatmaps(mean=gaussian_mean, stdev=0.1, map_size=(mheight, mwidth))
+    ghm = get_gaussian_heatmaps(mean=gaussian_mean, stdev=0.05, map_size=(mheight, mwidth))
     # print(ghm.size())
     # print(ghm)
 

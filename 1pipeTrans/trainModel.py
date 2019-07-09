@@ -5,13 +5,13 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from networks.model1pipetrans import FullNetwork
+from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
 import sms
 
-DATASET = 'NTU'  # 'NTU' or 'panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
 BATCH_SIZE = 20
@@ -24,7 +24,6 @@ WIDTH = 112
 # training parameters
 NUM_EPOCHS = 1000
 LR = 1e-4
-CON_LOSS_W = 0.0
 
 
 def ntu_config():
@@ -39,8 +38,8 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net1pipetrans_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                       PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
@@ -52,8 +51,8 @@ def panoptic_config():
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net1pipetrans_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                       PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, close_cams_file, weight_file
 
 

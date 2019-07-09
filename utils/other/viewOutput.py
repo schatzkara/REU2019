@@ -2,32 +2,26 @@ import os
 import cv2
 import numpy as np
 
-root_dir = '/home/yogesh/kara/REU2019/'
-# root_dir = 'C:/Users/Owner/Documents/UCF/output/'
-
-vid_dir = 'KP/videos/ntu_netkp_/'
-# vid_dir = 'phase3/videos/pan_net3_57epochs/'
-# vid_dir = 'noconsistency/videos/ntu_netnocon_66e/'
-# vid_dir = 'noconKP/videos/ntu_netnocon_98e/'
-# vid_dir = 'noconsistency/videos/pan_netnocon_72e/'
-
+# root_dir = '/home/yogesh/kara/REU2019/'
+root_dir = 'C:/Users/Owner/Documents/UCF/output/'
+vid_dir = 'repkpapp/videos/pan_net3in_282e/'
 
 full_dir = os.path.join(root_dir, vid_dir)
 print(full_dir)
 
 possible_views = [1, 2]
 types_to_show = [
-    'input',
-    'output',
+    # 'input',
+    # 'output',
     # 'recon',
     # 'rep',
     # 'rep_est',
-    # 'kp',
-    # 'kp_est'
+    'kp',
+    'kp_est'
 ]
 height = width = 112
 frames = 16
-if 'rep' in types_to_show:
+if 'rep' in types_to_show or 'kp' in types_to_show:
     frames = 4
 nkp = 32
 
@@ -127,7 +121,7 @@ if __name__ == '__main__':
                             # continue
                         path = os.path.join(view_path_, type_, frame)
                         addFrame = cv2.imread(path)
-                        print(addFrame)
+                        # print(addFrame)
                         # print(path)
                         # if k == 0:
                             # display = addFrame

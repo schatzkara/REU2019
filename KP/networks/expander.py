@@ -73,7 +73,7 @@ class Expander(nn.Module):
 if __name__ == "__main__":
     print_summary = True
 
-    ex = Expander(vp_value_count=1, out_size=14)
+    ex = Expander(vp_value_count=1, out_frames=4, out_size=14)
 
     if print_summary:
         summary(ex, input_size=(3))

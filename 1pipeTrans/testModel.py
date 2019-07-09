@@ -4,7 +4,7 @@ import os
 import time
 import torch
 import torch.nn as nn
-from networks.model1pipetrans import FullNetwork
+from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 from data.outputConversion import convert_to_vid
@@ -29,9 +29,9 @@ def ntu_config():
     else:
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
-    weights_path = './weights/net1pipetrans_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+    weights_path = './weights/net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                         PRECROP, 1000, 0.0001)
-    output_video_dir = './videos/ntu_net1pipetrans_'
+    output_video_dir = './videos/ntu_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
 
@@ -45,7 +45,7 @@ def panoptic_config():
         os.mkdir('./weights')
     weights_path = './weights/net1pipetrans_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                         PRECROP, 1000, 0.0001)
-    output_video_dir = './videos/pan_net1pipetrans_'
+    output_video_dir = './videos/pan_'
 
     return data_root_dir, test_split, close_cams_file, weights_path, output_video_dir
 

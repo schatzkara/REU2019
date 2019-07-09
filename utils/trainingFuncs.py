@@ -1,7 +1,7 @@
 import torch
 import time
 from utils import sms
-from utils.modelIOFuncs import get_first_frame, convert_outputs
+from .modelIOFuncs import get_first_frame, convert_outputs
 from utils.lossFuncs import calculate_loss, print_loss
 
 
@@ -116,7 +116,7 @@ def testing_loop(model, criterion, device, testloader, output_dir, loss_weights=
                    loss_values=list(epoch_loss_values.values()))
 
 
-def train_model(num_epochs, model, optimizer, criterion,
+def train_model(starting_epoch, num_epochs, model, optimizer, criterion,
                 trainloader, testloader, device, weight_file, loss_weights=None):
     """
     Function to train and validate the model for all epochs.
@@ -124,7 +124,7 @@ def train_model(num_epochs, model, optimizer, criterion,
     """
     min_loss = 0.0
     start_time = time.time()
-    for epoch in range(num_epochs):
+    for epoch in range(starting_epoch, num_epochs):
         print('Training...')
         training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainloader, loss_weights)
         print('Validation...')

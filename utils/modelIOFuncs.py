@@ -28,8 +28,12 @@ def get_first_frame(vid_batch):
 def convert_outputs(inputs, outputs, output_dir, batch_num):
     if len(outputs) == 4:
         convert_outputs_4(inputs, outputs, output_dir, batch_num)
+    elif len(outputs) == 6:
+        convert_outputs_6(inputs, outputs, output_dir, batch_num)
     elif len(outputs) == 8:
-        convert_outputs(inputs, outputs, output_dir, batch_num)
+        convert_outputs_8(inputs, outputs, output_dir, batch_num)
+    elif len(outputs) == 10:
+        convert_outputs_10(inputs, outputs, output_dir, batch_num)
 
 
 def convert_outputs_4(inputs, outputs, output_dir, batch_num):
@@ -48,6 +52,28 @@ def convert_outputs_4(inputs, outputs, output_dir, batch_num):
                    batch_num=batch_num, view=1, item_type='rep')
     convert_to_vid(tensor=rep_v2, output_dir=output_dir,
                    batch_num=batch_num, view=2, item_type='rep')
+
+
+def convert_outputs_6(inputs, outputs, output_dir, batch_num):
+    vp_diff, vid1, vid2, img1, img2 = inputs
+    gen_v1, gen_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = outputs
+
+    convert_to_vid(tensor=vid1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='input')
+    convert_to_vid(tensor=vid2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='input')
+    convert_to_vid(tensor=gen_v1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='output')
+    convert_to_vid(tensor=gen_v2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='output')
+    convert_to_vid(tensor=kp_v1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='kp')
+    convert_to_vid(tensor=kp_v2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='kp')
+    convert_to_vid(tensor=kp_v1_est, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='kp_est')
+    convert_to_vid(tensor=kp_v2_est, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='kp_est')
 
 
 def convert_outputs_8(inputs, outputs, output_dir, batch_num):
@@ -74,6 +100,38 @@ def convert_outputs_8(inputs, outputs, output_dir, batch_num):
                    batch_num=batch_num, view=1, item_type='rep_est')
     convert_to_vid(tensor=rep_v2_est, output_dir=output_dir,
                    batch_num=batch_num, view=2, item_type='rep_est')
+
+
+def convert_outputs_10(inputs, outputs, output_dir, batch_num):
+    vp_diff, vid1, vid2, img1, img2 = inputs
+    gen_v1, gen_v2, rep_v1, rep_v2, rep_v1_est, rep_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est = outputs
+
+    convert_to_vid(tensor=vid1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='input')
+    convert_to_vid(tensor=vid2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='input')
+    convert_to_vid(tensor=gen_v1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='output')
+    convert_to_vid(tensor=gen_v2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='output')
+
+    convert_to_vid(tensor=rep_v1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='rep')
+    convert_to_vid(tensor=rep_v2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='rep')
+    convert_to_vid(tensor=rep_v1_est, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='rep_est')
+    convert_to_vid(tensor=rep_v2_est, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='rep_est')
+
+    convert_to_vid(tensor=kp_v1, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='kp')
+    convert_to_vid(tensor=kp_v2, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='kp')
+    convert_to_vid(tensor=kp_v1_est, output_dir=output_dir,
+                   batch_num=batch_num, view=1, item_type='kp_est')
+    convert_to_vid(tensor=kp_v2_est, output_dir=output_dir,
+                   batch_num=batch_num, view=2, item_type='kp_est')
 
 
 def convert_to_vid(tensor, output_dir, batch_num, view, item_type):
@@ -114,13 +172,27 @@ def save_frames(vid, output_dir, batch_num, vid_num, view, item_type):
                 hmap_path = os.path.join(vid_path, hmap_name)
                 hmap = vid[kp, f, :, :].cpu().numpy()
                 hmap = denormalize_frame(hmap)
-
                 try:
                     cv2.imwrite(hmap_path, hmap)
                 except:
                     print('The image did not successfully save.')
 
                 assert os.path.exists(hmap_path), 'The image does not exist.'
+
+    if 'rep' in item_type:
+        for c in range(channels, 10):
+            for f in range(frames):
+                hmap_name = make_frame_name(f + 1)[:-4] + make_frame_name(c + 1)
+                hmap_path = os.path.join(vid_path, hmap_name)
+                hmap = vid[c, f, :, :].cpu().numpy()
+                hmap = denormalize_frame(hmap)
+                try:
+                    cv2.imwrite(hmap_path, hmap)
+                except:
+                    print('The image did not successfully save.')
+
+                assert os.path.exists(hmap_path), 'The image does not exist.'
+
     else:
         if channels == 3:
             for i in range(frames):
@@ -137,22 +209,6 @@ def save_frames(vid, output_dir, batch_num, vid_num, view, item_type):
                     print('The image did not successfully save.')
 
                 assert os.path.exists(frame_path), 'The image does not exist.'
-        else:
-            for i in range(frames):
-                # for j in range(channels):
-                for j in range(3):
-                    frame_name = make_frame_name(i + 1)[:-4] + make_frame_name(j + 1)
-                    frame_path = os.path.join(vid_path, frame_name)
-                    # extract one frame as np array
-                    frame = vid[j, i, :, :].squeeze().cpu().numpy()
-                    frame = denormalize_frame(frame)
-
-                    try:
-                        cv2.imwrite(frame_path, frame)
-                    except:
-                        print('The image did not successfully save.')
-
-                    assert os.path.exists(frame_path), 'The image does not exist.'
 
 
 def make_vid_path(output_dir, batch_num, vid_num, view, item_type):

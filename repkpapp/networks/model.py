@@ -64,18 +64,23 @@ class FullNetwork(nn.Module):
         self.vp_value_count = vp_value_count
         # self.output_shape = output_shape
         self.out_frames = output_shape[2]
+        self.rep_channels = 256
+        self.rep_frames = 4
+        self.rep_size = 14
+        self.nkp = 32
         # self.stdev = stdev
 
         self.vgg = vgg16(pretrained=True, weights_path=vgg_weights_path)
         self.i3d = InceptionI3d(final_endpoint='Mixed_5c_small', in_frames=self.out_frames,
                                 pretrained=True, weights_path=i3d_weights_path)
 
-        self.kpp = KPPredictor(stdev=stdev)
+        self.kpp = KPPredictor(in_channels=self.rep_channels, nkp=self.nkp, stdev=stdev)
 
-        self.exp = Expander(vp_value_count=self.vp_value_count, out_frames=16, out_size=14)
-        self.trans = Transformer(in_channels=32 + self.vp_value_count)
+        self.exp = Expander(vp_value_count=self.vp_value_count, out_frames=self.rep_frames, out_size=self.rep_size)
+        self.trans = Transformer(in_channels=self.rep_channels + self.vp_value_count, out_channels=self.rep_channels)
 
-        self.gen = Generator(in_channels=32 + 32 + 32, out_frames=self.out_frames)
+        self.gen = Generator(in_channels=self.rep_channels + self.rep_channels + self.nkp,
+                             out_frames=self.out_frames)
         # print('%s Model Successfully Built \n' % self.net_name)
 
     def forward(self, vp_diff, vid1, vid2, img1, img2):
@@ -96,42 +101,45 @@ class FullNetwork(nn.Module):
                  Shape of two output videos is: (bsz, 3, 8/16, 112, 112) for this application.
                  Shape of two key-point feature maps is: (bsz, 32, 16, 28, 28) for this application.
         """
-        vp1_to_2, vp2_to_1 = self.exp(vp_diff), self.exp(-vp_diff)  # bsz,1/3,14,14
+        vp1_to_2, vp2_to_1 = self.exp(vp_diff), self.exp(-vp_diff)  # bsz,1/3,4,14,14
 
-        exp_app_v1, exp_app_v2 = self.appearance_pipeline(img1, img2)  # bsz,32,16,14,14
+        exp_app_v1, exp_app_v2 = self.appearance_pipeline(img1, img2)  # bsz,256,4,14,14
 
-        action_output = self.action_pipeline(vp1_to_2, vp2_to_1, vid1, vid2)  # bsz,32,8/16,14,14
-        rep_v1, rep_v2, rep_v1_est, rep_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est = action_output
+        rep_v1, rep_v2, rep_v1_est, rep_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est = self.action_pipeline(vp1_to_2,
+                                                                                                          vp2_to_1,
+                                                                                                          vid1, vid2)
+        # bsz,256,4,14,14; bsz,32,4,14,14
+
+        # exp_app_v1, exp_app_v2 = self.appearance_pipeline(img1, img2)  # bsz,256,4,14,14
 
         # appearance encoding + video features
         gen_input1, gen_input2 = torch.cat([exp_app_v1, rep_v1_est, kp_v1_est], dim=1), \
                                  torch.cat([exp_app_v2, rep_v2_est, kp_v2_est], dim=1)  # dim=channels
 
         # these are the videos that get returned
-        gen_v1, gen_v2 = self.gen(gen_input1), self.gen(gen_input2)  # bsz,3,8/16,112,112
+        gen_v1, gen_v2 = self.gen(gen_input1), self.gen(gen_input2)  # bsz,3,16,112,112
 
         return gen_v1, gen_v2, rep_v1, rep_v2, rep_v1_est, rep_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est
 
     def appearance_pipeline(self, img1, img2):
-        app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # bsz,32,14,14
+        app_v1, app_v2 = self.vgg(img1), self.vgg(img2)  # bsz,256,14,14
 
-        exp_app_v1, exp_app_v2 = self.expand_app_enc(app_v1, 16), self.expand_app_enc(app_v2, 16)  # bsz,32,8/16,14,14
+        exp_app_v1, exp_app_v2 = self.expand_app_enc(app_v1, self.rep_frames), \
+                                 self.expand_app_enc(app_v2, self.rep_frames)  # bsz,256,4,14,14
 
         return exp_app_v1, exp_app_v2
 
     def action_pipeline(self, vp1_to_2, vp2_to_1, vid1, vid2):
-        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,32,4,14,14
+        rep_v1, rep_v2 = self.i3d(vid1), self.i3d(vid2)  # bsz,256,4,14,14
 
-        rep_v1, kp_v1 = self.kpp(rep_v1)  # bsz,32,16,14,14; bsz,32,16,28,28
-        rep_v2, kp_v2 = self.kpp(rep_v2)
+        kp_v1, kp_v2 = self.kpp(rep_v1), self.kpp(rep_v2)  # bsz,32,4,14,14
 
         # viewpoint change + action representation
         trans_input1, trans_input2 = torch.cat([vp2_to_1, rep_v2], dim=1), torch.cat([vp1_to_2, rep_v1], dim=1)  # dim=c
 
-        rep_v1_est, rep_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # bsz,32,8/16,14,14
+        rep_v1_est, rep_v2_est = self.trans(trans_input1), self.trans(trans_input2)  # bsz,256,4,14,14
 
-        rep_v1_est, kp_v1_est = self.kpp(rep_v1_est)  # bsz,32,16,14,14; bsz,32,16,28,28
-        rep_v2_est, kp_v2_est = self.kpp(rep_v2_est)
+        kp_v1_est, kp_v2_est = self.kpp(rep_v1_est), self.kpp(rep_v2_est)  # bsz,32,4,14,14
 
         return rep_v1, rep_v2, rep_v1_est, rep_v2_est, kp_v1, kp_v2, kp_v1_est, kp_v2_est
 

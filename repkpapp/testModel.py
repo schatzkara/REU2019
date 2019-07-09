@@ -7,7 +7,7 @@ import torch.nn as nn
 from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
-from data.modelIOFuncs import convert_to_vid
+from utils.modelIOFuncs import convert_to_vid
 import torch.backends.cudnn as cudnn
 
 DATASET = 'NTU'  # 'NTU' or 'panoptic'
@@ -33,7 +33,7 @@ def ntu_config():
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
     weights_path = './weights/net3in_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                     PRECROP, 1000, 0.0001)
+                                                                      PRECROP, 1000, 0.0001)
     output_video_dir = './videos/ntu_net3in_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
@@ -47,7 +47,7 @@ def panoptic_config():
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
     weights_path = './weights/net3in_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                     PRECROP, 1000, 0.0001)
+                                                                      PRECROP, 1000, 0.0001)
     output_video_dir = './videos/pan_net3in_'
 
     return data_root_dir, test_split, close_cams_file, weights_path, output_video_dir

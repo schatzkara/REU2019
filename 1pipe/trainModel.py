@@ -5,7 +5,7 @@ import time
 import torch
 import torch.nn as nn
 import torch.optim as optim
-from networks.model1pipe import FullNetwork
+from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
@@ -24,7 +24,13 @@ WIDTH = 112
 # training parameters
 NUM_EPOCHS = 1000
 LR = 1e-4
-CON_LOSS_W = 0.0
+
+pretrained = True
+if DATASET.lower() == 'ntu':
+    pretrained_weights = './weights/net1pipe_ntu_20_16_2_True_1000_0.0001.pt'
+else:
+    pretrained_weights = './weights/net1pipe_pan_20_16_2_False_1000_0.0001.pt'
+pretrained_epochs = 52
 
 
 def ntu_config():
@@ -154,14 +160,14 @@ def get_first_frame(vid_batch):
     return imgs
 
 
-def train_model():
+def train_model(starting_epoch):
     """
     Function to train and validate the model for all epochs.
     :return: None
     """
     min_loss = 0.0
     start_time = time.time()
-    for epoch in range(NUM_EPOCHS):
+    for epoch in range(starting_epoch, NUM_EPOCHS):
         print('Training...')
         training_loop(epoch)
         print('Validation...')
@@ -206,6 +212,8 @@ if __name__ == '__main__':
 
         # model
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        if pretrained:
+            model.load_state_dict(torch.load(pretrained_weights))
         model = model.to(device)
 
         if device == 'cuda':
@@ -233,6 +241,8 @@ if __name__ == '__main__':
 
         # model
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        if pretrained:
+            model.load_state_dict(torch.load(pretrained_weights))
         model = model.to(device)
 
         if device == 'cuda':
@@ -262,4 +272,8 @@ if __name__ == '__main__':
 
     print_params()
     print(model)
-    train_model()
+    if pretrained:
+        starting_epoch = pretrained_epochs
+    else:
+        starting_epoch = 0
+    train_model(starting_epoch)

@@ -4,7 +4,7 @@ import os
 import time
 import torch
 import torch.nn as nn
-from networks.model1pipe import FullNetwork
+from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 from data.outputConversion import convert_to_vid

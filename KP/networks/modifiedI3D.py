@@ -189,7 +189,7 @@ class InceptionI3d(nn.Module):
         'Mixed_4e',
         'Mixed_4f',
         # 'MaxPool3d_5a_2x2',
-        'MaxPool3d_5a_1x1',
+        # 'MaxPool3d_5a_1x1',
         'Mixed_5b',
         # 'Mixed_5c',
         'Mixed_5c_small',
@@ -326,10 +326,10 @@ class InceptionI3d(nn.Module):
         #                                                   padding=0)
         # if self._final_endpoint == end_point: return
 
-        end_point = 'MaxPool3d_5a_1x1'
-        self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(1, 1, 1),
-                                                          padding=0)
-        if self._final_endpoint == end_point: return
+        # end_point = 'MaxPool3d_5a_1x1'
+        # self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(1, 1, 1),
+        #                                                   padding=0)
+        # if self._final_endpoint == end_point: return
 
         end_point = 'Mixed_5b'
         self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [256, 160, 320, 32, 128, 128],
@@ -375,8 +375,8 @@ class InceptionI3d(nn.Module):
                                             int(128 / 4), int(128 / 4)],
                                            name + end_point)
 
-        self.feature_layer = Unit3D(in_channels=256, output_channels=32, kernel_shape=[3, 3, 3], padding=1,
-                           name='features')
+        # self.feature_layer = Unit3D(in_channels=256, output_channels=128, kernel_shape=[3, 3, 3], padding=1,
+        #                             name='features')
 
     # def replace_logits(self, num_classes):
     #     self._num_classes = num_classes
@@ -409,7 +409,7 @@ class InceptionI3d(nn.Module):
                 x = self._modules[end_point](x)  # use _modules to work with dataparallel
 
         x = self.final_layer(x)
-        x = self.feature_layer(x)
+        # x = self.feature_layer(x)
 
         # Modification: Again, the final 'Logits' layers were eliminated.
         # x = self.logits(self.dropout(self.avg_pool(x)))
