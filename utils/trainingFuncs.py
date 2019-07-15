@@ -110,10 +110,10 @@ def testing_loop(model, criterion, device, testloader, output_dir, loss_weights=
             print_loss(traintest='Testing', epochbatch='Batch', step=batch_idx + 1, total_steps=len(testloader),
                        loss_names=list(losses.keys()), loss_values=list(losses.values()))
 
-        epoch_loss_values = {name: val / len(testloader) for name, val in running_losses.items()}
-        print_loss(traintest='Testing', epochbatch='Epoch', step=1, total_steps=1,
-                   loss_names=list(epoch_loss_values.keys()),
-                   loss_values=list(epoch_loss_values.values()))
+    epoch_loss_values = {name: val / len(testloader) for name, val in running_losses.items()}
+    print_loss(traintest='Testing', epochbatch='Epoch', step=1, total_steps=1,
+               loss_names=list(epoch_loss_values.keys()),
+               loss_values=list(epoch_loss_values.values()))
 
 
 def train_model(starting_epoch, num_epochs, model, optimizer, criterion,

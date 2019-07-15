@@ -9,12 +9,12 @@ from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
-import sms
+from utils import sms
 
-DATASET = 'NTU'  # 'NTU' or 'panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 20
+BATCH_SIZE = 16
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
@@ -24,13 +24,6 @@ WIDTH = 112
 # training parameters
 NUM_EPOCHS = 1000
 LR = 1e-4
-
-pretrained = True
-if DATASET.lower() == 'ntu':
-    pretrained_weights = './weights/net1pipe_ntu_20_16_2_True_1000_0.0001.pt'
-else:
-    pretrained_weights = './weights/net1pipe_pan_20_16_2_False_1000_0.0001.pt'
-pretrained_epochs = 52
 
 
 def ntu_config():
@@ -45,8 +38,8 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net1pipe_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                       PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
@@ -58,8 +51,8 @@ def panoptic_config():
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net1pipe_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                       PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, close_cams_file, weight_file
 
 
@@ -160,14 +153,14 @@ def get_first_frame(vid_batch):
     return imgs
 
 
-def train_model(starting_epoch):
+def train_model():
     """
     Function to train and validate the model for all epochs.
     :return: None
     """
     min_loss = 0.0
     start_time = time.time()
-    for epoch in range(starting_epoch, NUM_EPOCHS):
+    for epoch in range(NUM_EPOCHS):
         print('Training...')
         training_loop(epoch)
         print('Validation...')
@@ -212,8 +205,6 @@ if __name__ == '__main__':
 
         # model
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
-        if pretrained:
-            model.load_state_dict(torch.load(pretrained_weights))
         model = model.to(device)
 
         if device == 'cuda':
@@ -241,8 +232,6 @@ if __name__ == '__main__':
 
         # model
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
-        if pretrained:
-            model.load_state_dict(torch.load(pretrained_weights))
         model = model.to(device)
 
         if device == 'cuda':
@@ -272,8 +261,4 @@ if __name__ == '__main__':
 
     print_params()
     print(model)
-    if pretrained:
-        starting_epoch = pretrained_epochs
-    else:
-        starting_epoch = 0
-    train_model(starting_epoch)
+    train_model()

@@ -2,28 +2,36 @@ import os
 import cv2
 import numpy as np
 
-# root_dir = '/home/yogesh/kara/REU2019/'
-root_dir = 'C:/Users/Owner/Documents/UCF/output/'
-vid_dir = 'repkpapp/videos/pan_net3in_282e/'
+root_dir = '/home/yogesh/kara/REU2019/'
+# root_dir = 'C:/Users/Owner/Documents/UCF/output/'
+
+vid_dir = 'repkpapp/videos/ntu_/'
+# vid_dir = 'repkpapp/videos/pan_/'
+# vid_dir = 'newgen/videos/ntu_'
 
 full_dir = os.path.join(root_dir, vid_dir)
 print(full_dir)
 
+batches_to_view = [18, 20, 84, 119, 145, 193, 199, 303, 309, 341]
+
 possible_views = [1, 2]
 types_to_show = [
-    # 'input',
-    # 'output',
+    'input',
+    'output',
     # 'recon',
     # 'rep',
     # 'rep_est',
-    'kp',
-    'kp_est'
+    # 'kp',
+    # 'kp_est'
 ]
 height = width = 112
 frames = 16
 if 'rep' in types_to_show or 'kp' in types_to_show:
     frames = 4
 nkp = 32
+
+display_time = 100
+display_size = 500
 
 
 def make_frame_name(frame_num):
@@ -36,10 +44,13 @@ def make_frame_name(frame_num):
 
 
 if __name__ == '__main__':
-    batch_dirs = [os.path.join(full_dir, batch) for batch in os.listdir(full_dir)]
+    if batches_to_view is None or len(batches_to_view) == 0:
+        batch_dirs = [os.path.join(full_dir, str(batch+1)) for batch in range(len(os.listdir(full_dir)))]
+    else:
+        batch_dirs = [os.path.join(full_dir, str(batch)) for batch in batches_to_view]
     vid_dirs = []
     for batch in batch_dirs:
-        vids = [os.path.join(batch, vid) for vid in os.listdir(batch)]
+        vids = [os.path.join(batch, str(vid+1)) for vid in range(len(os.listdir(batch)))]
         vid_dirs.extend(vids)
     view_dirs = []
     for vid in vid_dirs:
@@ -136,9 +147,9 @@ if __name__ == '__main__':
                 # print(len(all_displays))
                 full_display = np.vstack((all_displays))
                 cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-                cv2.resizeWindow('image', 600, 600)
+                cv2.resizeWindow('image', display_size, display_size)
                 cv2.imshow('image', full_display)
-                cv2.waitKey(250)
+                cv2.waitKey(display_time)
                 # print(display)
                 # cv2.destroyAllWindows()
 
@@ -176,9 +187,9 @@ if __name__ == '__main__':
                     # print(len(all_displays))
                     full_display = np.vstack((all_displays))
                     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-                    cv2.resizeWindow('image', 600, 600)
+                    cv2.resizeWindow('image', display_size, display_size)
                     cv2.imshow('image', full_display)
-                    cv2.waitKey(250)
+                    cv2.waitKey(display_time)
                     # print(display)
                     # cv2.destroyAllWindows()
 
@@ -216,9 +227,9 @@ if __name__ == '__main__':
                     # print(len(all_displays))
                     full_display = np.vstack((all_displays))
                     cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-                    cv2.resizeWindow('image', 600, 600)
+                    cv2.resizeWindow('image', display_size, display_size)
                     cv2.imshow('image', full_display)
-                    cv2.waitKey(250)
+                    cv2.waitKey(display_time)
                     # print(display)
                     # cv2.destroyAllWindows()
 

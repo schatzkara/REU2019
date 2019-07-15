@@ -1,0 +1,2575 @@
+Sequential(
+  (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (1): ReLU(inplace)
+  (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (3): ReLU(inplace)
+  (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (6): ReLU(inplace)
+  (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (8): ReLU(inplace)
+  (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+  (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (11): ReLU(inplace)
+  (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (13): ReLU(inplace)
+  (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+  (15): ReLU(inplace)
+  (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+)
+Parameters for training on NTU
+Batch Size: 20
+Tensor Size: (3,16,112,112)
+Skip Length: 2
+Precrop: True
+Close Views: False
+Total Epochs: 1000
+Learning Rate: 0.0001
+FullNetwork(
+  (vgg): VGG(
+    (features): Sequential(
+      (0): Conv2d(3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (1): ReLU(inplace)
+      (2): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (3): ReLU(inplace)
+      (4): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (5): Conv2d(64, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (6): ReLU(inplace)
+      (7): Conv2d(128, 128, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (8): ReLU(inplace)
+      (9): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+      (10): Conv2d(128, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (11): ReLU(inplace)
+      (12): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (13): ReLU(inplace)
+      (14): Conv2d(256, 256, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1))
+      (15): ReLU(inplace)
+      (16): MaxPool2d(kernel_size=2, stride=2, padding=0, dilation=1, ceil_mode=False)
+    )
+  )
+  (i3d): InceptionI3d(
+    (Conv3d_1a_7x7): Unit3D(
+      (conv3d): Conv3d(3, 64, kernel_size=[7, 7, 7], stride=(2, 2, 2), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_2a_3x3): MaxPool3dSamePadding(kernel_size=[1, 3, 3], stride=(1, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Conv3d_2b_1x1): Unit3D(
+      (conv3d): Conv3d(64, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (Conv3d_2c_3x3): Unit3D(
+      (conv3d): Conv3d(64, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+    (MaxPool3d_3a_3x3): MaxPool3dSamePadding(kernel_size=[2, 3, 3], stride=(2, 2, 2), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_3b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(192, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(192, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(192, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 32, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(192, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_3c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(256, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 192, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(256, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 96, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(256, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (MaxPool3d_4a_3x3): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+    (Mixed_4b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(480, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(480, 96, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(96, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(96, 208, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(208, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(480, 16, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(16, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(16, 48, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(480, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(112, 224, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(224, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4d): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(128, 256, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 24, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(24, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(24, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4e): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(512, 112, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(112, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(512, 144, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(144, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(144, 288, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(288, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(512, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 64, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(512, 64, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(64, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_4f): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(528, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(528, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(528, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(528, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_5b): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 256, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 160, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(160, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(160, 320, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(320, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 32, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(32, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(32, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (Mixed_5c): InceptionModule(
+      (b0): Unit3D(
+        (conv3d): Conv3d(832, 384, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(384, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1a): Unit3D(
+        (conv3d): Conv3d(832, 192, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(192, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b1b): Unit3D(
+        (conv3d): Conv3d(192, 384, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(384, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2a): Unit3D(
+        (conv3d): Conv3d(832, 48, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(48, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b2b): Unit3D(
+        (conv3d): Conv3d(48, 128, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+      (b3a): MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1), padding=0, dilation=1, ceil_mode=False)
+      (b3b): Unit3D(
+        (conv3d): Conv3d(832, 128, kernel_size=[1, 1, 1], stride=(1, 1, 1), bias=False)
+        (bn): BatchNorm3d(128, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+      )
+    )
+    (feature_layer): Unit3D(
+      (conv3d): Conv3d(1024, 256, kernel_size=[3, 3, 3], stride=(1, 1, 1), bias=False)
+      (bn): BatchNorm3d(256, eps=0.001, momentum=0.01, affine=True, track_running_stats=True)
+    )
+  )
+  (exp): Expander(
+    (conv3d_1a): Conv3d(1, 4, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (conv3d_1b): Conv3d(4, 1, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  )
+  (conv64): Conv3d(64, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  (conv192): Conv3d(192, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  (conv256): Conv3d(256, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+  (trans): Transformer(
+    (conv3d_1a): Conv3d(129, 129, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_1a): ReLU(inplace)
+    (conv3d_1b): Conv3d(129, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_1b): ReLU(inplace)
+    (conv3d_1c): Conv3d(256, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_1c): ReLU(inplace)
+  )
+  (gen): Generator(
+    (conv3d_1a): Conv3d(512, 256, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_1a): ReLU(inplace)
+    (conv3d_1b): Conv3d(256, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_1b): ReLU(inplace)
+    (conv3d_2a): Conv3d(384, 128, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_2a): ReLU(inplace)
+    (conv3d_2b): Conv3d(128, 64, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_2b): ReLU(inplace)
+    (conv3d_3a): Conv3d(320, 32, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_3a): ReLU(inplace)
+    (conv3d_3b): Conv3d(32, 16, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_3b): ReLU(inplace)
+    (conv3d_4a): Conv3d(16, 8, kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
+    (relu_4a): ReLU(inplace)
+    (conv3d_4b): Conv3d(8, 3, kernel_size=(1, 1, 1), stride=(1, 1, 1))
+    (sigmoid): Sigmoid()
+  )
+)
+Training...
+	Batch 10/672 Recon Loss:0.08645
+	Batch 20/672 Recon Loss:0.07611
+	Batch 30/672 Recon Loss:0.05766
+	Batch 40/672 Recon Loss:0.04367
+	Batch 50/672 Recon Loss:0.03538
+	Batch 60/672 Recon Loss:0.03767
+	Batch 70/672 Recon Loss:0.02962
+	Batch 80/672 Recon Loss:0.02771
+	Batch 90/672 Recon Loss:0.02620
+	Batch 100/672 Recon Loss:0.02622
+	Batch 110/672 Recon Loss:0.02477
+	Batch 120/672 Recon Loss:0.02415
+	Batch 130/672 Recon Loss:0.02349
+	Batch 140/672 Recon Loss:0.02376
+	Batch 150/672 Recon Loss:0.02095
+	Batch 160/672 Recon Loss:0.02091
+	Batch 170/672 Recon Loss:0.02056
+	Batch 180/672 Recon Loss:0.01988
+	Batch 190/672 Recon Loss:0.02068
+	Batch 200/672 Recon Loss:0.01916
+	Batch 210/672 Recon Loss:0.01926
+	Batch 220/672 Recon Loss:0.01879
+	Batch 230/672 Recon Loss:0.01820
+	Batch 240/672 Recon Loss:0.01673
+	Batch 250/672 Recon Loss:0.01845
+	Batch 260/672 Recon Loss:0.01632
+	Batch 270/672 Recon Loss:0.01632
+	Batch 280/672 Recon Loss:0.01705
+	Batch 290/672 Recon Loss:0.01634
+	Batch 300/672 Recon Loss:0.01759
+	Batch 310/672 Recon Loss:0.01537
+	Batch 320/672 Recon Loss:0.01478
+	Batch 330/672 Recon Loss:0.01616
+	Batch 340/672 Recon Loss:0.01424
+	Batch 350/672 Recon Loss:0.01542
+	Batch 360/672 Recon Loss:0.01457
+	Batch 370/672 Recon Loss:0.01362
+	Batch 380/672 Recon Loss:0.01356
+	Batch 390/672 Recon Loss:0.01273
+	Batch 400/672 Recon Loss:0.01529
+	Batch 410/672 Recon Loss:0.01363
+	Batch 420/672 Recon Loss:0.01352
+	Batch 430/672 Recon Loss:0.01365
+	Batch 440/672 Recon Loss:0.01211
+	Batch 450/672 Recon Loss:0.01418
+	Batch 460/672 Recon Loss:0.01374
+	Batch 470/672 Recon Loss:0.01312
+	Batch 480/672 Recon Loss:0.01334
+	Batch 490/672 Recon Loss:0.01165
+	Batch 500/672 Recon Loss:0.01362
+	Batch 510/672 Recon Loss:0.01109
+	Batch 520/672 Recon Loss:0.01145
+	Batch 530/672 Recon Loss:0.01146
+	Batch 540/672 Recon Loss:0.01261
+	Batch 550/672 Recon Loss:0.01195
+	Batch 560/672 Recon Loss:0.01084
+	Batch 570/672 Recon Loss:0.01110
+	Batch 580/672 Recon Loss:0.01023
+	Batch 590/672 Recon Loss:0.01012
+	Batch 600/672 Recon Loss:0.01189
+	Batch 610/672 Recon Loss:0.01043
+	Batch 620/672 Recon Loss:0.00872
+	Batch 630/672 Recon Loss:0.01439
+	Batch 640/672 Recon Loss:0.00893
+	Batch 650/672 Recon Loss:0.00968
+	Batch 660/672 Recon Loss:0.01248
+	Batch 670/672 Recon Loss:0.01004
+Training Epoch 1/1000 Recon Loss:0.01990
+Validation...
+/home/erikqu/.conda/envs/myenv/lib/python3.7/site-packages/torch/nn/functional.py:2539: UserWarning: Default upsampling behavior when mode=trilinear is changed to align_corners=False since 0.4.0. Please specify align_corners=True if the old behavior is desired. See the documentation of nn.Upsample for details.
+  "See the documentation of nn.Upsample for details.".format(mode))
+	Batch 10/276 Recon Loss:0.00853
+	Batch 20/276 Recon Loss:0.00741
+	Batch 30/276 Recon Loss:0.00861
+	Batch 40/276 Recon Loss:0.01059
+	Batch 50/276 Recon Loss:0.00844
+	Batch 60/276 Recon Loss:0.00895
+	Batch 70/276 Recon Loss:0.00844
+	Batch 80/276 Recon Loss:0.01047
+	Batch 90/276 Recon Loss:0.00669
+	Batch 100/276 Recon Loss:0.00723
+	Batch 110/276 Recon Loss:0.00668
+	Batch 120/276 Recon Loss:0.01113
+	Batch 130/276 Recon Loss:0.00829
+	Batch 140/276 Recon Loss:0.01232
+	Batch 150/276 Recon Loss:0.00953
+	Batch 160/276 Recon Loss:0.01131
+	Batch 170/276 Recon Loss:0.00948
+	Batch 180/276 Recon Loss:0.00831
+	Batch 190/276 Recon Loss:0.00779
+	Batch 200/276 Recon Loss:0.01096
+	Batch 210/276 Recon Loss:0.01158
+	Batch 220/276 Recon Loss:0.00849
+	Batch 230/276 Recon Loss:0.02052
+	Batch 240/276 Recon Loss:0.00759
+	Batch 250/276 Recon Loss:0.00788
+	Batch 260/276 Recon Loss:0.00719
+	Batch 270/276 Recon Loss:0.00918
+Validation Epoch 1/1000 Recon Loss:0.00933
+Training...
+	Batch 10/672 Recon Loss:0.00995
+	Batch 20/672 Recon Loss:0.01015
+	Batch 30/672 Recon Loss:0.01040
+	Batch 40/672 Recon Loss:0.00898
+	Batch 50/672 Recon Loss:0.01198
+	Batch 60/672 Recon Loss:0.00983
+	Batch 70/672 Recon Loss:0.00988
+	Batch 80/672 Recon Loss:0.00994
+	Batch 90/672 Recon Loss:0.01093
+	Batch 100/672 Recon Loss:0.00925
+	Batch 110/672 Recon Loss:0.01093
+	Batch 120/672 Recon Loss:0.01098
+	Batch 130/672 Recon Loss:0.00795
+	Batch 140/672 Recon Loss:0.00887
+	Batch 150/672 Recon Loss:0.01092
+	Batch 160/672 Recon Loss:0.00890
+	Batch 170/672 Recon Loss:0.00916
+	Batch 180/672 Recon Loss:0.00978
+	Batch 190/672 Recon Loss:0.01001
+	Batch 200/672 Recon Loss:0.00892
+	Batch 210/672 Recon Loss:0.00912
+	Batch 220/672 Recon Loss:0.00988
+	Batch 230/672 Recon Loss:0.00841
+	Batch 240/672 Recon Loss:0.00965
+	Batch 250/672 Recon Loss:0.00914
+	Batch 260/672 Recon Loss:0.01332
+	Batch 270/672 Recon Loss:0.01051
+	Batch 280/672 Recon Loss:0.00951
+	Batch 290/672 Recon Loss:0.00846
+	Batch 300/672 Recon Loss:0.00815
+	Batch 310/672 Recon Loss:0.00875
+	Batch 320/672 Recon Loss:0.01104
+	Batch 330/672 Recon Loss:0.00943
+	Batch 340/672 Recon Loss:0.01052
+	Batch 350/672 Recon Loss:0.00942
+	Batch 360/672 Recon Loss:0.00877
+	Batch 370/672 Recon Loss:0.00981
+	Batch 380/672 Recon Loss:0.00870
+	Batch 390/672 Recon Loss:0.00924
+	Batch 400/672 Recon Loss:0.00935
+	Batch 410/672 Recon Loss:0.01016
+	Batch 420/672 Recon Loss:0.00859
+	Batch 430/672 Recon Loss:0.00970
+	Batch 440/672 Recon Loss:0.00909
+	Batch 450/672 Recon Loss:0.00836
+	Batch 460/672 Recon Loss:0.00872
+	Batch 470/672 Recon Loss:0.00796
+	Batch 480/672 Recon Loss:0.01001
+	Batch 490/672 Recon Loss:0.00864
+	Batch 500/672 Recon Loss:0.00746
+	Batch 510/672 Recon Loss:0.00950
+	Batch 520/672 Recon Loss:0.00845
+	Batch 530/672 Recon Loss:0.00891
+	Batch 540/672 Recon Loss:0.00833
+	Batch 550/672 Recon Loss:0.00973
+	Batch 560/672 Recon Loss:0.00828
+	Batch 570/672 Recon Loss:0.00892
+	Batch 580/672 Recon Loss:0.00865
+	Batch 590/672 Recon Loss:0.00830
+	Batch 600/672 Recon Loss:0.00873
+	Batch 610/672 Recon Loss:0.00835
+	Batch 620/672 Recon Loss:0.00908
+	Batch 630/672 Recon Loss:0.00751
+	Batch 640/672 Recon Loss:0.00879
+	Batch 650/672 Recon Loss:0.00935
+	Batch 660/672 Recon Loss:0.00817
+	Batch 670/672 Recon Loss:0.00867
+Training Epoch 2/1000 Recon Loss:0.00933
+Validation...
+	Batch 10/276 Recon Loss:0.00696
+	Batch 20/276 Recon Loss:0.00617
+	Batch 30/276 Recon Loss:0.00699
+	Batch 40/276 Recon Loss:0.00909
+	Batch 50/276 Recon Loss:0.00690
+	Batch 60/276 Recon Loss:0.00761
+	Batch 70/276 Recon Loss:0.00727
+	Batch 80/276 Recon Loss:0.00914
+	Batch 90/276 Recon Loss:0.00537
+	Batch 100/276 Recon Loss:0.00595
+	Batch 110/276 Recon Loss:0.00542
+	Batch 120/276 Recon Loss:0.00962
+	Batch 130/276 Recon Loss:0.00681
+	Batch 140/276 Recon Loss:0.01106
+	Batch 150/276 Recon Loss:0.00792
+	Batch 160/276 Recon Loss:0.01019
+	Batch 170/276 Recon Loss:0.00777
+	Batch 180/276 Recon Loss:0.00694
+	Batch 190/276 Recon Loss:0.00645
+	Batch 200/276 Recon Loss:0.00961
+	Batch 210/276 Recon Loss:0.01003
+	Batch 220/276 Recon Loss:0.00708
+	Batch 230/276 Recon Loss:0.01844
+	Batch 240/276 Recon Loss:0.00618
+	Batch 250/276 Recon Loss:0.00646
+	Batch 260/276 Recon Loss:0.00589
+	Batch 270/276 Recon Loss:0.00782
+Validation Epoch 2/1000 Recon Loss:0.00789
+Training...
+	Batch 10/672 Recon Loss:0.00951
+	Batch 20/672 Recon Loss:0.00990
+	Batch 30/672 Recon Loss:0.00752
+	Batch 40/672 Recon Loss:0.00972
+	Batch 50/672 Recon Loss:0.00727
+	Batch 60/672 Recon Loss:0.00981
+	Batch 70/672 Recon Loss:0.00745
+	Batch 80/672 Recon Loss:0.00757
+	Batch 90/672 Recon Loss:0.00790
+	Batch 100/672 Recon Loss:0.00844
+	Batch 110/672 Recon Loss:0.00962
+	Batch 120/672 Recon Loss:0.00829
+	Batch 130/672 Recon Loss:0.00920
+	Batch 140/672 Recon Loss:0.00932
+	Batch 150/672 Recon Loss:0.00828
+	Batch 160/672 Recon Loss:0.00877
+	Batch 170/672 Recon Loss:0.01016
+	Batch 180/672 Recon Loss:0.00727
+	Batch 190/672 Recon Loss:0.00943
+	Batch 200/672 Recon Loss:0.00861
+	Batch 210/672 Recon Loss:0.01111
+	Batch 220/672 Recon Loss:0.00815
+	Batch 230/672 Recon Loss:0.00725
+	Batch 240/672 Recon Loss:0.01096
+	Batch 250/672 Recon Loss:0.00868
+	Batch 260/672 Recon Loss:0.00925
+	Batch 270/672 Recon Loss:0.00783
+	Batch 280/672 Recon Loss:0.00749
+	Batch 290/672 Recon Loss:0.00926
+	Batch 300/672 Recon Loss:0.00938
+	Batch 310/672 Recon Loss:0.00752
+	Batch 320/672 Recon Loss:0.00915
+	Batch 330/672 Recon Loss:0.00752
+	Batch 340/672 Recon Loss:0.00781
+	Batch 350/672 Recon Loss:0.00731
+	Batch 360/672 Recon Loss:0.00937
+	Batch 370/672 Recon Loss:0.00671
+	Batch 380/672 Recon Loss:0.00811
+	Batch 390/672 Recon Loss:0.00741
+	Batch 400/672 Recon Loss:0.00766
+	Batch 410/672 Recon Loss:0.00814
+	Batch 420/672 Recon Loss:0.00824
+	Batch 430/672 Recon Loss:0.00868
+	Batch 440/672 Recon Loss:0.00791
+	Batch 450/672 Recon Loss:0.00869
+	Batch 460/672 Recon Loss:0.00882
+	Batch 470/672 Recon Loss:0.00933
+	Batch 480/672 Recon Loss:0.00665
+	Batch 490/672 Recon Loss:0.00794
+	Batch 500/672 Recon Loss:0.00792
+	Batch 510/672 Recon Loss:0.00735
+	Batch 520/672 Recon Loss:0.01005
+	Batch 530/672 Recon Loss:0.00783
+	Batch 540/672 Recon Loss:0.00784
+	Batch 550/672 Recon Loss:0.00864
+	Batch 560/672 Recon Loss:0.00782
+	Batch 570/672 Recon Loss:0.00835
+	Batch 580/672 Recon Loss:0.00858
+	Batch 590/672 Recon Loss:0.00891
+	Batch 600/672 Recon Loss:0.00782
+	Batch 610/672 Recon Loss:0.00745
+	Batch 620/672 Recon Loss:0.00928
+	Batch 630/672 Recon Loss:0.00801
+	Batch 640/672 Recon Loss:0.00770
+	Batch 650/672 Recon Loss:0.00777
+	Batch 660/672 Recon Loss:0.00896
+	Batch 670/672 Recon Loss:0.00703
+Training Epoch 3/1000 Recon Loss:0.00831
+Validation...
+	Batch 10/276 Recon Loss:0.00634
+	Batch 20/276 Recon Loss:0.00566
+	Batch 30/276 Recon Loss:0.00631
+	Batch 40/276 Recon Loss:0.00853
+	Batch 50/276 Recon Loss:0.00631
+	Batch 60/276 Recon Loss:0.00703
+	Batch 70/276 Recon Loss:0.00672
+	Batch 80/276 Recon Loss:0.00856
+	Batch 90/276 Recon Loss:0.00489
+	Batch 100/276 Recon Loss:0.00538
+	Batch 110/276 Recon Loss:0.00494
+	Batch 120/276 Recon Loss:0.00907
+	Batch 130/276 Recon Loss:0.00623
+	Batch 140/276 Recon Loss:0.01045
+	Batch 150/276 Recon Loss:0.00723
+	Batch 160/276 Recon Loss:0.00959
+	Batch 170/276 Recon Loss:0.00715
+	Batch 180/276 Recon Loss:0.00630
+	Batch 190/276 Recon Loss:0.00596
+	Batch 200/276 Recon Loss:0.00900
+	Batch 210/276 Recon Loss:0.00918
+	Batch 220/276 Recon Loss:0.00645
+	Batch 230/276 Recon Loss:0.01761
+	Batch 240/276 Recon Loss:0.00558
+	Batch 250/276 Recon Loss:0.00586
+	Batch 260/276 Recon Loss:0.00535
+	Batch 270/276 Recon Loss:0.00721
+Validation Epoch 3/1000 Recon Loss:0.00732
+Training...
+	Batch 10/672 Recon Loss:0.00834
+	Batch 20/672 Recon Loss:0.00935
+	Batch 30/672 Recon Loss:0.00781
+	Batch 40/672 Recon Loss:0.00852
+	Batch 50/672 Recon Loss:0.00803
+	Batch 60/672 Recon Loss:0.00893
+	Batch 70/672 Recon Loss:0.00765
+	Batch 80/672 Recon Loss:0.00728
+	Batch 90/672 Recon Loss:0.00922
+	Batch 100/672 Recon Loss:0.00664
+	Batch 110/672 Recon Loss:0.00836
+	Batch 120/672 Recon Loss:0.00700
+	Batch 130/672 Recon Loss:0.00950
+	Batch 140/672 Recon Loss:0.00752
+	Batch 150/672 Recon Loss:0.00671
+	Batch 160/672 Recon Loss:0.00754
+	Batch 170/672 Recon Loss:0.00816
+	Batch 180/672 Recon Loss:0.00891
+	Batch 190/672 Recon Loss:0.00832
+	Batch 200/672 Recon Loss:0.00915
+	Batch 210/672 Recon Loss:0.00677
+	Batch 220/672 Recon Loss:0.00959
+	Batch 230/672 Recon Loss:0.00691
+	Batch 240/672 Recon Loss:0.00993
+	Batch 250/672 Recon Loss:0.00682
+	Batch 260/672 Recon Loss:0.00983
+	Batch 270/672 Recon Loss:0.00789
+	Batch 280/672 Recon Loss:0.00904
+	Batch 290/672 Recon Loss:0.00808
+	Batch 300/672 Recon Loss:0.00803
+	Batch 310/672 Recon Loss:0.00793
+	Batch 320/672 Recon Loss:0.00807
+	Batch 330/672 Recon Loss:0.00759
+	Batch 340/672 Recon Loss:0.00771
+	Batch 350/672 Recon Loss:0.00789
+	Batch 360/672 Recon Loss:0.00741
+	Batch 370/672 Recon Loss:0.00660
+	Batch 380/672 Recon Loss:0.00778
+	Batch 390/672 Recon Loss:0.00869
+	Batch 400/672 Recon Loss:0.00782
+	Batch 410/672 Recon Loss:0.00751
+	Batch 420/672 Recon Loss:0.00713
+	Batch 430/672 Recon Loss:0.00725
+	Batch 440/672 Recon Loss:0.00735
+	Batch 450/672 Recon Loss:0.00687
+	Batch 460/672 Recon Loss:0.00677
+	Batch 470/672 Recon Loss:0.00693
+	Batch 480/672 Recon Loss:0.00763
+	Batch 490/672 Recon Loss:0.00670
+	Batch 500/672 Recon Loss:0.00775
+	Batch 510/672 Recon Loss:0.00777
+	Batch 520/672 Recon Loss:0.00722
+	Batch 530/672 Recon Loss:0.00868
+	Batch 540/672 Recon Loss:0.00688
+	Batch 550/672 Recon Loss:0.00758
+	Batch 560/672 Recon Loss:0.00614
+	Batch 570/672 Recon Loss:0.00704
+	Batch 580/672 Recon Loss:0.00849
+	Batch 590/672 Recon Loss:0.00649
+	Batch 600/672 Recon Loss:0.00706
+	Batch 610/672 Recon Loss:0.00800
+	Batch 620/672 Recon Loss:0.00764
+	Batch 630/672 Recon Loss:0.00694
+	Batch 640/672 Recon Loss:0.00745
+	Batch 650/672 Recon Loss:0.00777
+	Batch 660/672 Recon Loss:0.00671
+	Batch 670/672 Recon Loss:0.00821
+Training Epoch 4/1000 Recon Loss:0.00770
+Validation...
+	Batch 10/276 Recon Loss:0.00585
+	Batch 20/276 Recon Loss:0.00522
+	Batch 30/276 Recon Loss:0.00581
+	Batch 40/276 Recon Loss:0.00805
+	Batch 50/276 Recon Loss:0.00581
+	Batch 60/276 Recon Loss:0.00653
+	Batch 70/276 Recon Loss:0.00643
+	Batch 80/276 Recon Loss:0.00813
+	Batch 90/276 Recon Loss:0.00447
+	Batch 100/276 Recon Loss:0.00497
+	Batch 110/276 Recon Loss:0.00452
+	Batch 120/276 Recon Loss:0.00862
+	Batch 130/276 Recon Loss:0.00577
+	Batch 140/276 Recon Loss:0.01004
+	Batch 150/276 Recon Loss:0.00680
+	Batch 160/276 Recon Loss:0.00921
+	Batch 170/276 Recon Loss:0.00661
+	Batch 180/276 Recon Loss:0.00581
+	Batch 190/276 Recon Loss:0.00551
+	Batch 200/276 Recon Loss:0.00853
+	Batch 210/276 Recon Loss:0.00868
+	Batch 220/276 Recon Loss:0.00596
+	Batch 230/276 Recon Loss:0.01683
+	Batch 240/276 Recon Loss:0.00509
+	Batch 250/276 Recon Loss:0.00545
+	Batch 260/276 Recon Loss:0.00490
+	Batch 270/276 Recon Loss:0.00679
+Validation Epoch 4/1000 Recon Loss:0.00682
+Training...
+	Batch 10/672 Recon Loss:0.00818
+	Batch 20/672 Recon Loss:0.00838
+	Batch 30/672 Recon Loss:0.00813
+	Batch 40/672 Recon Loss:0.00683
+	Batch 50/672 Recon Loss:0.00727
+	Batch 60/672 Recon Loss:0.00664
+	Batch 70/672 Recon Loss:0.00693
+	Batch 80/672 Recon Loss:0.00826
+	Batch 90/672 Recon Loss:0.00649
+	Batch 100/672 Recon Loss:0.00740
+	Batch 110/672 Recon Loss:0.00694
+	Batch 120/672 Recon Loss:0.00657
+	Batch 130/672 Recon Loss:0.00666
+	Batch 140/672 Recon Loss:0.00660
+	Batch 150/672 Recon Loss:0.00787
+	Batch 160/672 Recon Loss:0.00723
+	Batch 170/672 Recon Loss:0.00799
+	Batch 180/672 Recon Loss:0.00809
+	Batch 190/672 Recon Loss:0.00763
+	Batch 200/672 Recon Loss:0.00677
+	Batch 210/672 Recon Loss:0.00705
+	Batch 220/672 Recon Loss:0.00852
+	Batch 230/672 Recon Loss:0.00760
+	Batch 240/672 Recon Loss:0.00788
+	Batch 250/672 Recon Loss:0.00741
+	Batch 260/672 Recon Loss:0.00766
+	Batch 270/672 Recon Loss:0.00693
+	Batch 280/672 Recon Loss:0.00756
+	Batch 290/672 Recon Loss:0.00705
+	Batch 300/672 Recon Loss:0.00730
+	Batch 310/672 Recon Loss:0.00978
+	Batch 320/672 Recon Loss:0.00716
+	Batch 330/672 Recon Loss:0.00686
+	Batch 340/672 Recon Loss:0.00782
+	Batch 350/672 Recon Loss:0.00704
+	Batch 360/672 Recon Loss:0.00855
+	Batch 370/672 Recon Loss:0.00690
+	Batch 380/672 Recon Loss:0.00686
+	Batch 390/672 Recon Loss:0.00660
+	Batch 400/672 Recon Loss:0.00771
+	Batch 410/672 Recon Loss:0.00697
+	Batch 420/672 Recon Loss:0.00680
+	Batch 430/672 Recon Loss:0.00637
+	Batch 440/672 Recon Loss:0.00638
+	Batch 450/672 Recon Loss:0.00774
+	Batch 460/672 Recon Loss:0.00792
+	Batch 470/672 Recon Loss:0.00623
+	Batch 480/672 Recon Loss:0.00697
+	Batch 490/672 Recon Loss:0.00713
+	Batch 500/672 Recon Loss:0.00669
+	Batch 510/672 Recon Loss:0.00710
+	Batch 520/672 Recon Loss:0.00731
+	Batch 530/672 Recon Loss:0.00714
+	Batch 540/672 Recon Loss:0.00735
+	Batch 550/672 Recon Loss:0.00890
+	Batch 560/672 Recon Loss:0.00683
+	Batch 570/672 Recon Loss:0.00672
+	Batch 580/672 Recon Loss:0.00667
+	Batch 590/672 Recon Loss:0.00651
+	Batch 600/672 Recon Loss:0.00731
+	Batch 610/672 Recon Loss:0.00592
+	Batch 620/672 Recon Loss:0.00849
+	Batch 630/672 Recon Loss:0.00595
+	Batch 640/672 Recon Loss:0.00615
+	Batch 650/672 Recon Loss:0.00802
+	Batch 660/672 Recon Loss:0.00787
+	Batch 670/672 Recon Loss:0.00666
+Training Epoch 5/1000 Recon Loss:0.00731
+Validation...
+	Batch 10/276 Recon Loss:0.00566
+	Batch 20/276 Recon Loss:0.00501
+	Batch 30/276 Recon Loss:0.00564
+	Batch 40/276 Recon Loss:0.00782
+	Batch 50/276 Recon Loss:0.00558
+	Batch 60/276 Recon Loss:0.00650
+	Batch 70/276 Recon Loss:0.00631
+	Batch 80/276 Recon Loss:0.00786
+	Batch 90/276 Recon Loss:0.00429
+	Batch 100/276 Recon Loss:0.00478
+	Batch 110/276 Recon Loss:0.00436
+	Batch 120/276 Recon Loss:0.00845
+	Batch 130/276 Recon Loss:0.00569
+	Batch 140/276 Recon Loss:0.01005
+	Batch 150/276 Recon Loss:0.00681
+	Batch 160/276 Recon Loss:0.00914
+	Batch 170/276 Recon Loss:0.00657
+	Batch 180/276 Recon Loss:0.00574
+	Batch 190/276 Recon Loss:0.00537
+	Batch 200/276 Recon Loss:0.00839
+	Batch 210/276 Recon Loss:0.00859
+	Batch 220/276 Recon Loss:0.00583
+	Batch 230/276 Recon Loss:0.01656
+	Batch 240/276 Recon Loss:0.00491
+	Batch 250/276 Recon Loss:0.00526
+	Batch 260/276 Recon Loss:0.00470
+	Batch 270/276 Recon Loss:0.00662
+Validation Epoch 5/1000 Recon Loss:0.00664
+Training...
+	Batch 10/672 Recon Loss:0.00844
+	Batch 20/672 Recon Loss:0.00711
+	Batch 30/672 Recon Loss:0.00695
+	Batch 40/672 Recon Loss:0.00928
+	Batch 50/672 Recon Loss:0.00743
+	Batch 60/672 Recon Loss:0.00679
+	Batch 70/672 Recon Loss:0.00685
+	Batch 80/672 Recon Loss:0.00847
+	Batch 90/672 Recon Loss:0.00678
+	Batch 100/672 Recon Loss:0.00693
+	Batch 110/672 Recon Loss:0.00673
+	Batch 120/672 Recon Loss:0.00793
+	Batch 130/672 Recon Loss:0.00716
+	Batch 140/672 Recon Loss:0.00668
+	Batch 150/672 Recon Loss:0.00738
+	Batch 160/672 Recon Loss:0.00702
+	Batch 170/672 Recon Loss:0.00718
+	Batch 180/672 Recon Loss:0.00678
+	Batch 190/672 Recon Loss:0.00566
+	Batch 200/672 Recon Loss:0.00680
+	Batch 210/672 Recon Loss:0.00745
+	Batch 220/672 Recon Loss:0.00534
+	Batch 230/672 Recon Loss:0.00748
+	Batch 240/672 Recon Loss:0.00593
+	Batch 250/672 Recon Loss:0.00554
+	Batch 260/672 Recon Loss:0.00860
+	Batch 270/672 Recon Loss:0.00651
+	Batch 280/672 Recon Loss:0.00807
+	Batch 290/672 Recon Loss:0.00713
+	Batch 300/672 Recon Loss:0.00747
+	Batch 310/672 Recon Loss:0.00623
+	Batch 320/672 Recon Loss:0.00688
+	Batch 330/672 Recon Loss:0.00687
+	Batch 340/672 Recon Loss:0.00583
+	Batch 350/672 Recon Loss:0.00641
+	Batch 360/672 Recon Loss:0.00620
+	Batch 370/672 Recon Loss:0.00709
+	Batch 380/672 Recon Loss:0.00762
+	Batch 390/672 Recon Loss:0.00994
+	Batch 400/672 Recon Loss:0.00588
+	Batch 410/672 Recon Loss:0.00644
+	Batch 420/672 Recon Loss:0.00656
+	Batch 430/672 Recon Loss:0.00663
+	Batch 440/672 Recon Loss:0.00733
+	Batch 450/672 Recon Loss:0.00748
+	Batch 460/672 Recon Loss:0.00632
+	Batch 470/672 Recon Loss:0.00729
+	Batch 480/672 Recon Loss:0.00676
+	Batch 490/672 Recon Loss:0.00596
+	Batch 500/672 Recon Loss:0.00694
+	Batch 510/672 Recon Loss:0.00693
+	Batch 520/672 Recon Loss:0.00564
+	Batch 530/672 Recon Loss:0.00699
+	Batch 540/672 Recon Loss:0.00711
+	Batch 550/672 Recon Loss:0.00761
+	Batch 560/672 Recon Loss:0.00653
+	Batch 570/672 Recon Loss:0.00665
+	Batch 580/672 Recon Loss:0.00756
+	Batch 590/672 Recon Loss:0.00813
+	Batch 600/672 Recon Loss:0.00660
+	Batch 610/672 Recon Loss:0.00726
+	Batch 620/672 Recon Loss:0.00724
+	Batch 630/672 Recon Loss:0.00743
+	Batch 640/672 Recon Loss:0.00743
+	Batch 650/672 Recon Loss:0.00687
+	Batch 660/672 Recon Loss:0.00870
+	Batch 670/672 Recon Loss:0.00750
+Training Epoch 6/1000 Recon Loss:0.00703
+Validation...
+	Batch 10/276 Recon Loss:0.00537
+	Batch 20/276 Recon Loss:0.00481
+	Batch 30/276 Recon Loss:0.00529
+	Batch 40/276 Recon Loss:0.00752
+	Batch 50/276 Recon Loss:0.00532
+	Batch 60/276 Recon Loss:0.00613
+	Batch 70/276 Recon Loss:0.00615
+	Batch 80/276 Recon Loss:0.00766
+	Batch 90/276 Recon Loss:0.00408
+	Batch 100/276 Recon Loss:0.00452
+	Batch 110/276 Recon Loss:0.00418
+	Batch 120/276 Recon Loss:0.00805
+	Batch 130/276 Recon Loss:0.00541
+	Batch 140/276 Recon Loss:0.00986
+	Batch 150/276 Recon Loss:0.00636
+	Batch 160/276 Recon Loss:0.00908
+	Batch 170/276 Recon Loss:0.00629
+	Batch 180/276 Recon Loss:0.00537
+	Batch 190/276 Recon Loss:0.00515
+	Batch 200/276 Recon Loss:0.00808
+	Batch 210/276 Recon Loss:0.00819
+	Batch 220/276 Recon Loss:0.00549
+	Batch 230/276 Recon Loss:0.01601
+	Batch 240/276 Recon Loss:0.00465
+	Batch 250/276 Recon Loss:0.00502
+	Batch 260/276 Recon Loss:0.00451
+	Batch 270/276 Recon Loss:0.00637
+Validation Epoch 6/1000 Recon Loss:0.00637
+Training...
+	Batch 10/672 Recon Loss:0.00575
+	Batch 20/672 Recon Loss:0.00613
+	Batch 30/672 Recon Loss:0.00751
+	Batch 40/672 Recon Loss:0.00741
+	Batch 50/672 Recon Loss:0.00706
+	Batch 60/672 Recon Loss:0.00746
+	Batch 70/672 Recon Loss:0.00713
+	Batch 80/672 Recon Loss:0.00608
+	Batch 90/672 Recon Loss:0.00604
+	Batch 100/672 Recon Loss:0.00802
+	Batch 110/672 Recon Loss:0.00785
+	Batch 120/672 Recon Loss:0.00706
+	Batch 130/672 Recon Loss:0.00844
+	Batch 140/672 Recon Loss:0.00788
+	Batch 150/672 Recon Loss:0.00753
+	Batch 160/672 Recon Loss:0.00731
+	Batch 170/672 Recon Loss:0.00752
+	Batch 180/672 Recon Loss:0.00552
+	Batch 190/672 Recon Loss:0.00785
+	Batch 200/672 Recon Loss:0.00732
+	Batch 210/672 Recon Loss:0.00723
+	Batch 220/672 Recon Loss:0.00619
+	Batch 230/672 Recon Loss:0.00737
+	Batch 240/672 Recon Loss:0.00631
+	Batch 250/672 Recon Loss:0.00601
+	Batch 260/672 Recon Loss:0.00590
+	Batch 270/672 Recon Loss:0.00695
+	Batch 280/672 Recon Loss:0.00821
+	Batch 290/672 Recon Loss:0.00736
+	Batch 300/672 Recon Loss:0.00709
+	Batch 310/672 Recon Loss:0.00708
+	Batch 320/672 Recon Loss:0.00680
+	Batch 330/672 Recon Loss:0.00620
+	Batch 340/672 Recon Loss:0.00640
+	Batch 350/672 Recon Loss:0.00521
+	Batch 360/672 Recon Loss:0.00571
+	Batch 370/672 Recon Loss:0.00523
+	Batch 380/672 Recon Loss:0.00637
+	Batch 390/672 Recon Loss:0.00611
+	Batch 400/672 Recon Loss:0.00658
+	Batch 410/672 Recon Loss:0.00628
+	Batch 420/672 Recon Loss:0.00624
+	Batch 430/672 Recon Loss:0.00612
+	Batch 440/672 Recon Loss:0.00619
+	Batch 450/672 Recon Loss:0.00770
+	Batch 460/672 Recon Loss:0.00662
+	Batch 470/672 Recon Loss:0.00681
+	Batch 480/672 Recon Loss:0.00668
+	Batch 490/672 Recon Loss:0.00666
+	Batch 500/672 Recon Loss:0.00580
+	Batch 510/672 Recon Loss:0.00676
+	Batch 520/672 Recon Loss:0.00726
+	Batch 530/672 Recon Loss:0.00758
+	Batch 540/672 Recon Loss:0.00692
+	Batch 550/672 Recon Loss:0.00660
+	Batch 560/672 Recon Loss:0.00583
+	Batch 570/672 Recon Loss:0.00669
+	Batch 580/672 Recon Loss:0.00638
+	Batch 590/672 Recon Loss:0.00700
+	Batch 600/672 Recon Loss:0.00757
+	Batch 610/672 Recon Loss:0.00764
+	Batch 620/672 Recon Loss:0.00858
+	Batch 630/672 Recon Loss:0.00749
+	Batch 640/672 Recon Loss:0.00665
+	Batch 650/672 Recon Loss:0.00610
+	Batch 660/672 Recon Loss:0.00799
+	Batch 670/672 Recon Loss:0.00771
+Training Epoch 7/1000 Recon Loss:0.00681
+Validation...
+	Batch 10/276 Recon Loss:0.00520
+	Batch 20/276 Recon Loss:0.00466
+	Batch 30/276 Recon Loss:0.00509
+	Batch 40/276 Recon Loss:0.00739
+	Batch 50/276 Recon Loss:0.00513
+	Batch 60/276 Recon Loss:0.00600
+	Batch 70/276 Recon Loss:0.00586
+	Batch 80/276 Recon Loss:0.00766
+	Batch 90/276 Recon Loss:0.00400
+	Batch 100/276 Recon Loss:0.00433
+	Batch 110/276 Recon Loss:0.00403
+	Batch 120/276 Recon Loss:0.00789
+	Batch 130/276 Recon Loss:0.00520
+	Batch 140/276 Recon Loss:0.00932
+	Batch 150/276 Recon Loss:0.00606
+	Batch 160/276 Recon Loss:0.00900
+	Batch 170/276 Recon Loss:0.00611
+	Batch 180/276 Recon Loss:0.00523
+	Batch 190/276 Recon Loss:0.00501
+	Batch 200/276 Recon Loss:0.00792
+	Batch 210/276 Recon Loss:0.00779
+	Batch 220/276 Recon Loss:0.00525
+	Batch 230/276 Recon Loss:0.01563
+	Batch 240/276 Recon Loss:0.00448
+	Batch 250/276 Recon Loss:0.00490
+	Batch 260/276 Recon Loss:0.00434
+	Batch 270/276 Recon Loss:0.00608
+Validation Epoch 7/1000 Recon Loss:0.00621
+Training...
+	Batch 10/672 Recon Loss:0.00731
+	Batch 20/672 Recon Loss:0.00627
+	Batch 30/672 Recon Loss:0.00672
+	Batch 40/672 Recon Loss:0.00646
+	Batch 50/672 Recon Loss:0.00676
+	Batch 60/672 Recon Loss:0.00633
+	Batch 70/672 Recon Loss:0.00672
+	Batch 80/672 Recon Loss:0.00731
+	Batch 90/672 Recon Loss:0.00602
+	Batch 100/672 Recon Loss:0.00650
+	Batch 110/672 Recon Loss:0.00621
+	Batch 120/672 Recon Loss:0.00557
+	Batch 130/672 Recon Loss:0.00545
+	Batch 140/672 Recon Loss:0.00756
+	Batch 150/672 Recon Loss:0.00685
+	Batch 160/672 Recon Loss:0.00760
+	Batch 170/672 Recon Loss:0.00646
+	Batch 180/672 Recon Loss:0.00594
+	Batch 190/672 Recon Loss:0.00676
+	Batch 200/672 Recon Loss:0.00684
+	Batch 210/672 Recon Loss:0.00706
+	Batch 220/672 Recon Loss:0.00702
+	Batch 230/672 Recon Loss:0.00654
+	Batch 240/672 Recon Loss:0.00596
+	Batch 250/672 Recon Loss:0.00715
+	Batch 260/672 Recon Loss:0.00692
+	Batch 270/672 Recon Loss:0.00524
+	Batch 280/672 Recon Loss:0.00609
+	Batch 290/672 Recon Loss:0.00648
+	Batch 300/672 Recon Loss:0.00766
+	Batch 310/672 Recon Loss:0.00815
+	Batch 320/672 Recon Loss:0.00692
+	Batch 330/672 Recon Loss:0.00672
+	Batch 340/672 Recon Loss:0.00752
+	Batch 350/672 Recon Loss:0.00723
+	Batch 360/672 Recon Loss:0.00615
+	Batch 370/672 Recon Loss:0.00579
+	Batch 380/672 Recon Loss:0.00759
+	Batch 390/672 Recon Loss:0.00653
+	Batch 400/672 Recon Loss:0.00693
+	Batch 410/672 Recon Loss:0.00580
+	Batch 420/672 Recon Loss:0.00603
+	Batch 430/672 Recon Loss:0.00781
+	Batch 440/672 Recon Loss:0.00635
+	Batch 450/672 Recon Loss:0.00844
+	Batch 460/672 Recon Loss:0.00743
+	Batch 470/672 Recon Loss:0.00794
+	Batch 480/672 Recon Loss:0.00704
+	Batch 490/672 Recon Loss:0.00686
+	Batch 500/672 Recon Loss:0.00588
+	Batch 510/672 Recon Loss:0.00527
+	Batch 520/672 Recon Loss:0.00692
+	Batch 530/672 Recon Loss:0.00634
+	Batch 540/672 Recon Loss:0.00640
+	Batch 550/672 Recon Loss:0.00688
+	Batch 560/672 Recon Loss:0.00637
+	Batch 570/672 Recon Loss:0.00633
+	Batch 580/672 Recon Loss:0.00620
+	Batch 590/672 Recon Loss:0.00627
+	Batch 600/672 Recon Loss:0.00629
+	Batch 610/672 Recon Loss:0.00592
+	Batch 620/672 Recon Loss:0.00496
+	Batch 630/672 Recon Loss:0.00603
+	Batch 640/672 Recon Loss:0.00581
+	Batch 650/672 Recon Loss:0.00647
+	Batch 660/672 Recon Loss:0.00792
+	Batch 670/672 Recon Loss:0.00662
+Training Epoch 8/1000 Recon Loss:0.00661
+Validation...
+	Batch 10/276 Recon Loss:0.00513
+	Batch 20/276 Recon Loss:0.00458
+	Batch 30/276 Recon Loss:0.00507
+	Batch 40/276 Recon Loss:0.00729
+	Batch 50/276 Recon Loss:0.00500
+	Batch 60/276 Recon Loss:0.00585
+	Batch 70/276 Recon Loss:0.00585
+	Batch 80/276 Recon Loss:0.00758
+	Batch 90/276 Recon Loss:0.00389
+	Batch 100/276 Recon Loss:0.00425
+	Batch 110/276 Recon Loss:0.00396
+	Batch 120/276 Recon Loss:0.00785
+	Batch 130/276 Recon Loss:0.00512
+	Batch 140/276 Recon Loss:0.00930
+	Batch 150/276 Recon Loss:0.00598
+	Batch 160/276 Recon Loss:0.00894
+	Batch 170/276 Recon Loss:0.00600
+	Batch 180/276 Recon Loss:0.00516
+	Batch 190/276 Recon Loss:0.00493
+	Batch 200/276 Recon Loss:0.00795
+	Batch 210/276 Recon Loss:0.00766
+	Batch 220/276 Recon Loss:0.00518
+	Batch 230/276 Recon Loss:0.01585
+	Batch 240/276 Recon Loss:0.00442
+	Batch 250/276 Recon Loss:0.00486
+	Batch 260/276 Recon Loss:0.00426
+	Batch 270/276 Recon Loss:0.00605
+Validation Epoch 8/1000 Recon Loss:0.00615
+Training...
+	Batch 10/672 Recon Loss:0.00648
+	Batch 20/672 Recon Loss:0.00765
+	Batch 30/672 Recon Loss:0.00655
+	Batch 40/672 Recon Loss:0.00666
+	Batch 50/672 Recon Loss:0.00683
+	Batch 60/672 Recon Loss:0.00619
+	Batch 70/672 Recon Loss:0.00641
+	Batch 80/672 Recon Loss:0.00601
+	Batch 90/672 Recon Loss:0.00649
+	Batch 100/672 Recon Loss:0.00646
+	Batch 110/672 Recon Loss:0.00711
+	Batch 120/672 Recon Loss:0.00611
+	Batch 130/672 Recon Loss:0.00698
+	Batch 140/672 Recon Loss:0.00685
+	Batch 150/672 Recon Loss:0.00589
+	Batch 160/672 Recon Loss:0.00623
+	Batch 170/672 Recon Loss:0.00645
+	Batch 180/672 Recon Loss:0.00605
+	Batch 190/672 Recon Loss:0.00544
+	Batch 200/672 Recon Loss:0.00657
+	Batch 210/672 Recon Loss:0.00731
+	Batch 220/672 Recon Loss:0.00659
+	Batch 230/672 Recon Loss:0.00662
+	Batch 240/672 Recon Loss:0.00782
+	Batch 250/672 Recon Loss:0.00730
+	Batch 260/672 Recon Loss:0.00698
+	Batch 270/672 Recon Loss:0.00683
+	Batch 280/672 Recon Loss:0.00662
+	Batch 290/672 Recon Loss:0.00583
+	Batch 300/672 Recon Loss:0.00603
+	Batch 310/672 Recon Loss:0.00555
+	Batch 320/672 Recon Loss:0.00583
+	Batch 330/672 Recon Loss:0.00595
+	Batch 340/672 Recon Loss:0.00676
+	Batch 350/672 Recon Loss:0.00571
+	Batch 360/672 Recon Loss:0.00596
+	Batch 370/672 Recon Loss:0.00729
+	Batch 380/672 Recon Loss:0.00607
+	Batch 390/672 Recon Loss:0.00623
+	Batch 400/672 Recon Loss:0.00575
+	Batch 410/672 Recon Loss:0.00605
+	Batch 420/672 Recon Loss:0.00809
+	Batch 430/672 Recon Loss:0.00637
+	Batch 440/672 Recon Loss:0.00624
+	Batch 450/672 Recon Loss:0.00663
+	Batch 460/672 Recon Loss:0.00658
+	Batch 470/672 Recon Loss:0.00676
+	Batch 480/672 Recon Loss:0.00621
+	Batch 490/672 Recon Loss:0.00661
+	Batch 500/672 Recon Loss:0.00705
+	Batch 510/672 Recon Loss:0.00550
+	Batch 520/672 Recon Loss:0.00693
+	Batch 530/672 Recon Loss:0.00665
+	Batch 540/672 Recon Loss:0.00541
+	Batch 550/672 Recon Loss:0.00598
+	Batch 560/672 Recon Loss:0.00761
+	Batch 570/672 Recon Loss:0.00548
+	Batch 580/672 Recon Loss:0.00660
+	Batch 590/672 Recon Loss:0.00544
+	Batch 600/672 Recon Loss:0.00579
+	Batch 610/672 Recon Loss:0.00562
+	Batch 620/672 Recon Loss:0.00570
+	Batch 630/672 Recon Loss:0.00709
+	Batch 640/672 Recon Loss:0.00666
+	Batch 650/672 Recon Loss:0.00681
+	Batch 660/672 Recon Loss:0.00591
+	Batch 670/672 Recon Loss:0.00635
+Training Epoch 9/1000 Recon Loss:0.00648
+Validation...
+	Batch 10/276 Recon Loss:0.00495
+	Batch 20/276 Recon Loss:0.00440
+	Batch 30/276 Recon Loss:0.00488
+	Batch 40/276 Recon Loss:0.00690
+	Batch 50/276 Recon Loss:0.00488
+	Batch 60/276 Recon Loss:0.00572
+	Batch 70/276 Recon Loss:0.00572
+	Batch 80/276 Recon Loss:0.00715
+	Batch 90/276 Recon Loss:0.00376
+	Batch 100/276 Recon Loss:0.00415
+	Batch 110/276 Recon Loss:0.00384
+	Batch 120/276 Recon Loss:0.00750
+	Batch 130/276 Recon Loss:0.00495
+	Batch 140/276 Recon Loss:0.00938
+	Batch 150/276 Recon Loss:0.00594
+	Batch 160/276 Recon Loss:0.00883
+	Batch 170/276 Recon Loss:0.00589
+	Batch 180/276 Recon Loss:0.00497
+	Batch 190/276 Recon Loss:0.00477
+	Batch 200/276 Recon Loss:0.00753
+	Batch 210/276 Recon Loss:0.00770
+	Batch 220/276 Recon Loss:0.00506
+	Batch 230/276 Recon Loss:0.01499
+	Batch 240/276 Recon Loss:0.00427
+	Batch 250/276 Recon Loss:0.00472
+	Batch 260/276 Recon Loss:0.00412
+	Batch 270/276 Recon Loss:0.00595
+Validation Epoch 9/1000 Recon Loss:0.00592
+Training...
+	Batch 10/672 Recon Loss:0.00599
+	Batch 20/672 Recon Loss:0.00700
+	Batch 30/672 Recon Loss:0.00651
+	Batch 40/672 Recon Loss:0.00782
+	Batch 50/672 Recon Loss:0.00587
+	Batch 60/672 Recon Loss:0.00624
+	Batch 70/672 Recon Loss:0.00714
+	Batch 80/672 Recon Loss:0.00570
+	Batch 90/672 Recon Loss:0.00648
+	Batch 100/672 Recon Loss:0.00570
+	Batch 110/672 Recon Loss:0.00580
+	Batch 120/672 Recon Loss:0.00560
+	Batch 130/672 Recon Loss:0.00717
+	Batch 140/672 Recon Loss:0.00631
+	Batch 150/672 Recon Loss:0.00544
+	Batch 160/672 Recon Loss:0.00656
+	Batch 170/672 Recon Loss:0.00675
+	Batch 180/672 Recon Loss:0.00695
+	Batch 190/672 Recon Loss:0.00626
+	Batch 200/672 Recon Loss:0.00638
+	Batch 210/672 Recon Loss:0.00658
+	Batch 220/672 Recon Loss:0.00607
+	Batch 230/672 Recon Loss:0.00751
+	Batch 240/672 Recon Loss:0.00688
+	Batch 250/672 Recon Loss:0.00579
+	Batch 260/672 Recon Loss:0.00590
+	Batch 270/672 Recon Loss:0.00625
+	Batch 280/672 Recon Loss:0.00590
+	Batch 290/672 Recon Loss:0.00594
+	Batch 300/672 Recon Loss:0.00581
+	Batch 310/672 Recon Loss:0.00513
+	Batch 320/672 Recon Loss:0.00610
+	Batch 330/672 Recon Loss:0.00713
+	Batch 340/672 Recon Loss:0.00711
+	Batch 350/672 Recon Loss:0.00573
+	Batch 360/672 Recon Loss:0.00684
+	Batch 370/672 Recon Loss:0.00593
+	Batch 380/672 Recon Loss:0.00665
+	Batch 390/672 Recon Loss:0.00560
+	Batch 400/672 Recon Loss:0.00589
+	Batch 410/672 Recon Loss:0.00587
+	Batch 420/672 Recon Loss:0.00525
+	Batch 430/672 Recon Loss:0.00602
+	Batch 440/672 Recon Loss:0.00756
+	Batch 450/672 Recon Loss:0.00619
+	Batch 460/672 Recon Loss:0.00827
+	Batch 470/672 Recon Loss:0.00613
+	Batch 480/672 Recon Loss:0.00688
+	Batch 490/672 Recon Loss:0.00545
+	Batch 500/672 Recon Loss:0.00634
+	Batch 510/672 Recon Loss:0.00500
+	Batch 520/672 Recon Loss:0.00682
+	Batch 530/672 Recon Loss:0.00580
+	Batch 540/672 Recon Loss:0.00648
+	Batch 550/672 Recon Loss:0.00587
+	Batch 560/672 Recon Loss:0.00669
+	Batch 570/672 Recon Loss:0.00633
+	Batch 580/672 Recon Loss:0.00643
+	Batch 590/672 Recon Loss:0.00584
+	Batch 600/672 Recon Loss:0.00517
+	Batch 610/672 Recon Loss:0.00620
+	Batch 620/672 Recon Loss:0.00666
+	Batch 630/672 Recon Loss:0.00760
+	Batch 640/672 Recon Loss:0.00639
+	Batch 650/672 Recon Loss:0.00585
+	Batch 660/672 Recon Loss:0.00625
+	Batch 670/672 Recon Loss:0.00767
+Training Epoch 10/1000 Recon Loss:0.00632
+Validation...
+	Batch 10/276 Recon Loss:0.00495
+	Batch 20/276 Recon Loss:0.00440
+	Batch 30/276 Recon Loss:0.00483
+	Batch 40/276 Recon Loss:0.00696
+	Batch 50/276 Recon Loss:0.00480
+	Batch 60/276 Recon Loss:0.00566
+	Batch 70/276 Recon Loss:0.00564
+	Batch 80/276 Recon Loss:0.00732
+	Batch 90/276 Recon Loss:0.00377
+	Batch 100/276 Recon Loss:0.00409
+	Batch 110/276 Recon Loss:0.00381
+	Batch 120/276 Recon Loss:0.00739
+	Batch 130/276 Recon Loss:0.00492
+	Batch 140/276 Recon Loss:0.00918
+	Batch 150/276 Recon Loss:0.00568
+	Batch 160/276 Recon Loss:0.00859
+	Batch 170/276 Recon Loss:0.00576
+	Batch 180/276 Recon Loss:0.00492
+	Batch 190/276 Recon Loss:0.00476
+	Batch 200/276 Recon Loss:0.00746
+	Batch 210/276 Recon Loss:0.00756
+	Batch 220/276 Recon Loss:0.00505
+	Batch 230/276 Recon Loss:0.01475
+	Batch 240/276 Recon Loss:0.00424
+	Batch 250/276 Recon Loss:0.00467
+	Batch 260/276 Recon Loss:0.00411
+	Batch 270/276 Recon Loss:0.00588
+Validation Epoch 10/1000 Recon Loss:0.00587
+Training...
+	Batch 10/672 Recon Loss:0.00744
+	Batch 20/672 Recon Loss:0.00513
+	Batch 30/672 Recon Loss:0.00649
+	Batch 40/672 Recon Loss:0.00531
+	Batch 50/672 Recon Loss:0.00700
+	Batch 60/672 Recon Loss:0.00554
+	Batch 70/672 Recon Loss:0.00562
+	Batch 80/672 Recon Loss:0.00627
+	Batch 90/672 Recon Loss:0.00824
+	Batch 100/672 Recon Loss:0.00539
+	Batch 110/672 Recon Loss:0.00521
+	Batch 120/672 Recon Loss:0.00650
+	Batch 130/672 Recon Loss:0.00580
+	Batch 140/672 Recon Loss:0.00646
+	Batch 150/672 Recon Loss:0.00592
+	Batch 160/672 Recon Loss:0.00483
+	Batch 170/672 Recon Loss:0.00580
+	Batch 180/672 Recon Loss:0.00511
+	Batch 190/672 Recon Loss:0.00580
+	Batch 200/672 Recon Loss:0.00718
+	Batch 210/672 Recon Loss:0.00805
+	Batch 220/672 Recon Loss:0.00630
+	Batch 230/672 Recon Loss:0.00732
+	Batch 240/672 Recon Loss:0.00549
+	Batch 250/672 Recon Loss:0.00651
+	Batch 260/672 Recon Loss:0.00529
+	Batch 270/672 Recon Loss:0.00680
+	Batch 280/672 Recon Loss:0.00591
+	Batch 290/672 Recon Loss:0.00612
+	Batch 300/672 Recon Loss:0.00542
+	Batch 310/672 Recon Loss:0.00569
+	Batch 320/672 Recon Loss:0.00710
+	Batch 330/672 Recon Loss:0.00551
+	Batch 340/672 Recon Loss:0.00585
+	Batch 350/672 Recon Loss:0.00658
+	Batch 360/672 Recon Loss:0.00624
+	Batch 370/672 Recon Loss:0.00557
+	Batch 380/672 Recon Loss:0.00736
+	Batch 390/672 Recon Loss:0.00749
+	Batch 400/672 Recon Loss:0.00655
+	Batch 410/672 Recon Loss:0.00505
+	Batch 420/672 Recon Loss:0.00565
+	Batch 430/672 Recon Loss:0.00569
+	Batch 440/672 Recon Loss:0.00648
+	Batch 450/672 Recon Loss:0.00693
+	Batch 460/672 Recon Loss:0.00660
+	Batch 470/672 Recon Loss:0.00795
+	Batch 480/672 Recon Loss:0.00619
+	Batch 490/672 Recon Loss:0.00544
+	Batch 500/672 Recon Loss:0.00536
+	Batch 510/672 Recon Loss:0.00704
+	Batch 520/672 Recon Loss:0.00683
+	Batch 530/672 Recon Loss:0.00714
+	Batch 540/672 Recon Loss:0.00583
+	Batch 550/672 Recon Loss:0.00539
+	Batch 560/672 Recon Loss:0.00626
+	Batch 570/672 Recon Loss:0.00605
+	Batch 580/672 Recon Loss:0.00658
+	Batch 590/672 Recon Loss:0.00639
+	Batch 600/672 Recon Loss:0.00543
+	Batch 610/672 Recon Loss:0.00626
+	Batch 620/672 Recon Loss:0.00582
+	Batch 630/672 Recon Loss:0.00557
+	Batch 640/672 Recon Loss:0.00619
+	Batch 650/672 Recon Loss:0.00598
+	Batch 660/672 Recon Loss:0.00524
+	Batch 670/672 Recon Loss:0.00750
+Training Epoch 11/1000 Recon Loss:0.00619
+Validation...
+	Batch 10/276 Recon Loss:0.00476
+	Batch 20/276 Recon Loss:0.00425
+	Batch 30/276 Recon Loss:0.00460
+	Batch 40/276 Recon Loss:0.00674
+	Batch 50/276 Recon Loss:0.00464
+	Batch 60/276 Recon Loss:0.00532
+	Batch 70/276 Recon Loss:0.00544
+	Batch 80/276 Recon Loss:0.00711
+	Batch 90/276 Recon Loss:0.00358
+	Batch 100/276 Recon Loss:0.00399
+	Batch 110/276 Recon Loss:0.00367
+	Batch 120/276 Recon Loss:0.00740
+	Batch 130/276 Recon Loss:0.00471
+	Batch 140/276 Recon Loss:0.00887
+	Batch 150/276 Recon Loss:0.00563
+	Batch 160/276 Recon Loss:0.00815
+	Batch 170/276 Recon Loss:0.00574
+	Batch 180/276 Recon Loss:0.00477
+	Batch 190/276 Recon Loss:0.00455
+	Batch 200/276 Recon Loss:0.00730
+	Batch 210/276 Recon Loss:0.00743
+	Batch 220/276 Recon Loss:0.00488
+	Batch 230/276 Recon Loss:0.01424
+	Batch 240/276 Recon Loss:0.00409
+	Batch 250/276 Recon Loss:0.00450
+	Batch 260/276 Recon Loss:0.00395
+	Batch 270/276 Recon Loss:0.00576
+Validation Epoch 11/1000 Recon Loss:0.00570
+Training...
+	Batch 10/672 Recon Loss:0.00546
+	Batch 20/672 Recon Loss:0.00565
+	Batch 30/672 Recon Loss:0.00541
+	Batch 40/672 Recon Loss:0.00676
+	Batch 50/672 Recon Loss:0.00506
+	Batch 60/672 Recon Loss:0.00485
+	Batch 70/672 Recon Loss:0.00565
+	Batch 80/672 Recon Loss:0.00555
+	Batch 90/672 Recon Loss:0.00646
+	Batch 100/672 Recon Loss:0.00631
+	Batch 110/672 Recon Loss:0.00625
+	Batch 120/672 Recon Loss:0.00758
+	Batch 130/672 Recon Loss:0.00661
+	Batch 140/672 Recon Loss:0.00637
+	Batch 150/672 Recon Loss:0.00681
+	Batch 160/672 Recon Loss:0.00561
+	Batch 170/672 Recon Loss:0.00681
+	Batch 180/672 Recon Loss:0.00603
+	Batch 190/672 Recon Loss:0.00551
+	Batch 200/672 Recon Loss:0.00626
+	Batch 210/672 Recon Loss:0.00549
+	Batch 220/672 Recon Loss:0.00783
+	Batch 230/672 Recon Loss:0.00599
+	Batch 240/672 Recon Loss:0.00616
+	Batch 250/672 Recon Loss:0.00589
+	Batch 260/672 Recon Loss:0.00559
+	Batch 270/672 Recon Loss:0.00580
+	Batch 280/672 Recon Loss:0.00621
+	Batch 290/672 Recon Loss:0.00688
+	Batch 300/672 Recon Loss:0.00577
+	Batch 310/672 Recon Loss:0.00721
+	Batch 320/672 Recon Loss:0.00540
+	Batch 330/672 Recon Loss:0.00689
+	Batch 340/672 Recon Loss:0.00554
+	Batch 350/672 Recon Loss:0.00572
+	Batch 360/672 Recon Loss:0.00614
+	Batch 370/672 Recon Loss:0.00605
+	Batch 380/672 Recon Loss:0.00606
+	Batch 390/672 Recon Loss:0.00675
+	Batch 400/672 Recon Loss:0.00569
+	Batch 410/672 Recon Loss:0.00623
+	Batch 420/672 Recon Loss:0.00590
+	Batch 430/672 Recon Loss:0.00503
+	Batch 440/672 Recon Loss:0.00709
+	Batch 450/672 Recon Loss:0.00578
+	Batch 460/672 Recon Loss:0.00565
+	Batch 470/672 Recon Loss:0.00666
+	Batch 480/672 Recon Loss:0.00572
+	Batch 490/672 Recon Loss:0.00601
+	Batch 500/672 Recon Loss:0.00651
+	Batch 510/672 Recon Loss:0.00467
+	Batch 520/672 Recon Loss:0.00628
+	Batch 530/672 Recon Loss:0.00580
+	Batch 540/672 Recon Loss:0.00673
+	Batch 550/672 Recon Loss:0.00509
+	Batch 560/672 Recon Loss:0.00538
+	Batch 570/672 Recon Loss:0.00720
+	Batch 580/672 Recon Loss:0.00634
+	Batch 590/672 Recon Loss:0.00508
+	Batch 600/672 Recon Loss:0.00626
+	Batch 610/672 Recon Loss:0.00521
+	Batch 620/672 Recon Loss:0.00529
+	Batch 630/672 Recon Loss:0.00594
+	Batch 640/672 Recon Loss:0.00638
+	Batch 650/672 Recon Loss:0.00669
+	Batch 660/672 Recon Loss:0.00627
+	Batch 670/672 Recon Loss:0.00523
+Training Epoch 12/1000 Recon Loss:0.00608
+Validation...
+	Batch 10/276 Recon Loss:0.00471
+	Batch 20/276 Recon Loss:0.00422
+	Batch 30/276 Recon Loss:0.00460
+	Batch 40/276 Recon Loss:0.00680
+	Batch 50/276 Recon Loss:0.00463
+	Batch 60/276 Recon Loss:0.00540
+	Batch 70/276 Recon Loss:0.00554
+	Batch 80/276 Recon Loss:0.00725
+	Batch 90/276 Recon Loss:0.00360
+	Batch 100/276 Recon Loss:0.00395
+	Batch 110/276 Recon Loss:0.00368
+	Batch 120/276 Recon Loss:0.00711
+	Batch 130/276 Recon Loss:0.00473
+	Batch 140/276 Recon Loss:0.00916
+	Batch 150/276 Recon Loss:0.00545
+	Batch 160/276 Recon Loss:0.00829
+	Batch 170/276 Recon Loss:0.00564
+	Batch 180/276 Recon Loss:0.00474
+	Batch 190/276 Recon Loss:0.00457
+	Batch 200/276 Recon Loss:0.00725
+	Batch 210/276 Recon Loss:0.00740
+	Batch 220/276 Recon Loss:0.00483
+	Batch 230/276 Recon Loss:0.01438
+	Batch 240/276 Recon Loss:0.00409
+	Batch 250/276 Recon Loss:0.00450
+	Batch 260/276 Recon Loss:0.00391
+	Batch 270/276 Recon Loss:0.00573
+Validation Epoch 12/1000 Recon Loss:0.00568
+Training...
+	Batch 10/672 Recon Loss:0.00503
+	Batch 20/672 Recon Loss:0.00627
+	Batch 30/672 Recon Loss:0.00590
+	Batch 40/672 Recon Loss:0.00460
+	Batch 50/672 Recon Loss:0.00598
+	Batch 60/672 Recon Loss:0.00650
+	Batch 70/672 Recon Loss:0.00538
+	Batch 80/672 Recon Loss:0.00629
+	Batch 90/672 Recon Loss:0.00730
+	Batch 100/672 Recon Loss:0.00545
+	Batch 110/672 Recon Loss:0.00599
+	Batch 120/672 Recon Loss:0.00768
+	Batch 130/672 Recon Loss:0.00621
+	Batch 140/672 Recon Loss:0.00603
+	Batch 150/672 Recon Loss:0.00546
+	Batch 160/672 Recon Loss:0.00638
+	Batch 170/672 Recon Loss:0.00497
+	Batch 180/672 Recon Loss:0.00605
+	Batch 190/672 Recon Loss:0.00620
+	Batch 200/672 Recon Loss:0.00753
+	Batch 210/672 Recon Loss:0.00579
+	Batch 220/672 Recon Loss:0.00583
+	Batch 230/672 Recon Loss:0.00768
+	Batch 240/672 Recon Loss:0.00542
+	Batch 250/672 Recon Loss:0.00705
+	Batch 260/672 Recon Loss:0.00720
+	Batch 270/672 Recon Loss:0.00627
+	Batch 280/672 Recon Loss:0.00505
+	Batch 290/672 Recon Loss:0.00509
+	Batch 300/672 Recon Loss:0.00614
+	Batch 310/672 Recon Loss:0.00496
+	Batch 320/672 Recon Loss:0.00651
+	Batch 330/672 Recon Loss:0.00577
+	Batch 340/672 Recon Loss:0.00547
+	Batch 350/672 Recon Loss:0.00560
+	Batch 360/672 Recon Loss:0.00602
+	Batch 370/672 Recon Loss:0.00620
+	Batch 380/672 Recon Loss:0.00561
+	Batch 390/672 Recon Loss:0.00715
+	Batch 400/672 Recon Loss:0.00559
+	Batch 410/672 Recon Loss:0.00465
+	Batch 420/672 Recon Loss:0.00581
+	Batch 430/672 Recon Loss:0.00612
+	Batch 440/672 Recon Loss:0.00599
+	Batch 450/672 Recon Loss:0.00461
+	Batch 460/672 Recon Loss:0.00524
+	Batch 470/672 Recon Loss:0.00553
+	Batch 480/672 Recon Loss:0.00562
+	Batch 490/672 Recon Loss:0.00490
+	Batch 500/672 Recon Loss:0.00543
+	Batch 510/672 Recon Loss:0.00540
+	Batch 520/672 Recon Loss:0.00614
+	Batch 530/672 Recon Loss:0.00663
+	Batch 540/672 Recon Loss:0.00555
+	Batch 550/672 Recon Loss:0.00679
+	Batch 560/672 Recon Loss:0.00559
+	Batch 570/672 Recon Loss:0.00581
+	Batch 580/672 Recon Loss:0.00556
+	Batch 590/672 Recon Loss:0.00603
+	Batch 600/672 Recon Loss:0.00613
+	Batch 610/672 Recon Loss:0.00664
+	Batch 620/672 Recon Loss:0.00626
+	Batch 630/672 Recon Loss:0.00467
+	Batch 640/672 Recon Loss:0.00675
+	Batch 650/672 Recon Loss:0.00546
+	Batch 660/672 Recon Loss:0.00620
+	Batch 670/672 Recon Loss:0.00560
+Training Epoch 13/1000 Recon Loss:0.00598
+Validation...
+	Batch 10/276 Recon Loss:0.00471
+	Batch 20/276 Recon Loss:0.00420
+	Batch 30/276 Recon Loss:0.00457
+	Batch 40/276 Recon Loss:0.00665
+	Batch 50/276 Recon Loss:0.00457
+	Batch 60/276 Recon Loss:0.00533
+	Batch 70/276 Recon Loss:0.00558
+	Batch 80/276 Recon Loss:0.00669
+	Batch 90/276 Recon Loss:0.00355
+	Batch 100/276 Recon Loss:0.00390
+	Batch 110/276 Recon Loss:0.00364
+	Batch 120/276 Recon Loss:0.00697
+	Batch 130/276 Recon Loss:0.00475
+	Batch 140/276 Recon Loss:0.00877
+	Batch 150/276 Recon Loss:0.00546
+	Batch 160/276 Recon Loss:0.00831
+	Batch 170/276 Recon Loss:0.00557
+	Batch 180/276 Recon Loss:0.00473
+	Batch 190/276 Recon Loss:0.00454
+	Batch 200/276 Recon Loss:0.00726
+	Batch 210/276 Recon Loss:0.00747
+	Batch 220/276 Recon Loss:0.00482
+	Batch 230/276 Recon Loss:0.01476
+	Batch 240/276 Recon Loss:0.00405
+	Batch 250/276 Recon Loss:0.00448
+	Batch 260/276 Recon Loss:0.00387
+	Batch 270/276 Recon Loss:0.00568
+Validation Epoch 13/1000 Recon Loss:0.00564
+Training...
+	Batch 10/672 Recon Loss:0.00657
+	Batch 20/672 Recon Loss:0.00545
+	Batch 30/672 Recon Loss:0.00631
+	Batch 40/672 Recon Loss:0.00499
+	Batch 50/672 Recon Loss:0.00570
+	Batch 60/672 Recon Loss:0.00566
+	Batch 70/672 Recon Loss:0.00698
+	Batch 80/672 Recon Loss:0.00571
+	Batch 90/672 Recon Loss:0.00604
+	Batch 100/672 Recon Loss:0.00498
+	Batch 110/672 Recon Loss:0.00629
+	Batch 120/672 Recon Loss:0.00619
+	Batch 130/672 Recon Loss:0.00587
+	Batch 140/672 Recon Loss:0.00541
+	Batch 150/672 Recon Loss:0.00630
+	Batch 160/672 Recon Loss:0.00621
+	Batch 170/672 Recon Loss:0.00568
+	Batch 180/672 Recon Loss:0.00606
+	Batch 190/672 Recon Loss:0.00565
+	Batch 200/672 Recon Loss:0.00501
+	Batch 210/672 Recon Loss:0.00538
+	Batch 220/672 Recon Loss:0.00639
+	Batch 230/672 Recon Loss:0.00574
+	Batch 240/672 Recon Loss:0.00566
+	Batch 250/672 Recon Loss:0.00583
+	Batch 260/672 Recon Loss:0.00755
+	Batch 270/672 Recon Loss:0.00570
+	Batch 280/672 Recon Loss:0.00605
+	Batch 290/672 Recon Loss:0.00430
+	Batch 300/672 Recon Loss:0.00538
+	Batch 310/672 Recon Loss:0.00672
+	Batch 320/672 Recon Loss:0.00569
+	Batch 330/672 Recon Loss:0.00614
+	Batch 340/672 Recon Loss:0.00711
+	Batch 350/672 Recon Loss:0.00548
+	Batch 360/672 Recon Loss:0.00507
+	Batch 370/672 Recon Loss:0.00651
+	Batch 380/672 Recon Loss:0.00809
+	Batch 390/672 Recon Loss:0.00549
+	Batch 400/672 Recon Loss:0.00559
+	Batch 410/672 Recon Loss:0.00754
+	Batch 420/672 Recon Loss:0.00562
+	Batch 430/672 Recon Loss:0.00540
+	Batch 440/672 Recon Loss:0.00507
+	Batch 450/672 Recon Loss:0.00620
+	Batch 460/672 Recon Loss:0.00670
+	Batch 470/672 Recon Loss:0.00552
+	Batch 480/672 Recon Loss:0.00466
+	Batch 490/672 Recon Loss:0.00532
+	Batch 500/672 Recon Loss:0.00598
+	Batch 510/672 Recon Loss:0.00522
+	Batch 520/672 Recon Loss:0.00576
+	Batch 530/672 Recon Loss:0.00774
+	Batch 540/672 Recon Loss:0.00704
+	Batch 550/672 Recon Loss:0.00755
+	Batch 560/672 Recon Loss:0.00624
+	Batch 570/672 Recon Loss:0.00504
+	Batch 580/672 Recon Loss:0.00634
+	Batch 590/672 Recon Loss:0.00696
+	Batch 600/672 Recon Loss:0.00573
+	Batch 610/672 Recon Loss:0.00487
+	Batch 620/672 Recon Loss:0.00695
+	Batch 630/672 Recon Loss:0.00564
+	Batch 640/672 Recon Loss:0.00539
+	Batch 650/672 Recon Loss:0.00568
+	Batch 660/672 Recon Loss:0.00573
+	Batch 670/672 Recon Loss:0.00638
+Training Epoch 14/1000 Recon Loss:0.00590
+Validation...
+	Batch 10/276 Recon Loss:0.00459
+	Batch 20/276 Recon Loss:0.00409
+	Batch 30/276 Recon Loss:0.00446
+	Batch 40/276 Recon Loss:0.00652
+	Batch 50/276 Recon Loss:0.00445
+	Batch 60/276 Recon Loss:0.00517
+	Batch 70/276 Recon Loss:0.00537
+	Batch 80/276 Recon Loss:0.00684
+	Batch 90/276 Recon Loss:0.00344
+	Batch 100/276 Recon Loss:0.00383
+	Batch 110/276 Recon Loss:0.00354
+	Batch 120/276 Recon Loss:0.00685
+	Batch 130/276 Recon Loss:0.00460
+	Batch 140/276 Recon Loss:0.00874
+	Batch 150/276 Recon Loss:0.00522
+	Batch 160/276 Recon Loss:0.00808
+	Batch 170/276 Recon Loss:0.00551
+	Batch 180/276 Recon Loss:0.00462
+	Batch 190/276 Recon Loss:0.00443
+	Batch 200/276 Recon Loss:0.00714
+	Batch 210/276 Recon Loss:0.00733
+	Batch 220/276 Recon Loss:0.00462
+	Batch 230/276 Recon Loss:0.01339
+	Batch 240/276 Recon Loss:0.00392
+	Batch 250/276 Recon Loss:0.00436
+	Batch 260/276 Recon Loss:0.00379
+	Batch 270/276 Recon Loss:0.00558
+Validation Epoch 14/1000 Recon Loss:0.00549
+Training...
+	Batch 10/672 Recon Loss:0.00557
+	Batch 20/672 Recon Loss:0.00674
+	Batch 30/672 Recon Loss:0.00588
+	Batch 40/672 Recon Loss:0.00583
+	Batch 50/672 Recon Loss:0.00512
+	Batch 60/672 Recon Loss:0.00548
+	Batch 70/672 Recon Loss:0.00578
+	Batch 80/672 Recon Loss:0.00581
+	Batch 90/672 Recon Loss:0.00573
+	Batch 100/672 Recon Loss:0.00546
+	Batch 110/672 Recon Loss:0.00575
+	Batch 120/672 Recon Loss:0.00560
+	Batch 130/672 Recon Loss:0.00581
+	Batch 140/672 Recon Loss:0.00546
+	Batch 150/672 Recon Loss:0.00554
+	Batch 160/672 Recon Loss:0.00470
+	Batch 170/672 Recon Loss:0.00607
+	Batch 180/672 Recon Loss:0.00584
+	Batch 190/672 Recon Loss:0.00588
+	Batch 200/672 Recon Loss:0.00552
+	Batch 210/672 Recon Loss:0.00672
+	Batch 220/672 Recon Loss:0.00721
+	Batch 230/672 Recon Loss:0.00521
+	Batch 240/672 Recon Loss:0.00684
+	Batch 250/672 Recon Loss:0.00583
+	Batch 260/672 Recon Loss:0.00540
+	Batch 270/672 Recon Loss:0.00682
+	Batch 280/672 Recon Loss:0.00496
+	Batch 290/672 Recon Loss:0.00627
+	Batch 300/672 Recon Loss:0.00671
+	Batch 310/672 Recon Loss:0.00565
+	Batch 320/672 Recon Loss:0.00518
+	Batch 330/672 Recon Loss:0.00572
+	Batch 340/672 Recon Loss:0.00623
+	Batch 350/672 Recon Loss:0.00520
+	Batch 360/672 Recon Loss:0.00541
+	Batch 370/672 Recon Loss:0.00619
+	Batch 380/672 Recon Loss:0.00669
+	Batch 390/672 Recon Loss:0.00486
+	Batch 400/672 Recon Loss:0.00638
+	Batch 410/672 Recon Loss:0.00590
+	Batch 420/672 Recon Loss:0.00599
+	Batch 430/672 Recon Loss:0.00608
+	Batch 440/672 Recon Loss:0.00597
+	Batch 450/672 Recon Loss:0.00614
+	Batch 460/672 Recon Loss:0.00604
+	Batch 470/672 Recon Loss:0.00661
+	Batch 480/672 Recon Loss:0.00519
+	Batch 490/672 Recon Loss:0.00693
+	Batch 500/672 Recon Loss:0.00839
+	Batch 510/672 Recon Loss:0.00524
+	Batch 520/672 Recon Loss:0.00675
+	Batch 530/672 Recon Loss:0.00495
+	Batch 540/672 Recon Loss:0.00568
+	Batch 550/672 Recon Loss:0.00606
+	Batch 560/672 Recon Loss:0.00618
+	Batch 570/672 Recon Loss:0.00627
+	Batch 580/672 Recon Loss:0.00585
+	Batch 590/672 Recon Loss:0.00623
+	Batch 600/672 Recon Loss:0.00511
+	Batch 610/672 Recon Loss:0.00521
+	Batch 620/672 Recon Loss:0.00547
+	Batch 630/672 Recon Loss:0.00594
+	Batch 640/672 Recon Loss:0.00487
+	Batch 650/672 Recon Loss:0.00642
+	Batch 660/672 Recon Loss:0.00570
+	Batch 670/672 Recon Loss:0.00506
+Training Epoch 15/1000 Recon Loss:0.00582
+Validation...
+	Batch 10/276 Recon Loss:0.00457
+	Batch 20/276 Recon Loss:0.00409
+	Batch 30/276 Recon Loss:0.00443
+	Batch 40/276 Recon Loss:0.00648
+	Batch 50/276 Recon Loss:0.00449
+	Batch 60/276 Recon Loss:0.00516
+	Batch 70/276 Recon Loss:0.00535
+	Batch 80/276 Recon Loss:0.00676
+	Batch 90/276 Recon Loss:0.00349
+	Batch 100/276 Recon Loss:0.00383
+	Batch 110/276 Recon Loss:0.00357
+	Batch 120/276 Recon Loss:0.00706
+	Batch 130/276 Recon Loss:0.00454
+	Batch 140/276 Recon Loss:0.00893
+	Batch 150/276 Recon Loss:0.00527
+	Batch 160/276 Recon Loss:0.00800
+	Batch 170/276 Recon Loss:0.00547
+	Batch 180/276 Recon Loss:0.00459
+	Batch 190/276 Recon Loss:0.00442
+	Batch 200/276 Recon Loss:0.00713
+	Batch 210/276 Recon Loss:0.00723
+	Batch 220/276 Recon Loss:0.00463
+	Batch 230/276 Recon Loss:0.01386
+	Batch 240/276 Recon Loss:0.00394
+	Batch 250/276 Recon Loss:0.00439
+	Batch 260/276 Recon Loss:0.00381
+	Batch 270/276 Recon Loss:0.00555
+Validation Epoch 15/1000 Recon Loss:0.00550
+Training...
+	Batch 10/672 Recon Loss:0.00603
+	Batch 20/672 Recon Loss:0.00605
+	Batch 30/672 Recon Loss:0.00485
+	Batch 40/672 Recon Loss:0.00590
+	Batch 50/672 Recon Loss:0.00626
+	Batch 60/672 Recon Loss:0.00614
+	Batch 70/672 Recon Loss:0.00562
+	Batch 80/672 Recon Loss:0.00526
+	Batch 90/672 Recon Loss:0.00629
+	Batch 100/672 Recon Loss:0.00492
+	Batch 110/672 Recon Loss:0.00629
+	Batch 120/672 Recon Loss:0.00497
+	Batch 130/672 Recon Loss:0.00496
+	Batch 140/672 Recon Loss:0.00590
+	Batch 150/672 Recon Loss:0.00634
+	Batch 160/672 Recon Loss:0.00512
+	Batch 170/672 Recon Loss:0.00630
+	Batch 180/672 Recon Loss:0.00620
+	Batch 190/672 Recon Loss:0.00492
+	Batch 200/672 Recon Loss:0.00521
+	Batch 210/672 Recon Loss:0.00615
+	Batch 220/672 Recon Loss:0.00486
+	Batch 230/672 Recon Loss:0.00632
+	Batch 240/672 Recon Loss:0.00605
+	Batch 250/672 Recon Loss:0.00669
+	Batch 260/672 Recon Loss:0.00598
+	Batch 270/672 Recon Loss:0.00614
+	Batch 280/672 Recon Loss:0.00616
+	Batch 290/672 Recon Loss:0.00577
+	Batch 300/672 Recon Loss:0.00686
+	Batch 310/672 Recon Loss:0.00546
+	Batch 320/672 Recon Loss:0.00526
+	Batch 330/672 Recon Loss:0.00495
+	Batch 340/672 Recon Loss:0.00592
+	Batch 350/672 Recon Loss:0.00527
+	Batch 360/672 Recon Loss:0.00565
+	Batch 370/672 Recon Loss:0.00621
+	Batch 380/672 Recon Loss:0.00495
+	Batch 390/672 Recon Loss:0.00693
+	Batch 400/672 Recon Loss:0.00609
+	Batch 410/672 Recon Loss:0.00709
+	Batch 420/672 Recon Loss:0.00514
+	Batch 430/672 Recon Loss:0.00620
+	Batch 440/672 Recon Loss:0.00472
+	Batch 450/672 Recon Loss:0.00472
+	Batch 460/672 Recon Loss:0.00482
+	Batch 470/672 Recon Loss:0.00549
+	Batch 480/672 Recon Loss:0.00606
+	Batch 490/672 Recon Loss:0.00517
+	Batch 500/672 Recon Loss:0.00660
+	Batch 510/672 Recon Loss:0.00583
+	Batch 520/672 Recon Loss:0.00539
+	Batch 530/672 Recon Loss:0.00714
+	Batch 540/672 Recon Loss:0.00581
+	Batch 550/672 Recon Loss:0.00498
+	Batch 560/672 Recon Loss:0.00808
+	Batch 570/672 Recon Loss:0.00540
+	Batch 580/672 Recon Loss:0.00467
+	Batch 590/672 Recon Loss:0.00544
+	Batch 600/672 Recon Loss:0.00587
+	Batch 610/672 Recon Loss:0.00503
+	Batch 620/672 Recon Loss:0.00608
+	Batch 630/672 Recon Loss:0.00620
+	Batch 640/672 Recon Loss:0.00594
+	Batch 650/672 Recon Loss:0.00586
+	Batch 660/672 Recon Loss:0.00545
+	Batch 670/672 Recon Loss:0.00487
+Training Epoch 16/1000 Recon Loss:0.00574
+Validation...
+	Batch 10/276 Recon Loss:0.00452
+	Batch 20/276 Recon Loss:0.00405
+	Batch 30/276 Recon Loss:0.00437
+	Batch 40/276 Recon Loss:0.00650
+	Batch 50/276 Recon Loss:0.00440
+	Batch 60/276 Recon Loss:0.00512
+	Batch 70/276 Recon Loss:0.00529
+	Batch 80/276 Recon Loss:0.00684
+	Batch 90/276 Recon Loss:0.00342
+	Batch 100/276 Recon Loss:0.00377
+	Batch 110/276 Recon Loss:0.00351
+	Batch 120/276 Recon Loss:0.00678
+	Batch 130/276 Recon Loss:0.00450
+	Batch 140/276 Recon Loss:0.00889
+	Batch 150/276 Recon Loss:0.00517
+	Batch 160/276 Recon Loss:0.00825
+	Batch 170/276 Recon Loss:0.00539
+	Batch 180/276 Recon Loss:0.00454
+	Batch 190/276 Recon Loss:0.00438
+	Batch 200/276 Recon Loss:0.00708
+	Batch 210/276 Recon Loss:0.00726
+	Batch 220/276 Recon Loss:0.00460
+	Batch 230/276 Recon Loss:0.01349
+	Batch 240/276 Recon Loss:0.00390
+	Batch 250/276 Recon Loss:0.00432
+	Batch 260/276 Recon Loss:0.00376
+	Batch 270/276 Recon Loss:0.00549
+Validation Epoch 16/1000 Recon Loss:0.00544
+Training...
+	Batch 10/672 Recon Loss:0.00516
+	Batch 20/672 Recon Loss:0.00679
+	Batch 30/672 Recon Loss:0.00483
+	Batch 40/672 Recon Loss:0.00632
+	Batch 50/672 Recon Loss:0.00486
+	Batch 60/672 Recon Loss:0.00559
+	Batch 70/672 Recon Loss:0.00567
+	Batch 80/672 Recon Loss:0.00515
+	Batch 90/672 Recon Loss:0.00660
+	Batch 100/672 Recon Loss:0.00508
+	Batch 110/672 Recon Loss:0.00585
+	Batch 120/672 Recon Loss:0.00509
+	Batch 130/672 Recon Loss:0.00565
+	Batch 140/672 Recon Loss:0.00797
+	Batch 150/672 Recon Loss:0.00539
+	Batch 160/672 Recon Loss:0.00552
+	Batch 170/672 Recon Loss:0.00529
+	Batch 180/672 Recon Loss:0.00550
+	Batch 190/672 Recon Loss:0.00525
+	Batch 200/672 Recon Loss:0.00526
+	Batch 210/672 Recon Loss:0.00610
+	Batch 220/672 Recon Loss:0.00608
+	Batch 230/672 Recon Loss:0.00611
+	Batch 240/672 Recon Loss:0.00523
+	Batch 250/672 Recon Loss:0.00524
+	Batch 260/672 Recon Loss:0.00512
+	Batch 270/672 Recon Loss:0.00490
+	Batch 280/672 Recon Loss:0.00617
+	Batch 290/672 Recon Loss:0.00497
+	Batch 300/672 Recon Loss:0.00647
+	Batch 310/672 Recon Loss:0.00483
+	Batch 320/672 Recon Loss:0.00658
+	Batch 330/672 Recon Loss:0.00525
+	Batch 340/672 Recon Loss:0.00659
+	Batch 350/672 Recon Loss:0.00457
+	Batch 360/672 Recon Loss:0.00566
+	Batch 370/672 Recon Loss:0.00473
+	Batch 380/672 Recon Loss:0.00506
+	Batch 390/672 Recon Loss:0.00552
+	Batch 400/672 Recon Loss:0.00615
+	Batch 410/672 Recon Loss:0.00538
+	Batch 420/672 Recon Loss:0.00564
+	Batch 430/672 Recon Loss:0.00730
+	Batch 440/672 Recon Loss:0.00605
+	Batch 450/672 Recon Loss:0.00499
+	Batch 460/672 Recon Loss:0.00558
+	Batch 470/672 Recon Loss:0.00679
+	Batch 480/672 Recon Loss:0.00608
+	Batch 490/672 Recon Loss:0.00460
+	Batch 500/672 Recon Loss:0.00548
+	Batch 510/672 Recon Loss:0.00480
+	Batch 520/672 Recon Loss:0.00570
+	Batch 530/672 Recon Loss:0.00543
+	Batch 540/672 Recon Loss:0.00720
+	Batch 550/672 Recon Loss:0.00593
+	Batch 560/672 Recon Loss:0.00507
+	Batch 570/672 Recon Loss:0.00653
+	Batch 580/672 Recon Loss:0.00455
+	Batch 590/672 Recon Loss:0.00521
+	Batch 600/672 Recon Loss:0.00553
+	Batch 610/672 Recon Loss:0.00463
+	Batch 620/672 Recon Loss:0.00533
+	Batch 630/672 Recon Loss:0.00573
+	Batch 640/672 Recon Loss:0.00613
+	Batch 650/672 Recon Loss:0.00500
+	Batch 660/672 Recon Loss:0.00523
+	Batch 670/672 Recon Loss:0.00603
+Training Epoch 17/1000 Recon Loss:0.00566
+Validation...
+	Batch 10/276 Recon Loss:0.00438
+	Batch 20/276 Recon Loss:0.00395
+	Batch 30/276 Recon Loss:0.00419
+	Batch 40/276 Recon Loss:0.00634
+	Batch 50/276 Recon Loss:0.00426
+	Batch 60/276 Recon Loss:0.00491
+	Batch 70/276 Recon Loss:0.00519
+	Batch 80/276 Recon Loss:0.00658
+	Batch 90/276 Recon Loss:0.00332
+	Batch 100/276 Recon Loss:0.00365
+	Batch 110/276 Recon Loss:0.00343
+	Batch 120/276 Recon Loss:0.00683
+	Batch 130/276 Recon Loss:0.00438
+	Batch 140/276 Recon Loss:0.00862
+	Batch 150/276 Recon Loss:0.00513
+	Batch 160/276 Recon Loss:0.00777
+	Batch 170/276 Recon Loss:0.00530
+	Batch 180/276 Recon Loss:0.00438
+	Batch 190/276 Recon Loss:0.00432
+	Batch 200/276 Recon Loss:0.00692
+	Batch 210/276 Recon Loss:0.00718
+	Batch 220/276 Recon Loss:0.00444
+	Batch 230/276 Recon Loss:0.01353
+	Batch 240/276 Recon Loss:0.00374
+	Batch 250/276 Recon Loss:0.00420
+	Batch 260/276 Recon Loss:0.00366
+	Batch 270/276 Recon Loss:0.00532
+Validation Epoch 17/1000 Recon Loss:0.00529
+Training...
+	Batch 10/672 Recon Loss:0.00618
+	Batch 20/672 Recon Loss:0.00516
+	Batch 30/672 Recon Loss:0.00578
+	Batch 40/672 Recon Loss:0.00748
+	Batch 50/672 Recon Loss:0.00541
+	Batch 60/672 Recon Loss:0.00503
+	Batch 70/672 Recon Loss:0.00516
+	Batch 80/672 Recon Loss:0.00471
+	Batch 90/672 Recon Loss:0.00498
+	Batch 100/672 Recon Loss:0.00526
+	Batch 110/672 Recon Loss:0.00550
+	Batch 120/672 Recon Loss:0.00615
+	Batch 130/672 Recon Loss:0.00633
+	Batch 140/672 Recon Loss:0.00493
+	Batch 150/672 Recon Loss:0.00593
+	Batch 160/672 Recon Loss:0.00597
+	Batch 170/672 Recon Loss:0.00646
+	Batch 180/672 Recon Loss:0.00567
+	Batch 190/672 Recon Loss:0.00618
+	Batch 200/672 Recon Loss:0.00679
+	Batch 210/672 Recon Loss:0.00492
+	Batch 220/672 Recon Loss:0.00548
+	Batch 230/672 Recon Loss:0.00521
+	Batch 240/672 Recon Loss:0.00605
+	Batch 250/672 Recon Loss:0.00642
+	Batch 260/672 Recon Loss:0.00663
+	Batch 270/672 Recon Loss:0.00474
+	Batch 280/672 Recon Loss:0.00506
+	Batch 290/672 Recon Loss:0.00493
+	Batch 300/672 Recon Loss:0.00540
+	Batch 310/672 Recon Loss:0.00500
+	Batch 320/672 Recon Loss:0.00490
+	Batch 330/672 Recon Loss:0.00526
+	Batch 340/672 Recon Loss:0.00542
+	Batch 350/672 Recon Loss:0.00456
+	Batch 360/672 Recon Loss:0.00854
+	Batch 370/672 Recon Loss:0.00554
+	Batch 380/672 Recon Loss:0.00550
+	Batch 390/672 Recon Loss:0.00481
+	Batch 400/672 Recon Loss:0.00477
+	Batch 410/672 Recon Loss:0.00559
+	Batch 420/672 Recon Loss:0.00657
+	Batch 430/672 Recon Loss:0.00469
+	Batch 440/672 Recon Loss:0.00548
+	Batch 450/672 Recon Loss:0.00528
+	Batch 460/672 Recon Loss:0.00541
+	Batch 470/672 Recon Loss:0.00554
+	Batch 480/672 Recon Loss:0.00599
+	Batch 490/672 Recon Loss:0.00570
+	Batch 500/672 Recon Loss:0.00543
+	Batch 510/672 Recon Loss:0.00507
+	Batch 520/672 Recon Loss:0.00592
+	Batch 530/672 Recon Loss:0.00574
+	Batch 540/672 Recon Loss:0.00544
+	Batch 550/672 Recon Loss:0.00641
+	Batch 560/672 Recon Loss:0.00518
+	Batch 570/672 Recon Loss:0.00457
+	Batch 580/672 Recon Loss:0.00490
+	Batch 590/672 Recon Loss:0.00497
+	Batch 600/672 Recon Loss:0.00567
+	Batch 610/672 Recon Loss:0.00516
+	Batch 620/672 Recon Loss:0.00506
+	Batch 630/672 Recon Loss:0.00627
+	Batch 640/672 Recon Loss:0.00406
+	Batch 650/672 Recon Loss:0.00673
+	Batch 660/672 Recon Loss:0.00546
+	Batch 670/672 Recon Loss:0.00568
+Training Epoch 18/1000 Recon Loss:0.00562
+Validation...
+	Batch 10/276 Recon Loss:0.00443
+	Batch 20/276 Recon Loss:0.00399
+	Batch 30/276 Recon Loss:0.00423
+	Batch 40/276 Recon Loss:0.00641
+	Batch 50/276 Recon Loss:0.00428
+	Batch 60/276 Recon Loss:0.00508
+	Batch 70/276 Recon Loss:0.00521
+	Batch 80/276 Recon Loss:0.00683
+	Batch 90/276 Recon Loss:0.00335
+	Batch 100/276 Recon Loss:0.00367
+	Batch 110/276 Recon Loss:0.00345
+	Batch 120/276 Recon Loss:0.00666
+	Batch 130/276 Recon Loss:0.00442
+	Batch 140/276 Recon Loss:0.00843
+	Batch 150/276 Recon Loss:0.00506
+	Batch 160/276 Recon Loss:0.00792
+	Batch 170/276 Recon Loss:0.00533
+	Batch 180/276 Recon Loss:0.00446
+	Batch 190/276 Recon Loss:0.00440
+	Batch 200/276 Recon Loss:0.00694
+	Batch 210/276 Recon Loss:0.00709
+	Batch 220/276 Recon Loss:0.00452
+	Batch 230/276 Recon Loss:0.01324
+	Batch 240/276 Recon Loss:0.00378
+	Batch 250/276 Recon Loss:0.00426
+	Batch 260/276 Recon Loss:0.00369
+	Batch 270/276 Recon Loss:0.00534
+Validation Epoch 18/1000 Recon Loss:0.00532
+Training...
+	Batch 10/672 Recon Loss:0.00716
+	Batch 20/672 Recon Loss:0.00535
+	Batch 30/672 Recon Loss:0.00611
+	Batch 40/672 Recon Loss:0.00483
+	Batch 50/672 Recon Loss:0.00591
+	Batch 60/672 Recon Loss:0.00455
+	Batch 70/672 Recon Loss:0.00491
+	Batch 80/672 Recon Loss:0.00527
+	Batch 90/672 Recon Loss:0.00662
+	Batch 100/672 Recon Loss:0.00518
+	Batch 110/672 Recon Loss:0.00625
+	Batch 120/672 Recon Loss:0.00530
+	Batch 130/672 Recon Loss:0.00443
+	Batch 140/672 Recon Loss:0.00617
+	Batch 150/672 Recon Loss:0.00512
+	Batch 160/672 Recon Loss:0.00499
+	Batch 170/672 Recon Loss:0.00568
+	Batch 180/672 Recon Loss:0.00598
+	Batch 190/672 Recon Loss:0.00536
+	Batch 200/672 Recon Loss:0.00578
+	Batch 210/672 Recon Loss:0.00618
+	Batch 220/672 Recon Loss:0.00580
+	Batch 230/672 Recon Loss:0.00545
+	Batch 240/672 Recon Loss:0.00580
+	Batch 250/672 Recon Loss:0.00534
+	Batch 260/672 Recon Loss:0.00530
+	Batch 270/672 Recon Loss:0.00487
+	Batch 280/672 Recon Loss:0.00523
+	Batch 290/672 Recon Loss:0.00675
+	Batch 300/672 Recon Loss:0.00437
+	Batch 310/672 Recon Loss:0.00524
+	Batch 320/672 Recon Loss:0.00449
+	Batch 330/672 Recon Loss:0.00755
+	Batch 340/672 Recon Loss:0.00566
+	Batch 350/672 Recon Loss:0.00564
+	Batch 360/672 Recon Loss:0.00559
+	Batch 370/672 Recon Loss:0.00636
+	Batch 380/672 Recon Loss:0.00713
+	Batch 390/672 Recon Loss:0.00552
+	Batch 400/672 Recon Loss:0.00482
+	Batch 410/672 Recon Loss:0.00501
+	Batch 420/672 Recon Loss:0.00549
+	Batch 430/672 Recon Loss:0.00424
+	Batch 440/672 Recon Loss:0.00579
+	Batch 450/672 Recon Loss:0.00553
+	Batch 460/672 Recon Loss:0.00536
+	Batch 470/672 Recon Loss:0.00578
+	Batch 480/672 Recon Loss:0.00517
+	Batch 490/672 Recon Loss:0.00628
+	Batch 500/672 Recon Loss:0.00596
+	Batch 510/672 Recon Loss:0.00603
+	Batch 520/672 Recon Loss:0.00533
+	Batch 530/672 Recon Loss:0.00593
+	Batch 540/672 Recon Loss:0.00511
+	Batch 550/672 Recon Loss:0.00480
+	Batch 560/672 Recon Loss:0.00483
+	Batch 570/672 Recon Loss:0.00593
+	Batch 580/672 Recon Loss:0.00490
+	Batch 590/672 Recon Loss:0.00500
+	Batch 600/672 Recon Loss:0.00586
+	Batch 610/672 Recon Loss:0.00498
+	Batch 620/672 Recon Loss:0.00681
+	Batch 630/672 Recon Loss:0.00565
+	Batch 640/672 Recon Loss:0.00643
+	Batch 650/672 Recon Loss:0.00551
+	Batch 660/672 Recon Loss:0.00587
+	Batch 670/672 Recon Loss:0.00587
+Training Epoch 19/1000 Recon Loss:0.00554
+Validation...
+	Batch 10/276 Recon Loss:0.00430
+	Batch 20/276 Recon Loss:0.00385
+	Batch 30/276 Recon Loss:0.00407
+	Batch 40/276 Recon Loss:0.00637
+	Batch 50/276 Recon Loss:0.00419
+	Batch 60/276 Recon Loss:0.00499
+	Batch 70/276 Recon Loss:0.00513
+	Batch 80/276 Recon Loss:0.00681
+	Batch 90/276 Recon Loss:0.00322
+	Batch 100/276 Recon Loss:0.00353
+	Batch 110/276 Recon Loss:0.00334
+	Batch 120/276 Recon Loss:0.00649
+	Batch 130/276 Recon Loss:0.00427
+	Batch 140/276 Recon Loss:0.00855
+	Batch 150/276 Recon Loss:0.00493
+	Batch 160/276 Recon Loss:0.00799
+	Batch 170/276 Recon Loss:0.00510
+	Batch 180/276 Recon Loss:0.00426
+	Batch 190/276 Recon Loss:0.00420
+	Batch 200/276 Recon Loss:0.00682
+	Batch 210/276 Recon Loss:0.00705
+	Batch 220/276 Recon Loss:0.00440
+	Batch 230/276 Recon Loss:0.01305
+	Batch 240/276 Recon Loss:0.00369
+	Batch 250/276 Recon Loss:0.00409
+	Batch 260/276 Recon Loss:0.00356
+	Batch 270/276 Recon Loss:0.00518
+Validation Epoch 19/1000 Recon Loss:0.00518
+Training...
+	Batch 10/672 Recon Loss:0.00643
+	Batch 20/672 Recon Loss:0.00683
+	Batch 30/672 Recon Loss:0.00569
+	Batch 40/672 Recon Loss:0.00498
+	Batch 50/672 Recon Loss:0.00463
+	Batch 60/672 Recon Loss:0.00517
+	Batch 70/672 Recon Loss:0.00589
+	Batch 80/672 Recon Loss:0.00542
+	Batch 90/672 Recon Loss:0.00511
+	Batch 100/672 Recon Loss:0.00427
+	Batch 110/672 Recon Loss:0.00643
+	Batch 120/672 Recon Loss:0.00550
+	Batch 130/672 Recon Loss:0.00555
+	Batch 140/672 Recon Loss:0.00549
+	Batch 150/672 Recon Loss:0.00599
+	Batch 160/672 Recon Loss:0.00542
+	Batch 170/672 Recon Loss:0.00579
+	Batch 180/672 Recon Loss:0.00505
+	Batch 190/672 Recon Loss:0.00671
+	Batch 200/672 Recon Loss:0.00517
+	Batch 210/672 Recon Loss:0.00460
+	Batch 220/672 Recon Loss:0.00593
+	Batch 230/672 Recon Loss:0.00494
+	Batch 240/672 Recon Loss:0.00495
+	Batch 250/672 Recon Loss:0.00474
+	Batch 260/672 Recon Loss:0.00501
+	Batch 270/672 Recon Loss:0.00503
+	Batch 280/672 Recon Loss:0.00480
+	Batch 290/672 Recon Loss:0.00532
+	Batch 300/672 Recon Loss:0.00603
+	Batch 310/672 Recon Loss:0.00597
+	Batch 320/672 Recon Loss:0.00480
+	Batch 330/672 Recon Loss:0.00607
+	Batch 340/672 Recon Loss:0.00560
+	Batch 350/672 Recon Loss:0.00538
+	Batch 360/672 Recon Loss:0.00424
+	Batch 370/672 Recon Loss:0.00490
+	Batch 380/672 Recon Loss:0.00514
+	Batch 390/672 Recon Loss:0.00486
+	Batch 400/672 Recon Loss:0.00554
+	Batch 410/672 Recon Loss:0.00512
+	Batch 420/672 Recon Loss:0.00480
+	Batch 430/672 Recon Loss:0.00487
+	Batch 440/672 Recon Loss:0.00556
+	Batch 450/672 Recon Loss:0.00517
+	Batch 460/672 Recon Loss:0.00604
+	Batch 470/672 Recon Loss:0.00583
+	Batch 480/672 Recon Loss:0.00485
+	Batch 490/672 Recon Loss:0.00504
+	Batch 500/672 Recon Loss:0.00554
+	Batch 510/672 Recon Loss:0.00563
+	Batch 520/672 Recon Loss:0.00702
+	Batch 530/672 Recon Loss:0.00643
+	Batch 540/672 Recon Loss:0.00472
+	Batch 550/672 Recon Loss:0.00478
+	Batch 560/672 Recon Loss:0.00632
+	Batch 570/672 Recon Loss:0.00565
+	Batch 580/672 Recon Loss:0.00684
+	Batch 590/672 Recon Loss:0.00701
+	Batch 600/672 Recon Loss:0.00502
+	Batch 610/672 Recon Loss:0.00579
+	Batch 620/672 Recon Loss:0.00542
+	Batch 630/672 Recon Loss:0.00435
+	Batch 640/672 Recon Loss:0.00586
+	Batch 650/672 Recon Loss:0.00590
+	Batch 660/672 Recon Loss:0.00549
+	Batch 670/672 Recon Loss:0.00526
+Training Epoch 20/1000 Recon Loss:0.00547
+Validation...
+	Batch 10/276 Recon Loss:0.00426
+	Batch 20/276 Recon Loss:0.00382
+	Batch 30/276 Recon Loss:0.00407
+	Batch 40/276 Recon Loss:0.00619
+	Batch 50/276 Recon Loss:0.00413
+	Batch 60/276 Recon Loss:0.00474
+	Batch 70/276 Recon Loss:0.00506
+	Batch 80/276 Recon Loss:0.00674
+	Batch 90/276 Recon Loss:0.00317
+	Batch 100/276 Recon Loss:0.00350
+	Batch 110/276 Recon Loss:0.00329
+	Batch 120/276 Recon Loss:0.00645
+	Batch 130/276 Recon Loss:0.00423
+	Batch 140/276 Recon Loss:0.00838
+	Batch 150/276 Recon Loss:0.00483
+	Batch 160/276 Recon Loss:0.00780
+	Batch 170/276 Recon Loss:0.00507
+	Batch 180/276 Recon Loss:0.00424
+	Batch 190/276 Recon Loss:0.00419
+	Batch 200/276 Recon Loss:0.00688
+	Batch 210/276 Recon Loss:0.00686
+	Batch 220/276 Recon Loss:0.00433
+	Batch 230/276 Recon Loss:0.01313
+	Batch 240/276 Recon Loss:0.00362
+	Batch 250/276 Recon Loss:0.00410
+	Batch 260/276 Recon Loss:0.00349
+	Batch 270/276 Recon Loss:0.00515
+Validation Epoch 20/1000 Recon Loss:0.00514
+Training...
+	Batch 10/672 Recon Loss:0.00697
+	Batch 20/672 Recon Loss:0.00552
+	Batch 30/672 Recon Loss:0.00604
+	Batch 40/672 Recon Loss:0.00517
+	Batch 50/672 Recon Loss:0.00488
+	Batch 60/672 Recon Loss:0.00588
+	Batch 70/672 Recon Loss:0.00535
+	Batch 80/672 Recon Loss:0.00513
+	Batch 90/672 Recon Loss:0.00650
+	Batch 100/672 Recon Loss:0.00530
+	Batch 110/672 Recon Loss:0.00638
+	Batch 120/672 Recon Loss:0.00534
+	Batch 130/672 Recon Loss:0.00508
+	Batch 140/672 Recon Loss:0.00447
+	Batch 150/672 Recon Loss:0.00536
+	Batch 160/672 Recon Loss:0.00567
+	Batch 170/672 Recon Loss:0.00549
+	Batch 180/672 Recon Loss:0.00604
+	Batch 190/672 Recon Loss:0.00528
+	Batch 200/672 Recon Loss:0.00515
+	Batch 210/672 Recon Loss:0.00582
+	Batch 220/672 Recon Loss:0.00549
+	Batch 230/672 Recon Loss:0.00560
+	Batch 240/672 Recon Loss:0.00558
+	Batch 250/672 Recon Loss:0.00566
+	Batch 260/672 Recon Loss:0.00523
+	Batch 270/672 Recon Loss:0.00467
+	Batch 280/672 Recon Loss:0.00563
+	Batch 290/672 Recon Loss:0.00449
+	Batch 300/672 Recon Loss:0.00591
+	Batch 310/672 Recon Loss:0.00614
+	Batch 320/672 Recon Loss:0.00588
+	Batch 330/672 Recon Loss:0.00515
+	Batch 340/672 Recon Loss:0.00498
+	Batch 350/672 Recon Loss:0.00498
+	Batch 360/672 Recon Loss:0.00584
+	Batch 370/672 Recon Loss:0.00502
+	Batch 380/672 Recon Loss:0.00533
+	Batch 390/672 Recon Loss:0.00451
+	Batch 400/672 Recon Loss:0.00670
+	Batch 410/672 Recon Loss:0.00536
+	Batch 420/672 Recon Loss:0.00497
+	Batch 430/672 Recon Loss:0.00411
+	Batch 440/672 Recon Loss:0.00600
+	Batch 450/672 Recon Loss:0.00534
+	Batch 460/672 Recon Loss:0.00473
+	Batch 470/672 Recon Loss:0.00726
+	Batch 480/672 Recon Loss:0.00510
+	Batch 490/672 Recon Loss:0.00435
+	Batch 500/672 Recon Loss:0.00500
+	Batch 510/672 Recon Loss:0.00521
+	Batch 520/672 Recon Loss:0.00566
+	Batch 530/672 Recon Loss:0.00534
+	Batch 540/672 Recon Loss:0.00419
+	Batch 550/672 Recon Loss:0.00636
+	Batch 560/672 Recon Loss:0.00470
+	Batch 570/672 Recon Loss:0.00546
+	Batch 580/672 Recon Loss:0.00625
+	Batch 590/672 Recon Loss:0.00473
+	Batch 600/672 Recon Loss:0.00644
+	Batch 610/672 Recon Loss:0.00421
+	Batch 620/672 Recon Loss:0.00531
+	Batch 630/672 Recon Loss:0.00648
+	Batch 640/672 Recon Loss:0.00557
+	Batch 650/672 Recon Loss:0.00605
+	Batch 660/672 Recon Loss:0.00509
+	Batch 670/672 Recon Loss:0.00486
+Training Epoch 21/1000 Recon Loss:0.00540
+Validation...
+	Batch 10/276 Recon Loss:0.00422
+	Batch 20/276 Recon Loss:0.00382
+	Batch 30/276 Recon Loss:0.00405
+	Batch 40/276 Recon Loss:0.00612
+	Batch 50/276 Recon Loss:0.00412
+	Batch 60/276 Recon Loss:0.00476
+	Batch 70/276 Recon Loss:0.00518
+	Batch 80/276 Recon Loss:0.00646
+	Batch 90/276 Recon Loss:0.00311
+	Batch 100/276 Recon Loss:0.00350
+	Batch 110/276 Recon Loss:0.00330
+	Batch 120/276 Recon Loss:0.00665
+	Batch 130/276 Recon Loss:0.00430
+	Batch 140/276 Recon Loss:0.00826
+	Batch 150/276 Recon Loss:0.00500
+	Batch 160/276 Recon Loss:0.00760
+	Batch 170/276 Recon Loss:0.00510
+	Batch 180/276 Recon Loss:0.00425
+	Batch 190/276 Recon Loss:0.00414
+	Batch 200/276 Recon Loss:0.00669
+	Batch 210/276 Recon Loss:0.00694
+	Batch 220/276 Recon Loss:0.00443
+	Batch 230/276 Recon Loss:0.01338
+	Batch 240/276 Recon Loss:0.00358
+	Batch 250/276 Recon Loss:0.00406
+	Batch 260/276 Recon Loss:0.00349
+	Batch 270/276 Recon Loss:0.00525
+Validation Epoch 21/1000 Recon Loss:0.00514
+Training...
+	Batch 10/672 Recon Loss:0.00523
+	Batch 20/672 Recon Loss:0.00541
+	Batch 30/672 Recon Loss:0.00585
+	Batch 40/672 Recon Loss:0.00522
+	Batch 50/672 Recon Loss:0.00618
+	Batch 60/672 Recon Loss:0.00562
+	Batch 70/672 Recon Loss:0.00510
+	Batch 80/672 Recon Loss:0.00540
+	Batch 90/672 Recon Loss:0.00561
+	Batch 100/672 Recon Loss:0.00481
+	Batch 110/672 Recon Loss:0.00585
+	Batch 120/672 Recon Loss:0.00518
+	Batch 130/672 Recon Loss:0.00528
+	Batch 140/672 Recon Loss:0.00453
+	Batch 150/672 Recon Loss:0.00610
+	Batch 160/672 Recon Loss:0.00601
+	Batch 170/672 Recon Loss:0.00465
+	Batch 180/672 Recon Loss:0.00489
+	Batch 190/672 Recon Loss:0.00504
+	Batch 200/672 Recon Loss:0.00617
+	Batch 210/672 Recon Loss:0.00504
+	Batch 220/672 Recon Loss:0.00480
+	Batch 230/672 Recon Loss:0.00495
+	Batch 240/672 Recon Loss:0.00543
+	Batch 250/672 Recon Loss:0.00651
+	Batch 260/672 Recon Loss:0.00529
+	Batch 270/672 Recon Loss:0.00527
+	Batch 280/672 Recon Loss:0.00562
+	Batch 290/672 Recon Loss:0.00536
+	Batch 300/672 Recon Loss:0.00484
+	Batch 310/672 Recon Loss:0.00510
+	Batch 320/672 Recon Loss:0.00506
+	Batch 330/672 Recon Loss:0.00571
+	Batch 340/672 Recon Loss:0.00481
+	Batch 350/672 Recon Loss:0.00512
+	Batch 360/672 Recon Loss:0.00509
+	Batch 370/672 Recon Loss:0.00477
+	Batch 380/672 Recon Loss:0.00553
+	Batch 390/672 Recon Loss:0.00447
+	Batch 400/672 Recon Loss:0.00457
+	Batch 410/672 Recon Loss:0.00595
+	Batch 420/672 Recon Loss:0.00436
+	Batch 430/672 Recon Loss:0.00515
+	Batch 440/672 Recon Loss:0.00488
+	Batch 450/672 Recon Loss:0.00537
+	Batch 460/672 Recon Loss:0.00549
+	Batch 470/672 Recon Loss:0.00455
+	Batch 480/672 Recon Loss:0.00551
+	Batch 490/672 Recon Loss:0.00648
+	Batch 500/672 Recon Loss:0.00541
+	Batch 510/672 Recon Loss:0.00527
+	Batch 520/672 Recon Loss:0.00595
+	Batch 530/672 Recon Loss:0.00543
+	Batch 540/672 Recon Loss:0.00539
+	Batch 550/672 Recon Loss:0.00433
+	Batch 560/672 Recon Loss:0.00464
+	Batch 570/672 Recon Loss:0.00465
+	Batch 580/672 Recon Loss:0.00629
+	Batch 590/672 Recon Loss:0.00497
+	Batch 600/672 Recon Loss:0.00501
+	Batch 610/672 Recon Loss:0.00529
+	Batch 620/672 Recon Loss:0.00522
+	Batch 630/672 Recon Loss:0.00582
+	Batch 640/672 Recon Loss:0.00500
+	Batch 650/672 Recon Loss:0.00596
+	Batch 660/672 Recon Loss:0.00438
+	Batch 670/672 Recon Loss:0.00436
+Training Epoch 22/1000 Recon Loss:0.00536
+Validation...
+	Batch 10/276 Recon Loss:0.00415
+	Batch 20/276 Recon Loss:0.00375
+	Batch 30/276 Recon Loss:0.00392
+	Batch 40/276 Recon Loss:0.00601
+	Batch 50/276 Recon Loss:0.00401
+	Batch 60/276 Recon Loss:0.00478
+	Batch 70/276 Recon Loss:0.00495
+	Batch 80/276 Recon Loss:0.00618
+	Batch 90/276 Recon Loss:0.00307
+	Batch 100/276 Recon Loss:0.00339
+	Batch 110/276 Recon Loss:0.00320
+	Batch 120/276 Recon Loss:0.00645
+	Batch 130/276 Recon Loss:0.00414
+	Batch 140/276 Recon Loss:0.00849
+	Batch 150/276 Recon Loss:0.00473
+	Batch 160/276 Recon Loss:0.00766
+	Batch 170/276 Recon Loss:0.00504
+	Batch 180/276 Recon Loss:0.00410
+	Batch 190/276 Recon Loss:0.00411
+	Batch 200/276 Recon Loss:0.00667
+	Batch 210/276 Recon Loss:0.00679
+	Batch 220/276 Recon Loss:0.00417
+	Batch 230/276 Recon Loss:0.01282
+	Batch 240/276 Recon Loss:0.00351
+	Batch 250/276 Recon Loss:0.00399
+	Batch 260/276 Recon Loss:0.00340
+	Batch 270/276 Recon Loss:0.00511
+Validation Epoch 22/1000 Recon Loss:0.00504
+Training...
+	Batch 10/672 Recon Loss:0.00492
+	Batch 20/672 Recon Loss:0.00505
+	Batch 30/672 Recon Loss:0.00450
+	Batch 40/672 Recon Loss:0.00551
+	Batch 50/672 Recon Loss:0.00574
+	Batch 60/672 Recon Loss:0.00555
+	Batch 70/672 Recon Loss:0.00498
+	Batch 80/672 Recon Loss:0.00486
+	Batch 90/672 Recon Loss:0.00500
+	Batch 100/672 Recon Loss:0.00425
+	Batch 110/672 Recon Loss:0.00484
+	Batch 120/672 Recon Loss:0.00529
+	Batch 130/672 Recon Loss:0.00622
+	Batch 140/672 Recon Loss:0.00516
+	Batch 150/672 Recon Loss:0.00509
+	Batch 160/672 Recon Loss:0.00509
+	Batch 170/672 Recon Loss:0.00493
+	Batch 180/672 Recon Loss:0.00515
+	Batch 190/672 Recon Loss:0.00733
+	Batch 200/672 Recon Loss:0.00531
+	Batch 210/672 Recon Loss:0.00502
+	Batch 220/672 Recon Loss:0.00559
+	Batch 230/672 Recon Loss:0.00503
+	Batch 240/672 Recon Loss:0.00560
+	Batch 250/672 Recon Loss:0.00563
+	Batch 260/672 Recon Loss:0.00457
+	Batch 270/672 Recon Loss:0.00535
+	Batch 280/672 Recon Loss:0.00494
+	Batch 290/672 Recon Loss:0.00481
+	Batch 300/672 Recon Loss:0.00458
+	Batch 310/672 Recon Loss:0.00506
+	Batch 320/672 Recon Loss:0.00542
+	Batch 330/672 Recon Loss:0.00482
+	Batch 340/672 Recon Loss:0.00593
+	Batch 350/672 Recon Loss:0.00505
+	Batch 360/672 Recon Loss:0.00519
+	Batch 370/672 Recon Loss:0.00729
+	Batch 380/672 Recon Loss:0.00555
+	Batch 390/672 Recon Loss:0.00432
+	Batch 400/672 Recon Loss:0.00513
+	Batch 410/672 Recon Loss:0.00495
+	Batch 420/672 Recon Loss:0.00522
+	Batch 430/672 Recon Loss:0.00548
+	Batch 440/672 Recon Loss:0.00556
+	Batch 450/672 Recon Loss:0.00510
+	Batch 460/672 Recon Loss:0.00607
+	Batch 470/672 Recon Loss:0.00572
+	Batch 480/672 Recon Loss:0.00618
+	Batch 490/672 Recon Loss:0.00519
+	Batch 500/672 Recon Loss:0.00487
+	Batch 510/672 Recon Loss:0.00490
+	Batch 520/672 Recon Loss:0.00492
+	Batch 530/672 Recon Loss:0.00549
+	Batch 540/672 Recon Loss:0.00757
+	Batch 550/672 Recon Loss:0.00466
+	Batch 560/672 Recon Loss:0.00544
+	Batch 570/672 Recon Loss:0.00497
+	Batch 580/672 Recon Loss:0.00578
+	Batch 590/672 Recon Loss:0.00512
+	Batch 600/672 Recon Loss:0.00595
+	Batch 610/672 Recon Loss:0.00475
+	Batch 620/672 Recon Loss:0.00521
+	Batch 630/672 Recon Loss:0.00529
+	Batch 640/672 Recon Loss:0.00591
+	Batch 650/672 Recon Loss:0.00538
+	Batch 660/672 Recon Loss:0.00532
+	Batch 670/672 Recon Loss:0.00492
+Training Epoch 23/1000 Recon Loss:0.00533
+Validation...

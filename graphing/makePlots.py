@@ -1,13 +1,13 @@
 from graphing.plotting import single_plot, multi_line_plot
 from graphing.getData import get_parameters, get_epoch_metrics
 
-model_phase = 2  # 0, 1 or 2
+model_phase = 4  # 0 to 4
 
-job_numbers = [62231]
+job_numbers = [63225, 63951, 64092]
 
-root_dir = './logstograph/'
-file_name_start, file_name_end = 'output_', '.out2'
-starting_epoch = 0
+root_dir = './logstograph/1recon/'
+file_name_start, file_name_end = 'output_', '.out'
+starting_epoch = 5
 skip_epoch = 1
 ending_epoch = 200
 if model_phase == 0:
@@ -16,8 +16,12 @@ elif model_phase == 1:
     metrics = ['loss', 'con1', 'con2', 'recon1', 'recon2']
 elif model_phase == 2:
     metrics = ['loss', 'con1app', 'con2app', 'con1kp', 'con2kp', 'recon1', 'recon2']
+elif model_phase == 3:
+    metrics = ['loss', 'con1', 'con2', 'con3', 'con4', 'recon1', 'recon2']
+elif model_phase == 4:
+    metrics = ['loss']
 else:
-    print('There are only 2 model phases.')
+    print('Invalid model phase number.')
 
 
 def plot_multiple_files(file1, file2, *args):
@@ -58,9 +62,10 @@ def plot_multiple_files_together(file1, file2, *args):
             print(file)
             param_dict = get_parameters(file)
             print(param_dict)
-            print('Num Epochs Run: {}'.format(len(training_metrics[metric])))
+
             total_epochs = param_dict['total epochs']
             training_metrics, val_metrics = get_epoch_metrics(file, model_phase)
+            print('Num Epochs Run: {}'.format(len(training_metrics[metric])))
             all_y_data = training_metrics[metric][starting_epoch:ending_epoch]
             # print(y_data)
             y_data = [all_y_data[i] for i in range(0, len(all_y_data), skip_epoch)]

@@ -16,7 +16,7 @@ output file format:
     print('Time: {}'.format(end_time - start_time))
 """
 
-model_phase = 2  # 0, 1 or 2
+model_phase = 4  # 0, 1 or 2
 
 
 def get_parameters(output_file):
@@ -61,6 +61,10 @@ def get_epoch_metrics(output_file, model_phase):
         metrics = ['loss', 'con1', 'con2', 'recon1', 'recon2']
     elif model_phase == 2:
         metrics = ['loss', 'con1app', 'con2app', 'con1kp', 'con2kp', 'recon1', 'recon2']
+    elif model_phase == 3:
+        metrics = ['loss', 'con1', 'con2', 'con3', 'con4', 'recon1', 'recon2']
+    elif model_phase == 4:
+        metrics = ['loss']
     else:
         print('There are only 2 model phases.')
 
@@ -80,8 +84,10 @@ def get_epoch_metrics(output_file, model_phase):
                 line = line.replace(epoch_metrics_keys['training'] + " ", "")
                 line_parts = line.split(" ")
                 values = line_parts[1:]
+                if model_phase == 4:
+                    values = values[1:]
+                # print(values)
                 for i in range(0, len(values)):
-                    print(values[i])
                     metric_name, metric_value = values[i].split(":")
                     # metric_name = values[i][:values[i].index(':')]
                     # metric_value = values[i+1]
@@ -95,6 +101,8 @@ def get_epoch_metrics(output_file, model_phase):
                 line = line.replace(epoch_metrics_keys['val'] + " ", "")
                 line_parts = line.split(" ")
                 values = line_parts[1:]
+                if model_phase == 4:
+                    values = values[1:]
                 for i in range(0, len(values)):
                     metric_name, metric_value = values[i].split(":")
                     # metric_name = values[i][:values[i].index(':')]
@@ -108,7 +116,7 @@ def get_epoch_metrics(output_file, model_phase):
     return training_metrics, val_metrics
 
 
-def get_old_epoch_metrics(output_file):
+'''def get_old_epoch_metrics(output_file):
     # these dictionaries will hold lists for each metric
     training_metrics = {}
     val_metrics = {}
@@ -186,11 +194,11 @@ def get_old_old_epoch_metrics(output_file):
                     val_metrics[metric_name].append(metric_value)
                 training = True
 
-    return training_metrics, val_metrics
+    return training_metrics, val_metrics'''
 
 
 if __name__ == '__main__':
-    file_path = './logstograph/output_61860.out'
+    file_path = './logstograph/output_63227.out'
     param_dict = get_parameters(file_path)
     print(param_dict)
     epoch_metrics = get_epoch_metrics(file_path, model_phase)

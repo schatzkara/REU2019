@@ -4,13 +4,14 @@ import numpy as np
 def print_loss(traintest, epochbatch, step, total_steps, loss_names, loss_values):
     """
     Function to print out the loss values.
-    :param traintest: "Training", "Validation", or "Testing"
-    :param epochbatch: "Epoch" or "Batch"
-    :param step:
-    :param total_steps:
-    :param loss_names:
-    :param loss_values:
-    :return:
+    :param traintest: (str) Indicates the current stage of the experiment, i.e. "Training", "Validation", or "Testing".
+    :param epochbatch: (str) Indicates what stage of loss values are being reported, i.e. "Epoch" or "Batch".
+    :param step: (int) The current loop index, i.e. the batch # or the epoch #.
+    :param total_steps: (int) The total number of loops that will occur, i.e. The # of batches or the # of epochs.
+    :param loss_names: (list) The names of each of the losses calculated by the model.
+    :param loss_values: (list) The current values of each of the losses calculated by the model. Must be in the same
+                        order as loss_names.
+    :return: None
     """
     print_string = ''
     if epochbatch.lower() == 'epoch':
@@ -25,6 +26,15 @@ def print_loss(traintest, epochbatch, step, total_steps, loss_names, loss_values
 
 
 def calculate_loss(criterion, inputs, outputs, running_losses, loss_weights):
+    """
+    Function to calculate the loss values for the model.
+    :param criterion: (function) The loss function that is to be used to calculate each of the losses.
+    :param inputs: (list) The model's input tensors.
+    :param outputs: (list) The model's output tensors.
+    :param running_losses: (dict) The current running loss values to increment; key: loss name, value: loss value.
+    :param loss_weights: (dict) The weights to use (if any) for the different losses; key: loss name, value: loss value.
+    :return: 2 dicts containing the current and running loss values, key: loss name, value: loss value.
+    """
     if len(outputs) == 4:
         losses, running_losses = calculate_loss_4(criterion, inputs, outputs, running_losses, loss_weights)
     elif len(outputs) == 6:
