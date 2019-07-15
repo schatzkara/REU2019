@@ -112,7 +112,7 @@ class FullNetwork(nn.Module):
 
         # exp_app_v1, exp_app_v2 = self.appearance_pipeline(img1, img2)  # bsz,256,4,14,14
 
-        # appearance encoding + video features
+        # appearance encoding + video features + key points
         gen_input1, gen_input2 = torch.cat([exp_app_v1, rep_v1_est, kp_v1_est], dim=1), \
                                  torch.cat([exp_app_v2, rep_v2_est, kp_v2_est], dim=1)  # dim=channels
 

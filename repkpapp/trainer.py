@@ -28,11 +28,6 @@ STDEV = 0.05
 CON_LOSS_W = 0.1
 
 
-PRETRAINED = True
-pretrained_weights_file = './weights/net_ntu_16_16_2_True_1000_0.0001_0.05.pt'
-pretrained_epochs = 14
-
-
 def ntu_config():
     # NTU directory information
     data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
@@ -95,8 +90,6 @@ if __name__ == '__main__':
     model = FullNetwork(vp_value_count=VP_VALUE_COUNT,
                         output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH),
                         stdev=STDEV)
-    if PRETRAINED:
-        model.load_state_dict(torch.load(pretrained_weights_file))
     model = model.to(device)
 
     if device == 'cuda':
@@ -144,7 +137,7 @@ if __name__ == '__main__':
 
     print_params()
     print(model)
-    train_model(starting_epoch=pretrained_epochs+1, num_epochs=NUM_EPOCHS, model=model, optimizer=optimizer,
+    train_model(starting_epoch=0, num_epochs=NUM_EPOCHS, model=model, optimizer=optimizer,
                 criterion=criterion, trainloader=trainloader, testloader=testloader, device=device,
                 weight_file=weight_file, loss_weights={'con1': CON_LOSS_W, 'con2': CON_LOSS_W,
                                                        'con3': CON_LOSS_W, 'con4': CON_LOSS_W})

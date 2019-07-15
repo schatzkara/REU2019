@@ -27,13 +27,14 @@ class KPPredictor(nn.Module):
         # definition of all network layers
         self.conv3d_1 = nn.Conv3d(in_channels=in_channels, out_channels=128, kernel_size=(3, 3, 3),
                                   stride=(1, 1, 1), padding=(1, 1, 1))
+        self.relu_1 = nn.ReLU(inplace=True)
         self.conv3d_2 = nn.Conv3d(in_channels=128, out_channels=64, kernel_size=(3, 3, 3),
                                   stride=(1, 1, 1), padding=(1, 1, 1))
+        self.relu_2 = nn.ReLU(inplace=True)
         self.conv3d_3 = nn.Conv3d(in_channels=64, out_channels=self.nkp, kernel_size=(3, 3, 3),
                                   stride=(1, 1, 1), padding=(1, 1, 1))
-
-        self.max_pool1 = nn.MaxPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
-        self.max_pool2 = nn.MaxPool3d(kernel_size=(2, 1, 1), stride=(2, 1, 1))
+        self.sigmoid = nn.Sigmoid()
+        self.max_pool = nn.MaxPool3d(kernel_size=(4, 2, 2), stride=(4, 2, 2))
 
         # print('%s Model Successfully Built \n' % self.kpp_name)
 
@@ -56,8 +57,7 @@ class KPPredictor(nn.Module):
         gauss_mean = KPPredictor.get_gauss_mean(x)
         gauss_heatmaps = KPPredictor.get_gaussian_heatmaps(mean=gauss_mean, stdev=self.stdev, map_size=(height, width))
 
-        gauss_heatmaps = self.max_pool1(gauss_heatmaps)
-        gauss_heatmaps = self.max_pool2(gauss_heatmaps)
+        gauss_heatmaps = self.max_pool(gauss_heatmaps)
 
         return gauss_heatmaps
 
