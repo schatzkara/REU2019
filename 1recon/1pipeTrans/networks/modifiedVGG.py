@@ -27,28 +27,13 @@ class VGG(nn.Module):
         :param weights_path: (str) The path at which to pretrained weights are located.
         """
         super(VGG, self).__init__()
-        # modified so that not all the layers are used
         self.features = features
-        # self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
-        # self.classifier = nn.Sequential(
-        #     nn.Linear(512 * 7 * 7, 4096),
-        #     nn.ReLU(True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, 4096),
-        #     nn.ReLU(True),
-        #     nn.Dropout(),
-        #     nn.Linear(4096, num_classes),
-        # )
+
         if init_weights:
             self._initialize_weights()
 
-        # if pretrained:
-        #     self.load_state_dict(torch.load(weights_path))
         if pretrained:
             self.load_weights(weights_path=weights_path)
-
-        # self.final_layer = nn.Conv2d(256, 128, kernel_size=3, padding=1)
-        # self.final_relu = nn.ReLU(inplace=True)
 
     def load_weights(self, weights_path):
         state_dict = torch.load(weights_path)
@@ -65,16 +50,8 @@ class VGG(nn.Module):
         self.load_state_dict(new_state_dict)
 
     def forward(self, x):
-        # modified so that not all the layers are used
         self.features = self.features
         x = self.features(x)
-        # x = self.avgpool(x)
-        # x = x.view(x.size(0), -1)
-        # x = self.classifier(x)
-
-        # custom layers used to reduce the output channel dimensions to 32
-        # x = self.final_layer(x)
-        # x = self.final_relu(x)
 
         return x
 
@@ -132,10 +109,7 @@ def _vgg(arch, cfg, batch_norm, pretrained, progress, weights_path='', **kwargs)
         kwargs['init_weights'] = False
     model = VGG(make_layers(cfgs[cfg], num_layers=num_layers_to_use[cfg], batch_norm=batch_norm),
                 pretrained=pretrained, weights_path=weights_path, **kwargs)
-    # if pretrained:
-    #     state_dict = load_state_dict_from_url(model_urls[arch],
-    #                                           progress=progress)
-    #     model.load_state_dict(state_dict)
+
     return model
 
 

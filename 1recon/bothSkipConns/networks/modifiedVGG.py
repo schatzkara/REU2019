@@ -104,7 +104,7 @@ def make_layers(cfg, num_layers=None, batch_norm=False):
             in_channels = v
     # print('Modified VGG Model Successfully Built \n')
 
-    print(nn.Sequential(*layers))
+    # print(nn.Sequential(*layers))
     return nn.Sequential(*layers)
 
 

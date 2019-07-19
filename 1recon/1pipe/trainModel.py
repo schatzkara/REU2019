@@ -166,7 +166,10 @@ def train_model(starting_epoch):
     Function to train and validate the model for all epochs.
     :return: None
     """
-    min_loss = MIN_LOSS
+    if pretrained:
+        min_loss = MIN_LOSS
+    else:
+        min_loss = 0.0
     start_time = time.time()
     for epoch in range(starting_epoch, NUM_EPOCHS):
         print('Training...')

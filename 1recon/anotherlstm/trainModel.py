@@ -9,12 +9,12 @@ from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
-import sms
+from utils import sms
 
-DATASET = 'panoptic'  # 'NTU' or 'panoptic'
+DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 20
+BATCH_SIZE = 16
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
@@ -38,8 +38,8 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/netsoftmax_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                         PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
@@ -48,11 +48,12 @@ def panoptic_config():
     data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
     train_split = '/home/yogesh/kara/data/panoptic/mod_train.list'
     test_split = '/home/yogesh/kara/data/panoptic/mod_test.list'
+    close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/netsoftmax_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                         PRECROP, NUM_EPOCHS, LR)
-    return data_root_dir, train_split, test_split, weight_file
+    weight_file = './weights/net_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR)
+    return data_root_dir, train_split, test_split, close_cams_file, weight_file
 
 
 def training_loop(epoch):
@@ -61,11 +62,7 @@ def training_loop(epoch):
     :param epoch: (int) The current epoch in which the model is training.
     :return: None
     """
-    running_total_loss = 0.0
-    running_con1_loss = 0.0
-    running_con2_loss = 0.0
-    running_recon1_loss = 0.0
-    running_recon2_loss = 0.0
+    running_recon_loss = 0.0
 
     model.train()
 
@@ -77,41 +74,25 @@ def training_loop(epoch):
 
         optimizer.zero_grad()
 
-        output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
-                                                                         vid1=vid1, vid2=vid2,
-                                                                         img1=img1, img2=img2)
+        gen_v2, rep_v1 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
         # loss
-        con1_loss = criterion(kp_v1, kp_v1_est)
-        con2_loss = criterion(kp_v2, kp_v2_est)
-        recon1_loss = criterion(output_v1, vid1)
-        recon2_loss = criterion(output_v2, vid2)
-        loss = con1_loss + con2_loss + recon1_loss + recon2_loss
+        recon_loss = criterion(gen_v2, vid2)
+
+        loss = recon_loss
         loss.backward()
         optimizer.step()
 
-        running_total_loss += loss.item()
-        running_con1_loss += con1_loss.item()
-        running_con2_loss += con2_loss.item()
-        running_recon1_loss += recon1_loss.item()
-        running_recon2_loss += recon2_loss.item()
+        running_recon_loss += recon_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
+            print('\tBatch {}/{} Recon Loss:{}'.format(
                 batch_idx + 1,
                 len(trainloader),
-                "{0:.5f}".format(loss),
-                "{0:.5f}".format(con1_loss),
-                "{0:.5f}".format(con2_loss),
-                "{0:.5f}".format(recon1_loss),
-                "{0:.5f}".format(recon2_loss)))
+                "{0:.5f}".format(recon_loss)))
 
-    print('Training Epoch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
+    print('Training Epoch {}/{} Recon Loss:{}'.format(
         epoch + 1,
         NUM_EPOCHS,
-        "{0:.5f}".format((running_total_loss / len(trainloader))),
-        "{0:.5f}".format((running_con1_loss / len(trainloader))),
-        "{0:.5f}".format((running_con2_loss / len(trainloader))),
-        "{0:.5f}".format((running_recon1_loss / len(trainloader))),
-        "{0:.5f}".format((running_recon2_loss / len(trainloader)))))
+        "{0:.5f}".format((running_recon_loss / len(trainloader)))))
 
 
 def testing_loop(epoch):
@@ -120,11 +101,7 @@ def testing_loop(epoch):
     :param epoch: (int) The current epoch in which the model is testing/validating.
     :return: None
     """
-    running_total_loss = 0.0
-    running_con1_loss = 0.0
-    running_con2_loss = 0.0
-    running_recon1_loss = 0.0
-    running_recon2_loss = 0.0
+    running_recon_loss = 0.0
 
     model.eval()
 
@@ -135,41 +112,24 @@ def testing_loop(epoch):
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            output_v1, output_v2, kp_v1, kp_v2, kp_v1_est, kp_v2_est = model(vp_diff=vp_diff,
-                                                                             vid1=vid1, vid2=vid2,
-                                                                             img1=img1, img2=img2)
+            gen_v2, rep_v1 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
             # loss
-            con1_loss = criterion(kp_v1, kp_v1_est)
-            con2_loss = criterion(kp_v2, kp_v2_est)
-            recon1_loss = criterion(output_v1, vid1)
-            recon2_loss = criterion(output_v2, vid2)
-            loss = con1_loss + con2_loss + recon1_loss + recon2_loss
+            recon_loss = criterion(gen_v2, vid2)
 
-        running_total_loss += loss.item()
-        running_con1_loss += con1_loss.item()
-        running_con2_loss += con2_loss.item()
-        running_recon1_loss += recon1_loss.item()
-        running_recon2_loss += recon2_loss.item()
+        running_recon_loss += recon_loss.item()
+
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Loss:{} con1:{} con2: {} recon1:{} recon2:{}'.format(
+            print('\tBatch {}/{} Recon Loss:{}'.format(
                 batch_idx + 1,
                 len(testloader),
-                "{0:.5f}".format(loss),
-                "{0:.5f}".format(con1_loss),
-                "{0:.5f}".format(con2_loss),
-                "{0:.5f}".format(recon1_loss),
-                "{0:.5f}".format(recon2_loss)))
+                "{0:.5f}".format(recon_loss)))
 
-    print('Validation Epoch {}/{} Loss:{} con1:{} con2:{} recon1:{} recon2:{}'.format(
+    print('Validation Epoch {}/{} Recon Loss:{}'.format(
         epoch + 1,
         NUM_EPOCHS,
-        "{0:.5f}".format((running_total_loss / len(testloader))),
-        "{0:.5f}".format((running_con1_loss / len(testloader))),
-        "{0:.5f}".format((running_con2_loss / len(testloader))),
-        "{0:.5f}".format((running_recon1_loss / len(testloader))),
-        "{0:.5f}".format((running_recon2_loss / len(testloader)))))
+        "{0:.5f}".format((running_recon_loss / len(testloader)))))
 
-    return running_total_loss / len(testloader)
+    return running_recon_loss / len(testloader)
 
 
 def get_first_frame(vid_batch):
@@ -224,6 +184,7 @@ def print_params():
     print('Tensor Size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
     print('Skip Length: {}'.format(SKIP_LEN))
     print('Precrop: {}'.format(PRECROP))
+    print('Close Views: {}'.format(CLOSE_VIEWS))
     print('Total Epochs: {}'.format(NUM_EPOCHS))
     print('Learning Rate: {}'.format(LR))
 
@@ -236,12 +197,14 @@ if __name__ == '__main__':
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     RANDOM_ALL = True
     PRECROP = True if DATASET.lower() == 'ntu' else False
+    VP_VALUE_COUNT = 1 if DATASET.lower() == 'ntu' else 3
+    CLOSE_VIEWS = True if DATASET.lower() == 'panoptic' else False
 
     if DATASET.lower() == 'ntu':
         data_root_dir, train_split, test_split, param_file, weight_file = ntu_config()
 
         # model
-        model = FullNetwork(vp_value_count=1, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model = model.to(device)
 
         if device == 'cuda':
@@ -265,10 +228,10 @@ if __name__ == '__main__':
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     elif DATASET.lower() == 'panoptic':
-        data_root_dir, train_split, test_split, weight_file = panoptic_config()
+        data_root_dir, train_split, test_split, close_cams_file, weight_file = panoptic_config()
 
         # model
-        model = FullNetwork(vp_value_count=3, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model = model.to(device)
 
         if device == 'cuda':
@@ -282,13 +245,15 @@ if __name__ == '__main__':
         trainset = PanopticDataset(root_dir=data_root_dir, data_file=train_split,
                                    resize_height=HEIGHT, resize_width=WIDTH,
                                    clip_len=FRAMES, skip_len=SKIP_LEN,
-                                   random_all=RANDOM_ALL, precrop=PRECROP)
+                                   random_all=RANDOM_ALL, close_views=CLOSE_VIEWS,
+                                   close_cams_file=close_cams_file, precrop=PRECROP)
         trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
 
         testset = PanopticDataset(root_dir=data_root_dir, data_file=test_split,
                                   resize_height=HEIGHT, resize_width=WIDTH,
                                   clip_len=FRAMES, skip_len=SKIP_LEN,
-                                  random_all=RANDOM_ALL, precrop=PRECROP)
+                                  random_all=RANDOM_ALL, close_views=CLOSE_VIEWS,
+                                  close_cams_file=close_cams_file, precrop=PRECROP)
         testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
 
     else:

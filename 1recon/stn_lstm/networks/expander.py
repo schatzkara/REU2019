@@ -1,4 +1,4 @@
-# phase 2
+# phase 3
 
 import torch
 import torch.nn as nn
@@ -12,7 +12,7 @@ class Expander(nn.Module):
     Class representing the Expander network to be used to expand the viewpoint ID to the desired size.
     """
 
-    def __init__(self, vp_value_count, out_frames, out_size, ex_name='Viewpoint Expander'):
+    def __init__(self, vp_value_count, ex_name='Viewpoint Expander'):
         """
         Initializes the Expander network.
         :param vp_value_count: (int) The number of values that identify the viewpoint
@@ -23,8 +23,6 @@ class Expander(nn.Module):
         self.ex_name = ex_name
 
         self.vp_value_count = vp_value_count
-        self.out_frames = out_frames
-        self.out_size = out_size
 
         # definition of all network layers
         self.conv3d_1a = nn.Conv3d(in_channels=self.vp_value_count, out_channels=4, kernel_size=(3, 3, 3),
@@ -34,7 +32,7 @@ class Expander(nn.Module):
 
     # print('%s Model Successfully Built \n' % self.ex_name)
 
-    def forward(self, x):
+    def forward(self, x, out_frames, out_size):
         """
         Function to compute a single forward pass through the network, according to the architecture.
         :param x: (tensor) The input tensor (viewpoint ID) to expand.
@@ -42,14 +40,14 @@ class Expander(nn.Module):
         :return: A tensor representing the viewpoint.
                  Shape of output is: (bsz, 1/3, 8/16, 28, 28) for this application.
         """
-        x = self.expand_vp(x)
+        x = self.expand_vp(x, out_frames, out_size)
 
         x = self.conv3d_1a(x)
         x = self.conv3d_1b(x)
 
         return x
 
-    def expand_vp(self, vp):
+    def expand_vp(self, vp, out_frames, out_size):
         """
         Function to expand the size of the viewpoint to the desired size.
         :param vp: (tensor) The input tensor (viewpoint ID) to expand.
@@ -60,10 +58,10 @@ class Expander(nn.Module):
         if self.vp_value_count == 1:
             vp = torch.unsqueeze(vp, dim=1)
 
-        buffer = torch.zeros(bsz, self.vp_value_count, self.out_frames, self.out_size, self.out_size)
-        for f in range(self.out_frames):
-            for h in range(self.out_size):
-                for w in range(self.out_size):
+        buffer = torch.zeros(bsz, self.vp_value_count, out_frames, out_size[0], out_size[1])
+        for f in range(out_frames):
+            for h in range(out_size[0]):
+                for w in range(out_size[1]):
                     buffer[:, :, f, h, w] = vp
         buffer = buffer.to(device)
 
@@ -73,7 +71,7 @@ class Expander(nn.Module):
 if __name__ == "__main__":
     print_summary = True
 
-    ex = Expander(vp_value_count=1, out_size=14)
+    ex = Expander(vp_value_count=1)
 
     if print_summary:
         summary(ex, input_size=(3))

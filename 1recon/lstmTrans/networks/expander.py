@@ -16,7 +16,6 @@ class Expander(nn.Module):
         """
         Initializes the Expander network.
         :param vp_value_count: (int) The number of values that identify the viewpoint
-        :param out_size: (int) The height and width desired in the output viewpoint tensor.
         :param ex_name: (str, optional) The name of the network (default 'Viewpoint Expander').
         """
         super(Expander, self).__init__()
@@ -36,9 +35,11 @@ class Expander(nn.Module):
         """
         Function to compute a single forward pass through the network, according to the architecture.
         :param x: (tensor) The input tensor (viewpoint ID) to expand.
-                   Must be a tensor of shape: (bsz, 1/3) for this application.
+                   Must be a tensor of shape: (bsz, vp_value_count) for this application.
+        :param out_frames: (int) The number of frames desired in the output tensor.
+        :param out_size: (int) The desired output tensor height and width.
         :return: A tensor representing the viewpoint.
-                 Shape of output is: (bsz, 1/3, 8/16, 28, 28) for this application.
+                 Shape of output is: (bsz, vp_value_count, out_frames, out_size, out_size) for this application.
         """
         x = self.expand_vp(x, out_frames, out_size)
 
@@ -51,6 +52,8 @@ class Expander(nn.Module):
         """
         Function to expand the size of the viewpoint to the desired size.
         :param vp: (tensor) The input tensor (viewpoint ID) to expand.
+        :param out_frames: (int) The number of frames desired in the output tensor.
+        :param out_size: (int) The desired output tensor height and width.
         :return: The expanded viewpoint tensor.
         """
         bsz = vp.size()[0]

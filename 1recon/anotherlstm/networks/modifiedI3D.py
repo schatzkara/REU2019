@@ -1,4 +1,4 @@
-# phase 2
+# phase 3
 
 # modified from https://github.com/piergiaj/pytorch-i3d
 
@@ -189,10 +189,10 @@ class InceptionI3d(nn.Module):
         'Mixed_4e',
         'Mixed_4f',
         # 'MaxPool3d_5a_2x2',
-        'MaxPool3d_5a_1x1',
+        # 'MaxPool3d_5a_1x1',
         'Mixed_5b',
-        # 'Mixed_5c',
-        'Mixed_5c_small',
+        'Mixed_5c',
+        # 'Mixed_5c_small',
         # 'Logits',
         # 'Predictions',
     )
@@ -217,7 +217,7 @@ class InceptionI3d(nn.Module):
     #           ValueError: if `final_endpoint` is not recognized.
     #     """
 
-    def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c_small', in_frames=8, in_channels=3,
+    def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c', in_frames=8, in_channels=3,
                  pretrained=False, weights_path=''):
         """
         Initializes I3D model instance.
@@ -293,8 +293,9 @@ class InceptionI3d(nn.Module):
         if self._final_endpoint == end_point: return
 
         # Modification: changed the stride of this max pooling layer so that the temporal dimension does not change.
+        # now changed so that none of the dimensions change
         end_point = 'MaxPool3d_4a_3x3'
-        self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 2, 2),
+        self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[3, 3, 3], stride=(1, 1, 1),
                                                           padding=0)
         if self._final_endpoint == end_point: return
 
@@ -325,10 +326,10 @@ class InceptionI3d(nn.Module):
         #                                                   padding=0)
         # if self._final_endpoint == end_point: return
 
-        end_point = 'MaxPool3d_5a_1x1'
-        self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(1, 1, 1),
-                                                          padding=0)
-        if self._final_endpoint == end_point: return
+        # end_point = 'MaxPool3d_5a_1x1'
+        # self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(1, 1, 1),
+        #                                                   padding=0)
+        # if self._final_endpoint == end_point: return
 
         end_point = 'Mixed_5b'
         self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [256, 160, 320, 32, 128, 128],
@@ -342,10 +343,9 @@ class InceptionI3d(nn.Module):
         #                                               int(128 / 4), int(128 / 4)],
         #                                              name + end_point)
 
-
-        # end_point = 'Mixed_5c'
-        # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
-        #                                              name + end_point)
+        end_point = 'Mixed_5c'
+        self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
+                                                     name + end_point)
 
         # Modification: removed final 'Logits' layers since we are not dealing with classification in this application.
         # We are using this network to produce a feature map to represent the 'action' of the video, so we want a larger
@@ -369,11 +369,12 @@ class InceptionI3d(nn.Module):
 
         self.build()
 
-        end_point = 'Mixed_5c_small'
-        self.final_layer = InceptionModule(256 + 320 + 128 + 128,
-                                           [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
-                                            int(128 / 4), int(128 / 4)],
-                                           name + end_point)
+        # end_point = 'Mixed_5c_small'
+        # self.final_layer = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
+        #                                    name + end_point)
+
+        self.feature_layer = Unit3D(in_channels=384 + 384 + 128 + 128, output_channels=256, kernel_shape=[3, 3, 3],
+                                    padding=1, name='features')
 
     # def replace_logits(self, num_classes):
     #     self._num_classes = num_classes
@@ -401,11 +402,17 @@ class InceptionI3d(nn.Module):
         :return: A tensor representing the feature map representation of the 'action' in the video.
                  Shape of output is: (bsz, 256, 4, 7, 7) for this application.
         """
+        return_features = []
+
         for end_point in self.VALID_ENDPOINTS:
             if end_point in self.end_points:
                 x = self._modules[end_point](x)  # use _modules to work with dataparallel
+                if end_point in ['Conv3d_1a_7x7', 'Conv3d_2c_3x3']:
+                    return_features.append(x)
 
-        x = self.final_layer(x)
+        # x = self.final_layer(x)
+        x = self.feature_layer(x)
+        return_features.append(x)
 
         # Modification: Again, the final 'Logits' layers were eliminated.
         # x = self.logits(self.dropout(self.avg_pool(x)))
@@ -414,7 +421,8 @@ class InceptionI3d(nn.Module):
         # logits is batch X time X classes, which is what we want to work with
         # return logits
 
-        return x
+        return return_features  # returns 64x8x56x56, 192x8x28x28, 256x4x14x14
+        # return x
 
     # Modification: This method was no longer necessary.
     # def extract_features(self, x):
@@ -426,7 +434,7 @@ class InceptionI3d(nn.Module):
 
 def load_layer_weights(weights_path):
     state_dict = torch.load(weights_path)
-    remove_layers = ['Mixed_5c', 'Logits', 'Predictions']
+    remove_layers = ['Logits', 'Predictions']
     remove_layers.extend([l.lower() for l in remove_layers])
     new_state_dict = {}
     for item, state in state_dict.items():
@@ -441,7 +449,7 @@ def load_layer_weights(weights_path):
 if __name__ == "__main__":
     print_summary = True
 
-    i3d = InceptionI3d(final_endpoint='Mixed_5c_small', in_frames=16)
+    i3d = InceptionI3d(final_endpoint='Mixed_5c', in_frames=16)
 
     if print_summary:
         summary(i3d, input_size=(3, 16, 112, 112))

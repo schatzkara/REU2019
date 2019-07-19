@@ -21,8 +21,7 @@ Pipeline:
     vp = expander(i3)
     rep' = trans(rep + vp)
 
-    o_con = GEN(app_2 + rep)
-    o_real = GEN(app + rep')
+    recon = gen(app_2 + rep')
 """
 
 vgg_weights_path = '/home/yogesh/kara/REU2019/weights/vgg16-397923af.pth'
@@ -44,6 +43,7 @@ class FullNetwork(nn.Module):
     def __init__(self, vp_value_count, output_shape, name='Full Network'):
         """
         Initializes the Full Network.
+        :param vp_value_count: (int) The number of values that identify the viewpoint.
         :param output_shape: (5-tuple) The desired output shape for generated videos. Must match video input shape.
                               Legal values: (bsz, 3, 8, 112, 112) and (bsz, 3, 16, 112, 112)
         :param name: (str, optional) The name of the network (default 'Full Network').
@@ -62,6 +62,8 @@ class FullNetwork(nn.Module):
         self.vp_value_count = vp_value_count
         self.output_shape = output_shape
         self.out_frames = output_shape[2]
+
+        # specs of the motion features from I3D
         self.rep_channels = 256
         self.rep_frames = 4
         self.rep_size = 14
@@ -84,16 +86,11 @@ class FullNetwork(nn.Module):
                         Must be a tensor of shape: (bsz, 1/3) for this application.
         :param vid1: (tensor) A video of the scene from the first viewpoint.
                       Must be a tensor of shape: (bsz, 3, 8/16, 112, 112) for this application.
-        :param vid2: (tensor) A video of the scene from the second viewpoint.
-                      Must be a tensor of shape: (bsz, 3, 8/16, 112, 112) for this application.
-        :param img1: (tensor) An image of the scene from the first viewpoint to use for appearance conditioning.
-                      Must be a tensor of shape: (bsz, 3, 112, 112) for this application.
         :param img2: (tensor) An image of the scene from the second viewpoint to use for appearance conditioning.
                       Must be a tensor of shape: (bsz, 3, 112, 112) for this application.
-        :return: The two output videos, one from each viewpoint, the two keypoint feature maps, and the two transformed
-                 keypoint feature maps.
-                 Shape of two output videos is: (bsz, 3, 8/16, 112, 112) for this application.
-                 Shape of two keypoint feature maps is: (bsz, 32, 16, 28, 28) for this application.
+        :return: The reconstructed video and the transformed representation of the motion features.
+                 Shape of output video is: (bsz, 3, out_frames, 112, 112) for this application.
+                 Shape of motion features is: (bsz, rep_channels, rep_frames, rep_size, rep_size) for this application.
         """
         vp1_to_2 = self.exp(vp_diff)  # bsz,1/3,4,14,14
 
@@ -112,7 +109,7 @@ class FullNetwork(nn.Module):
     def appearance_pipeline(self, img2):
         app_v2 = self.vgg(img2)  # bsz,256,14,14
 
-        exp_app_v2 = self.expand_app_enc(app=app_v2, frames=self.rep_frames)  # bsz,256,4,14,14
+        exp_app_v2 = FullNetwork.expand_app_enc(app=app_v2, frames=self.rep_frames)  # bsz,256,4,14,14
 
         return exp_app_v2
 
@@ -126,23 +123,12 @@ class FullNetwork(nn.Module):
 
         return rep_v2_est
 
-    '''def transform_kp(self, vp, kp):
-        bsz, channels, frames, height, width = kp.size()
-        buffer = torch.zeros(bsz, channels, frames, height, width)
-        for i in range(frames):
-            kp_frame = torch.squeeze(kp[:, :, i, :, :], dim=2)  # eliminate temporal dim
-            # key points + view point
-            trans_input = torch.cat([vp, kp_frame], dim=1)  # dim=channels
-            kp_frame_est = self.trans(trans_input)  # bsz,32,14,14
-            buffer[:, :, i, :, :] = kp_frame_est
-        buffer = buffer.to(device)
-
-        return buffer'''
-
-    def expand_app_enc(self, app, frames):
+    @staticmethod
+    def expand_app_enc(app, frames):
         """
         Function to repeat the appearance encoding along the depth. Makes the depth equivalent to the input video depth.
         :param app: (tensor) The appearance encoding to expand.
+        :param frames: (int) The number of frames for which to repeat the appearance encoding.
         :return: The expanded appearance encoding.
         """
         bsz, channels, height, width = app.size()

@@ -1,4 +1,4 @@
-# phase 2
+# phase 3
 
 # modified from https://github.com/pytorch/vision/blob/master/torchvision/models/vgg.py
 
@@ -16,7 +16,8 @@ class VGG(nn.Module):
     """
     Class representing the modified VGG network to be used.
     """
-    def __init__(self, features, num_layers, num_classes=1000, init_weights=True,
+
+    def __init__(self, features, num_classes=1000, init_weights=True,
                  pretrained=False, weights_path=''):
         """
         Initializes the modified VGG network.
@@ -27,10 +28,8 @@ class VGG(nn.Module):
         :param weights_path: (str) The path at which to pretrained weights are located.
         """
         super(VGG, self).__init__()
-        # modified so that not all the layers are used
-        self.features = features[:num_layers]
-        self.num_layers = num_layers
-        self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        self.features = features
+        # self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
         # self.classifier = nn.Sequential(
         #     nn.Linear(512 * 7 * 7, 4096),
         #     nn.ReLU(True),
@@ -43,17 +42,13 @@ class VGG(nn.Module):
         if init_weights:
             self._initialize_weights()
 
-        # if pretrained:
-        #     self.load_state_dict(torch.load(weights_path))
         if pretrained:
             self.load_weights(weights_path=weights_path)
 
-        self.final_layer = nn.Conv2d(256, 32, kernel_size=3, padding=1)
-        self.final_relu = nn.ReLU(inplace=True)
-
     def load_weights(self, weights_path):
         state_dict = torch.load(weights_path)
-        bad_weights = ["features.17", "features.19", "features.21", "features.24",
+        # bad_weights = ["features.17", "features.19", "features.21",
+        bad_weights = ["features.24",
                        "features.26", "features.28", "classifier.0", "classifier.3",
                        "classifier.6"]
         new_state_dict = {}
@@ -66,18 +61,19 @@ class VGG(nn.Module):
         self.load_state_dict(new_state_dict)
 
     def forward(self, x):
-        # modified so that not all the layers are used
-        self.features = self.features
-        x = self.features(x)
+        return_features = []
+
+        for i in range(len(self.features)):
+            x = self.features[i](x)
+            if i in [8, 15, 22]:  # 16]:
+                # feature_size = x.size()[-1]
+                return_features.append(x)
+        # x = self.features(x)
         # x = self.avgpool(x)
         # x = x.view(x.size(0), -1)
         # x = self.classifier(x)
 
-        # custom layers used to reduce the output channel dimensions to 32
-        x = self.final_layer(x)
-        x = self.final_relu(x)
-
-        return x
+        return return_features  # this has 128x56x56, 256x28x28, 512x14x14
 
     def _initialize_weights(self):
         for m in self.modules():
@@ -93,7 +89,9 @@ class VGG(nn.Module):
                 nn.init.constant_(m.bias, 0)
 
 
-def make_layers(cfg, batch_norm=False):
+def make_layers(cfg, num_layers=None, batch_norm=False):
+    if num_layers is not None:
+        cfg = cfg[:num_layers]
     layers = []
     in_channels = 3
     for v in cfg:
@@ -108,6 +106,7 @@ def make_layers(cfg, batch_norm=False):
             in_channels = v
     # print('Modified VGG Model Successfully Built \n')
 
+    # print(nn.Sequential(*layers))
     return nn.Sequential(*layers)
 
 
@@ -119,17 +118,17 @@ cfgs = {
 }
 
 num_layers_to_use = {
-    'A': 12,
-    'B': 16,
-    'D': 17,
-    'E': 20,
+    'A': 7,
+    'B': 9,
+    'D': 13,  # 10,
+    'E': 11,
 }
 
 
 def _vgg(arch, cfg, batch_norm, pretrained, progress, weights_path='', **kwargs):
     if pretrained:
         kwargs['init_weights'] = False
-    model = VGG(make_layers(cfgs[cfg], batch_norm=batch_norm), num_layers=num_layers_to_use[cfg],
+    model = VGG(make_layers(cfgs[cfg], num_layers=num_layers_to_use[cfg], batch_norm=batch_norm),
                 pretrained=pretrained, weights_path=weights_path, **kwargs)
     # if pretrained:
     #     state_dict = load_state_dict_from_url(model_urls[arch],

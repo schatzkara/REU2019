@@ -4,18 +4,21 @@ import torch.nn as nn
 from torch.autograd import Variable
 import torch
 from torchsummary import summary
+from STN import STN
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
 class ConvLSTMCell(nn.Module):
 
-    def __init__(self, input_dim, hidden_dim, kernel_size, bias):
+    def __init__(self, input_dim, hidden_dim, kernel_size, in_shape, bias):
         """
         Initialize ConvLSTM cell.
 
         Parameters
         ----------
+        input_size: (int, int)
+            Height and width of input tensor as (height, width).
         input_dim: int
             Number of channels of input tensor.
         hidden_dim: int
@@ -36,6 +39,8 @@ class ConvLSTMCell(nn.Module):
         self.padding = kernel_size[0] // 2, kernel_size[1] // 2
         self.bias = bias
 
+        self.stn = STN(in_channels=self.input_dim + self.hidden_dim, in_shape=in_shape)
+
         self.conv = nn.Conv2d(in_channels=self.input_dim + self.hidden_dim,
                               out_channels=4 * self.hidden_dim,
                               kernel_size=self.kernel_size,
@@ -47,8 +52,11 @@ class ConvLSTMCell(nn.Module):
 
         combined = torch.cat([input_tensor, h_cur], dim=1)  # concatenate along channel axis
 
-        combined_conv = self.conv(combined)
+        combined = self.stn(combined)
 
+        combined_conv = self.conv(combined)
+        # print(combined_conv.size())
+        # print(self.hidden_dim)
         cc_i, cc_f, cc_o, cc_g = torch.split(combined_conv, self.hidden_dim, dim=1)
         i = torch.sigmoid(cc_i)
         f = torch.sigmoid(cc_f)
@@ -72,7 +80,7 @@ class ConvLSTMCell(nn.Module):
 
 class ConvLSTM(nn.Module):
 
-    def __init__(self, input_dim, hidden_dim, kernel_size, num_layers,
+    def __init__(self, input_dim, hidden_dim, kernel_size, num_layers, in_shape,
                  batch_first=False, bias=True, return_all_layers=False):
         super(ConvLSTM, self).__init__()
 
@@ -101,6 +109,7 @@ class ConvLSTM(nn.Module):
             cell_list.append(ConvLSTMCell(input_dim=cur_input_dim,
                                           hidden_dim=self.hidden_dim[i],
                                           kernel_size=self.kernel_size[i],
+                                          in_shape=in_shape,
                                           bias=self.bias))
 
         self.cell_list = nn.ModuleList(cell_list)

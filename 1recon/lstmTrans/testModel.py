@@ -7,13 +7,13 @@ import torch.nn as nn
 from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
-from data.outputConversion import convert_to_vid
+from utils.modelIOFuncs import convert_to_vid
 import torch.backends.cudnn as cudnn
 
 DATASET = 'NTU'  # 'NTU' or 'panoptic'
 
 # data parameters
-BATCH_SIZE = 20
+BATCH_SIZE = 16
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
@@ -66,7 +66,7 @@ def test():
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v2, rep_v1 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+            gen_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
 
             # save videos
             convert_to_vid(tensor=vid1, output_dir=output_video_dir,
@@ -75,14 +75,9 @@ def test():
                            batch_num=batch_idx + 1, view=2, item_type='input')
             convert_to_vid(tensor=gen_v2, output_dir=output_video_dir,
                            batch_num=batch_idx + 1, view=2, item_type='output')
-            convert_to_vid(tensor=rep_v1, output_dir=output_video_dir,
-                           batch_num=batch_idx + 1, view=1, item_type='rep')
 
             # loss
             recon_loss = criterion(gen_v2, vid2)
-            # reconstruction losses for videos gen from features and same view
-            # recon3_loss = criterion(recon_v1, vid1)
-            # recon4_loss = criterion(recon_v2, vid2)
             loss = recon_loss
 
         running_recon_loss += recon_loss.item()

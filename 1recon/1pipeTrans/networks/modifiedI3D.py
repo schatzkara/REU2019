@@ -198,25 +198,6 @@ class InceptionI3d(nn.Module):
     )
     VALID_IN_FRAMES = (8, 16)
 
-    # def __init__(self, num_classes=400, spatial_squeeze=True,
-    #              final_endpoint='Logits', name='inception_i3d', in_channels=3, dropout_keep_prob=0.5):
-    #     """Initializes I3D model instance.
-    #         Args:
-    #           num_classes: The number of outputs in the logit layer (default 400, which
-    #               matches the Kinetics dataset).
-    #           spatial_squeeze: Whether to squeeze the spatial dimensions for the logits
-    #               before returning (default True).
-    #           final_endpoint: The model contains many possible endpoints.
-    #               `final_endpoint` specifies the last endpoint for the model to be built
-    #               up to. In addition to the output at `final_endpoint`, all the outputs
-    #               at endpoints up to `final_endpoint` will also be returned, in a
-    #               dictionary. `final_endpoint` must be one of
-    #               InceptionI3d.VALID_ENDPOINTS (default 'Logits').
-    #           name: A string (optional). The name of this module.
-    #         Raises:
-    #           ValueError: if `final_endpoint` is not recognized.
-    #     """
-
     def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c_small', in_frames=8, in_channels=3,
                  pretrained=False, weights_path=''):
         """
@@ -239,11 +220,8 @@ class InceptionI3d(nn.Module):
 
         super(InceptionI3d, self).__init__()
         self.i3d_name = name
-        # self._num_classes = num_classes
-        # self._spatial_squeeze = spatial_squeeze
         self._final_endpoint = final_endpoint
         self.in_frames = in_frames
-        # self.logits = None
         self.pretrained = pretrained
         self.weights_path = weights_path
 
@@ -325,7 +303,7 @@ class InceptionI3d(nn.Module):
         # self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(2, 2, 2),
         #                                                   padding=0)
         # if self._final_endpoint == end_point: return
-
+        #
         # end_point = 'MaxPool3d_5a_1x1'
         # self.end_points[end_point] = MaxPool3dSamePadding(kernel_size=[2, 2, 2], stride=(1, 1, 1),
         #                                                   padding=0)
@@ -347,26 +325,6 @@ class InceptionI3d(nn.Module):
         # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
         #                                              name + end_point)
 
-        # Modification: removed final 'Logits' layers since we are not dealing with classification in this application.
-        # We are using this network to produce a feature map to represent the 'action' of the video, so we want a larger
-        # output tensor.
-        # if self._final_endpoint == end_point: return
-
-        # end_point = 'Logits'
-        # self.avg_pool = nn.AvgPool3d(kernel_size=[2, 7, 7],
-        #                              stride=(1, 1, 1))
-        # selfdropout = nn.Dropout(dropout_keep_prob)
-        # Note: this layer is not actually used in the network, but it is built here anyways so that pretrained weights
-        # can be used for the network.
-        # self.logits = Unit3D(in_channels=int(384 / 4) + int(384 / 4) + int(128 / 4) + int(128 / 4), output_channels=157,
-        #                      self._num_classes,
-        # kernel_shape=[1, 1, 1],
-        # padding=0,
-        # activation_fn=None,
-        # use_batch_norm=False,
-        # use_bias=True,
-        # name='logits')
-
         self.build()
 
         end_point = 'Mixed_5c_small'
@@ -374,19 +332,6 @@ class InceptionI3d(nn.Module):
                                            [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
                                             int(128 / 4), int(128 / 4)],
                                            name + end_point)
-
-        # self.feature_layer = Unit3D(in_channels=256, output_channels=128, kernel_shape=[3, 3, 3], padding=1,
-        #                             name='features')
-
-    # def replace_logits(self, num_classes):
-    #     self._num_classes = num_classes
-    #     self.logits = Unit3D(in_channels=384 + 384 + 128 + 128, output_channels=self._num_classes,
-    #                          kernel_shape=[1, 1, 1],
-    #                          padding=0,
-    #                          activation_fn=None,
-    #                          use_batch_norm=False,
-    #                          use_bias=True,
-    #                          name='logits')
 
     def build(self):
         for k in self.end_points.keys():
@@ -409,14 +354,6 @@ class InceptionI3d(nn.Module):
                 x = self._modules[end_point](x)  # use _modules to work with dataparallel
 
         x = self.final_layer(x)
-        # x = self.feature_layer(x)
-
-        # Modification: Again, the final 'Logits' layers were eliminated.
-        # x = self.logits(self.dropout(self.avg_pool(x)))
-        # if self._spatial_squeeze:
-        #     logits = x.squeeze(3).squeeze(3)
-        # logits is batch X time X classes, which is what we want to work with
-        # return logits
 
         return x
 

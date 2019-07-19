@@ -25,14 +25,6 @@ WIDTH = 112
 NUM_EPOCHS = 1000
 LR = 1e-4
 
-pretrained = True
-MIN_LOSS = 0.00253
-if DATASET.lower() == 'ntu':
-    pretrained_weights = './weights/net_ntu_16_16_2_True_1000_0.0001.pt'
-else:
-    pretrained_weights = './weights/net_pan_16_16_2_False_1000_0.0001.pt'
-pretrained_epochs = 109
-
 
 def ntu_config():
     # NTU directory information
@@ -82,7 +74,7 @@ def training_loop(epoch):
 
         optimizer.zero_grad()
 
-        gen_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+        gen_v2, rep_v1 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
         # loss
         recon_loss = criterion(gen_v2, vid2)
 
@@ -120,7 +112,7 @@ def testing_loop(epoch):
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+            gen_v2, rep_v1 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
             # loss
             recon_loss = criterion(gen_v2, vid2)
 
@@ -161,17 +153,14 @@ def get_first_frame(vid_batch):
     return imgs
 
 
-def train_model(starting_epoch):
+def train_model():
     """
     Function to train and validate the model for all epochs.
     :return: None
     """
-    if pretrained:
-        min_loss = MIN_LOSS
-    else:
-        min_loss = 0.0
+    min_loss = 0.0
     start_time = time.time()
-    for epoch in range(starting_epoch, NUM_EPOCHS):
+    for epoch in range(NUM_EPOCHS):
         print('Training...')
         training_loop(epoch)
         print('Validation...')
@@ -272,8 +261,4 @@ if __name__ == '__main__':
 
     print_params()
     print(model)
-    if pretrained:
-        starting_epoch = pretrained_epochs
-    else:
-        starting_epoch = 0
-    train_model(starting_epoch)
+    train_model()
