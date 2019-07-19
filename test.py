@@ -1,94 +1,79 @@
-# import torch
-# import torch.nn as nn
-# import tensorflow as tf
-import sys
-import numpy as np
+from data.NTUDataLoader import NTUDataset
+import torch
 
-# tf.compat.v1.enable_eager_execution()
+data_root_dir = ''
+train_split = 'C:/Users/Owner/Documents/UCF/REU2019/data/NTU/train.list'
+param_file = 'C:/Users/Owner/Documents/UCF/REU2019/data/NTU/view.params'
+BATCH_SIZE = 1
+CHANNELS = 3
+FRAMES = 16
+SKIP_LEN = 2
+HEIGHT = 112
+WIDTH = 112
+RANDOM_ALL = True
+PRECROP = True
+DIFF_ACTORS = False
+DIFF_SCENES = False
 
-
-# x = torch.zeros(2, 2)
-# x = torch.tensor([[1., 2.],
-#                   [1., 2.],
-#                   [1., 2.]])
-# print(x.size())
-# y = torch.mean(x, dim=1)
-# print(y)
-# print(y.size())
-
-# a = torch.range(start=-1.0, end=1.0, step=2/7)
-# print(a)
-# tf.compat.v1.enable_eager_execution()
-# b = tf.linspace(start=-1.0, stop=1.0, num=8)
-# tf.print(b, output_stream=sys.stdout)
-
-# x = torch.tensor([2.0, 2.0])
-# x = torch.reshape(x, shape=(1, 1, 1, 2))
-# print(x)
-# print(x.size())
+# def decrypt_vid_name(vid_name):
+#     """
+#     Function to break up the meaning of the video name.
+#     :param vid_name: (string) The name of the video.
+#     :return: 4 ints representing the scene, person, repetition, and action that the video captures.
+#     """
+#     scene = int(vid_name[1:4])
+#     pid = int(vid_name[5:8])
+#     rid = int(vid_name[9:12])
+#     action = int(vid_name[13:16])
+#     sra = vid_name[:4] + vid_name[8:]
 #
-# y = torch.randn(3, 4, 5, 2)
-# print(y.size())
+#     return scene, pid, rid, action, sra
 #
-# z = x * y
-# print(z.size())
 #
-# zz = torch.sum(z, dim=3)
-# print(zz.size())
+if __name__ == '__main__':
+    #     with open(data_file) as f:
+    #         data_file = f.readlines()
+    #     data_file = [line.strip() for line in data_file]
+    #
+    #     SRA = {}  # SceneRepetitionAction
+    #
+    #     for sample in data_file:
+    #         sample = sample.split(' ')
+    #         sample_id = sample[0][sample[0].index('/') + 1:]
+    #         scene, pid, rid, action, sra = decrypt_vid_name(sample_id)
+    #         print(sra)
+    # if sra not in SRA.keys():
+    #     SRA[sra] = [sample_id]
+    # else:
+    #     SRA[sra].append(sample_id)
+    #
+    # for sra, samples in SRA.items():
+    #     print(sra)
+    #     print(samples)
+    #
+    #
+    # actors = []
+    #
+    # for sample in data_file:
+    #     sample = sample.split(' ')
+    #     sample_id = sample[0][sample[0].index('/') + 1:]
+    #     scene, pid, rid, action = decrypt_vid_name(sample_id)
+    #     print(action)
+    #     if action == 18:
+    #         if pid not in actors:
+    #             actors.append(pid)
+    #
+    # actors.sort()
+    #
+    # print(actors)
 
+    trainset = NTUDataset(root_dir=data_root_dir, data_file=train_split, param_file=param_file,
+                          resize_height=HEIGHT, resize_width=WIDTH,
+                          clip_len=FRAMES, skip_len=SKIP_LEN,
+                          random_all=RANDOM_ALL, precrop=PRECROP, diff_actors=DIFF_ACTORS, diff_scenes=DIFF_SCENES)
+    trainloader = torch.utils.data.DataLoader(trainset, batch_size=BATCH_SIZE, shuffle=True, num_workers=2)
 
-def my_get_coord(tensor, other_axis, axis_size):
-    coord_probs = torch.mean(tensor, dim=other_axis, keepdim=False)  # bsz,nkp,frames,h/w
-    coord_probs = nn.Softmax(dim=3)(coord_probs)  # softmax along h/w
-
-    step = 2 / (axis_size - 1)
-    coords = torch.range(start=-1.0, end=1.0, step=step, dtype=torch.float32)  # h/w
-    coords = torch.reshape(coords, shape=(1, 1, 1, axis_size))  # bsz,nkp,frames,h/w
-    coord = torch.sum(coord_probs * coords, dim=3)  # bsz, nkp, frames
-
-    return coord
-
-
-def get_coord(other_axis, axis_size):
-    # get "x-y" coordinates:
-    g_c_prob = tf.reduce_mean(x, axis=other_axis)  # B,W,NMAP
-    g_c_prob = tf.nn.softmax(g_c_prob, axis=1)  # B,W,NMAP
-    coord_pt = tf.to_float(tf.linspace(-1.0, 1.0, axis_size))  # W
-    coord_pt = tf.reshape(coord_pt, [1, axis_size, 1])
-    g_c = tf.reduce_sum(g_c_prob * coord_pt, axis=1)
-    return g_c, g_c_prob
-
-
-# print(torch.randint(1, 5, (1, 1, 1, 2, 2)))
-
-# tensor = torch.tensor([[[[[6., 0.],
-#                           [0.5, 8.],
-#                           [6., 0.],
-#                           [0.5, 8.]
-#                           ]]]])
-# torch.tensor([[[[[2.0, 2.0]]]],[[[[2.0, 2.0]]]]])
-# print(tensor.size())
-# ans1 = my_get_coord(tensor, 4, 4)
-#
-# x = tf.convert_to_tensor([[[[6., 0.],
-#                             [0.5, 8.],
-#                             [6., 0.],
-#                             [0.5, 8.]
-#                             ]]])
-# x = tf.transpose(x, perm=[0, 2, 3, 1])
-# [[[[2.0, 2.0]]],[[[2.0, 2.0]]]])
-# print(x.get_shape())
-# ans2, _ = get_coord(2, 4)
-#
-# print(ans1)
-# tf.print(ans2, output_stream=sys.stdout)
-
-# x = torch.zeros(2, 2, 2)
-# y = torch.ones(2, 2, 2)
-# z = torch.cat([torch.unsqueeze(x, dim=3), torch.unsqueeze(y, dim=3)], dim=3)
-# print(z.size())
-
-x = [[[2, 2]]]
-display = np.hstack((None, x))
-
-print(display)
+    for batch_idx, info in enumerate(trainloader):
+        if info[0] != info[1]:
+            print('cry')
+        # print(info)

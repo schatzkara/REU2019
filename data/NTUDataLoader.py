@@ -1,5 +1,4 @@
-# phase 2
-# this one has everything but multi-actor, multi-scene
+
 from torch.utils.data.dataset import Dataset
 import os
 import numpy as np
@@ -11,10 +10,10 @@ class NTUDataset(Dataset):
     """NTU Dataset"""
 
     def __init__(self, root_dir, data_file, param_file,
-                 resize_height, resize_width, clip_len,
-                 height=135, width=240, skip_len=1,
+                 resize_height, resize_width, clip_len, height=135, width=240, precrop=False, skip_len=1,
                  view1=1, view2=2, random_views=False, random_all=False,
-                 precrop=False):
+                 diff_actors=False, diff_scenes=False
+                 ):
         """
         Initializes the NTU Dataset object used for extracting samples to run through the network.
         :param root_dir: (str) Directory with all the frames extracted from the videos.
@@ -24,34 +23,52 @@ class NTUDataset(Dataset):
         :param clip_len: (int) The number of frames desired in the sample clip.
         :param height: (int, optional) The height of the frames in the dataset (default 135 for NTU Dataset).
         :param width: (int, optional) The width of the frames in the dataset (default 240 for NTU Dataset).
+        :param precrop: (boolean, optional) True to crop 50 pixels off left and right of frame before randomly cropping
+                        (default False).
         :param skip_len: (int, optional) The number of frames to skip between each when creating the clip (default 1).
         :param view1: (int, optional) The desired viewpoint to use as the first view; can be 1, 2, or 3 (default 1).
         :param view2: (int, optional) The desired viewpoint to use as the seconds view; can be 1, 2, or 3 (default 2).
         :param random_views: (boolean, optional) True to use 2 constant randomly generated views (default False).
         :param random_all: (boolean, optional) True to use 2 randomly generated views for each sample (default False).
-        :param precrop: (boolean, optional) True to crop 50 pixels off left and right of frame before randomly cropping
-                        (default False).
+        :param diff_actors: (boolean, optional) True to use different actors in view 1 and view 2 (default False).
+        :param diff_scenes: (boolean, optional) True to use different scenes in view 1 and view 2 (default False).
         """
         with open(data_file) as f:
             self.data_file = f.readlines()
         self.data_file = [line.strip() for line in self.data_file]
         self.root_dir = root_dir
         self.param_file = param_file
+
         self.clip_len = clip_len
         self.skip_len = skip_len
         self.height = height
         self.width = width
         self.resize_height = resize_height
         self.resize_width = resize_width
+        self.precrop = precrop
         self.channels = 3
+
         self.view1 = view1
         self.view2 = view2
         if random_views:
             self.get_random_views()
         self.random_all = random_all
-        self.precrop = precrop
-
         self.view_params = self.load_view_params()
+
+        self.diff_actors = diff_actors
+        self.diff_scenes = diff_scenes
+
+        if self.diff_actors or self.diff_scenes:
+            self.sample_dict = self.make_sample_dict()
+        if self.diff_actors and self.diff_scenes:
+            self.ra_dict = self.make_ra_dict()
+            # print(self.ra_dict)
+        elif self.diff_actors:
+            self.sra_dict = self.make_sra_dict()
+            # print(self.sra_dict)
+        elif self.diff_scenes:
+            self.pra_dict = self.make_pra_dict()
+            # print(self.pra_dict)
 
     def load_view_params(self):
         """
@@ -64,6 +81,61 @@ class NTUDataset(Dataset):
         view_params /= view_params.max(axis=0)
 
         return view_params
+
+    def make_sample_dict(self):
+        sample_dict = {}
+
+        for sample in self.data_file:
+            sample_info = sample.split(' ')
+            sample_id = sample_info[0][sample_info[0].index('/') + 1:]
+            sample_dict[sample_id] = sample
+
+        return sample_dict
+
+    def make_sra_dict(self):
+        SRA = {}  # SceneRepetitionAction
+
+        for sample in self.data_file:
+            sample_info = sample.split(' ')
+            sample_id = sample_info[0][sample_info[0].index('/') + 1:]
+            scene, pid, rid, action = self.decrypt_vid_name(sample_id)
+            sra = self.get_sra(scene, rid, action)
+            if sra not in SRA.keys():
+                SRA[sra] = [sample_id]
+            else:
+                SRA[sra].append(sample_id)
+
+        return SRA
+
+    def make_pra_dict(self):
+        PRA = {}  # PersonRepetitionAction
+
+        for sample in self.data_file:
+            sample_info = sample.split(' ')
+            sample_id = sample_info[0][sample_info[0].index('/') + 1:]
+            scene, pid, rid, action = self.decrypt_vid_name(sample_id)
+            pra = self.get_pra(pid, rid, action)
+            if pra not in PRA.keys():
+                PRA[pra] = [sample_id]
+            else:
+                PRA[pra].append(sample_id)
+
+        return PRA
+
+    def make_ra_dict(self):
+        RA = {}  # RepetitionAction
+
+        for sample in self.data_file:
+            sample_info = sample.split(' ')
+            sample_id = sample_info[0][sample_info[0].index('/') + 1:]
+            scene, pid, rid, action = self.decrypt_vid_name(sample_id)
+            ra = self.get_ra(rid, action)
+            if ra not in RA.keys():
+                RA[ra] = [sample_id]
+            else:
+                RA[ra].append(sample_id)
+
+        return RA
 
     def __len__(self):
         """
@@ -84,8 +156,9 @@ class NTUDataset(Dataset):
         if self.random_all:
             self.get_random_views()
 
-        action, sample_id, vp1, vp2, nf_v1, nf_v2 = self.process_index(index=idx)
-        view1path, view2path = self.get_vid_paths(action=action, sample_id=sample_id)
+        action, sample_id_v1, sample_id_v2, vp1, vp2, nf_v1, nf_v2 = self.process_index(index=idx)
+        view1path = self.get_vid_path(action=action, sample_id=sample_id_v1, view_id=self.view1)
+        view2path = self.get_vid_path(action=action, sample_id=sample_id_v2, view_id=self.view2)
 
         vp_diff = vp2 - vp1
 
@@ -103,7 +176,7 @@ class NTUDataset(Dataset):
 
     def get_random_views(self):
         """
-        Function to generate 2 randomStuff viewpoints for the sample.
+        Function to generate 2 random viewpoints for the sample.
         :return: 2 ints representing the viewpoints for the sample.
         """
         self.view1, self.view2 = np.random.randint(1, 4), np.random.randint(1, 4)
@@ -122,13 +195,34 @@ class NTUDataset(Dataset):
         sample_id = sample_info[0][sample_info[0].index('/') + 1:]
         scene, pid, rid, action = NTUDataset.decrypt_vid_name(vid_name=sample_id)
 
+        sample_id_v1 = sample_id
+        sample_info_v1 = sample_info
+        if self.diff_actors and self. diff_scenes:
+            ra = self.get_ra(rid, action)
+            sample_id_v2 = np.random.choice(self.ra_dict[ra])
+            sample_info_v2 = self.sample_dict[sample_id_v2].split(' ')
+        elif self.diff_actors:
+            sra = self.get_sra(scene, rid, action)
+            # num_actors = len(self.sra_dict[sra])
+            # actor_idx = np.random.randint(0, num_actors)
+            # sample_id_v2 = self.sra_dict[sra][actor_idx]
+            sample_id_v2 = np.random.choice(self.sra_dict[sra])
+            sample_info_v2 = self.sample_dict[sample_id_v2].split(' ')
+        elif self.diff_scenes:
+            pra = self.get_pra(pid, rid, action)
+            sample_id_v2 = np.random.choice(self.pra_dict[pra])
+            sample_info_v2 = self.sample_dict[sample_id_v2].split(' ')
+        else:
+            sample_id_v2 = sample_id
+            sample_info_v2 = sample_info
+
         angle_v1 = NTUDataset.get_viewing_angle(rid=rid, cam=self.view1)
         angle_v2 = NTUDataset.get_viewing_angle(rid=rid, cam=self.view2)
 
-        nf_v1, nf_v2, nf_v3 = sample_info[1:]
+        nf_v1, nf_v2, nf_v3 = sample_info_v1[1:]
         nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
 
-        info = (action, sample_id, angle_v1, angle_v2)
+        info = (action, sample_id_v1, sample_id_v2, angle_v1, angle_v2)
         if self.view1 == 1:
             info = info + (nf_v1,)
         elif self.view1 == 2:
@@ -136,6 +230,8 @@ class NTUDataset(Dataset):
         elif self.view1 == 3:
             info = info + (nf_v3,)
 
+        nf_v1, nf_v2, nf_v3 = sample_info_v2[1:]
+        nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
         if self.view2 == 1:
             info = info + (nf_v1,)
         elif self.view2 == 2:
@@ -173,7 +269,7 @@ class NTUDataset(Dataset):
 
         return vpt
 
-    def get_vid_paths(self, action, sample_id):
+    def get_vid_path(self, action, sample_id, view_id):
         """
         Function to get the paths at which the two sample views are located.
         :param action: (int) The action class that the sample captures.
@@ -181,10 +277,9 @@ class NTUDataset(Dataset):
         :return: 2 strings representing the paths for the sample views.
         """
         vid_path = self.make_sample_path(action=action, sample_id=sample_id)
+        view_path = os.path.join(vid_path, str(view_id))
 
-        view1_path, view2_path = os.path.join(vid_path, str(self.view1)), os.path.join(vid_path, str(self.view2))
-
-        return view1_path, view2_path
+        return view_path
 
     def make_sample_path(self, action, sample_id):
         """
@@ -211,9 +306,18 @@ class NTUDataset(Dataset):
 
         return scene, pid, rid, action
 
+    def get_sra(self, scene, rid, action):
+        return 'S' + str(scene).zfill(3) + 'R' + str(rid).zfill(3) + 'A' + str(action).zfill(3)
+
+    def get_pra(self, pid, rid, action):
+        return 'P' + str(pid).zfill(3) + 'R' + str(rid).zfill(3) + 'A' + str(action).zfill(3)
+
+    def get_ra(self, rid, action):
+        return 'R' + str(rid).zfill(3) + 'A' + str(action).zfill(3)
+
     def rand_frame_index(self, frame_count):
         """
-        Function to generate a randomStuff starting frame index for cropping the temporal dimension of the video.
+        Function to generate a random starting frame index for cropping the temporal dimension of the video.
         :param frame_count: (int) The number of available frames in the sample video.
         :return: The starting frame index for the sample.
         """
@@ -225,7 +329,7 @@ class NTUDataset(Dataset):
 
     def rand_pixel_index(self):
         """
-        Function to generate a randomStuff starting pixel for cropping the height and width of the frames.
+        Function to generate a random starting pixel for cropping the height and width of the frames.
         :return: 2 ints representing the starting pixel's x and y coordinates.
         """
         # if the frame is precropped, then 50 pixels are removed from the right and left each.
