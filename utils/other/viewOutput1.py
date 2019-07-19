@@ -5,18 +5,14 @@ import numpy as np
 root_dir = '/home/yogesh/kara/REU2019/'
 # root_dir = 'C:/Users/Owner/Documents/UCF/output/'
 
-# vid_dir = '1pipeTrans/videos/ntu_400e/'
-# vid_dir = 'appSkipConns/videos/ntu_70e/'
-# vid_dir = 'repSkipConns/videos/ntu_/'
-# vid_dir = 'bothSkipConns/videos/ntu_/'
-# vid_dir = 'repSkipConns/videos/ntu_/'
-vid_dir = 'lstmTrans/videos/ntu_/'
+vid_dir = 'repkpapp/videos/ntu_/'
+# vid_dir = 'repkpapp/videos/pan_/'
+# vid_dir = 'newgen/videos/ntu_111e/'
 
 full_dir = os.path.join(root_dir, vid_dir)
 print(full_dir)
 
-batches_to_view = [11, 15, 17, 18]  
-# range(15, 16)  # range(80, 90)  # None  # [11, 15, 17, 18]  # [18, 20, 84, 119, 145, 193, 199]  # , 303, 309, 341]
+batches_to_view = [18, 20, 84, 119, 145, 193, 199]  # , 303, 309, 341]
 
 possible_views = [1, 2]
 types_to_show = [
@@ -35,9 +31,7 @@ if 'rep' in types_to_show or 'kp' in types_to_show:
 nkp = 32
 
 display_time = 100
-display_size = 400
-
-ONE_RECON = True
+display_size = 500
 
 
 def make_frame_name(frame_num):
@@ -60,7 +54,7 @@ if __name__ == '__main__':
         vid_dirs.extend(vids)
     view_dirs = []
     for vid in vid_dirs:
-        views = [os.path.join(vid, view) for view in [str(2)]]
+        views = [os.path.join(vid, view) for view in os.listdir(vid)]
         view_dirs.extend(views)
     item_types = ['input', 'output', 'recon', 'rep', 'rep_est']
 
@@ -88,74 +82,35 @@ if __name__ == '__main__':
                     # cv2.destroyAllWindows()'''
 
     # view just gt and recon
-    # all_view_dirs = {}
-    # for view in view_dirs:
-    #     full_dirs = [os.path.join(view, item) for item in types_to_show]
-    #     all_view_dirs[view] = full_dirs
-    #
-    # for view, dirs in all_view_dirs.items():
-    sample_dirs = {}
-    for vid in vid_dirs:
-        input_path = os.path.join(vid, str(1), 'input')
-        gt_path = os.path.join(vid, str(2), 'input')
-        recon_path = os.path.join(vid, str(2), 'output')
-        sample_dirs[vid] = [input_path, gt_path, recon_path]
-        # print(view)
-    for vid, dirs in sample_dirs.items():
-        print(vid)
-        for i in range(frames):
-            frame = make_frame_name(i+1)
-            path = os.path.join(dirs[0], frame)
-            display = cv2.imread(path)
-            # print(dirs[0])
-            # print(path)
-            # display = cv2.resize(display, dsize=(height, width), interpolation=cv2.INTER_AREA)
-            for j in range(1, len(dirs)):
-                path = os.path.join(dirs[j], frame)
-                addFrame = cv2.imread(path)
-                # print(dirs[j])
-                # print(path)
-                # addFrame = cv2.resize(addFrame, dsize=(height, width), interpolation=cv2.INTER_AREA)
-                display = np.hstack((display, addFrame))
-            # img = cv2.imread(img)
-            cv2.namedWindow(vid_dir, cv2.WINDOW_NORMAL)
-            cv2.resizeWindow(vid_dir, 600, 300)
-            cv2.imshow(vid_dir, display)
-            cv2.waitKey(display_time)
-            # print(img)
-            # cv2.destroyAllWindows()
-
-    # view gt and recon
     '''all_view_dirs = {}
     for view in view_dirs:
         full_dirs = [os.path.join(view, item) for item in types_to_show]
         all_view_dirs[view] = full_dirs
 
     for view, dirs in all_view_dirs.items():
-        print(view)
         for i in range(frames):
-            frame = make_frame_name(i + 1)
+            frame = make_frame_name(i+1)
             path = os.path.join(dirs[0], frame)
             display = cv2.imread(path)
-            # print(dirs[0])
+            print(dirs[0])
             # print(path)
             # display = cv2.resize(display, dsize=(height, width), interpolation=cv2.INTER_AREA)
             for j in range(1, len(dirs)):
                 path = os.path.join(dirs[j], frame)
                 addFrame = cv2.imread(path)
-                # print(dirs[j])
+                print(dirs[j])
                 # print(path)
                 # addFrame = cv2.resize(addFrame, dsize=(height, width), interpolation=cv2.INTER_AREA)
                 display = np.hstack((display, addFrame))
             # img = cv2.imread(img)
             cv2.namedWindow('image', cv2.WINDOW_NORMAL)
-            cv2.resizeWindow('image', 600, 300)
+            cv2.resizeWindow('image', 900, 300)
             cv2.imshow('image', display)
             cv2.waitKey(250)
             # print(img)
             # cv2.destroyAllWindows()'''
 
-    '''# view gt and recon for both views
+    # view gt and recon for both views
     for video in vid_dirs:
         print(video)
         for i in range(frames):
@@ -276,6 +231,6 @@ if __name__ == '__main__':
                     cv2.imshow('image', full_display)
                     cv2.waitKey(display_time)
                     # print(display)
-                    # cv2.destroyAllWindows()'''
+                    # cv2.destroyAllWindows()
 
     print('done')

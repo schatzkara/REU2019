@@ -1,4 +1,4 @@
-# makes a .txt file with each camera and its 5 closest cameras on different panels
+# makes a file with each camera and its 5 closest cameras on different panels for each sample
 
 import os
 import numpy as np
