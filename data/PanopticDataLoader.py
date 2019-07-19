@@ -127,6 +127,8 @@ class PanopticDataset(Dataset):
 
     def get_viewpoints(self, sample_name, sample_path_head, sample_path_tail):
         cameras = os.listdir(os.path.join(self.root_dir, sample_path_head))
+        if self.close_views:
+            cameras = list(self.close_cams.keys())
         num_cameras = len(cameras)
         # print(num_cameras)
 
