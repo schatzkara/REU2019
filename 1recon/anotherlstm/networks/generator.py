@@ -35,9 +35,9 @@ class Generator(nn.Module):
                               'conv_1b': 128,
                               'conv_2a': 128,
                               'conv_2b': 64,
-                              'conv_3a': 64,
-                              'conv_3b': 32,
-                              'conv_4a': 16,
+                              'conv_3a': 32,
+                              'conv_3b': 16,
+                              'conv_4a': 8,
                               'conv_4b': 3
                               }  # key: layer name, value: layer_out_channels
         layer_in_channels = {'conv_1a': sum(in_channels),
@@ -145,11 +145,9 @@ class Generator(nn.Module):
 
 
 if __name__ == "__main__":
-    print_summary = False
+    print_summary = True
 
-    gen = Generator(in_channels=[128], out_frames=16)
-
-    print(gen)
+    gen = Generator(in_channels=[1, 1], out_frames=16)
 
     if print_summary:
         summary(gen, input_size=[[(1, 56, 56), (1, 28, 28), (1, 14, 14)], (1, 4, 14, 14)])
