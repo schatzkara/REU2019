@@ -81,23 +81,16 @@ class FullNetwork(nn.Module):
 
         self.exp = Expander(vp_value_count=self.vp_value_count)
 
-        # convs to make all appearance encodings have same number of channels, so they can be used in the same convLSTM
+        # convs to make all appearance encodings have same number of channels, so they can be used in the same convGRU
         self.app_conv128 = nn.Conv2d(in_channels=128, out_channels=self.app_feat, kernel_size=(3, 3),
                                      stride=(1, 1), padding=(1, 1))
         self.app_conv256a = nn.Conv2d(in_channels=256, out_channels=self.app_feat, kernel_size=(3, 3),
                                       stride=(1, 1), padding=(1, 1))
         self.app_conv256b = nn.Conv2d(in_channels=256, out_channels=self.app_feat, kernel_size=(3, 3),
                                       stride=(1, 1), padding=(1, 1))
-        self.app_convs = [self.app_conv128, self.app_conv256a, self.app_conv256b]
-        # self.app_convs = {128: self.app_conv128,
-        #                   256: self.app_conv256,
-        #                   512: self.app_conv512}
-
-        # convs for the initial hidden state of the convGRU
-        # self.hconv = nn.Conv2d(in_channels=256, out_channels=128, kernel_size=(3, 3), stride=(1, 1),
-        #                        padding=(1, 1))
-        # self.cconv = nn.Conv2d(in_channels=256, out_channels=128, kernel_size=(3, 3), stride=(1, 1),
-        #                        padding=(1, 1))
+        self.app_convs = [nn.Sequential(self.app_conv128, nn.ReLU(inplace=True)),
+                          nn.Sequential(self.app_conv256a, nn.ReLU(inplace=True)),
+                          nn.Sequential(self.app_conv256b, nn.ReLU(inplace=True))]
 
         # convs to make all motion features have the same number of channels, so they can be used in the same trans net
         self.rep_conv64 = nn.Conv3d(in_channels=64, out_channels=self.rep_feat, kernel_size=(3, 3, 3), stride=(1, 1, 1),
@@ -108,18 +101,18 @@ class FullNetwork(nn.Module):
         self.rep_conv256 = nn.Conv3d(in_channels=256, out_channels=self.rep_feat, kernel_size=(3, 3, 3),
                                      stride=(1, 1, 1),
                                      padding=(1, 1, 1))
-        self.rep_convs = {64: self.rep_conv64,
-                          192: self.rep_conv192,
-                          256: self.rep_conv256}
+        self.rep_convs = [nn.Sequential(self.rep_conv64, nn.ReLU(inplace=True)),
+                          nn.Sequential(self.rep_conv192, nn.ReLU(inplace=True)),
+                          nn.Sequential(self.rep_conv256, nn.ReLU(inplace=True))]
 
         self.trans = Transformer(in_channels=self.rep_feat + self.vp_value_count, out_channels=self.rep_feat)
 
         self.kpp = KPPredictor(in_channels=self.rep_feat, nkp=self.nkp, stdev=self.stdev)
 
-        self.vpp = VPPredictor(in_channels=512)
+        self.vpp = VPPredictor(in_channels=256)
 
-        self.conv_gru = ConvGRU(input_dim=self.rep_feat, hidden_dim=[self.app_feat], kernel_size=(7, 7),
-                                num_layers=1, batch_first=True, bias=False, return_all_layers=False)
+        self.gru = ConvGRU(input_dim=self.rep_feat, hidden_dim=[self.app_feat], kernel_size=(7, 7),
+                           num_layers=1, batch_first=True, bias=False, return_all_layers=False)
 
         self.gen = Generator(in_channels=[self.app_feat, self.nkp], out_frames=self.out_frames)
         # print('%s Model Successfully Built \n' % self.net_name)
@@ -138,12 +131,12 @@ class FullNetwork(nn.Module):
                  Shape of the output video is: (bsz, 3, out_frames, 112, 112) for this application.
         """
         est_reps_v2, est_kp_v2, rep_v1 = self.action_pipeline(vp_diff, vid1)
-        # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14, bsz,32,16,56,56, bsz,256,4,14,14
+        # [bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14], bsz,32,16,56,56, bsz,256,4,14,14
 
         est_apps_v2, app_v2 = self.appearance_pipeline(img2, est_reps_v2)
-        # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14, bsz,256,14,14
+        # [bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14], bsz,256,14,14
 
-        vp_est = self.viewpoint_pipeline(app_v2, rep_v1)  # scalar
+        vp_est = self.viewpoint_pipeline(app_v2, rep_v1)  # bsz
 
         # these are the videos that get returned
         gen_v2 = self.gen(est_apps_v2, est_kp_v2)  # bsz,3,out_frames,112,112
@@ -151,12 +144,22 @@ class FullNetwork(nn.Module):
         return gen_v2, vp_est
 
     def action_pipeline(self, vp_diff, vid):
+        """
+        Function to run all networks that extract motion features of some sort from the input video.
+        :param vp_diff: (tensor) The rotational viewpoint change that will be used to transform the motion features.
+        :param vid: (tensor) The input video from which to extract features.
+        :return: A list of 3 tensors of different sizes that containing the transformed motion features used to extract
+                 keypoints, a tensor of gaussian heatmaps representing the keypoints, and a tensor containing the motion
+                 features from I3D.
+        """
         reps = self.i3d(vid)  # bsz,64,8,56,56, bsz,192,8,28,28, bsz,256,4,14,14
+        reps = [self.rep_convs[i](reps[i]) for i in range(len(reps))]
 
         est_reps = []  # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14
-        for r in reps:
+        for i in range(len(reps)):
+            r = reps[i]
             bsz, channels, frames, height, width = r.size()
-            r = self.rep_convs[channels](r)
+            # r = self.rep_convs[i](r)
             vp_1_to_2 = self.exp(vp_diff, out_frames=frames, out_size=height)
             trans_input2 = torch.cat([vp_1_to_2, r], dim=1)  # dim=channels
             est_reps.append(self.trans(trans_input2))
@@ -166,25 +169,39 @@ class FullNetwork(nn.Module):
         return est_reps, est_kp, reps[-1]
 
     def appearance_pipeline(self, img, est_reps):
+        """
+        Function to run all networks that extract appearance features from the input image.
+        :param img: (tensor) The input image from which to extract features.
+        :param est_reps: (tensor) The motion features that will be used to transform the appearance features.
+        :return: A list of 3 tensors of different sizes that contain the transformed appearance features and a tensor
+                 containing the appearance features from VGG.
+        """
         apps = self.vgg(img)  # bsz,128,56,56, bsz,256,28,28, bsz,256,14,14
+        apps = [self.app_convs[i](apps[i]) for i in range(len(apps))]
 
         est_apps = []  # bsz,256,8,56,56, bsz,256,8,28,28, bsz,256,4,14,14
         for i in range(len(apps)):
-            bsz, channels, height, width = apps[i].size()
-            app = self.app_convs[channels](apps[i])  # bsz,256,56,56, bsz,256,28,28, bsz,256,14,14
-            output, last_state = self.conv_gru(input_tensor=est_reps[i].permute(0, 2, 1, 3, 4),
-                                               hidden_state=[app])
+            a, r = apps[i], est_reps[i]
+            # a = self.app_convs[i](a)
+            output, last_state = self.gru(input_tensor=r.permute(0, 2, 1, 3, 4),
+                                          hidden_state=[a])
             output = output[0].permute(0, 2, 1, 3, 4)
             trans_app = output.to(device)
             est_apps.append(trans_app)
 
-        return est_apps, apps[-1]  # bsz,256,8,56,56, bsz,256,8,28,28, bsz,256,4,14,14
+        return est_apps, apps[-1]
 
     def viewpoint_pipeline(self, app, rep):
+        """
+        Function to run the network to estimate the rotational viewpoint change.
+        :param app: (tensor) The VGG appearance features extracted from the input image.
+        :param rep: (tensor) The I3D motion features extracted from the input video.
+        :return: A tensor of scalars representing the estimated rotational viewpoint change.
+        """
         rep = nn.AvgPool3d(kernel_size=(4, 1, 1), stride=(4, 1, 1))(rep).squeeze()
         vpp_input = torch.cat([app, rep], dim=1)  # dim=channels
 
-        vp_est = self.vpp(vpp_input)
+        vp_est = self.vpp(vpp_input)  # bsz
 
         return vp_est
 
@@ -192,7 +209,7 @@ class FullNetwork(nn.Module):
 if __name__ == "__main__":
     print_summary = True
 
-    net = FullNetwork(vp_value_count=1, output_shape=(20, 3, 8, 112, 112))
+    net = FullNetwork(vp_value_count=1, stdev=0.1, output_shape=(20, 3, 8, 112, 112))
 
     if print_summary:
         summary(net, input_size=[(3, 8, 112, 112), (3, 8, 112, 122), (3, 112, 122), (3, 112, 112), (1)])

@@ -31,12 +31,12 @@ class Generator(nn.Module):
         self.out_frames = out_frames
 
         # definition of all layer channels
-        layer_out_channels = {'conv_1a': 256,
+        layer_out_channels = {'conv_1a': 128,
                               'conv_1b': 128,
                               'conv_2a': 128,
                               'conv_2b': 64,
-                              'conv_3a': 32,
-                              'conv_3b': 16,
+                              'conv_3a': 128,
+                              'conv_3b': 32,
                               'conv_4a': 8,
                               'conv_4b': 3
                               }  # key: layer name, value: layer_out_channels
@@ -52,6 +52,7 @@ class Generator(nn.Module):
 
         # definition of all network layers
         # block 1
+        self.avg_pool_1 = nn.AvgPool3d(kernel_size=(4, 4, 4), stride=(4, 4, 4))
         layer = 'conv_1a'
         self.conv3d_1a = nn.Conv3d(in_channels=layer_in_channels[layer], out_channels=layer_out_channels[layer],
                                    kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
@@ -62,6 +63,7 @@ class Generator(nn.Module):
         self.relu_1b = nn.ReLU(inplace=True)
 
         # block 2
+        self.avg_pool_2 = nn.AvgPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
         layer = 'conv_2a'
         self.conv3d_2a = nn.Conv3d(in_channels=layer_in_channels[layer], out_channels=layer_out_channels[layer],
                                    kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
@@ -72,6 +74,7 @@ class Generator(nn.Module):
         self.relu_2b = nn.ReLU(inplace=True)
 
         # block 3
+        self.avg_pool_3 = nn.AvgPool3d(kernel_size=(2, 1, 1), stride=(2, 1, 1))
         layer = 'conv_3a'
         self.conv3d_3a = nn.Conv3d(in_channels=layer_in_channels[layer], out_channels=layer_out_channels[layer],
                                    kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
@@ -93,7 +96,7 @@ class Generator(nn.Module):
 
         # print('%s Model Successfully Built \n' % self.gen_name)
 
-    def forward(self, app, rep):
+    def forward(self, app, kp):
         """
         Function to compute a single forward pass through the network, according to the architecture.
         :param app: (tensor) The input appearance encoding for the desired view of the generated video.
@@ -106,8 +109,8 @@ class Generator(nn.Module):
         # block 1
         block = 1
         app_block_input = app[-block]
-        rep_block_input = rep[-block]
-        x = torch.cat([app_block_input, rep_block_input], dim=1)  # dim=channels
+        kp_block_input = self.avg_pool_1(kp)
+        x = torch.cat([app_block_input, kp_block_input], dim=1)  # dim=channels
 
         x = self.conv3d_1a(x)
         x = self.relu_1a(x)
@@ -119,8 +122,8 @@ class Generator(nn.Module):
         # block 2
         block = 2
         app_block_input = app[-block]
-        rep_block_input = rep[-block]
-        x = torch.cat([app_block_input, rep_block_input, x], dim=1)
+        kp_block_input = self.avg_pool_2(kp)
+        x = torch.cat([app_block_input, kp_block_input, x], dim=1)
 
         x = self.conv3d_2a(x)
         x = self.relu_2a(x)
@@ -132,8 +135,8 @@ class Generator(nn.Module):
         # block 3
         block = 3
         app_block_input = app[-block]
-        rep_block_input = rep[-block]
-        x = torch.cat([app_block_input, rep_block_input, x], dim=1)
+        kp_block_input = self.avg_pool_3(kp)
+        x = torch.cat([app_block_input, kp_block_input, x], dim=1)
 
         x = self.conv3d_3a(x)
         x = self.relu_3a(x)

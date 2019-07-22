@@ -9,12 +9,13 @@ from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 import torch.backends.cudnn as cudnn
+from utils.modelIOFuncs import get_first_frame
 from utils import sms
 
 DATASET = 'NTU'  # 'NTU' or 'Panoptic'
 
 # data parameters
-BATCH_SIZE = 16
+BATCH_SIZE = 14
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
@@ -24,14 +25,15 @@ WIDTH = 112
 # training parameters
 NUM_EPOCHS = 1000
 LR = 1e-4
+STDEV = 0.1
 
-pretrained = True
-MIN_LOSS = 0.00253
-if DATASET.lower() == 'ntu':
-    pretrained_weights = './weights/net_ntu_16_16_2_True_1000_0.0001.pt'
-else:
-    pretrained_weights = './weights/net_pan_16_16_2_False_1000_0.0001.pt'
-pretrained_epochs = 109
+pretrained = False
+MIN_LOSS = 1.0
+# if DATASET.lower() == 'ntu':
+#     pretrained_weights = './weights/net_ntu_16_16_2_True_1000_0.0001.pt'
+# else:
+#     pretrained_weights = './weights/net_pan_16_16_2_False_1000_0.0001.pt'
+pretrained_epochs = 0
 
 
 def ntu_config():
@@ -46,8 +48,8 @@ def ntu_config():
     param_file = '/home/yogesh/kara/data/view.params'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                  PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_ntu_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                     PRECROP, NUM_EPOCHS, LR, STDEV)
     return data_root_dir, train_split, test_split, param_file, weight_file
 
 
@@ -59,8 +61,8 @@ def panoptic_config():
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weight_file = './weights/net_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                  PRECROP, NUM_EPOCHS, LR)
+    weight_file = './weights/net_pan_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                  PRECROP, NUM_EPOCHS, LR, STDEV)
     return data_root_dir, train_split, test_split, close_cams_file, weight_file
 
 
@@ -71,36 +73,43 @@ def training_loop(epoch):
     :return: None
     """
     running_recon_loss = 0.0
+    running_vp_loss = 0.0
 
     model.train()
 
     for batch_idx, (vp_diff, vid1, vid2) in enumerate(trainloader):
-        vp_diff = vp_diff.to(device)
+        vp_diff = vp_diff.type(torch.FloatTensor).to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
 
         optimizer.zero_grad()
 
-        gen_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+        gen_v2, vp_est = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
         # loss
         recon_loss = criterion(gen_v2, vid2)
+        vp_loss = criterion(vp_est, vp_diff)
 
-        loss = recon_loss
+        # del vid1, vid2, img1, img2, vp_diff, gen_v2, vp_est
+
+        loss = recon_loss + vp_loss
         loss.backward()
         optimizer.step()
 
         running_recon_loss += recon_loss.item()
+        running_vp_loss += vp_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Recon Loss:{}'.format(
+            print('\tBatch {}/{} ReconLoss:{} VPLoss:{}'.format(
                 batch_idx + 1,
                 len(trainloader),
-                "{0:.5f}".format(recon_loss)))
+                "{0:.5f}".format(recon_loss),
+                "{0:.5f}".format(vp_loss)))
 
-    print('Training Epoch {}/{} Recon Loss:{}'.format(
+    print('Training Epoch {}/{} ReconLoss:{} VPLoss:{}'.format(
         epoch + 1,
         NUM_EPOCHS,
-        "{0:.5f}".format((running_recon_loss / len(trainloader)))))
+        "{0:.5f}".format((running_recon_loss / len(trainloader))),
+        "{0:.5f}".format((running_vp_loss / len(trainloader)))))
 
 
 def testing_loop(epoch):
@@ -110,55 +119,39 @@ def testing_loop(epoch):
     :return: None
     """
     running_recon_loss = 0.0
+    running_vp_loss = 0.0
 
     model.eval()
 
     for batch_idx, (vp_diff, vid1, vid2) in enumerate(testloader):
-        vp_diff = vp_diff.to(device)
+        vp_diff = vp_diff.type(torch.FloatTensor).to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+            gen_v2, vp_est = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
             # loss
             recon_loss = criterion(gen_v2, vid2)
+            vp_loss = criterion(vp_est, vp_diff)
 
         running_recon_loss += recon_loss.item()
+        running_vp_loss += vp_loss.item()
 
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Recon Loss:{}'.format(
+            print('\tBatch {}/{} ReconLoss:{} VPLoss:{}'.format(
                 batch_idx + 1,
                 len(testloader),
-                "{0:.5f}".format(recon_loss)))
+                "{0:.5f}".format(recon_loss),
+                "{0:.5f}".format(vp_loss)))
 
-    print('Validation Epoch {}/{} Recon Loss:{}'.format(
+    print('Validation Epoch {}/{} ReconLoss:{} VPLoss:{}'.format(
         epoch + 1,
         NUM_EPOCHS,
-        "{0:.5f}".format((running_recon_loss / len(testloader)))))
+        "{0:.5f}".format((running_recon_loss / len(testloader))),
+        "{0:.5f}".format((running_vp_loss / len(testloader)))))
 
     return running_recon_loss / len(testloader)
-
-
-def get_first_frame(vid_batch):
-    """
-    Function to extract the first frame from a batch of input videos.
-    We extract the first frame from each of the videos input to the network so that the network can learn appearance
-    conditioning from the desired views.
-    :param vid_batch: (tensor) A batch of videos from which to extract only the first frame of each.
-    :return: A tensor that holds all the first frames.
-    """
-    # get the first frame fom each vid in the batch and eliminate temporal dimension
-    frames = [torch.squeeze(vid[:, :1, :, :]) for vid in vid_batch]
-    # extract the batch size from the input vid_batch
-    batch_size = vid_batch.size()[0]
-    # create empty tensor containing batch_size images of the correct shape (matching the frames)
-    imgs = torch.zeros(batch_size, *frames[0].size())
-    # put all the first frames into the tensor
-    for sample in range(batch_size):
-        imgs[sample] = frames[sample]
-
-    return imgs
 
 
 def train_model(starting_epoch):
@@ -215,7 +208,8 @@ if __name__ == '__main__':
         data_root_dir, train_split, test_split, param_file, weight_file = ntu_config()
 
         # model
-        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
+                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model = model.to(device)
 
         if device == 'cuda':
@@ -242,7 +236,8 @@ if __name__ == '__main__':
         data_root_dir, train_split, test_split, close_cams_file, weight_file = panoptic_config()
 
         # model
-        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
+                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model = model.to(device)
 
         if device == 'cuda':

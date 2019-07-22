@@ -16,6 +16,7 @@ class VGG(nn.Module):
     """
     Class representing the modified VGG network to be used.
     """
+
     def __init__(self, features, num_classes=1000, init_weights=True,
                  pretrained=False, weights_path=''):
         """
@@ -28,7 +29,16 @@ class VGG(nn.Module):
         """
         super(VGG, self).__init__()
         self.features = features
-
+        # self.avgpool = nn.AdaptiveAvgPool2d((7, 7))
+        # self.classifier = nn.Sequential(
+        #     nn.Linear(512 * 7 * 7, 4096),
+        #     nn.ReLU(True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, 4096),
+        #     nn.ReLU(True),
+        #     nn.Dropout(),
+        #     nn.Linear(4096, num_classes),
+        # )
         if init_weights:
             self._initialize_weights()
 
@@ -37,7 +47,8 @@ class VGG(nn.Module):
 
     def load_weights(self, weights_path):
         state_dict = torch.load(weights_path)
-        bad_weights = ["features.17", "features.19", "features.21", "features.24",
+        bad_weights = ["features.17", "features.19", "features.21",
+                       "features.24",
                        "features.26", "features.28", "classifier.0", "classifier.3",
                        "classifier.6"]
         new_state_dict = {}
@@ -54,10 +65,15 @@ class VGG(nn.Module):
 
         for i in range(len(self.features)):
             x = self.features[i](x)
-            if i in [8, 15, 16]:
+            if i in [8, 15, 16]:  # 22]:
                 # feature_size = x.size()[-1]
                 return_features.append(x)
-        return return_features  # this returns 128x56x56, 256x28x28, 256x14x14
+        # x = self.features(x)
+        # x = self.avgpool(x)
+        # x = x.view(x.size(0), -1)
+        # x = self.classifier(x)
+
+        return return_features  # this has 128x56x56, 256x28x28, 256x14x14
 
     def _initialize_weights(self):
         for m in self.modules():
@@ -104,7 +120,7 @@ cfgs = {
 num_layers_to_use = {
     'A': 7,
     'B': 9,
-    'D': 10,
+    'D': 10,  # 13,
     'E': 11,
 }
 
@@ -114,7 +130,10 @@ def _vgg(arch, cfg, batch_norm, pretrained, progress, weights_path='', **kwargs)
         kwargs['init_weights'] = False
     model = VGG(make_layers(cfgs[cfg], num_layers=num_layers_to_use[cfg], batch_norm=batch_norm),
                 pretrained=pretrained, weights_path=weights_path, **kwargs)
-
+    # if pretrained:
+    #     state_dict = load_state_dict_from_url(model_urls[arch],
+    #                                           progress=progress)
+    #     model.load_state_dict(state_dict)
     return model
 
 

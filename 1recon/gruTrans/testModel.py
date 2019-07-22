@@ -4,21 +4,23 @@ import os
 import time
 import torch
 import torch.nn as nn
-from networks.model import FullNetwork
+from networks.testmodel import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
-from utils.modelIOFuncs import convert_to_vid
+from utils.modelIOFuncs import get_first_frame, convert_to_vid, export_vps
 import torch.backends.cudnn as cudnn
 
 DATASET = 'NTU'  # 'NTU' or 'panoptic'
 
 # data parameters
-BATCH_SIZE = 16
+BATCH_SIZE = 14
 CHANNELS = 3
 FRAMES = 16
 SKIP_LEN = 2
 HEIGHT = 112
 WIDTH = 112
+
+STDEV = 0.1
 
 
 def ntu_config():
@@ -29,8 +31,8 @@ def ntu_config():
     else:
         test_split = '/home/yogesh/kara/data/val.list'
     param_file = '/home/yogesh/kara/data/view.params'
-    weights_path = './weights/net_ntu_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                        PRECROP, 1000, 0.0001)
+    weights_path = './weights/net_ntu_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                      PRECROP, 1000, 0.0001, STDEV)
     output_video_dir = './videos/ntu_'
 
     return data_root_dir, test_split, param_file, weights_path, output_video_dir
@@ -43,8 +45,8 @@ def panoptic_config():
     close_cams_file = '/home/yogesh/kara/data/panoptic/closecams.list'
     if not os.path.exists('./weights'):
         os.mkdir('./weights')
-    weights_path = './weights/net1pipetrans_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
-                                                                        PRECROP, 1000, 0.0001)
+    weights_path = './weights/net_pan_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
+                                                                                PRECROP, 1000, 0.0001, STDEV)
     output_video_dir = './videos/pan_'
 
     return data_root_dir, test_split, close_cams_file, weights_path, output_video_dir
@@ -56,17 +58,18 @@ def test():
     :return: None
     """
     running_recon_loss = 0.0
+    running_vp_loss = 0.0
 
     model.eval()
 
     for batch_idx, (vp_diff, vid1, vid2) in enumerate(testloader):
-        vp_diff = vp_diff.to(device)
+        vp_diff = vp_diff.type(torch.FloatTensor).to(device)
         vid1, vid2 = vid1.to(device), vid2.to(device)
         img1, img2 = get_first_frame(vid1), get_first_frame(vid2)
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+            gen_v2, vp_est = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
 
             # save videos
             convert_to_vid(tensor=vid1, output_dir=output_video_dir,
@@ -75,41 +78,25 @@ def test():
                            batch_num=batch_idx + 1, view=2, item_type='input')
             convert_to_vid(tensor=gen_v2, output_dir=output_video_dir,
                            batch_num=batch_idx + 1, view=2, item_type='output')
+            export_vps(vp_gt=vp_diff, vp_est=vp_est, output_dir=output_video_dir, batch_num=batch_idx + 1)
 
             # loss
             recon_loss = criterion(gen_v2, vid2)
-            loss = recon_loss
+            vp_loss = criterion(vp_est, vp_diff)
+            loss = recon_loss + vp_loss
 
         running_recon_loss += recon_loss.item()
+        running_vp_loss += vp_loss.item()
         if (batch_idx + 1) % 10 == 0:
-            print('\tBatch {}/{} Recon Loss:{}'.format(
+            print('\tBatch {}/{} ReconLoss:{} VPLoss:{}'.format(
                 batch_idx + 1,
                 len(testloader),
-                "{0:.5f}".format(recon_loss)))
+                "{0:.5f}".format(recon_loss),
+                "{0:.5f}".format(vp_loss)))
 
-    print('Testing Complete Recon Loss:{}'.format(
-        "{0:.5f}".format((running_recon_loss / len(testloader)))))
-
-
-def get_first_frame(vid_batch):
-    """
-    Function to extract the first frame from a batch of input videos.
-    We extract the first frame from each of the videos input to the network so that the network can learn appearance
-    conditioning from the desired views.
-    :param vid_batch: (tensor) A batch of videos from which to extract only the first frame of each.
-    :return: A tensor that holds all the first frames.
-    """
-    # get the first frame fom each vid in the batch and eliminate temporal dimension
-    frames = [torch.squeeze(vid[:, :1, :, :]) for vid in vid_batch]
-    # extract the batch size from the input vid_batch
-    batch_size = vid_batch.size()[0]
-    # create empty tensor containing batch_size images of the correct shape (matching the frames)
-    imgs = torch.zeros(batch_size, *frames[0].size())
-    # put all the first frames into the tensor
-    for sample in range(batch_size):
-        imgs[sample] = frames[sample]
-
-    return imgs
+    print('Testing Complete ReconLoss:{} VPLoss:{}'.format(
+        "{0:.5f}".format((running_recon_loss / len(testloader))),
+        "{0:.5f}".format((running_vp_loss / len(testloader)))))
 
 
 def test_model():
@@ -151,7 +138,8 @@ if __name__ == '__main__':
         data_root_dir, test_split, param_file, weights_path, output_video_dir = ntu_config()
 
         # model
-        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
+                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
 
@@ -172,7 +160,8 @@ if __name__ == '__main__':
         data_root_dir, test_split, close_cams_file, weights_path, output_video_dir = panoptic_config()
 
         # model
-        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+        model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
+                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
 

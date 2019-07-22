@@ -314,13 +314,6 @@ class InceptionI3d(nn.Module):
                                                      name + end_point)
         if self._final_endpoint == end_point: return
 
-        # Modification: changed the number of channels here to get only 256 as the output
-        # end_point = 'Mixed_5c_small'
-        # self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128,
-        #                                              [int(384 / 4), int(192 / 4), int(384 / 4), int(48 / 4),
-        #                                               int(128 / 4), int(128 / 4)],
-        #                                              name + end_point)
-
         end_point = 'Mixed_5c'
         self.end_points[end_point] = InceptionModule(256 + 320 + 128 + 128, [384, 192, 384, 48, 128, 128],
                                                      name + end_point)
@@ -328,7 +321,7 @@ class InceptionI3d(nn.Module):
         self.build()
 
         self.feature_layer = Unit3D(in_channels=384 + 384 + 128 + 128, output_channels=256, kernel_shape=[3, 3, 3],
-                                    padding=1, name='features')
+                                    padding=1, name='features')  # 256 + 320 + 128 + 128
 
     def build(self):
         for k in self.end_points.keys():
