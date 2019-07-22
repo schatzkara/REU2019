@@ -1,5 +1,4 @@
 # phase 3
-64262
 import torch
 import torch.nn as nn
 from networks.modifiedVGG import vgg16
@@ -16,14 +15,14 @@ Pipeline:
     i2 = 8 frames view1
     i3 = viewpoint change
 
-    app = VGG(i1)
-
     rep = I3D(i2)
     vp = expander(i3)
     rep' = trans(rep + vp)
+    
+    app = VGG(i1)
+    app' = lstm(app, rep')
 
-    o_con = GEN(app_2 + rep)
-    o_real = GEN(app + rep')
+    recon = gen(app')
 """
 
 vgg_weights_path = '/home/yogesh/kara/REU2019/weights/vgg16-397923af.pth'
@@ -73,20 +72,22 @@ class FullNetwork(nn.Module):
 
         self.exp = Expander(vp_value_count=self.vp_value_count)
 
+        # convs to make all appearance encoding have same number of channels, so they can be used in the same convLSTM
         self.app_conv128 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=(3, 3), stride=(1, 1),
                                      padding=(1, 1))
         self.app_conv256a = nn.Conv2d(in_channels=256, out_channels=256, kernel_size=(3, 3), stride=(1, 1),
                                       padding=(1, 1))
         self.app_conv256b = nn.Conv2d(in_channels=512, out_channels=256, kernel_size=(3, 3), stride=(1, 1),
                                       padding=(1, 1))
-
         self.app_convs = [self.app_conv128, self.app_conv256a, self.app_conv256b]
 
+        # convs for the initial hidden and current states of the convLSTM
         self.hconv = nn.Conv2d(in_channels=256, out_channels=128, kernel_size=(3, 3), stride=(1, 1),
                                padding=(1, 1))
         self.cconv = nn.Conv2d(in_channels=256, out_channels=128, kernel_size=(3, 3), stride=(1, 1),
                                padding=(1, 1))
 
+        # convs to make all motion features have the same number of channels, so they can be used in the same Trans Net
         self.rep_conv64 = nn.Conv3d(in_channels=64, out_channels=256, kernel_size=(3, 3, 3), stride=(1, 1, 1),
                                     padding=(1, 1, 1))
         self.rep_conv192 = nn.Conv3d(in_channels=192, out_channels=256, kernel_size=(3, 3, 3), stride=(1, 1, 1),
@@ -98,12 +99,6 @@ class FullNetwork(nn.Module):
                           256: self.rep_conv256}
 
         self.trans = Transformer(in_channels=256 + self.vp_value_count, out_channels=128)
-        # self.trans64 = Transformer(in_channels=64 + self.vp_value_count, out_channels=64)
-        # self.trans192 = Transformer(in_channels=192 + self.vp_value_count, out_channels=192)
-        # self.trans256 = Transformer(in_channels=256 + self.vp_value_count, out_channels=256)
-        # self.trans = {64: self.trans64,
-        #               192: self.trans192,
-        #               256: self.trans256}
 
         self.conv_lstm = ConvLSTM(input_dim=128, hidden_dim=[128], kernel_size=(3, 3), num_layers=1,
                                   batch_first=True, bias=False, return_all_layers=False)
@@ -116,62 +111,42 @@ class FullNetwork(nn.Module):
         Function to compute a single forward pass through the network, according to the architecture.
         :param vp_diff (tensor) The difference between the two viewpoints.
                         A scalar value for the NTU Dataset; a 3-tuple for the panoptic Dataset.
-                        Must be a tensor of shape: (bsz, 1/3) for this application.
+                        Must be a tensor of shape: (bsz, vp_value_count) for this application.
         :param vid1: (tensor) A video of the scene from the first viewpoint.
-                      Must be a tensor of shape: (bsz, 3, 8/16, 112, 112) for this application.
-        :param vid2: (tensor) A video of the scene from the second viewpoint.
-                      Must be a tensor of shape: (bsz, 3, 8/16, 112, 112) for this application.
-        :param img1: (tensor) An image of the scene from the first viewpoint to use for appearance conditioning.
-                      Must be a tensor of shape: (bsz, 3, 112, 112) for this application.
+                      Must be a tensor of shape: (bsz, 3, out_frames, 112, 112) for this application.
         :param img2: (tensor) An image of the scene from the second viewpoint to use for appearance conditioning.
                       Must be a tensor of shape: (bsz, 3, 112, 112) for this application.
-        :return: The two output videos, one from each viewpoint, the two keypoint feature maps, and the two transformed
-                 keypoint feature maps.
-                 Shape of two output videos is: (bsz, 3, 8/16, 112, 112) for this application.
-                 Shape of two keypoint feature maps is: (bsz, 32, 16, 28, 28) for this application.
+        :return: The reconstructed video.
+                 Shape of output video is: (bsz, 3, out_frames, 112, 112) for this application.
         """
-        # vp1_to_2 = self.exp(vp_diff)  # bsz,1/3,4,14,14
+        rep_v2_est = self.action_pipeline(vp_diff, vid1)  # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14
 
-        rep_v2_est = self.action_pipeline(vp_diff, vid1)  # 4x8x56x56, 192x8x28x28, 256x4x14x14
-
-        app_v2_est = self.appearance_pipeline(img2, rep_v2_est)  # bsz,256,14,14
-
-        # appearance encoding + video features
-        # gen_input2 = torch.cat([exp_app_v2, rep_v2_est], dim=1)
+        app_v2_est = self.appearance_pipeline(img2, rep_v2_est)  # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14
 
         # these are the videos that get returned
-        gen_v2 = self.gen(app_v2_est)  # bsz,3,8/16,112,112
+        gen_v2 = self.gen(app_v2_est)  # bsz,3,out_frames,112,112
 
-        return gen_v2, rep_v2_est
+        return gen_v2
 
     def appearance_pipeline(self, img2, rep_v2_est):
-        app_v2 = self.vgg(img2)  # 128x56x56, 256x28x28, 256x14x14
+        app_v2 = self.vgg(img2)  # bsz,128,56,56, bsz,256,28,28, bsz,256,14,14
 
-        app_v2 = [self.app_convs[i](app_v2[i]) for i in range(len(app_v2))]
+        app_v2 = [self.app_convs[i](app_v2[i]) for i in range(len(app_v2))]  # 256,56,56, 256,28,28, 256,14,14
 
-        h, c = [self.hconv(a) for a in app_v2], [self.cconv(a) for a in app_v2]
-
-        # exp_app_v2 = self.expand_app_enc(app=app_v2, frames=self.rep_frames)  # bsz,256,4,14,14
+        h, c = [self.hconv(a) for a in app_v2], [self.cconv(a) for a in app_v2]  # 128,56,56, 128,28,28, 128,14,14
 
         app_v2_est = []
         for i in range(len(rep_v2_est)):
             output, last_state = self.conv_lstm(input_tensor=rep_v2_est[i].permute(0, 2, 1, 3, 4),
                                                 hidden_state=[(h[i], c[i])])
             output = output[0].permute(0, 2, 1, 3, 4)
-            # bsz, channels, frames, height, width = output.size()
-            # trans_app = torch.zeros(bsz, channels, frames, height, width)
-            # for f in range(frames):
-            #     trans_app[:, :, f, :, :] = output[f]
             trans_app = output.to(device)
             app_v2_est.append(trans_app)
 
-        return app_v2_est
+        return app_v2_est  # bsz,256,8,56,56, bsz,256,8,28,28, bsz,256,4,14,14
 
     def action_pipeline(self, vp_diff, vid1):
-        rep_v1 = self.i3d(vid1)  # bsz,256,4,14,14
-
-        # viewpoint change + video features
-        # trans_input2 = torch.cat([vp_1_to_2, rep_v1], dim=1)  # dim=channels
+        rep_v1 = self.i3d(vid1)  # bsz,64,8,56,56, bsz,192,8,28,28, bsz,256,4,14,14
 
         rep_v2_est = []
         for rep in rep_v1:
@@ -180,36 +155,8 @@ class FullNetwork(nn.Module):
             vp_1_to_2 = self.exp(vp_diff, out_frames=frames, out_size=height)
             trans_input2 = torch.cat([vp_1_to_2, rep], dim=1)  # dim=channels
             rep_v2_est.append(self.trans(trans_input2))
-        # self.trans(trans_input2)  # bsz,256,4,14,14
 
-        return rep_v2_est  # 4x8x56x56, 192x8x28x28, 256x4x14x14
-
-    '''def transform_kp(self, vp, kp):
-        bsz, channels, frames, height, width = kp.size()
-        buffer = torch.zeros(bsz, channels, frames, height, width)
-        for i in range(frames):
-            kp_frame = torch.squeeze(kp[:, :, i, :, :], dim=2)  # eliminate temporal dim
-            # key points + view point
-            trans_input = torch.cat([vp, kp_frame], dim=1)  # dim=channels
-            kp_frame_est = self.trans(trans_input)  # bsz,32,14,14
-            buffer[:, :, i, :, :] = kp_frame_est
-        buffer = buffer.to(device)
-
-        return buffer'''
-
-    def expand_app_enc(self, app, frames):
-        """
-        Function to repeat the appearance encoding along the depth. Makes the depth equivalent to the input video depth.
-        :param app: (tensor) The appearance encoding to expand.
-        :return: The expanded appearance encoding.
-        """
-        bsz, channels, height, width = app.size()
-        buffer = torch.zeros(bsz, channels, frames, height, width)
-        for frame in range(frames):
-            buffer[:, :, frame, :, :] = app
-        buffer = buffer.to(device)
-
-        return buffer
+        return rep_v2_est  # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14
 
 
 if __name__ == "__main__":

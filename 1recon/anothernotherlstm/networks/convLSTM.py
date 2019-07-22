@@ -16,8 +16,6 @@ class ConvLSTMCell(nn.Module):
 
         Parameters
         ----------
-        input_size: (int, int)
-            Height and width of input tensor as (height, width).
         input_dim: int
             Number of channels of input tensor.
         hidden_dim: int
@@ -50,8 +48,6 @@ class ConvLSTMCell(nn.Module):
         combined = torch.cat([input_tensor, h_cur], dim=1)  # concatenate along channel axis
 
         combined_conv = self.conv(combined)
-        # print(combined_conv.size())
-        # print(self.hidden_dim)
         cc_i, cc_f, cc_o, cc_g = torch.split(combined_conv, self.hidden_dim, dim=1)
         i = torch.sigmoid(cc_i)
         f = torch.sigmoid(cc_f)
