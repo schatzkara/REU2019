@@ -264,3 +264,18 @@ def from_tensor(sample):
     sample = np.transpose(sample, (1, 2, 0))
 
     return sample
+
+
+def export_vps(vp_gt, vp_est, output_dir, batch_num):
+    file_path = os.path.join(output_dir, 'vps.txt')
+    bsz = vp_gt.size()[0]
+    assert bsz == vp_est.size()[0], 'vp_gt and vp_est are not the same size'
+
+    with open(file_path, 'a') as f:
+        f.write('Batch:{}\n'.format(batch_num))
+        f.write('{}\t{}\t{}\n'.format('Sample', 'GroundTruth', 'Estimated'))
+        for i in range(bsz):
+            f.write('{}\t{}\t{}\n'.format(str(i + 1).ljust(6),
+                                          str("{0:.5f}".format(vp_gt[i])).zfill(8),
+                                          str("{0:.5f}".format(vp_est[i])).zfill(8)))
+        f.write('\n')
