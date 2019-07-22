@@ -58,31 +58,32 @@ class NTUDataset(Dataset):
         self.diff_actors = diff_actors
         self.diff_scenes = diff_scenes
 
+        # make dicts that list the possible view2 samples and information for a given view1 sample
         if self.diff_actors or self.diff_scenes:
             self.sample_dict = self.make_sample_dict()
         if self.diff_actors and self.diff_scenes:
             self.ra_dict = self.make_ra_dict()
-            # print(self.ra_dict)
         elif self.diff_actors:
             self.sra_dict = self.make_sra_dict()
-            # print(self.sra_dict)
         elif self.diff_scenes:
             self.pra_dict = self.make_pra_dict()
-            # print(self.pra_dict)
 
     def load_view_params(self):
         """
-        Function to load the params associated with the camera view for the NTU Dataset.
-        :return: A
+        Function to load the params associated with the camera views for the NTU Dataset.
+        :return: An array containing all the view params.
         """
         view_params = np.loadtxt(self.param_file)
-
         # normalize the distances
         view_params /= view_params.max(axis=0)
 
         return view_params
 
     def make_sample_dict(self):
+        """
+        Function to make a dictionary that contains all the samples and the information associated with them.
+        :return: A dictionary with keys: sample_id and values: the sample's information from the data_file.
+        """
         sample_dict = {}
 
         for sample in self.data_file:
@@ -93,6 +94,12 @@ class NTUDataset(Dataset):
         return sample_dict
 
     def make_sra_dict(self):
+        """
+        Function to create a dictionary of samples that share the same scene, repetition, and action. Used when
+        diff_actors is true and diff_scenes is false to find a valid view2 sample given the SRA id from the view1
+        sample. The SRA id indicates the scene, repetition, and action of the sample.
+        :return: A dictionary with keys: SRA id (ex. S001R001A001) and values: list of samples with that SRA id.
+        """
         SRA = {}  # SceneRepetitionAction
 
         for sample in self.data_file:
@@ -108,6 +115,12 @@ class NTUDataset(Dataset):
         return SRA
 
     def make_pra_dict(self):
+        """
+        Function to create a dictionary of samples that share the same person, repetition, and action. Used when
+        diff_scenes is true and diff_actors is false to find a valid view2 sample given the PRA id from the view1
+        sample. The PRA id indicates the person, repetition, and action of the sample.
+        :return: A dictionary with keys: PRA id (ex. P001R001A001) and values: list of samples with that PRA id.
+        """
         PRA = {}  # PersonRepetitionAction
 
         for sample in self.data_file:
@@ -123,6 +136,12 @@ class NTUDataset(Dataset):
         return PRA
 
     def make_ra_dict(self):
+        """
+        Function to create a dictionary of samples that share the same repetition, and action. Used when
+        diff_actors and diff_scenes are both true to find a valid view2 sample given the RA id from the view1 sample.
+        The RA id indicates the repetition and action of the sample.
+        :return: A dictionary with keys: RA id (ex. R001A001) and values: list of samples with that RA id.
+        """
         RA = {}  # RepetitionAction
 
         for sample in self.data_file:
@@ -170,14 +189,14 @@ class NTUDataset(Dataset):
                                 frame_index=frame_index, pixel_index=pixel_index)
         vid2 = self.load_frames(vid_path=view2path,
                                 frame_index=frame_index, pixel_index=pixel_index)
-        vid1, vid2 = NTUDataset.to_tensor(sample=vid1), NTUDataset.to_tensor(sample=vid2)
+        vid1, vid2 = self.to_tensor(sample=vid1), self.to_tensor(sample=vid2)
 
         return vp_diff, vid1, vid2
 
     def get_random_views(self):
         """
-        Function to generate 2 random viewpoints for the sample.
-        :return: 2 ints representing the viewpoints for the sample.
+        Function to generate 2 random viewpoints for the sample. Automatically updates view1 and view2
+        :return: None
         """
         self.view1, self.view2 = np.random.randint(1, 4), np.random.randint(1, 4)
         while self.view2 == self.view1:
@@ -188,24 +207,21 @@ class NTUDataset(Dataset):
         Function to process the information that the data file contains about the sample.
         The line of information contains the sample name as well as the number of available frames from each view
         :param index: (int) The index of the sample.
-        :return: the action class, sample_id, two floats representing the viewpoint angles, and two ints representing
-                 the number of frames in view1 and view2
+        :return: the action class, the view1 and view2 sample_ids, two floats representing the viewpoint angles, and
+                 two ints representing the number of frames in view1 and view2
         """
         sample_info = self.data_file[index].split(' ')
         sample_id = sample_info[0][sample_info[0].index('/') + 1:]
-        scene, pid, rid, action = NTUDataset.decrypt_vid_name(vid_name=sample_id)
+        scene, pid, rid, action = self.decrypt_vid_name(vid_name=sample_id)
 
         sample_id_v1 = sample_id
         sample_info_v1 = sample_info
-        if self.diff_actors and self. diff_scenes:
+        if self.diff_actors and self.diff_scenes:
             ra = self.get_ra(rid, action)
             sample_id_v2 = np.random.choice(self.ra_dict[ra])
             sample_info_v2 = self.sample_dict[sample_id_v2].split(' ')
         elif self.diff_actors:
             sra = self.get_sra(scene, rid, action)
-            # num_actors = len(self.sra_dict[sra])
-            # actor_idx = np.random.randint(0, num_actors)
-            # sample_id_v2 = self.sra_dict[sra][actor_idx]
             sample_id_v2 = np.random.choice(self.sra_dict[sra])
             sample_info_v2 = self.sample_dict[sample_id_v2].split(' ')
         elif self.diff_scenes:
@@ -216,30 +232,35 @@ class NTUDataset(Dataset):
             sample_id_v2 = sample_id
             sample_info_v2 = sample_info
 
-        angle_v1 = NTUDataset.get_viewing_angle(rid=rid, cam=self.view1)
-        angle_v2 = NTUDataset.get_viewing_angle(rid=rid, cam=self.view2)
+        angle_v1 = self.get_viewing_angle(rid=rid, cam=self.view1)
+        angle_v2 = self.get_viewing_angle(rid=rid, cam=self.view2)
 
-        nf_v1, nf_v2, nf_v3 = sample_info_v1[1:]
-        nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
+        nf_v1 = int(sample_info_v1[self.view1])
+        nf_v2 = int(sample_info_v2[self.view2])
 
-        info = (action, sample_id_v1, sample_id_v2, angle_v1, angle_v2)
-        if self.view1 == 1:
-            info = info + (nf_v1,)
-        elif self.view1 == 2:
-            info = info + (nf_v2,)
-        elif self.view1 == 3:
-            info = info + (nf_v3,)
+        return action, sample_id_v1, sample_id_v2, angle_v1, angle_v2, nf_v1, nf_v2
 
-        nf_v1, nf_v2, nf_v3 = sample_info_v2[1:]
-        nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
-        if self.view2 == 1:
-            info = info + (nf_v1,)
-        elif self.view2 == 2:
-            info = info + (nf_v2,)
-        elif self.view2 == 3:
-            info = info + (nf_v3,)
-
-        return info
+        # nf_v1, nf_v2, nf_v3 = sample_info_v1[1:]
+        # nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
+        #
+        # info = (action, sample_id_v1, sample_id_v2, angle_v1, angle_v2)
+        # if self.view1 == 1:
+        #     info = info + (nf_v1,)
+        # elif self.view1 == 2:
+        #     info = info + (nf_v2,)
+        # elif self.view1 == 3:
+        #     info = info + (nf_v3,)
+        #
+        # nf_v1, nf_v2, nf_v3 = sample_info_v2[1:]
+        # nf_v1, nf_v2, nf_v3 = int(nf_v1), int(nf_v2), int(nf_v3)
+        # if self.view2 == 1:
+        #     info = info + (nf_v1,)
+        # elif self.view2 == 2:
+        #     info = info + (nf_v2,)
+        # elif self.view2 == 3:
+        #     info = info + (nf_v3,)
+        #
+        # return info
 
     @staticmethod
     def get_viewing_angle(rid, cam):
@@ -274,7 +295,8 @@ class NTUDataset(Dataset):
         Function to get the paths at which the two sample views are located.
         :param action: (int) The action class that the sample captures.
         :param sample_id: (str) The id for the sample from the data file.
-        :return: 2 strings representing the paths for the sample views.
+        :param view_id: (int) The view number of the sample.
+        :return: A string representing the path for the sample view.
         """
         vid_path = self.make_sample_path(action=action, sample_id=sample_id)
         view_path = os.path.join(vid_path, str(view_id))
@@ -306,13 +328,36 @@ class NTUDataset(Dataset):
 
         return scene, pid, rid, action
 
-    def get_sra(self, scene, rid, action):
+    @staticmethod
+    def get_sra(scene, rid, action):
+        """
+        Function to create the SRA id for a sample, which indicates the scene, repetition, and action of the sample.
+        :param scene: (int) The scene id for the sample.
+        :param rid: (int) The repetition id for the sample.
+        :param action: (int) The action class id for the sample.
+        :return: A string representing the SRA id for the sample.
+        """
         return 'S' + str(scene).zfill(3) + 'R' + str(rid).zfill(3) + 'A' + str(action).zfill(3)
 
-    def get_pra(self, pid, rid, action):
+    @staticmethod
+    def get_pra(pid, rid, action):
+        """
+        Function to create the PRA id for a sample, which indicates the person, repetition, and action of the sample.
+        :param pid: (int) The person/actor id for the sample.
+        :param rid: (int) The repetition id for the sample.
+        :param action: (int) The action class id for the sample.
+        :return: A string representing the PRA id for the sample.
+        """
         return 'P' + str(pid).zfill(3) + 'R' + str(rid).zfill(3) + 'A' + str(action).zfill(3)
 
-    def get_ra(self, rid, action):
+    @staticmethod
+    def get_ra(rid, action):
+        """
+        Function to create the RA id for a sample, which indicates the repetition and action of the sample.
+        :param rid: (int) The repetition id for the sample.
+        :param action: (int) The action class id for the sample.
+        :return: A string representing the RA id for the sample.
+        """
         return 'R' + str(rid).zfill(3) + 'A' + str(action).zfill(3)
 
     def rand_frame_index(self, frame_count):
@@ -356,7 +401,7 @@ class NTUDataset(Dataset):
         for i in range(self.clip_len):
             # retrieve the frame (next 9 lines)
             frame_num = frame_index + (i * self.skip_len)
-            frame_name = NTUDataset.make_frame_name(frame_num=frame_num)
+            frame_name = self.make_frame_name(frame_num=frame_num)
             frame_path = os.path.join(vid_path, frame_name)
             assert os.path.exists(frame_path), 'Frame path {} DNE.'.format(frame_path)
             try:
@@ -370,7 +415,7 @@ class NTUDataset(Dataset):
             frame = self.crop_frame(frame=frame,
                                     h_index=height_index, w_index=width_index)
             # normalize
-            frame = NTUDataset.normalize_frame(frame)
+            frame = self.normalize_frame(frame)
 
             # add the frame to the buffer (clip)
             buffer[i] = frame

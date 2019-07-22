@@ -8,7 +8,7 @@ import _pickle as pickle
 
 
 class PanopticDataset(Dataset):
-    """panoptic Dataset"""
+    """Panoptic Dataset"""
 
     def __init__(self, root_dir, data_file, resize_height, resize_width, clip_len,
                  height=128, width=128, frame_count=125,
@@ -289,7 +289,7 @@ class PanopticDataset(Dataset):
         for i in range(self.clip_len):
             # retrieve the frame (next 9 lines)
             frame_num = frame_index + (i * self.skip_len)
-            frame_name = PanopticDataset.make_frame_name(frame_num=frame_num)
+            frame_name = self.make_frame_name(frame_num=frame_num)
             frame_path = os.path.join(vid_path, frame_name)
             assert os.path.exists(frame_path), 'Frame path {} DNE.'.format(frame_path)
             try:
@@ -303,11 +303,11 @@ class PanopticDataset(Dataset):
             frame = self.crop_frame(frame=frame,
                                     height_index=height_index, width_index=width_index)
             # normalize
-            frame = PanopticDataset.normalize_frame(frame)
+            frame = self.normalize_frame(frame)
 
             # add the frame to the buffer (clip)
             buffer[i] = frame
-        buffer = PanopticDataset.to_tensor(buffer)
+        buffer = self.to_tensor(buffer)
 
         return buffer
 
