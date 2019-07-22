@@ -3,19 +3,40 @@ import cv2
 import numpy as np
 
 root_dir = '/home/yogesh/kara/REU2019/'
-# root_dir = 'C:/Users/Owner/Documents/UCF/output/'
 
-# vid_dir = '1pipeTrans/videos/ntu_400e/'
-# vid_dir = 'appSkipConns/videos/ntu_70e/'
-# vid_dir = 'repSkipConns/videos/ntu_/'
-# vid_dir = 'bothSkipConns/videos/ntu_/'
-# vid_dir = 'repSkipConns/videos/ntu_/'
-vid_dir = 'lstmTrans/videos/ntu_/'
+version_number = 10
+model_versions = {1: '1pipe',
+                  2: '1pipeTrans',
+                  3: 'appSkipConns',
+                  4: 'repSkipConns',
+                  5: 'bothSkipConns',
+                  6: 'lstmTrans',
+                  7: '7x7lstm',
+                  8: 'anotherlstm',
+                  9: 'diffAS',
+                  10: 'gruTrans'
+                  }
+epochs = {'1pipe': 175,
+          '1pipeTrans': 1000,
+          'appSkipConns': 153,
+          'repSkipConns': 126,
+          'bothSkipConns': 78,
+          'lstmTrans': 180,
+          '7x7lstm': 140,
+          'anotherlstm': 50,
+          'diffAS': 0,
+          'gruTrans': 12}
+
+data_set = 'ntu'  # 'ntu' or 'pan'
+
+model = model_versions[version_number]
+vid_dir = os.path.join(model, 'videos', data_set + '_' + str(epochs[model]) + 'e')
+# vid_dir = os.path.join(model, data_set + '_')
 
 full_dir = os.path.join(root_dir, vid_dir)
 print(full_dir)
 
-batches_to_view = [11, 15, 17, 18]
+batches_to_view = range(1, 50)  # None  # [166, 167]  # [274, 275, 276]  # [343, 344, 345]  # [207, 208, 209]  # [166, 167]  # None  # [208]  # range(165, 175)  # range(200, 210)  # range(80, 90)  #  [11, 15, 17, 18]
 # range(15, 16)  # range(80, 90)  # None  # [11, 15, 17, 18]  # [18, 20, 84, 119, 145, 193, 199]  # , 303, 309, 341]
 
 possible_views = [1, 2]
@@ -178,12 +199,12 @@ def view_both_gt_recon():
 
 if __name__ == '__main__':
     if batches_to_view is None or len(batches_to_view) == 0:
-        batch_dirs = [os.path.join(full_dir, str(batch+1)) for batch in range(len(os.listdir(full_dir)))]
+        batch_dirs = [os.path.join(full_dir, str(batch + 1)) for batch in range(len(os.listdir(full_dir)))]
     else:
         batch_dirs = [os.path.join(full_dir, str(batch)) for batch in batches_to_view]
     vid_dirs = []
     for batch in batch_dirs:
-        vids = [os.path.join(batch, str(vid+1)) for vid in range(len(os.listdir(batch)))]
+        vids = [os.path.join(batch, str(vid + 1)) for vid in range(len(os.listdir(batch)))]
         vid_dirs.extend(vids)
     view_dirs = []
     for vid in vid_dirs:
