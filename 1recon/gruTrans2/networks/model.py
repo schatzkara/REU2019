@@ -44,7 +44,7 @@ class FullNetwork(nn.Module):
     VALID_VP_VALUE_COUNTS = (1, 3)
     VALID_FRAME_COUNTS = (8, 16)
 
-    def __init__(self, vp_value_count, stdev, output_shape, name='Full Network'):
+    def __init__(self, vp_value_count, stdev, output_shape, use_est_vp=False, name='Full Network'):
         """
         Initializes the Full Network.
         :param vp_value_count: (int) The number of values that identify the viewpoint.
@@ -67,6 +67,7 @@ class FullNetwork(nn.Module):
         self.stdev = stdev
         self.output_shape = output_shape
         self.out_frames = output_shape[2]
+        self.use_est_vp = use_est_vp
 
         # specs of various features
         self.app_feat = 128
@@ -109,9 +110,13 @@ class FullNetwork(nn.Module):
 
         self.kpp = KPPredictor(in_channels=self.rep_feat, nkp=self.nkp, stdev=self.stdev)
 
+        self.kp_poolers = [nn.AvgPool3d(kernel_size=(2, 1, 1), stride=(2, 1, 1)),
+                           nn.AvgPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2)),
+                           nn.AvgPool3d(kernel_size=(4, 4, 4), stride=(4, 4, 4))]
+
         self.vpp = VPPredictor(in_channels=256)
 
-        self.gru = ConvGRU(input_dim=self.rep_feat, hidden_dim=[self.app_feat], kernel_size=(7, 7),
+        self.gru = ConvGRU(input_dim=self.rep_feat + self.nkp, hidden_dim=[self.app_feat], kernel_size=(7, 7),
                            num_layers=1, batch_first=True, bias=False, return_all_layers=False)
 
         self.gen = Generator(in_channels=[self.app_feat, self.nkp], out_frames=self.out_frames)
@@ -137,64 +142,18 @@ class FullNetwork(nn.Module):
 
         vp_est = self.viewpoint_pipeline(apps_v2[-1], reps_v1[-1])  # bsz
 
-        est_reps_v2, est_kp_v2 = self.action_pipeline(vp_est, reps_v1)
+        if self.use_est_vp:
+            est_reps_v2, est_kp_v2 = self.action_pipeline(vp_est, reps_v1)
+        else:
+            est_reps_v2, est_kp_v2 = self.action_pipeline(vp_diff, reps_v1)
         # [bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14], bsz,32,16,56,56, bsz,256,4,14,14
 
-        est_apps_v2 = self.appearance_pipeline(apps_v2, est_reps_v2)
+        est_apps_v2 = self.appearance_pipeline(apps_v2, est_reps_v2, est_kp_v2)
         # [bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14], bsz,256,14,14
 
-        # these are the videos that get returned
         gen_v2 = self.gen(est_apps_v2, est_kp_v2)  # bsz,3,out_frames,112,112
 
-        return gen_v2, vp_est, est_kp_v2
-
-    def action_pipeline(self, vp_diff, reps):
-        """
-        Function to run all networks that extract motion features of some sort from the input video.
-        :param vp_diff: (tensor) The rotational viewpoint change that will be used to transform the motion features.
-        :param vid: (tensor) The input video from which to extract features.
-        :return: A list of 3 tensors of different sizes that containing the transformed motion features used to extract
-                 keypoints, a tensor of gaussian heatmaps representing the keypoints, and a tensor containing the motion
-                 features from I3D.
-        """
-        # reps = self.i3d(vid)  # bsz,64,8,56,56, bsz,192,8,28,28, bsz,256,4,14,14
-        # reps = [self.rep_convs[i](reps[i]) for i in range(len(reps))]
-
-        est_reps = []  # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14
-        for i in range(len(reps)):
-            r = reps[i]
-            bsz, channels, frames, height, width = r.size()
-            # r = self.rep_convs[i](r)
-            vp_1_to_2 = self.exp(vp_diff, out_frames=frames, out_size=height)
-            trans_input2 = torch.cat([vp_1_to_2, r], dim=1)  # dim=channels
-            est_reps.append(self.trans(trans_input2))
-
-        est_reps, est_kp = self.kpp(est_reps)  # bsz,32,16,56,56
-
-        return est_reps, est_kp
-
-    def appearance_pipeline(self, apps, est_reps):
-        """
-        Function to run all networks that extract appearance features from the input image.
-        :param img: (tensor) The input image from which to extract features.
-        :param est_reps: (tensor) The motion features that will be used to transform the appearance features.
-        :return: A list of 3 tensors of different sizes that contain the transformed appearance features and a tensor
-                 containing the appearance features from VGG.
-        """
-        # apps = self.vgg(img)  # bsz,128,56,56, bsz,256,28,28, bsz,256,14,14
-        # apps = [self.app_convs[i](apps[i]) for i in range(len(apps))]
-
-        est_apps = []  # bsz,256,8,56,56, bsz,256,8,28,28, bsz,256,4,14,14
-        for i in range(len(apps)):
-            a, r = apps[i], est_reps[i]
-            # a = self.app_convs[i](a)
-            output, last_state = self.gru(input_tensor=r.permute(0, 2, 1, 3, 4),
-                                          hidden_state=[a])
-            output = output[0].permute(0, 2, 1, 3, 4)
-            trans_app = output.to(device)
-            est_apps.append(trans_app)
-
-        return est_apps
+        return gen_v2, vp_est
 
     def viewpoint_pipeline(self, app, rep):
         """
@@ -209,6 +168,49 @@ class FullNetwork(nn.Module):
         vp_est = self.vpp(vpp_input)  # bsz
 
         return vp_est
+
+    def action_pipeline(self, vp_diff, reps):
+        """
+        Function to run all networks that extract motion features of some sort from the input video.
+        :param vp_diff: (tensor) The rotational viewpoint change that will be used to transform the motion features.
+        :param vid: (tensor) The input video from which to extract features.
+        :return: A list of 3 tensors of different sizes that containing the transformed motion features used to extract
+                 keypoints, a tensor of gaussian heatmaps representing the keypoints, and a tensor containing the motion
+                 features from I3D.
+        """
+        est_reps = []  # bsz,128,8,56,56, bsz,128,8,28,28, bsz,128,4,14,14
+        for i in range(len(reps)):
+            r = reps[i]
+            bsz, channels, frames, height, width = r.size()
+            vp_1_to_2 = self.exp(vp_diff, out_frames=frames, out_size=height)
+            trans_input2 = torch.cat([vp_1_to_2, r], dim=1)  # dim=channels
+            est_reps.append(self.trans(trans_input2))
+
+        est_reps, est_kp = self.kpp(est_reps)  # bsz,32,16,56,56
+
+        return est_reps, est_kp
+
+    def appearance_pipeline(self, apps, est_reps, est_kp):
+        """
+        Function to run all networks that extract appearance features from the input image.
+        :param img: (tensor) The input image from which to extract features.
+        :param est_reps: (tensor) The motion features that will be used to transform the appearance features.
+        :param est_kp: (tensor) The keypoints that will be used to transform the appearance features.
+        :return: A list of 3 tensors of different sizes that contain the transformed appearance features and a tensor
+                 containing the appearance features from VGG.
+        """
+        est_apps = []  # bsz,256,8,56,56, bsz,256,8,28,28, bsz,256,4,14,14
+        for i in range(len(apps)):
+            a, r = apps[i], est_reps[i]
+            kp = self.kp_poolers[i](est_kp)
+            cell_input = torch.cat([r, kp], dim=1).permute(0, 2, 1, 3, 4)  # dim=channels
+            output, last_state = self.gru(input_tensor=cell_input,
+                                          hidden_state=[a])
+            output = output[0].permute(0, 2, 1, 3, 4)
+            trans_app = output.to(device)
+            est_apps.append(trans_app)
+
+        return est_apps
 
 
 if __name__ == "__main__":

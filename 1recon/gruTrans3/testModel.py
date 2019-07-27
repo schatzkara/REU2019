@@ -4,7 +4,7 @@ import os
 import time
 import torch
 import torch.nn as nn
-from networks.testmodel import FullNetwork
+from networks.model import FullNetwork
 from data.NTUDataLoader import NTUDataset
 from data.PanopticDataLoader import PanopticDataset
 from utils.modelIOFuncs import get_first_frame, convert_to_vid, export_vps
@@ -69,7 +69,7 @@ def test():
         img1, img2 = img1.to(device), img2.to(device)
 
         with torch.no_grad():
-            gen_v2, vp_est, est_kp_v2 = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
+            gen_v2, vp_est = model(vp_diff=vp_diff, vid1=vid1, img2=img2)
 
             # save videos
             convert_to_vid(tensor=vid1, output_dir=output_video_dir,
@@ -78,8 +78,6 @@ def test():
                            batch_num=batch_idx + 1, view=2, item_type='input')
             convert_to_vid(tensor=gen_v2, output_dir=output_video_dir,
                            batch_num=batch_idx + 1, view=2, item_type='output')
-            convert_to_vid(tensor=est_kp_v2, output_dir=output_video_dir,
-                           batch_num=batch_idx + 1, view=2, item_type='kp')
             export_vps(vp_gt=vp_diff, vp_est=vp_est, output_dir=output_video_dir, batch_num=batch_idx + 1)
 
             # loss
@@ -163,7 +161,7 @@ if __name__ == '__main__':
 
         # model
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
-                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH), use_est_vp=True)
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
 
