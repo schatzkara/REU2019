@@ -8,8 +8,8 @@ def print_loss(traintest, epochbatch, step, total_steps, loss_names, loss_values
     :param epochbatch: (str) Indicates what stage of loss values are being reported, i.e. "Epoch" or "Batch".
     :param step: (int) The current loop index, i.e. the batch # or the epoch #.
     :param total_steps: (int) The total number of loops that will occur, i.e. The # of batches or the # of epochs.
-    :param loss_names: (list) The names of each of the losses calculated by the model.
-    :param loss_values: (list) The current values of each of the losses calculated by the model. Must be in the same
+    :param loss_names: (list) The names of each of the losses calculated by the generator.
+    :param loss_values: (list) The current values of each of the losses calculated by the generator. Must be in the same
                         order as loss_names.
     :return: None
     """
@@ -27,10 +27,10 @@ def print_loss(traintest, epochbatch, step, total_steps, loss_names, loss_values
 
 def calculate_loss(criterion, inputs, outputs, running_losses, loss_weights):
     """
-    Function to calculate the loss values for the model.
+    Function to calculate the loss values for the generator.
     :param criterion: (function) The loss function that is to be used to calculate each of the losses.
-    :param inputs: (list) The model's input tensors.
-    :param outputs: (list) The model's output tensors.
+    :param inputs: (list) The generator's input tensors.
+    :param outputs: (list) The generator's output tensors.
     :param running_losses: (dict) The current running loss values to increment; key: loss name, value: loss value.
     :param loss_weights: (dict) The weights to use (if any) for the different losses; key: loss name, value: loss value.
     :return: 2 dicts containing the current and running loss values, key: loss name, value: loss value.

@@ -119,8 +119,8 @@ class FullNetwork(nn.Module):
 
         self.ofp = OFPredictor(in_channels=self.rep_feat + self.nkp)
 
-        self.gru = ConvGRU(input_dim=self.rep_feat + self.nkp, hidden_dim=[self.app_feat], kernel_size=(7, 7),
-                           num_layers=1, batch_first=True, bias=False, return_all_layers=False)
+        self.gru = ConvGRU(input_dim=self.app_feat + self.rep_feat + self.nkp, hidden_dim=[self.app_feat],
+                           kernel_size=(7, 7), num_layers=1, batch_first=True, bias=False, return_all_layers=False)
 
         self.gen = Generator(in_channels=[self.app_feat, self.nkp], out_frames=self.out_frames)
         # print('%s Model Successfully Built \n' % self.net_name)

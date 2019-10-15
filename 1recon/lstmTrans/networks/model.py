@@ -22,7 +22,7 @@ Pipeline:
     app = VGG(i1)
     app' = lstm(app, rep')
 
-    recon = gen(app', rep')
+    recon = gen(app' + rep')
 """
 
 vgg_weights_path = '/home/yogesh/kara/REU2019/weights/vgg16-397923af.pth'

@@ -156,7 +156,7 @@ class InceptionModule(nn.Module):
 
 class InceptionI3d(nn.Module):
     """Inception-v1 I3D architecture.
-    The model is introduced in:
+    The generator is introduced in:
         Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset
         Joao Carreira, Andrew Zisserman
         https://arxiv.org/pdf/1705.07750v1.pdf.
@@ -167,7 +167,7 @@ class InceptionI3d(nn.Module):
         http://arxiv.org/pdf/1409.4842v1.pdf.
     """
 
-    # Endpoints of the model in order. During construction, all the endpoints up
+    # Endpoints of the generator in order. During construction, all the endpoints up
     # to a designated `final_endpoint` are returned in a dictionary as the
     # second return value.
     VALID_ENDPOINTS = (
@@ -195,14 +195,14 @@ class InceptionI3d(nn.Module):
 
     # def __init__(self, num_classes=400, spatial_squeeze=True,
     #              final_endpoint='Logits', name='inception_i3d', in_channels=3, dropout_keep_prob=0.5):
-    #     """Initializes I3D model instance.
+    #     """Initializes I3D generator instance.
     #         Args:
     #           num_classes: The number of outputs in the logit layer (default 400, which
     #               matches the Kinetics dataset).
     #           spatial_squeeze: Whether to squeeze the spatial dimensions for the logits
     #               before returning (default True).
-    #           final_endpoint: The model contains many possible endpoints.
-    #               `final_endpoint` specifies the last endpoint for the model to be built
+    #           final_endpoint: The generator contains many possible endpoints.
+    #               `final_endpoint` specifies the last endpoint for the generator to be built
     #               up to. In addition to the output at `final_endpoint`, all the outputs
     #               at endpoints up to `final_endpoint` will also be returned, in a
     #               dictionary. `final_endpoint` must be one of
@@ -214,7 +214,7 @@ class InceptionI3d(nn.Module):
 
     def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c', in_frames=8, in_channels=3):
         """
-        Initializes I3D model instance.
+        Initializes I3D generator instance.
         :param name: (str, optional) The name of the network (default 'modified_inception_i3d').
         :param final_endpoint: (str, optional) The name of the final layer used in the network (default 'Mixed_5c').
         :param in_frames: (int, optional) The number of frames in the input video (default 8).

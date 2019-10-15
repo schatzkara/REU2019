@@ -8,7 +8,7 @@ from utils.lossFuncs import calculate_loss, print_loss
 def training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainloader, loss_weights=None):
     """
     Function carrying out the training loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is training.
+    :param epoch: (int) The current epoch in which the generator is training.
     :return: None
     """
     running_losses = None
@@ -44,7 +44,7 @@ def training_loop(epoch, num_epochs, model, optimizer, criterion, device, trainl
 def validation_loop(epoch, num_epochs, model, criterion, device, testloader, loss_weights=None):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is testing/validating.
+    :param epoch: (int) The current epoch in which the generator is testing/validating.
     :return: None
     """
     running_losses = None
@@ -119,7 +119,7 @@ def testing_loop(model, criterion, device, testloader, output_dir, loss_weights=
 def train_model(starting_epoch, num_epochs, model, optimizer, criterion,
                 trainloader, testloader, device, weight_file, loss_weights=None):
     """
-    Function to train and validate the model for all epochs.
+    Function to train and validate the generator for all epochs.
     :return: None
     """
     min_loss = 0.0
@@ -140,7 +140,7 @@ def train_model(starting_epoch, num_epochs, model, optimizer, criterion,
 
 def test_model(model, criterion, device, testloader, output_dir, loss_weights=None):
     """
-    Function to test the model.
+    Function to test the generator.
     :return: None
     """
     start_time = time.time()

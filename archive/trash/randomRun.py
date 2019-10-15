@@ -6,7 +6,7 @@ from old.phase0 import FullNetwork
 
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-# model
+# generator
 model = FullNetwork()
 model.to(device)
 
@@ -84,7 +84,7 @@ def train(dataset, epoch):  # dataset is dict of nbatches, each batch is dict of
 
         optimizer.zero_grad()
 
-        print('Running inputs through model.')
+        print('Running inputs through generator.')
         output_v1, output_v2, rep_v1, rep_v2 = model(view1img, view2img, view1vid, view2vid)
         con_loss = criterion(rep_v1, rep_v2)
         recon_loss1 = criterion(output_v1, view1vid)
@@ -127,7 +127,7 @@ def test(dataset, epoch):  # dataset is dict of 2 views with (1-PROP_TRAINING)*D
 
     # optimizer.zero_grad()
 
-    print('Running inputs through model.')
+    print('Running inputs through generator.')
     with torch.no_grad():
         output_v1, output_v2, rep_v1, rep_v2 = model(view1img, view2img, view1vid, view2vid)
         con_loss = criterion(rep_v1, rep_v2)
@@ -150,7 +150,7 @@ def train_model():
     #         print(view)
     #         print(training_batches[batch][view].size())
     start_time = time.time()
-    print('Training model.')
+    print('Training generator.')
     for epoch in range(num_epochs):
         # print('Epoch {}/{}'.format(epoch, NUM_EPOCHS))
         print('Training...')

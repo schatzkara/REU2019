@@ -1,15 +1,15 @@
 from graphing.plotting import single_plot, multi_line_plot
 from graphing.getData import get_parameters, get_epoch_metrics
 
-model_phase = 4  # 0 to 4
+model_phase = 5  # 0 to 4
 
-job_numbers = [63225, 63951, 64092]
+job_numbers = [66984, 67219, 67232, 67288]
 
-root_dir = './logstograph/1recon/'
+root_dir = './logstograph/gruTrans/'
 file_name_start, file_name_end = 'output_', '.out'
-starting_epoch = 5
+starting_epoch = 50
 skip_epoch = 1
-ending_epoch = 200
+ending_epoch = 80
 if model_phase == 0:
     metrics = ['loss', 'con', 'recon1', 'recon2']
 elif model_phase == 1:
@@ -20,8 +20,10 @@ elif model_phase == 3:
     metrics = ['loss', 'con1', 'con2', 'con3', 'con4', 'recon1', 'recon2']
 elif model_phase == 4:
     metrics = ['loss']
+elif model_phase == 5:
+    metrics = ['reconloss', 'vploss']
 else:
-    print('Invalid model phase number.')
+    print('Invalid generator phase number.')
 
 
 def plot_multiple_files(file1, file2, *args):

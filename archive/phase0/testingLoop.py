@@ -37,7 +37,7 @@ NUM_EPOCHS = 1
 def test(epoch):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is testing/validating.
+    :param epoch: (int) The current epoch in which the generator is testing/validating.
     :return: None
     """
     running_total_loss = 0.0
@@ -225,7 +225,7 @@ def from_tensor(sample):
 
 def test_model():
     """
-    Function to carry out the model's testing over all epochs.
+    Function to carry out the generator's testing over all epochs.
     :return: None
     """
     start_time = time.time()
@@ -251,14 +251,14 @@ def print_params():
 if __name__ == '__main__':
     """
     Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
+    This function creates the generator and data loaders. Then, it trains the generator.
     """
     if PRINT_PARAMS:
         print_params()
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    # model
+    # generator
     model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
     model.load_state_dict(torch.load(weights_path))
     # print('Model Built.')

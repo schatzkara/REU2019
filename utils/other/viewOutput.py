@@ -31,7 +31,7 @@ data_set = 'ntu'  # 'ntu' or 'pan'
 
 model = model_versions[version_number]
 vid_dir = os.path.join(model, 'videos', data_set + '_' + str(epochs[model]) + 'e')
-# vid_dir = os.path.join(model, data_set + '_')
+# vid_dir = os.path.join(generator, data_set + '_')
 
 full_dir = os.path.join(root_dir, vid_dir)
 print(full_dir)
@@ -55,7 +55,7 @@ if 'rep' in types_to_show or 'kp' in types_to_show:
     frames = 4
 nkp = 32
 
-display_time = 100
+display_time = 200
 display_size = 400
 
 

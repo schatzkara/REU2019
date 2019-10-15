@@ -16,12 +16,12 @@ output file format:
     print('Time: {}'.format(end_time - start_time))
 """
 
-model_phase = 4  # 0, 1 or 2
+model_phase = 5  # 0, 1 or 2
 
 
 def get_parameters(output_file):
     """
-    Function to get the model and data parameters for the experiment.
+    Function to get the generator and data parameters for the experiment.
     :param output_file: (str) The path for the file that contains the experiment terminal output.
     :return: (dict) A dictionary with keys as parameter names and values as parameter values.
     """
@@ -50,7 +50,7 @@ def get_epoch_metrics(output_file, model_phase):
     """
     Function to get the metric values for each epoch.
     :param output_file: (str) The path for the file that contains the experiment terminal output.
-    :param model_phase: (int) The phase of the model that the output file is from.
+    :param model_phase: (int) The phase of the generator that the output file is from.
     :return: (dict, dict) A dictionary representing the training metrics and another representing the val metrics.
               Keys are metric names and values are a list of the metric values for each epoch.
     """
@@ -65,8 +65,10 @@ def get_epoch_metrics(output_file, model_phase):
         metrics = ['loss', 'con1', 'con2', 'con3', 'con4', 'recon1', 'recon2']
     elif model_phase == 4:
         metrics = ['loss']
+    elif model_phase == 5:
+        metrics = ['reconloss', 'vploss']
     else:
-        print('There are only 2 model phases.')
+        print('There are only 2 generator phases.')
 
     # these dictionaries will hold lists for each metric
     training_metrics = {}
@@ -198,13 +200,14 @@ def get_old_old_epoch_metrics(output_file):
 
 
 if __name__ == '__main__':
-    file_path = './logstograph/output_63227.out'
+    file_path = './logstograph/now/output_67219.out'
     param_dict = get_parameters(file_path)
     print(param_dict)
     epoch_metrics = get_epoch_metrics(file_path, model_phase)
     print(epoch_metrics)
     training_metrics, val_metrics = epoch_metrics
-    val_loss = val_metrics['loss']
+    val_loss = val_metrics['reconloss']
     print(val_loss)
     min_loss = min(val_loss)
     print(min_loss)
+    print(len(val_loss))

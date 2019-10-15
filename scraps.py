@@ -1,7 +1,7 @@
 
 # if __name__ == "__main__":
-#     model = FullNetwork()
-#     model(0,0)
+#     generator = FullNetwork()
+#     generator(0,0)
 #     print_summary = True
 #
 #     vgg = VGG('VGG16')
@@ -15,41 +15,40 @@
 #
 
 
-
-for value in training_data.items():
-    print(value[1].size())
-for value in testing_data.items():
-    print(value[1].size())
-
-for value in training_batches.values():
-    print(value.size())
-
-
-
-x = torch.zeros([3, 4, 4])
-y = torch.zeros([3, 2, 4, 4])
-print('x:', x)
-print('y:', y)
-
-z = torch.unsqueeze(x, 1)
-print('z:', z)
-print(z.size())
-
-a = torch.cat([y, z], dim=1)
-print(a.size())
+# for value in training_data.items():
+#     print(value[1].size())
+# for value in testing_data.items():
+#     print(value[1].size())
+#
+# for value in training_batches.values():
+#     print(value.size())
 
 
 
-rand_input = torch.randn(1, 1536, 7, 7)
-model = Generator(in_channels=1536)
-output = model(rand_input)
-print(output.size())
+# x = torch.zeros([3, 4, 4])
+# y = torch.zeros([3, 2, 4, 4])
+# print('x:', x)
+# print('y:', y)
+
+# z = torch.unsqueeze(x, 1)
+# print('z:', z)
+# print(z.size())
+#
+# a = torch.cat([y, z], dim=1)
+# print(a.size())
 
 
 
-def test(dataset, epoch):
+# rand_input = torch.randn(1, 1536, 7, 7)
+# generator = Generator(in_channels=1536)
+# output = generator(rand_input)
+# print(output.size())
+
+
+
+'''def test(dataset, epoch):
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = FullNetwork()
+    generator = FullNetwork()
 
     criterion = None
     optimizer = None
@@ -68,9 +67,9 @@ def test(dataset, epoch):
             running_loss = 0.0
 
             if phase == 'train':
-                model.train()
+                generator.train()
             else:
-                model.eval()
+                generator.eval()
 
             for inputs, targets in data[phase]:
                 inputs = inputs.to(device)
@@ -79,13 +78,13 @@ def test(dataset, epoch):
                 optimizer.zero_grad()
 
                 if phase == 'train':
-                    outputs = model(inputs)
+                    outputs = generator(inputs)
                     loss = criterion(outputs, targets)
                     loss.backward()
                     optimizer.step()
                 else:
                     with torch.no_grad():
-                        outputs = model(inputs)
+                        outputs = generator(inputs)
                     loss = criterion(outputs, targets)
 
                 running_loss += loss.item() * inputs.size(0)
@@ -94,49 +93,50 @@ def test(dataset, epoch):
                 end_time = time.time()
                 print('Time: {}'.format(end_time - start_time))
 
-                running_loss = 0.0
+                running_loss = 0.0'''
+
+
+# import torch
+#
+# random_images_v1 = torch.randn(1, 3, 112, 112)
+# random_images_v2 = torch.randn(1, 3, 112, 112)
+# random_videos_v1 = torch.randn(1, 3, 8, 112, 112)
+# random_videos_v2 = torch.randn(1, 3, 8, 112, 112)
+#
+# generator = FullNetwork()
+#
+# output1, output2 = generator(random_images_v1, random_images_v2, random_videos_v1, random_videos_v2)
+#
+# print(output1)
+# print(output2)
+# print(output1.size())
+# print(output2.size())
 
 
 
-random_images_v1 = torch.randn(1, 3, 112, 112)
-random_images_v2 = torch.randn(1, 3, 112, 112)
-random_videos_v1 = torch.randn(1, 3, 8, 112, 112)
-random_videos_v2 = torch.randn(1, 3, 8, 112, 112)
-
-model = FullNetwork()
-
-output1, output2 = model(random_images_v1, random_images_v2, random_videos_v1, random_videos_v2)
-
-print(output1)
-print(output2)
-print(output1.size())
-print(output2.size())
+# l = [1, 2, 3, 4, 5]
+# print(l)
+# print(*l)
 
 
 
-l = [1, 2, 3, 4, 5]
-print(l)
-print(*l)
+# with open('test.txt') as f:
+#     data_file = f.readlines()
+#     data_file = [line.strip() for line in data_file]
+#
+# print(data_file)
+# print(len(data_file))
 
 
 
-with open('test.txt') as f:
-    data_file = f.readlines()
-    data_file = [line.strip() for line in data_file]
-
-print(data_file)
-print(len(data_file))
-
+# import glob
+#
+# for filename in glob.iglob('C:/Users/Owner/Documents/*', recursive=True):
+#     print(filename)
+#
 
 
-import glob
-
-for filename in glob.iglob('C:/Users/Owner/Documents/*', recursive=True):
-    print(filename)
-
-
-
-import os
+# import os
 # import glob
 
 # Class(1 - 60)
@@ -151,46 +151,46 @@ import os
 
 # print(listdir_nohidden(path='C:/Users/Owner/Documents'))
 
-dir = 'C:/Users/Owner/Documents'
-x = os.listdir(path=dir)
-classes = []
-for y in x:
-    if not y.startswith('~') and not y.endswith('.ini') and not y.startswith('M'):
-        classes.append(os.path.join(dir, y))
-print("CLASSES", classes)
-samples = []
-for c in classes:
-    samples.append([os.path.join(c, s) for s in os.listdir(c)])
-# samples = [os.listdir(os.path.join(dir, c)) for c in classes]
-print("SAMPLES", samples)
-views = [os.listdir(path=s) for s in samples]
-print("VIEWS", views)
+# dir = 'C:/Users/Owner/Documents'
+# x = os.listdir(path=dir)
+# classes = []
+# for y in x:
+#     if not y.startswith('~') and not y.endswith('.ini') and not y.startswith('M'):
+#         classes.append(os.path.join(dir, y))
+# print("CLASSES", classes)
+# samples = []
+# for c in classes:
+#     samples.append([os.path.join(c, s) for s in os.listdir(c)])
+# # samples = [os.listdir(os.path.join(dir, c)) for c in classes]
+# print("SAMPLES", samples)
+# views = [os.listdir(path=s) for s in samples]
+# print("VIEWS", views)
+#
+#
+
+
+# import torch
+
+# x = torch.zeros(10, 8, 3, 12, 12)
+# print(x.size()[0])
+#
+# frame = torch.zeros(3, 12, 12)
+#
+# imgs = torch.zeros(10, *frame.size())
+# print(imgs.size())
 
 
 
 
-import torch
-
-x = torch.zeros(10, 8, 3, 12, 12)
-print(x.size()[0])
-
-frame = torch.zeros(3, 12, 12)
-
-imgs = torch.zeros(10, *frame.size())
-print(imgs.size())
-
-
-
-
-l = [0,1,2,3]
-
-x, y, z = l[1:]
-print(x, y, z)
-
-a = () + (1,)
-b = a + (2,)
-print(a, b)
-
+# l = [0,1,2,3]
+#
+# x, y, z = l[1:]
+# print(x, y, z)
+#
+# a = () + (1,)
+# b = a + (2,)
+# print(a, b)
+#
 
 
 
@@ -285,31 +285,31 @@ print(torch.eq(a, b))
 
 
 
-s = " hey i am kara"
-
-t = s.split(" ")
-
-print(t)
-
-a = 52075235.239528592034
-
-print("{0:.5f}".format(a))
-
-b = [1, 2, 3, 4, 5]
-
-print(b[2:-2])
-
-import torch
-
-x = torch.tensor([[1, 2], [1, 2]])
-print(x.size()[0])
-
-from randomStuff import sms
-
-n = 5
-
-sms.send("hello{}".format(n), "6304876751", "att")
-
+# s = " hey i am kara"
+#
+# t = s.split(" ")
+#
+# print(t)
+#
+# a = 52075235.239528592034
+#
+# print("{0:.5f}".format(a))
+#
+# b = [1, 2, 3, 4, 5]
+#
+# print(b[2:-2])
+#
+# import torch
+#
+# x = torch.tensor([[1, 2], [1, 2]])
+# print(x.size()[0])
+#
+# from randomStuff import sms
+#
+# n = 5
+#
+# sms.send("hello{}".format(n), "6304876751", "att")
+#
 
 
 import torch
@@ -423,72 +423,72 @@ cv2.imwrite('./img.jpg', frame)
 
 
 
-from old.phase0 import NTUDataset
-import torch
-
-data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135/'
-test_splits = 'C:/Users/Owner/Documents/UCF/Project/SSCVAS/data/shortestval.list'
-
-# VIEW1 = 1
-# VIEW2 = 2
-BATCH_SIZE = 32
-CHANNELS = 3
-FRAMES = 8
-SKIP_LEN = 2
-HEIGHT = 112
-WIDTH = 112
-PRECROP = True
-
-
-if __name__ == '__main__':
-    testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
-                         resize_height=HEIGHT, resize_width=WIDTH,
-                         clip_len=FRAMES, skip_len=SKIP_LEN,
-                         random_all=True, precrop=PRECROP)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=1)
-
-    for batch_idx, (view1vid, view2vid) in enumerate(testloader):
-        print(view1vid.size())
-        print(view1vid)
-        print(view2vid.size())
-        print(view2vid)
-
-
-
+# from old.phase0 import NTUDataset
+# import torch
+#
+# data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135/'
+# test_splits = 'C:/Users/Owner/Documents/UCF/Project/SSCVAS/data/shortestval.list'
+#
+VIEW1 = 1
+VIEW2 = 2
+# BATCH_SIZE = 32
+# CHANNELS = 3
+# FRAMES = 8
+# SKIP_LEN = 2
+# HEIGHT = 112
+# WIDTH = 112
+# PRECROP = True
+#
+#
+# if __name__ == '__main__':
+#     testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
+#                          resize_height=HEIGHT, resize_width=WIDTH,
+#                          clip_len=FRAMES, skip_len=SKIP_LEN,
+#                          random_all=True, precrop=PRECROP)
+#     testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=1)
+#
+#     for batch_idx, (view1vid, view2vid) in enumerate(testloader):
+#         print(view1vid.size())
+#         print(view1vid)
+#         print(view2vid.size())
+#         print(view2vid)
+#
+#
+#
 # from PanopticDataLoader import PanopticDataset
-from archive.phase2.data import NTUDataset
-import torch
-
-data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135'
-test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/NTU/one.list'
+# from archive.phase2.data import NTUDataset
+# import torch
+#
+# data_root_dir = 'C:/Users/Owner/Documents/UCF/Project/ntu-ard/frames-240x135'
+# test_splits = 'C:/Users/Owner/Documents/UCF/Project/REU2019/data/NTU/one.list'
 
 # VIEW1 = 1
 # VIEW2 = 2
-BATCH_SIZE = 32
-CHANNELS = 3
-FRAMES = 8
-SKIP_LEN = 2
-HEIGHT = 112
-WIDTH = 112
-PRECROP = False
-
-if __name__ == '__main__':
-    testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
-                              resize_height=HEIGHT, resize_width=WIDTH,
-                              clip_len=FRAMES, skip_len=SKIP_LEN,
-                              random_all=True, precrop=PRECROP)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=1)
-
-    for batch_idx, (vp1, vp2, view1vid, view2vid) in enumerate(testloader):
-        print(view1vid.size())
-        # print(view1vid)
-        print(view2vid.size())
+# BATCH_SIZE = 32
+# CHANNELS = 3
+# FRAMES = 8
+# SKIP_LEN = 2
+# HEIGHT = 112
+# WIDTH = 112
+# PRECROP = False
+#
+# if __name__ == '__main__':
+#     testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
+#                               resize_height=HEIGHT, resize_width=WIDTH,
+#                               clip_len=FRAMES, skip_len=SKIP_LEN,
+#                               random_all=True, precrop=PRECROP)
+#     testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=1)
+#
+#     for batch_idx, (vp1, vp2, view1vid, view2vid) in enumerate(testloader):
+#         print(view1vid.size())
+#         print(view1vid)
+        # print(view2vid.size())
         # print(view2vid)
-        print(vp1)
-        print(vp2)
-        print(vp1.size())
-
-
+        # print(vp1)
+        # print(vp2)
+        # print(vp1.size())
+#
+#
 
 import numpy as np
 import cv2
@@ -517,218 +517,218 @@ print(maxi)
 
 
 
-import time
-import torch
-import torch.nn as nn
-from old.phase0 import FullNetwork
-from old.phase0 import NTUDataset
-import torch.backends.cudnn as cudnn
-import cv2
-
+# import time
+# import torch
+# import torch.nn as nn
+# from old.phase0 import FullNetwork
+# from old.phase0 import NTUDataset
+# import torch.backends.cudnn as cudnn
+# import cv2
+#
 # directory information
-data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
+# data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
 # train_splits = '/home/yogesh/kara/data/train.list'
-test_splits = '/home/yogesh/kara/data/val.list'
-weights_path = '/home/yogesh/kara/REU2019/weights/test_net_32_8_2_True_1000_0001.pt'
-
+# test_splits = '/home/yogesh/kara/data/val.list'
+# weights_path = '/home/yogesh/kara/REU2019/weights/test_net_32_8_2_True_1000_0001.pt'
+#
 # data parameters
-PRINT_PARAMS = True
+# PRINT_PARAMS = True
 # VIEW1 = 1
 # VIEW2 = 2
-BATCH_SIZE = 32
-CHANNELS = 3
-FRAMES = 8
-SKIP_LEN = 2
-HEIGHT = 112
-WIDTH = 112
-PRECROP = False
-
+# BATCH_SIZE = 32
+# CHANNELS = 3
+# FRAMES = 8
+# SKIP_LEN = 2
+# HEIGHT = 112
+# WIDTH = 112
+# PRECROP = False
+#
 # training parameters
-NUM_EPOCHS = 1
+# NUM_EPOCHS = 1
 # LR = 1e-4
-
+#
 # weight_file_name = './weights/net_{}_{}_{}_{}'.format(BATCH_SIZE, FRAMES, NUM_EPOCHS, LR)
-output_video_dir = '/home/yogesh/kara/REU2019/videos/'
+# output_video_dir = '/home/yogesh/kara/REU2019/videos/'
+#
+#
+# def test(epoch):
+#     """
+#     Function to carry out the testing/validation loop for the Full Network for a single epoch.
+#     :param epoch: (int) The current epoch in which the generator is testing/validating.
+#     :return: None
+#     """
+#     running_total_loss = 0.0
+#     running_con_loss = 0.0
+#     running_recon1_loss = 0.0
+#     running_recon2_loss = 0.0
+#
+#     generator.eval()
+#
+#     for batch_idx, (view1vid, view2vid) in enumerate(testloader):
+#         view1vid, view2vid = view1vid.to(device), view2vid.to(device)
+#         view1img, view2img = get_first_frame(view1vid), get_first_frame(view2vid)
+#         view1img, view2img = view1img.to(device), view2img.to(device)
+#
+#         with torch.no_grad():
+#             output_v1, output_v2, rep_v1, rep_v2 = generator(vid1=view1vid, vid2=view2vid, img1=view1img, img2=view2img)
+#             con_loss = criterion(rep_v1, rep_v2)
+#             recon1_loss = criterion(output_v1, view1vid)
+#             recon2_loss = criterion(output_v2, view2vid)
+#             loss = con_loss + recon1_loss + recon2_loss
+#
+#           # save videos
+            # convert_to_vid(view1vid, batch_idx, True), convert_to_vid(view2vid, batch_idx, True)
+            # convert_to_vid(output_v1, batch_idx, False), convert_to_vid(output_v1, batch_idx, False)
 
-
-def test(epoch):
-    """
-    Function to carry out the testing/validation loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is testing/validating.
-    :return: None
-    """
-    running_total_loss = 0.0
-    running_con_loss = 0.0
-    running_recon1_loss = 0.0
-    running_recon2_loss = 0.0
-
-    model.eval()
-
-    for batch_idx, (view1vid, view2vid) in enumerate(testloader):
-        view1vid, view2vid = view1vid.to(device), view2vid.to(device)
-        view1img, view2img = get_first_frame(view1vid), get_first_frame(view2vid)
-        view1img, view2img = view1img.to(device), view2img.to(device)
-
-        with torch.no_grad():
-            output_v1, output_v2, rep_v1, rep_v2 = model(vid1=view1vid, vid2=view2vid, img1=view1img, img2=view2img)
-            con_loss = criterion(rep_v1, rep_v2)
-            recon1_loss = criterion(output_v1, view1vid)
-            recon2_loss = criterion(output_v2, view2vid)
-            loss = con_loss + recon1_loss + recon2_loss
-
-            # save videos
-            convert_to_vid(view1vid, batch_idx, True), convert_to_vid(view2vid, batch_idx, True)
-            convert_to_vid(output_v1, batch_idx, False), convert_to_vid(output_v1, batch_idx, False)
-
-        running_total_loss += loss.item()
-        running_con_loss += con_loss.item()
-        running_recon1_loss += recon1_loss.item()
-        running_recon2_loss += recon2_loss.item()
-        print('\tBatch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(batch_idx + 1, len(testloader),
-                                                                          "{0:.5f}".format(loss),
-                                                                          "{0:.5f}".format(con_loss),
-                                                                          "{0:.5f}".format(recon1_loss),
-                                                                          "{0:.5f}".format(recon2_loss)))
-
-    print('Validation Epoch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
-                                                                               "{0:.5f}".format((
-                                                                                       running_total_loss / len(
-                                                                                   testloader))),
-                                                                               "{0:.5f}".format((running_con_loss / len(
-                                                                                   testloader))),
-                                                                               "{0:.5f}".format((
-                                                                                       running_recon1_loss / len(
-                                                                                   testloader))),
-                                                                               "{0:.5f}".format((
-                                                                                       running_recon2_loss / len(
-                                                                                   testloader)))))
-
-
-def get_first_frame(vid_batch):
-    """
-    Function to extract the first frame from a batch of input videos.
-    We extract the first frame from each of the videos input to the network so that the network can learn appearance
-    conditioning from the desired views.
-    :param vid_batch: (tensor) A batch of videos from which to extract only the first frame of each.
-    :return: A tensor that holds all the first frames.
-    """
-    # get the first frame fom each vid in the batch and eliminate temporal dimension
-    frames = [torch.squeeze(vid[:, :1, :, :]) for vid in vid_batch]
+        # running_total_loss += loss.item()
+        # running_con_loss += con_loss.item()
+        # running_recon1_loss += recon1_loss.item()
+        # running_recon2_loss += recon2_loss.item()
+        # print('\tBatch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(batch_idx + 1, len(testloader),
+        #                                                                   "{0:.5f}".format(loss),
+        #                                                                   "{0:.5f}".format(con_loss),
+        #                                                                   "{0:.5f}".format(recon1_loss),
+        #                                                                   "{0:.5f}".format(recon2_loss)))
+    #
+    # print('Validation Epoch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
+    #                                                                            "{0:.5f}".format((
+    #                                                                                    running_total_loss / len(
+    #                                                                                testloader))),
+    #                                                                            "{0:.5f}".format((running_con_loss / len(
+    #                                                                                testloader))),
+    #                                                                            "{0:.5f}".format((
+    #                                                                                    running_recon1_loss / len(
+    #                                                                                testloader))),
+    #                                                                            "{0:.5f}".format((
+    #                                                                                    running_recon2_loss / len(
+    #                                                                                testloader)))))
+#
+#
+# def get_first_frame(vid_batch):
+#     """
+#     Function to extract the first frame from a batch of input videos.
+#     We extract the first frame from each of the videos input to the network so that the network can learn appearance
+#     conditioning from the desired views.
+#     :param vid_batch: (tensor) A batch of videos from which to extract only the first frame of each.
+#     :return: A tensor that holds all the first frames.
+#     """
+#     get the first frame fom each vid in the batch and eliminate temporal dimension
+    # frames = [torch.squeeze(vid[:, :1, :, :]) for vid in vid_batch]
     # extract the batch size from the input vid_batch
-    batch_size = vid_batch.size()[0]
+    # batch_size = vid_batch.size()[0]
     # create empty tensor containing batch_size images of the correct shape (matching the frames)
-    imgs = torch.zeros(batch_size, *frames[0].size())
+    # imgs = torch.zeros(batch_size, *frames[0].size())
     # put all the first frames into the tensor
-    for sample in range(batch_size):
-        imgs[sample] = frames[sample]
-
-    return imgs
-
-
-def convert_to_vid(tensor, batch_num, input):  # whether it was an input or output
-    bsz, channels, frames, height, width = tensor.size()
-    for i in range(bsz):
-        vid = tensor[i]
-        if input:
-            vid_path = os.path.join(output_video_dir, 'input', str(batch_num), str(i))
-        else:
-            vid_path = os.path.join(output_video_dir, 'output', str(batch_num), str(i))
-        save_frames(vid_path, vid)
-
-
-def save_frames(vid_path, vid):
-    channels, frames, height, width = vid.size()
-    for i in range(frames):
-        frame_name = make_frame_name(i + 1)
-        frame_path = os.path.join(vid_path, frame_name)
-        # extract one frame as np array
-        frame = vid[:, i, :, :].squeeze().cpu().numpy()
+    # for sample in range(batch_size):
+    #     imgs[sample] = frames[sample]
+    #
+    # return imgs
+#
+# output_video_dir = ''
+# def convert_to_vid(tensor, batch_num, input):  # whether it was an input or output
+#     bsz, channels, frames, height, width = tensor.size()
+#     for i in range(bsz):
+#         vid = tensor[i]
+#         if input:
+#             vid_path = os.path.join(output_video_dir, 'input', str(batch_num), str(i))
+#         else:
+#             vid_path = os.path.join(output_video_dir, 'output', str(batch_num), str(i))
+#         save_frames(vid_path, vid)
+#
+#
+# def save_frames(vid_path, vid):
+#     channels, frames, height, width = vid.size()
+#     for i in range(frames):
+#         frame_name = make_frame_name(i + 1)
+#         frame_path = os.path.join(vid_path, frame_name)
+#         extract one frame as np array
+        # frame = vid[:, i, :, :].squeeze().cpu().numpy()
         # pytorch tensor is (channels, height, width)
         # np is (height, width, channels)
-        frame = np.transpose(frame, (1, 2, 0))
-
-        try:
-            cv2.imwrite(frame_path, frame)
-        except:
-            print('The image did not successfully save.')
-
-
-def make_frame_name(frame_num):
-    """
-    Function to correctly generate the correctly formatted .jpg file name for the frame.
-    :param frame_num: The frame number captured in the file.
-    :return: str representing the file name.
-    """
-    return str(frame_num).zfill(3) + '.jpg'
-
-
-def test_model():
-    start_time = time.time()
-    for epoch in range(NUM_EPOCHS):
-        test(epoch)
-    end_time = time.time()
-    print('Time: {}'.format(end_time - start_time))
-
-
-def print_params():
-    """
-    Function to print out all the custom parameter information for the experiment.
-    :return: None
-    """
-    print('Parameters:')
-    print('Batch size: {}'.format(BATCH_SIZE))
-    print('Tensor size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
-    print('Skip Length: {}'.format(SKIP_LEN))
-    print('Total Epochs: {}'.format(NUM_EPOCHS))
-    # print('Learning Rate: {}'.format(LR))
+        # frame = np.transpose(frame, (1, 2, 0))
+        #
+        # try:
+        #     cv2.imwrite(frame_path, frame)
+        # except:
+        #     print('The image did not successfully save.')
+#
+#
+# def make_frame_name(frame_num):
+#     """
+#     Function to correctly generate the correctly formatted .jpg file name for the frame.
+#     :param frame_num: The frame number captured in the file.
+#     :return: str representing the file name.
+#     """
+#     return str(frame_num).zfill(3) + '.jpg'
+#
+#
+# def test_model():
+#     start_time = time.time()
+#     for epoch in range(NUM_EPOCHS):
+#         test(epoch)
+#     end_time = time.time()
+#     print('Time: {}'.format(end_time - start_time))
 
 
-if __name__ == '__main__':
-    """
-    Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
-    """
-    if PRINT_PARAMS:
-        print_params()
-
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-    # model
-    model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
-    model.load_state_dict(torch.load(weights_path))
-    # model = torch.load(weights_path)
+# def print_params():
+#     """
+#     Function to print out all the custom parameter information for the experiment.
+#     :return: None
+#     """
+#     print('Parameters:')
+#     print('Batch size: {}'.format(BATCH_SIZE))
+#     print('Tensor size: ({},{},{},{})'.format(CHANNELS, FRAMES, HEIGHT, WIDTH))
+#     print('Skip Length: {}'.format(SKIP_LEN))
+#     print('Total Epochs: {}'.format(NUM_EPOCHS))
+#     print('Learning Rate: {}'.format(LR))
+#
+#
+# if __name__ == '__main__':
+#     """
+#     Main function to carry out the training loop.
+#     This function creates the generator and data loaders. Then, it trains the generator.
+#     """
+#     if PRINT_PARAMS:
+#         print_params()
+#
+#     device = 'cuda' if torch.cuda.is_available() else 'cpu'
+#
+#     generator
+    # generator = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+    # generator.load_state_dict(torch.load(weights_path))
+    # generator = torch.load(weights_path)
     # print('Model Built.')
-    model = model.to(device)
-
-    print(model)
-
-    if device == 'cuda':
-        net = torch.nn.DataParallel(model)
-        cudnn.benchmark = True
-
-    criterion = nn.MSELoss()
-    # optimizer = optim.Adam(model.parameters(), lr=LR)  # other parameters???
-
+    # generator = generator.to(device)
+    #
+    # print(generator)
+    #
+    # if device == 'cuda':
+    #     net = torch.nn.DataParallel(generator)
+    #     cudnn.benchmark = True
+    #
+    # criterion = nn.MSELoss()
+    # optimizer = optim.Adam(generator.parameters(), lr=LR)  # other parameters???
+    #
     # data
-    testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
-                         resize_height=HEIGHT, resize_width=WIDTH,
-                         clip_len=FRAMES, skip_len=SKIP_LEN,
-                         random_all=True, precrop=PRECROP)
-    testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
-
-    test_model()
-
-
-
-
-import torch
-
-a = torch.randn((3, 512, 7, 7))
-
-print(a.numel())
-
-
-
+    # testset = NTUDataset(root_dir=data_root_dir, data_file=test_splits,
+    #                      resize_height=HEIGHT, resize_width=WIDTH,
+    #                      clip_len=FRAMES, skip_len=SKIP_LEN,
+    #                      random_all=True, precrop=PRECROP)
+    # testloader = torch.utils.data.DataLoader(testset, batch_size=BATCH_SIZE, shuffle=False, num_workers=2)
+    #
+    # test_model()
+#
+#
+#
+#
+# import torch
+#
+# a = torch.randn((3, 512, 7, 7))
+#
+# print(a.numel())
+#
+#
+#
 
 import torch
 
@@ -873,7 +873,7 @@ if __name__ == '__main__':
         print(vp1.size())
 
 
-from data.panoptic.PanopticDataLoader import PanopticDataset
+from data.PanopticDataLoader import PanopticDataset
 import torch
 
 data_root_dir = 'C:/Users/Owner/Documents/UCF/panoptic/rgb_data/'
@@ -998,25 +998,25 @@ if __name__ == "__main__":
 
 
 
- samples = get_samples(data_root_dir)
-    vga_list = get_vga_list(panels, nodes)
-    for sample in samples:
-        cal_file = os.path.join(data_root_dir, sample, 'calibration_' + sample + '.pkl')
-
-        # load the calibration file
-        with open(cal_file, 'rb') as fp:
-            cal = pickle.load(fp)
-
-        cameras = list(cal.keys())
-        for vga in vga_list:
-            # print(vga)
-            cameras.remove(vga)
-        print(sample)
-        print(cameras)
-        print(len(cameras))
-
-
-
+ # samples = get_samples(data_root_dir)
+ #    vga_list = get_vga_list(panels, nodes)
+ #    for sample in samples:
+ #        cal_file = os.path.join(data_root_dir, sample, 'calibration_' + sample + '.pkl')
+ #
+ #        load the calibration file
+        # with open(cal_file, 'rb') as fp:
+        #     cal = pickle.load(fp)
+        #
+        # cameras = list(cal.keys())
+        # for vga in vga_list:
+        #     print(vga)
+            # cameras.remove(vga)
+        # print(sample)
+        # print(cameras)
+        # print(len(cameras))
+#
+#
+#
 
 
 my_list = [('a', 0), ('z', 25), ('h', 7), ('c', 2)]
@@ -1167,6 +1167,7 @@ def my_get_coord(tensor, other_axis, axis_size):
 
     return coord
 
+import tensorflow as tf
 
 def get_coord(other_axis, axis_size):
     # get "x-y" coordinates:
@@ -1318,5 +1319,15 @@ vp_gt = torch.randn(4)
 vp_est = torch.randn(4)
 
 export_vps(vp_gt=vp_gt, vp_est=vp_est, output_dir='./', batch_num=1)
+
+
+import torch
+
+x = torch.zeros(3, 4, 5, 6)
+y = torch.sum(x, dim=1, keepdim=True)
+
+print(x.size())
+print(y.size())
+
 
 

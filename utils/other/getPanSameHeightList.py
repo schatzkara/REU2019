@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
 data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
+data_file = '/home/yogesh/kara/data/panoptic/mod_train.list'
 # data_root_dir = 'C:/Users/Owner/Documents/UCF/panoptic/rgb_data/'
 # sample = '150303_celloScene1'  # '150821_dance4'
 # cal_file_path = os.path.join(data_root_dir, sample, 'calibration_' + sample + '.pkl')
@@ -215,7 +216,7 @@ def get_same_height_cams(vga_list, cam_positions):
                 continue
             else:
                 x2, y2, z2 = cam_positions[vga2]
-                if abs(y1 - y2) <= 0.1 and euclidean_distance((x1, y1, z1), (x2, y2, z2)) < 2.0:
+                if abs(y1 - y2) <= 0.005:  #  and euclidean_distance((x1, y1, z1), (x2, y2, z2)) < 2.0:
                     cams.append(vga2)
         if len(cams) > 0:
             same_height_cams[vga1] = cams
@@ -223,20 +224,44 @@ def get_same_height_cams(vga_list, cam_positions):
     return same_height_cams
 
 
+def get_vid_path(path_head, path_tail, view_num):
+    """
+    Function to get the paths at which the two sample views are located.
+    :param path_head: (str) The first part of the vid path that contains the sample name and dir
+    :param path_tail: (str) The last part of the vid path that contains the frame indices
+    :return: 2 strings representing the paths for the sample views.
+    """
+    view_path = os.path.join(data_root_dir, path_head, str(view_num), path_tail)
+    # print(view_path)
+    return view_path
+
+
 if __name__ == '__main__':
     # vga_list = get_vga_list(panels, nodes)
     # vga_list = get_existing_vga_list(data_root_dir)
-
-    sample_list = get_samples(data_root_dir)
+    with open(data_file, 'r') as f:
+        data_file = f.readlines()
+    sample_list = [line.strip() for line in data_file]
+    # sample_list = get_samples(data_root_dir)
     # sample_list = ['151125_mafia']
     with open(output_file, 'w') as f:
         for sample in sample_list:
             print(sample)
+            sample_path_head, sample_path_tail = sample.split(' ')
+            sample_name = sample_path_head[:sample_path_head.index('/')]
             f.write(sample + '\n')
-            vga_list = os.listdir(os.path.join(data_root_dir, sample, 'samples'))
+            vga_list = os.listdir(os.path.join(data_root_dir, sample_path_head))
+
+            i = 0
+            while i < len(vga_list):
+                viewpath = get_vid_path(path_head=sample_path_head, path_tail=sample_path_tail, view_num=vga_list[i])
+                if not os.path.exists(viewpath):
+                    vga_list.remove(vga_list[i])
+                else:
+                    i += 1
             # vga_list = ['vga_11_11']
             # print(vga_list)
-            vga_list, cam_positions = get_camera_positions(vga_list, sample)
+            vga_list, cam_positions = get_camera_positions(vga_list, sample_name)
             # print(vga_list)
             # print(list(cam_positions.keys()))
             # print('\n\n')

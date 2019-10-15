@@ -29,19 +29,19 @@ class ConvGRUCell(nn.Module):
         self.bias = bias
         # self.dtype = dtype
 
-        '''self.conv_gates = nn.Conv2d(in_channels=input_dim + hidden_dim,
+        self.conv_gates = nn.Conv2d(in_channels=hidden_dim + hidden_dim,
                                     out_channels=2 * self.hidden_dim,  # for update_gate,reset_gate respectively
                                     kernel_size=kernel_size,
                                     padding=self.padding,
                                     bias=self.bias)
 
-        self.conv_can = nn.Conv2d(in_channels=input_dim + hidden_dim,
+        self.conv_can = nn.Conv2d(in_channels=hidden_dim + hidden_dim,
                                   out_channels=self.hidden_dim,  # for candidate neural memory
                                   kernel_size=kernel_size,
                                   padding=self.padding,
-                                  bias=self.bias)'''
+                                  bias=self.bias)
 
-        self.refine_conv = nn.Conv2d(in_channels=hidden_dim + input_dim,
+        self.refine_conv = nn.Conv2d(in_channels=input_dim,
                                      out_channels=self.hidden_dim,
                                      kernel_size=kernel_size,
                                      padding=self.padding,
@@ -66,22 +66,21 @@ class ConvGRUCell(nn.Module):
         """
         warped_app = self.warp_app_feat(h_cur, input_tensor)
 
-        conv_input = torch.cat([warped_app, mf, kp], dim=1)  # dim=channels
+        x_t = torch.cat([warped_app, mf, kp], dim=1)  # dim=channels
+        x_t = self.refine_conv(x_t)
 
-        h_next = self.refine_conv(conv_input)
-
-        '''combined = torch.cat([warped_app, h_cur], dim=1)
+        combined = torch.cat([x_t, h_cur], dim=1)
         combined_conv = self.conv_gates(combined)
 
         gamma, beta = torch.split(combined_conv, self.hidden_dim, dim=1)
         reset_gate = torch.sigmoid(gamma)
         update_gate = torch.sigmoid(beta)
 
-        combined = torch.cat([warped_app, reset_gate * h_cur], dim=1)
+        combined = torch.cat([x_t, reset_gate * h_cur], dim=1)
         cc_cnm = self.conv_can(combined)
         cnm = torch.tanh(cc_cnm)
 
-        h_next = (1 - update_gate) * h_cur + update_gate * cnm'''
+        h_next = (1 - update_gate) * h_cur + update_gate * cnm
 
         '''combined = torch.cat([input_tensor, h_cur], dim=1)
         combined_conv = self.conv_gates(combined)

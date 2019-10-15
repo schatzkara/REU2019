@@ -80,7 +80,7 @@ def print_params():
 if __name__ == '__main__':
     """
     Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
+    This function creates the generator and data loaders. Then, it trains the generator.
     """
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     RANDOM_ALL = True
@@ -88,7 +88,7 @@ if __name__ == '__main__':
     VP_VALUE_COUNT = 1 if DATASET.lower() == 'ntu' else 3
     CLOSE_VIEWS = True if DATASET.lower() == 'panoptic' else False
 
-    # model
+    # generator
     model = FullNetwork(vp_value_count=VP_VALUE_COUNT,
                         output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH),
                         stdev=STDEV)

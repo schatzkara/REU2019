@@ -69,7 +69,7 @@ def panoptic_config():
 def training_loop(epoch):
     """
     Function carrying out the training loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is training.
+    :param epoch: (int) The current epoch in which the generator is training.
     :return: None
     """
     running_recon_loss = 0.0
@@ -115,7 +115,7 @@ def training_loop(epoch):
 def testing_loop(epoch):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is testing/validating.
+    :param epoch: (int) The current epoch in which the generator is testing/validating.
     :return: None
     """
     running_recon_loss = 0.0
@@ -156,7 +156,7 @@ def testing_loop(epoch):
 
 def train_model(starting_epoch):
     """
-    Function to train and validate the model for all epochs.
+    Function to train and validate the generator for all epochs.
     :return: None
     """
     if pretrained:
@@ -196,7 +196,7 @@ def print_params():
 if __name__ == '__main__':
     """
     Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
+    This function creates the generator and data loaders. Then, it trains the generator.
     """
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     RANDOM_ALL = True
@@ -207,7 +207,7 @@ if __name__ == '__main__':
     if DATASET.lower() == 'ntu':
         data_root_dir, train_split, test_split, param_file, weight_file = ntu_config()
 
-        # model
+        # generator
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
                             output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model = model.to(device)
@@ -235,7 +235,7 @@ if __name__ == '__main__':
     elif DATASET.lower() == 'panoptic':
         data_root_dir, train_split, test_split, close_cams_file, weight_file = panoptic_config()
 
-        # model
+        # generator
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
                             output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH), use_est_vp=False)
         model = model.to(device)

@@ -36,7 +36,7 @@ class Discriminator(nn.Module):
                              'conv_3': layer_out_channels['conv_2'],
                              'conv_4': layer_out_channels['conv_3'],
                              'conv_5': layer_out_channels['conv_4'],
-                             'linear': layer_out_channels['conv_5']
+                             'linear': layer_out_channels['conv_5'] * 8 * 56 * 56  # * 16 * 112 * 112 # 51380224
                              }  # key: layer name, value: layer_in_channels
 
         # definition of all network layers
@@ -48,6 +48,7 @@ class Discriminator(nn.Module):
         self.conv3d_2 = nn.Conv3d(in_channels=layer_in_channels[layer], out_channels=layer_out_channels[layer],
                                   kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
         self.relu_2 = nn.ReLU(inplace=True)
+        self.avg_pool_1 = nn.AvgPool3d(kernel_size=(2, 2, 2), stride=(2, 2, 2))
         layer = 'conv_3'
         self.conv3d_3 = nn.Conv3d(in_channels=layer_in_channels[layer], out_channels=layer_out_channels[layer],
                                   kernel_size=(3, 3, 3), stride=(1, 1, 1), padding=(1, 1, 1))
@@ -62,6 +63,7 @@ class Discriminator(nn.Module):
         self.relu_5 = nn.ReLU(inplace=True)
         layer = 'linear'
         self.fc_1 = nn.Linear(in_features=layer_in_channels[layer], out_features=layer_out_channels[layer])
+        self.sigmoid = nn.Sigmoid()
 
         # print('%s Model Successfully Built \n' % self.gen_name)
 
@@ -73,14 +75,19 @@ class Discriminator(nn.Module):
         """
         x = self.relu_1(self.conv3d_1(vid))
         x = self.relu_2(self.conv3d_2(x))
+        x = self.avg_pool_1(x)
         x = self.relu_3(self.conv3d_3(x))
         x = self.relu_4(self.conv3d_4(x))
         x = self.relu_5(self.conv3d_5(x))
 
-        bsz, channels, height, width = x.size()
+        bsz, channels, frames, height, width = x.size()
+        # print(x.size())
         x = x.reshape(bsz, -1)
 
+        # print(x.size())
+
         x = self.fc_1(x).squeeze()
+        x = self.sigmoid(x)
 
         return x
 
@@ -91,4 +98,4 @@ if __name__ == "__main__":
     dis = Discriminator()
 
     if print_summary:
-        summary(dis, input_size=(16, 3, 112, 112))
+        summary(dis, input_size=(3, 16, 112, 112))

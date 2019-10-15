@@ -157,7 +157,7 @@ def get_first_frame(vid_batch):
 
 def test_model():
     """
-    Function to test the model.
+    Function to test the generator.
     :return: None
     """
     start_time = time.time()
@@ -183,7 +183,7 @@ def print_params():
 if __name__ == '__main__':
     """
     Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
+    This function creates the generator and data loaders. Then, it trains the generator.
     """
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     RANDOM_ALL = True
@@ -194,7 +194,7 @@ if __name__ == '__main__':
     if DATASET.lower() == 'ntu':
         data_root_dir, test_split, param_file, weights_path, output_video_dir = ntu_config()
 
-        # model
+        # generator
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
@@ -215,7 +215,7 @@ if __name__ == '__main__':
     elif DATASET.lower() == 'panoptic':
         data_root_dir, test_split, close_cams_file, weights_path, output_video_dir = panoptic_config()
 
-        # model
+        # generator
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)

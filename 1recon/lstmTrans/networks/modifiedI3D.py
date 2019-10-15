@@ -160,7 +160,7 @@ class InceptionModule(nn.Module):
 
 class InceptionI3d(nn.Module):
     """Inception-v1 I3D architecture.
-    The model is introduced in:
+    The generator is introduced in:
         Quo Vadis, Action Recognition? A New Model and the Kinetics Dataset
         Joao Carreira, Andrew Zisserman
         https://arxiv.org/pdf/1705.07750v1.pdf.
@@ -171,7 +171,7 @@ class InceptionI3d(nn.Module):
         http://arxiv.org/pdf/1409.4842v1.pdf.
     """
 
-    # Endpoints of the model in order. During construction, all the endpoints up
+    # Endpoints of the generator in order. During construction, all the endpoints up
     # to a designated `final_endpoint` are returned in a dictionary as the
     # second return value.
     VALID_ENDPOINTS = (
@@ -201,13 +201,13 @@ class InceptionI3d(nn.Module):
     def __init__(self, name='modified_inception_i3d', final_endpoint='Mixed_5c', in_frames=8, in_channels=3,
                  pretrained=False, weights_path=''):
         """
-        Initializes I3D model instance.
+        Initializes I3D generator instance.
         :param name: (str, optional) The name of the network (default 'modified_inception_i3d').
         :param final_endpoint: (str, optional) The name of the final layer used in the network (default 'Mixed_5c').
         :param in_frames: (int, optional) The number of frames in the input video (default 8).
                            Legal values: 8, 16
         :param in_channels: (int, optional) The number of channels in the input tensor (default 3).
-        :param pretrained: (bool, optional) True if the model should load pretrained weights; False otherwise.
+        :param pretrained: (bool, optional) True if the generator should load pretrained weights; False otherwise.
         :param weights_path: (str, optional) The path at which the pretrained weights are located.
         Raises:
             ValueError: if 'final_ endpoint' is not recognized.

@@ -37,7 +37,7 @@ weight_file_name = './weights/phase1_net_pan_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_
 def train(epoch):
     """
     Function carrying out the training loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is training.
+    :param epoch: (int) The current epoch in which the generator is training.
     :return: None
     """
     running_total_loss = 0.0
@@ -89,7 +89,7 @@ def train(epoch):
 def test(epoch):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is testing/validating.
+    :param epoch: (int) The current epoch in which the generator is testing/validating.
     :return: (float) The total loss for the epoch.
     """
     running_total_loss = 0.0
@@ -161,7 +161,7 @@ def get_first_frame(vid_batch):
 
 def train_model():
     """
-    Function to carry out the model's training and validation over all epochs.
+    Function to carry out the generator's training and validation over all epochs.
     :return: None
     """
     min_loss = 0.0
@@ -171,7 +171,7 @@ def train_model():
         train(epoch)
         print('Validation...')
         loss = test(epoch)
-        # if the loss reaches a min, then save the model weights
+        # if the loss reaches a min, then save the generator weights
         if epoch == 0 or loss < min_loss:
             min_loss = loss
             torch.save(model.state_dict(), weight_file_name)
@@ -196,14 +196,14 @@ def print_params():
 if __name__ == '__main__':
     """
     Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
+    This function creates the generator and data loaders. Then, it trains the generator.
     """
     if PRINT_PARAMS:
         print_params()
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    # model
+    # generator
     model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
     model = model.to(device)
 

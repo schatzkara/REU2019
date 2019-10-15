@@ -6,8 +6,8 @@ import _pickle as pickle
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-# data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
-data_root_dir = 'C:/Users/Owner/Documents/UCF/panoptic/rgb_data/'
+data_root_dir = '/home/c2-2/yogesh/datasets/panoptic/rgb_data/'
+# data_root_dir = 'C:/Users/Owner/Documents/UCF/panoptic/rgb_data/'
 sample = '150821_dance4'  # '150303_celloScene1'  # '150821_dance5'
 
 panels = range(1, 21)  # VGA panels range from 1 to 20
@@ -30,6 +30,19 @@ def get_vga_list(panels, nodes):
     for panel in panels:
         for node in nodes:
             vga_list.append(format_node(panel, node))
+
+    return vga_list
+
+
+def get_existing_vga_list(root_dir):
+    vga_list = []
+    samples = os.listdir(root_dir)
+    samples = [os.path.join(s, 'samples') for s in samples]
+    for sample in samples:
+        cams = os.listdir(os.path.join(root_dir, sample))
+        for cam in cams:
+            if cam not in vga_list:
+                vga_list.append(cam)
 
     return vga_list
 
@@ -95,6 +108,43 @@ def get_view(seq_id, view_id, x_pos, y_pos):
 
 
 def plot_cameras(cam_positions):
+    fig = plt.figure(1, (16, 16))
+    ax = fig.add_subplot(111, projection='3d')
+    colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+
+    for panel in panels:
+        labels = []
+        xs = []
+        ys = []
+        zs = []
+        for node in nodes:
+            cam = format_node(panel, node)
+            try:
+                x, y, z = cam_positions[cam]
+                labels.append(cam)
+                xs.append(x)
+                ys.append(y)
+                zs.append(z)
+
+                id = cam[7:]
+                ax.text(x, y, z, id, size=4, zorder=1, color='k')
+            except:
+                abc = 1
+        color = colors[panel % len(colors)]
+        color = np.repeat(color, len(xs))
+        ax.scatter(xs, ys, zs, c=color)
+
+        centroid = (sum(xs) / len(xs), sum(ys) / len(ys), sum(zs) / len(zs))
+        ax.text(*centroid, 'Panel' + str(panel), size=8, zorder=1, color=color[0])
+    # for cam in cam_positions:
+    #     x, y, z = cam_positions[cam]
+    #     id = cam[7:]
+    #     ax.text(x, y, z, id, size=8, zorder=1, color='k')
+
+    plt.show()
+
+
+'''def plot_cameras(cam_positions):
     labels = []
     xs = []
     ys = []
@@ -128,7 +178,7 @@ def plot_cameras(cam_positions):
 
     # print(euclidean_distance(np.array(pos1), np.array(pos2)))
 
-    plt.show()
+    plt.show()'''
 
 
 def euclidean_distance(x, y):
@@ -142,7 +192,8 @@ def euclidean_distance(x, y):
 if __name__ == '__main__':
     # sample = input('What sample? ')
     # cameras = get_vga_list(panels, nodes)
-    cameras = ['vga_01_01', 'vga_04_08', 'vga_11_04']
+    cameras = get_existing_vga_list(data_root_dir)
+    # cameras = ['vga_01_01', 'vga_04_08', 'vga_11_04']
     # cameras = get_cameras(sample)
     cam_positions = get_camera_positions(cameras, sample)
     print(cam_positions)

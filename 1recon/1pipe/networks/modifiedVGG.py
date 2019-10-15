@@ -135,77 +135,77 @@ def _vgg(arch, cfg, batch_norm, pretrained, progress, weights_path='', **kwargs)
     # if pretrained:
     #     state_dict = load_state_dict_from_url(model_urls[arch],
     #                                           progress=progress)
-    #     model.load_state_dict(state_dict)
+    #     generator.load_state_dict(state_dict)
     return model
 
 
 def vgg11(pretrained=False, progress=True, **kwargs):
-    """VGG 11-layer model (configuration "A")
+    """VGG 11-layer generator (configuration "A")
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg11', 'A', False, pretrained, progress, **kwargs)
 
 
 def vgg11_bn(pretrained=False, progress=True, **kwargs):
-    """VGG 11-layer model (configuration "A") with batch normalization
+    """VGG 11-layer generator (configuration "A") with batch normalization
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg11_bn', 'A', True, pretrained, progress, **kwargs)
 
 
 def vgg13(pretrained=False, progress=True, **kwargs):
-    """VGG 13-layer model (configuration "B")
+    """VGG 13-layer generator (configuration "B")
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg13', 'B', False, pretrained, progress, **kwargs)
 
 
 def vgg13_bn(pretrained=False, progress=True, **kwargs):
-    """VGG 13-layer model (configuration "B") with batch normalization
+    """VGG 13-layer generator (configuration "B") with batch normalization
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg13_bn', 'B', True, pretrained, progress, **kwargs)
 
 
 def vgg16(pretrained=False, progress=True, weights_path='', **kwargs):
-    """VGG 16-layer model (configuration "D")
+    """VGG 16-layer generator (configuration "D")
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg16', 'D', False, pretrained=pretrained, progress=progress, weights_path=weights_path, **kwargs)
 
 
 def vgg16_bn(pretrained=False, progress=True, **kwargs):
-    """VGG 16-layer model (configuration "D") with batch normalization
+    """VGG 16-layer generator (configuration "D") with batch normalization
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg16_bn', 'D', True, pretrained, progress, **kwargs)
 
 
 def vgg19(pretrained=False, progress=True, **kwargs):
-    """VGG 19-layer model (configuration "E")
+    """VGG 19-layer generator (configuration "E")
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg19', 'E', False, pretrained, progress, **kwargs)
 
 
 def vgg19_bn(pretrained=False, progress=True, **kwargs):
-    """VGG 19-layer model (configuration 'E') with batch normalization
+    """VGG 19-layer generator (configuration 'E') with batch normalization
     Args:
-        pretrained (bool): If True, returns a model pre-trained on ImageNet
+        pretrained (bool): If True, returns a generator pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
     return _vgg('vgg19_bn', 'E', True, pretrained, progress, **kwargs)

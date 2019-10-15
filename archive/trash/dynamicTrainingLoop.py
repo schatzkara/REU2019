@@ -36,7 +36,7 @@ weight_file_name = './weights/net_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAME
 def train(epoch):
     """
     Function carrying out the training loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is training.
+    :param epoch: (int) The current epoch in which the generator is training.
     :return: None
     """
     running_total_loss = 0.0
@@ -90,7 +90,7 @@ def train(epoch):
 def test(epoch):
     """
     Function to carry out the testing/validation loop for the Full Network for a single epoch.
-    :param epoch: (int) The current epoch in which the model is testing/validating.
+    :param epoch: (int) The current epoch in which the generator is testing/validating.
     :return: None
     """
     running_total_loss = 0.0
@@ -126,7 +126,7 @@ def test(epoch):
                                                                             "{0:.5f}".format(recon2_loss)))
 
     # if epoch == 0 or running_total_loss < min_loss:
-    #     torch.save(model.state_dict(), weight_file_name)
+    #     torch.save(generator.state_dict(), weight_file_name)
     #     min_loss = running_total_loss
 
     print('Validation Epoch {}/{} Loss:{} con:{} recon1:{} recon2:{}'.format(epoch + 1, NUM_EPOCHS,
@@ -197,14 +197,14 @@ def print_params():
 if __name__ == '__main__':
     """
     Main function to carry out the training loop. 
-    This function creates the model and data loaders. Then, it trains the model.
+    This function creates the generator and data loaders. Then, it trains the generator.
     """
     if PRINT_PARAMS:
         print_params()
 
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-    # model
+    # generator
     model = FullNetwork(output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
     # print('Model Built.')
     model = model.to(device)
@@ -235,4 +235,4 @@ if __name__ == '__main__':
     train_model()
 
     # if SAVE_WEIGHTS:
-    #     torch.save(model.state_dict(), './weights/net_{}_{}_{}_{}_{}'.format(BATCH_SIZE, NUM_EPOCHS, LR))
+    #     torch.save(generator.state_dict(), './weights/net_{}_{}_{}_{}_{}'.format(BATCH_SIZE, NUM_EPOCHS, LR))

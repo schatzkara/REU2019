@@ -12,10 +12,10 @@ if __name__ == "__main__":
     vgg = vgg16()
     i3d = InceptionI3d(final_endpoint='Mixed_5c', in_frames=video_size[1])
     gen = Generator(in_channels=1536, out_frames=video_size[1])
-    # model = FullNetwork(output_shape=(1,) + video_size)
+    # generator = FullNetwork(output_shape=(1,) + video_size)
 
     if print_summary:
         summary(vgg, input_size=image_size)
         summary(i3d, input_size=video_size)
         summary(gen, input_size=(1536, 7, 7))
-        # summary(model, input_size=[video_size, video_size, image_size, image_size])
+        # summary(generator, input_size=[video_size, video_size, image_size, image_size])
