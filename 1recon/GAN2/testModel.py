@@ -24,6 +24,20 @@ WIDTH = 112
 STDEV = 0.1
 
 
+def pretrained_weights_config():
+    if SERVER == 'crcv':
+        vgg_weights_path = '/home/yogesh/kara/REU2019/weights/vgg16-397923af.pth'
+        i3d_weights_path = '/home/yogesh/kara/REU2019/weights/rgb_charades.pt'
+    elif SERVER == 'newton':
+        vgg_weights_path = '/home/yrawat/kara/weights/vgg16-397923af.pth'
+        i3d_weights_path = '/home/yrawat/kara/weights/rgb_charades.pt'
+    else:
+        print('Server name unknown.')
+        vgg_weights_path = i3d_weights_path = gen_weights_path = disc_weights_path = ''
+
+    return vgg_weights_path, i3d_weights_path
+
+
 def ntu_config():
     # NTU directory information
     if SERVER == 'crcv':
@@ -149,12 +163,15 @@ if __name__ == '__main__':
     VP_VALUE_COUNT = 1 if DATASET.lower() == 'ntu' else 3
     CLOSE_VIEWS = True if DATASET.lower() == 'panoptic' else False
 
+    vgg_weights_path, i3d_weights_path = pretrained_weights_config()
+
     if DATASET.lower() == 'ntu':
         data_root_dir, test_split, param_file, weights_path, output_video_dir = ntu_config()
 
         # generator
         model = FullNetwork(vp_value_count=VP_VALUE_COUNT, stdev=STDEV,
-                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH))
+                            output_shape=(BATCH_SIZE, CHANNELS, FRAMES, HEIGHT, WIDTH),
+                            pretrained=True, vgg_weights_path=vgg_weights_path, i3d_weights_path=i3d_weights_path)
         model.load_state_dict(torch.load(weights_path))
         model = model.to(device)
 
