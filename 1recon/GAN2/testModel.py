@@ -10,6 +10,7 @@ from data.PanopticDataLoader import PanopticDataset
 from utils.modelIOFuncs import get_first_frame, convert_to_vid, export_vps
 import torch.backends.cudnn as cudnn
 
+SERVER = 'newton'  # 'crcv' or 'newton'
 DATASET = 'NTU'  # 'NTU' or 'panoptic'
 
 # data parameters
@@ -25,12 +26,24 @@ STDEV = 0.1
 
 def ntu_config():
     # NTU directory information
-    data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
-    if FRAMES * SKIP_LEN >= 32:
-        test_split = '/home/yogesh/kara/data/val16.list'
+    if SERVER == 'crcv':
+        data_root_dir = '/home/c2-2/yogesh/datasets/ntu-ard/frames-240x135/'
+        if FRAMES * SKIP_LEN >= 32:
+            test_split = '/home/yogesh/kara/data/val16.list'
+        else:
+            test_split = '/home/yogesh/kara/data/val.list'
+        param_file = '/home/yogesh/kara/data/view.params'
+    elif SERVER == 'newton':
+        data_root_dir = '/groups/mshah/data/ntu-ard/frames-240x135/'
+        if FRAMES * SKIP_LEN >= 32:
+            test_split = '/home/yrawat/kara/data/val16.list'
+        else:
+            test_split = '/home/yrawat/kara/data/val.list'
+        param_file = '/home/yrawat/kara/data/view.params'
     else:
-        test_split = '/home/yogesh/kara/data/val.list'
-    param_file = '/home/yogesh/kara/data/view.params'
+        print('Server name unknown.')
+        data_root_dir = train_split = test_split = param_file = ''
+
     weights_path = './weights/net_gen_ntu_{}_{}_{}_{}_{}_{}_{}.pt'.format(BATCH_SIZE, FRAMES, SKIP_LEN,
                                                                           PRECROP, 1000, 0.0001, STDEV)
     output_video_dir = './videos/ntu_'
